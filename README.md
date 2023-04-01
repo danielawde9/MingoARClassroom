@@ -42,9 +42,9 @@ These instructions will get you a copy of the project up and running on your loc
 
 1. Clone the repository:
 
-bashCopy code
-
-`git clone https://github.com/yourusername/mingo-ar-classroom.git`
+```bash
+git clone https://github.com/yourusername/mingo-ar-classroom.git
+```
 
 2. Open the project in Unity.
 3. Import the Firebase SDK and Vuforia Engine packages into your project.
