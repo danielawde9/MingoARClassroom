@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using UnityEngine.XR.ARSubsystems;
+using UnityEngine.EventSystems;
 
 namespace UnityEngine.XR.ARFoundation.Samples
 {
@@ -33,6 +34,13 @@ namespace UnityEngine.XR.ARFoundation.Samples
         public GameObject spawnedObject { get; private set; }
 
         bool m_Pressed;
+        protected override void OnPress(Vector3 position) => m_Pressed = true;
+
+        protected override void OnPressCancel() => m_Pressed = false;
+
+        static List<ARRaycastHit> s_Hits = new List<ARRaycastHit>();
+
+        ARRaycastManager m_RaycastManager;
 
         protected override void Awake()
         {
@@ -65,12 +73,5 @@ namespace UnityEngine.XR.ARFoundation.Samples
             }
         }
 
-        protected override void OnPress(Vector3 position) => m_Pressed = true;
-
-        protected override void OnPressCancel() => m_Pressed = false;
-
-        static List<ARRaycastHit> s_Hits = new List<ARRaycastHit>();
-
-        ARRaycastManager m_RaycastManager;
     }
 }
