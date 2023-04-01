@@ -1,19 +1,18 @@
 using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
+using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
-using UnityEngine.EventSystems;
-
-namespace UnityEngine.XR.ARFoundation.Samples
-{
-    /// <summary>
-    /// Listens for touch events and performs an AR raycast from the screen touch point.
-    /// AR raycasts will only hit detected trackables like feature points and planes.
-    ///
-    /// If a raycast hits a trackable, the <see cref="placedPrefab"/> is instantiated
-    /// and moved to the hit position.
-    /// </summary>
-    [RequireComponent(typeof(ARRaycastManager))]
-    public class AnchorCreator : PressInputBase
+/// <summary>
+/// Listens for touch events and performs an AR raycast from the screen touch point.
+/// AR raycasts will only hit detected trackables like feature points and planes.
+///
+/// If a raycast hits a trackable, the <see cref="placedPrefab"/> is instantiated
+/// and moved to the hit position.
+/// </summary>
+[RequireComponent(typeof(ARRaycastManager))]
+    public class AnchorCreatorNew : PressInputBase
     {
         [SerializeField]
         [Tooltip("Instantiates this prefab on a plane at the touch location.")]
@@ -68,10 +67,15 @@ namespace UnityEngine.XR.ARFoundation.Samples
                 }
                 else
                 {
-                    spawnedObject.transform.position = hitPose.position;
+                    Button clickedButton = QuizButtonHandler.LastClickButton;
+                    if (clickedButton != null)
+                    {
+                        Debug.Log("User clicked button: " + clickedButton.name);
+                        QuizButtonHandler.ResetLastClickButton(); // Reset the last clicked button
+
+                    }
                 }
             }
         }
 
     }
-}
