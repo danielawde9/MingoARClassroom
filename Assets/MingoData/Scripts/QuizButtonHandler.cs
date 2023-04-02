@@ -3,15 +3,11 @@ using UnityEngine.UI;
 
 public class QuizButtonHandler : MonoBehaviour
 {
-    public static Button LastClickButton { get; private set; }
+    [SerializeField] private QuizManager quizManager;
+
+    // This function will be called when a button is clicked using Event Triggers.
     public void OnButtonClicked(Button button)
     {
-        LastClickButton = button;
-        Debug.Log("Clicked button: " + button.name);
-    }
-
-    public static void ResetLastClickButton()
-    {
-        LastClickButton = null;
+        quizManager.OnButtonClicked(button);
     }
 }
