@@ -313,7 +313,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_PlanePrefab: {fileID: 4776765576899091622, guid: 3738bd65ede154463b2c35064b9e5fdb,
     type: 3}
-  m_DetectionMode: -1
+  m_DetectionMode: 1
 --- !u!114 &1177768078
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -368,6 +368,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_PlacedPrefab: {fileID: 8339614054140438254, guid: d8b52f64c81060043b4400aefaca0fb9,
     type: 3}
+  textMeshPrefab: {fileID: 0}
 --- !u!1 &1419518263
 GameObject:
   m_ObjectHideFlags: 0
@@ -379,6 +380,7 @@ GameObject:
   - component: {fileID: 1419518266}
   - component: {fileID: 1419518265}
   - component: {fileID: 1419518264}
+  - component: {fileID: 1419518267}
   m_Layer: 0
   m_Name: AR Session
   m_TagString: Untagged
@@ -428,6 +430,23 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1419518267
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1419518263}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b15f82cc229284894964d2d30806969d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HumanSegmentationStencilMode: 0
+  m_HumanSegmentationDepthMode: 0
+  m_EnvironmentDepthMode: 1
+  m_EnvironmentDepthTemporalSmoothing: 1
+  m_OcclusionPreferenceMode: 0
 --- !u!1 &1913222803
 GameObject:
   m_ObjectHideFlags: 0
