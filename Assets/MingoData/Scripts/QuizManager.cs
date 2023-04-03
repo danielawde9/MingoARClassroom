@@ -18,6 +18,7 @@ public class QuestionsList
         public string question;
         public List<string> answers;
         public int correctAnswerIndex;
+        public string targetCountryName;
     }
 }
 

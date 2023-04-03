@@ -65,6 +65,7 @@ public class PlaceDashboardAnchor : PressInputBase
             if (spawnedObject == null)
             {
                 spawnedObject = Instantiate(m_PlacedPrefab, hitPose.position, hitPose.rotation);
+               
             }
         }
     }
