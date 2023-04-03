@@ -19,6 +19,7 @@
     "com.unity.xr-content.xr-sim-environments": "file:../ContentPackages\\com.unity.xr-content.xr-sim-environments-1.0.0.tgz",
     "com.unity.xr.arcore": "5.0.5",
     "com.unity.xr.arfoundation": "5.0.5",
+    "com.unity.xr.arkit": "5.0.5",
     "com.unity.xr.legacyinputhelpers": "2.1.10",
     "com.unity.xr.management": "4.2.0",
     "com.unity.modules.ai": "1.0.0",

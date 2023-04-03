@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.ARFoundation;
@@ -10,19 +11,18 @@ public class CountryClickHandler : PressInputBase
     [Tooltip("Instantiates this prefab on a plane at the touch location.")]
     GameObject m_PlacedPrefab;
 
-    public GameObject PlacedPrefab
+    public GameObject placedPrefab
     {
         get { return m_PlacedPrefab; }
         set { m_PlacedPrefab = value; }
     }
 
-    public GameObject SpawnedObject { get; private set; }
+    public GameObject spawnedObject { get; private set; }
 
     ARRaycastManager m_RaycastManager;
     Camera mainCamera;
 
-    float cooldownTimer = 0f;
-    readonly float cooldownDuration = 0.5f;
+    bool globePlaced = false;
 
     protected override void Awake()
     {
@@ -31,28 +31,17 @@ public class CountryClickHandler : PressInputBase
         mainCamera = Camera.main;
     }
 
-    void Update()
-    {
-        if (cooldownTimer > 0)
-        {
-            cooldownTimer -= Time.deltaTime;
-        }
-    }
-
     protected override void OnPress(Vector3 position)
     {
-        if (cooldownTimer > 0) return;
-
-        if (SpawnedObject == null)
+        if (!globePlaced)
         {
             PlaceGlobe(position);
+            globePlaced = true;
         }
         else
         {
             DetectCountryTouch(position);
         }
-
-        cooldownTimer = cooldownDuration;
     }
 
     void PlaceGlobe(Vector2 touchPosition)
@@ -62,7 +51,7 @@ public class CountryClickHandler : PressInputBase
         if (m_RaycastManager.Raycast(touchPosition, s_Hits, TrackableType.PlaneWithinPolygon))
         {
             var hitPose = s_Hits[0].pose;
-            SpawnedObject = Instantiate(m_PlacedPrefab, hitPose.position, hitPose.rotation);
+            spawnedObject = Instantiate(m_PlacedPrefab, hitPose.position, hitPose.rotation);
         }
     }
 
@@ -77,7 +66,37 @@ public class CountryClickHandler : PressInputBase
             if (hitObject.CompareTag("Country")) // Make sure to set the tag "Country" on each country GameObject
             {
                 Debug.Log("Country touched: " + hitObject.name);
+
+                // Change the color of the country
+                ChangeCountryColor(hitObject);
+
+                // Set the original and target positions for the lerp animation
+                Vector3 originalPosition = hitObject.transform.position;
+                Vector3 targetPosition = originalPosition + Vector3.up * 0.1f; // adjust the height as desired
+
+                // Start the lerp animation
+                StartCoroutine(MoveObject(hitObject.transform, originalPosition, targetPosition, 0.5f));
             }
         }
     }
+    IEnumerator MoveObject(Transform objectTransform, Vector3 startPos, Vector3 endPos, float duration)
+    {
+        float t = 0f;
+        while (t < duration)
+        {
+            t += Time.deltaTime;
+            float normalizedTime = t / duration;
+            objectTransform.position = Vector3.Lerp(startPos, endPos, normalizedTime);
+            yield return null;
+        }
+    }
+
+
+    void ChangeCountryColor(GameObject country)
+    {
+        Renderer renderer = country.GetComponent<Renderer>();
+        Color originalColor = renderer.material.color;
+        renderer.material.color = Color.yellow; // Set the color to yellow, or any other color you prefer
+    }
+
 }
