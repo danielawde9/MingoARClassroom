@@ -37,10 +37,14 @@ public class ARQuizDashboardAnchorPlacer : BasePressInputHandler
     }
 
 
+    public void SetGlobeActive(bool active)
+    {
+        if (m_PlacedGlobePrefab != null)
+        {
+            m_PlacedGlobePrefab.SetActive(active);
+        }
+    }
 
-    /// <summary>
-    /// The object instantiated as a result of a successful raycast intersection with a plane.
-    /// </summary>
     public GameObject SpawnedObject { get; private set; }
 
     bool m_Pressed;
@@ -76,7 +80,7 @@ public class ARQuizDashboardAnchorPlacer : BasePressInputHandler
             {
                 SpawnedObject = Instantiate(m_PlacedUIQuizDashboardPrefab, hitPose.position, hitPose.rotation);
 
-                Instantiate(m_PlacedGlobePrefab,hitPose.position+new Vector3(0f, 1.0f, 0f), hitPose.rotation);
+                Instantiate(m_PlacedGlobePrefab,hitPose.position+new Vector3(0f, 1.0f, 1.0f), hitPose.rotation);
                
             }
         }

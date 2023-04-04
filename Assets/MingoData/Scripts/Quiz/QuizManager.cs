@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static QuestionsList;
 using static QuestionTypes;
 
 
@@ -12,7 +13,6 @@ public class QuizManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI questionText;
     [SerializeField] private List<Button> answerButtons;
     [SerializeField] private Slider timerSlider;
-    [SerializeField] public GameObject globe; // Add a reference to the globe GameObject
 
     public float timerDuration = 30f;
 
@@ -44,8 +44,16 @@ public class QuizManager : MonoBehaviour
     public void OnButtonClicked(Button button)
     {
         int clickedButtonIndex = answerButtons.IndexOf(button);
-        CheckAnswer(clickedButtonIndex);
-        MoveToNextQuestion();
+        // If the submit button is clicked and the question type is GLOBE_QUESTION, call OnSubmitButtonClicked()
+        if (clickedButtonIndex == 3 && questions[currentQuestionIndex].type == GLOBE_QUESTION)
+        {
+            OnSubmitButtonClicked();
+        }
+        else
+        {
+            CheckAnswer(clickedButtonIndex);
+            MoveToNextQuestion();
+        }
     }
 
     private void LoadQuestions()
@@ -54,11 +62,6 @@ public class QuizManager : MonoBehaviour
         QuestionsList questionsList = JsonUtility.FromJson<QuestionsList>(jsonFile.text);
         questions = questionsList.questions;
 
-        if (questions.Exists(q => q.type == GLOBE_QUESTION))
-        {
-            globe.SetActive(true);
-
-        }
     }
 
     private void DisplayQuestion()
@@ -67,19 +70,30 @@ public class QuizManager : MonoBehaviour
         questionText.text = currentQuestion.question;
         correctAnswerIndex = currentQuestion.correctAnswerIndex;
 
-        // Hide or show the globe based on the question type
-        globe.SetActive(currentQuestion.type == GLOBE_QUESTION);
+        ARQuizDashboardAnchorPlacer arQuizDashboardAnchorPlacer = FindObjectOfType<ARQuizDashboardAnchorPlacer>();
+
+        if (arQuizDashboardAnchorPlacer != null)
+        {
+            arQuizDashboardAnchorPlacer.SetGlobeActive(currentQuestion.type == GLOBE_QUESTION);
+        }
 
         switch (currentQuestion.type)
         {
             case MULTIPLE_CHOICE:
                 DisplayAnswers(currentQuestion.answers, 4);
+                SetAnswerButtonsActive(true);
+
                 break;
             case TRUE_FALSE:
                 DisplayAnswers(currentQuestion.answers, 2);
+                SetAnswerButtonsActive(true);
+
                 break;
             case GLOBE_QUESTION:
-                StartCoroutine(GlobeQuestionCoroutine(currentQuestion));
+                SetAnswerButtonsActive(false);
+                answerButtons[3].gameObject.SetActive(true); // Set the last button as the submit button
+                answerButtonTexts[3].text = "Submit";
+
 
                 break;
             default:
@@ -87,7 +101,45 @@ public class QuizManager : MonoBehaviour
                 break;
         }
     }
+    private void SetAnswerButtonsActive(bool active)
+    {
+        foreach (Button button in answerButtons)
+        {
+            button.gameObject.SetActive(active);
+        }
+    }
 
+    public void OnSubmitButtonClicked()
+    {
+        CountryClickHandler countryClickHandler = FindObjectOfType<CountryClickHandler>();
+
+        QuestionsList.Question currentQuestion = questions[currentQuestionIndex];
+
+        // Check if the selected country is the correct answer
+        if (countryClickHandler.SelectedCountryName == currentQuestion.targetCountryName)
+        {
+            Debug.Log("Correct answer!");
+            // Increase the score and show the correct feedback (e.g., change color, show a message, etc.)
+        }
+        else
+        {
+            Debug.Log("Wrong answer!");
+            // Show the wrong feedback (e.g., change color, show a message, etc.)
+        }
+
+
+        // Reset the SelectedCountryName
+        countryClickHandler.SelectedCountryName = null;
+        // Add a delay before moving to the next question
+        StartCoroutine(ProceedToNextQuestion());
+    }
+
+    private IEnumerator ProceedToNextQuestion()
+    {
+        yield return new WaitForSeconds(2f);
+        // Move to the next question
+        MoveToNextQuestion();
+    }
 
     private IEnumerator GlobeQuestionCoroutine(QuestionsList.Question question)
     {
@@ -113,25 +165,6 @@ public class QuizManager : MonoBehaviour
             }
         }
 
-        // Check if the selected country is the correct answer
-        if (countryClickHandler.SelectedCountryName == question.targetCountryName)
-        {
-            Debug.Log("Correct answer!");
-            // Increase the score and show the correct feedback (e.g., change color, show a message, etc.)
-        }
-        else
-        {
-            Debug.Log("Wrong answer!");
-            // Show the wrong feedback (e.g., change color, show a message, etc.)
-        }
-
-        // Reset the SelectedCountryName
-        countryClickHandler.SelectedCountryName = null;
-        // Add a delay before moving to the next question
-        yield return new WaitForSeconds(2f);
-
-        // Move to the next question
-        MoveToNextQuestion();
     }
 
 
@@ -151,7 +184,7 @@ public class QuizManager : MonoBehaviour
     {
         Debug.Log("Time's up!");
         // Add your logic here, e.g., move to the next question or end the quiz
-        //MoveToNextQuestion();
+        MoveToNextQuestion();
     }
 
     private void DisplayAnswers(List<string> answers, int numberOfButtons)

@@ -354,7 +354,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_PlacedUIQuizDashboardPrefab: {fileID: 3978811623495066059, guid: 880f02b6ba708be4ba3e74510d5edc4c,
     type: 3}
-  m_PlacedGlobePrefab: {fileID: 8339614054140438254, guid: d8b52f64c81060043b4400aefaca0fb9,
+  m_PlacedGlobePrefab: {fileID: 3954710876632599559, guid: d8b52f64c81060043b4400aefaca0fb9,
     type: 3}
 --- !u!114 &1177768081
 MonoBehaviour:
