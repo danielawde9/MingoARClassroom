@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -6,27 +5,14 @@ using UnityEngine;
 using UnityEngine.UI;
 using static QuestionTypes;
 
-[System.Serializable]
-public class QuestionsList
-{
-    public List<Question> questions;
 
-    [System.Serializable]
-    public class Question
-    {
-        public string type;
-        public string question;
-        public List<string> answers;
-        public int correctAnswerIndex;
-        public string targetCountryName;
-    }
-}
 
 public class QuizManager : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI questionText;
     [SerializeField] private List<Button> answerButtons;
     [SerializeField] private Slider timerSlider;
+    [SerializeField] public GameObject globe; // Add a reference to the globe GameObject
 
     public float timerDuration = 30f;
 
@@ -67,6 +53,12 @@ public class QuizManager : MonoBehaviour
         TextAsset jsonFile = Resources.Load<TextAsset>("questions");
         QuestionsList questionsList = JsonUtility.FromJson<QuestionsList>(jsonFile.text);
         questions = questionsList.questions;
+
+        if (questions.Exists(q => q.type == GLOBE_QUESTION))
+        {
+            globe.SetActive(true);
+
+        }
     }
 
     private void DisplayQuestion()
@@ -74,7 +66,11 @@ public class QuizManager : MonoBehaviour
         QuestionsList.Question currentQuestion = questions[currentQuestionIndex];
         questionText.text = currentQuestion.question;
         correctAnswerIndex = currentQuestion.correctAnswerIndex;
-        switch(currentQuestion.type)
+
+        // Hide or show the globe based on the question type
+        globe.SetActive(currentQuestion.type == GLOBE_QUESTION);
+
+        switch (currentQuestion.type)
         {
             case MULTIPLE_CHOICE:
                 DisplayAnswers(currentQuestion.answers, 4);
@@ -82,11 +78,62 @@ public class QuizManager : MonoBehaviour
             case TRUE_FALSE:
                 DisplayAnswers(currentQuestion.answers, 2);
                 break;
+            case GLOBE_QUESTION:
+                StartCoroutine(GlobeQuestionCoroutine(currentQuestion));
+
+                break;
             default:
                 Debug.LogError($"Unsupported question type: {currentQuestion.type}");
                 break;
         }
     }
+
+
+    private IEnumerator GlobeQuestionCoroutine(QuestionsList.Question question)
+    {
+        // Set the question text
+        questionText.text = question.question;
+
+        // Enable the CountryClickHandler script and disable the ARQuizDashboardAnchorPlacer
+        CountryClickHandler countryClickHandler = FindObjectOfType<CountryClickHandler>();
+        ARQuizDashboardAnchorPlacer arQuizDashboardAnchorPlacer = FindObjectOfType<ARQuizDashboardAnchorPlacer>();
+        countryClickHandler.enabled = true;
+        arQuizDashboardAnchorPlacer.enabled = false;
+
+        // Wait until the player clicks on a country and it gets lifted
+        while (true)
+        {
+            if (countryClickHandler.SelectedCountryName == null)
+            {
+                yield return null;
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        // Check if the selected country is the correct answer
+        if (countryClickHandler.SelectedCountryName == question.targetCountryName)
+        {
+            Debug.Log("Correct answer!");
+            // Increase the score and show the correct feedback (e.g., change color, show a message, etc.)
+        }
+        else
+        {
+            Debug.Log("Wrong answer!");
+            // Show the wrong feedback (e.g., change color, show a message, etc.)
+        }
+
+        // Reset the SelectedCountryName
+        countryClickHandler.SelectedCountryName = null;
+        // Add a delay before moving to the next question
+        yield return new WaitForSeconds(2f);
+
+        // Move to the next question
+        MoveToNextQuestion();
+    }
+
 
     private void Update()
     {
@@ -98,13 +145,13 @@ public class QuizManager : MonoBehaviour
         else if (remainingTime <= 0)
         {
             TimerFinished();
-
         }
     }
     private void TimerFinished()
     {
         Debug.Log("Time's up!");
         // Add your logic here, e.g., move to the next question or end the quiz
+        //MoveToNextQuestion();
     }
 
     private void DisplayAnswers(List<string> answers, int numberOfButtons)
@@ -123,15 +170,25 @@ public class QuizManager : MonoBehaviour
         }
     }
 
-    private void MoveToNextQuestion() { 
-    
-        currentQuestionIndex =(currentQuestionIndex+1)%questions.Count;
-        DisplayQuestion();
+    private void MoveToNextQuestion()
+    {
+        if (currentQuestionIndex < questions.Count - 1)
+        {
+            currentQuestionIndex++;
+            DisplayQuestion();
+            remainingTime = timerDuration;
+            timerSlider.value = timerDuration;
+        }
+        else
+        {
+            Debug.Log("Quiz completed");
+            // Implement quiz completion logic
+        }
     }
 
     private void CheckAnswer(int clickedButtonIndex)
     {
-        if(clickedButtonIndex == correctAnswerIndex)
+        if (clickedButtonIndex == correctAnswerIndex)
         {
             Debug.Log("Correct answer!");
         }

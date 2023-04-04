@@ -537,7 +537,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3978811623495066059}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.151, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -689,7 +689,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.6320754, g: 0.5098344, b: 0.54388726, a: 1}
+  m_Color: {r: 0.9433962, g: 0.5562478, b: 0.934582, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1807,4 +1807,5 @@ MonoBehaviour:
   - {fileID: 8072307849122082178}
   - {fileID: 5292427823993312222}
   timerSlider: {fileID: 3249707988286872734}
+  globe: {fileID: 8339614054140438254, guid: d8b52f64c81060043b4400aefaca0fb9, type: 3}
   timerDuration: 30

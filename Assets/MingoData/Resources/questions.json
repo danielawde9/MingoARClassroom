@@ -1,6 +1,13 @@
 {
   "questions": [
     {
+      "type": "globe_country",
+      "question": "Click on the United States",
+      "answers": [],
+      "correctAnswerIndex": -1,
+      "targetCountryName": "United States"
+    },
+    {
       "type": "multiple_choice",
       "question": "What is the capital of France?",
       "answers": ["Paris", "London", "Berlin", "Rome"],

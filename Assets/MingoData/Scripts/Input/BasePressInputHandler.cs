@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public abstract class PressInputBase : MonoBehaviour
+public abstract class BasePressInputHandler : MonoBehaviour
 {
     protected InputAction m_PressAction;
 

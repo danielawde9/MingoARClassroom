@@ -9,36 +9,46 @@ using UnityEngine.XR.ARSubsystems;
 /// Listens for touch events and performs an AR raycast from the screen touch point.
 /// AR raycasts will only hit detected trackables like feature points and planes.
 ///
-/// If a raycast hits a trackable, the <see cref="placedPrefab"/> is instantiated
+/// If a raycast hits a trackable, the <see cref="PlacedUIQuizDashboardPrefab"/> is instantiated
 /// and moved to the hit position.
 /// </summary>
 [RequireComponent(typeof(ARRaycastManager))]
-public class PlaceDashboardAnchor : PressInputBase
+public class ARQuizDashboardAnchorPlacer : BasePressInputHandler
 {
     [SerializeField]
-    [Tooltip("Instantiates this prefab on a plane at the touch location.")]
-    GameObject m_PlacedPrefab;
+    GameObject m_PlacedUIQuizDashboardPrefab;
 
-    /// <summary>
-    /// The prefab to instantiate on touch.
-    /// </summary>
-    public GameObject placedPrefab
+    [SerializeField]
+    GameObject m_PlacedGlobePrefab;
+
+
+
+    public GameObject PlacedUIQuizDashboardPrefab
     {
-        get { return m_PlacedPrefab; }
-        set { m_PlacedPrefab = value; }
+        get { return m_PlacedUIQuizDashboardPrefab; }
+        set { m_PlacedUIQuizDashboardPrefab = value; }
     }
+
+
+    public GameObject PlacedGlobePrefab
+    {
+        get { return m_PlacedGlobePrefab; }
+        set { m_PlacedGlobePrefab = value; }
+    }
+
+
 
     /// <summary>
     /// The object instantiated as a result of a successful raycast intersection with a plane.
     /// </summary>
-    public GameObject spawnedObject { get; private set; }
+    public GameObject SpawnedObject { get; private set; }
 
     bool m_Pressed;
     protected override void OnPress(Vector3 position) => m_Pressed = true;
 
     protected override void OnPressCancel() => m_Pressed = false;
 
-    static List<ARRaycastHit> s_Hits = new List<ARRaycastHit>();
+    static readonly List<ARRaycastHit> s_Hits = new();
 
     ARRaycastManager m_RaycastManager;
 
@@ -62,9 +72,11 @@ public class PlaceDashboardAnchor : PressInputBase
             // will be the closest hit.
             var hitPose = s_Hits[0].pose;
 
-            if (spawnedObject == null)
+            if (SpawnedObject == null)
             {
-                spawnedObject = Instantiate(m_PlacedPrefab, hitPose.position, hitPose.rotation);
+                SpawnedObject = Instantiate(m_PlacedUIQuizDashboardPrefab, hitPose.position, hitPose.rotation);
+
+                Instantiate(m_PlacedGlobePrefab,hitPose.position+new Vector3(0f, 1.0f, 0f), hitPose.rotation);
                
             }
         }
