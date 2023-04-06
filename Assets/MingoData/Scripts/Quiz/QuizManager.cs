@@ -47,7 +47,9 @@ public class QuizManager : MonoBehaviour
         // If the submit button is clicked and the question type is GLOBE_QUESTION, call OnSubmitButtonClicked()
         if (clickedButtonIndex == 3 && questions[currentQuestionIndex].type == GLOBE_QUESTION)
         {
-            OnSubmitButtonClicked();
+            CheckGlobeAnswer();
+            MoveToNextQuestion();
+
         }
         else
         {
@@ -93,8 +95,7 @@ public class QuizManager : MonoBehaviour
                 SetAnswerButtonsActive(false);
                 answerButtons[3].gameObject.SetActive(true); // Set the last button as the submit button
                 answerButtonTexts[3].text = "Submit";
-
-
+                StartCoroutine(GlobeQuestionCoroutine(currentQuestion));
                 break;
             default:
                 Debug.LogError($"Unsupported question type: {currentQuestion.type}");
@@ -109,7 +110,7 @@ public class QuizManager : MonoBehaviour
         }
     }
 
-    public void OnSubmitButtonClicked()
+    public void CheckGlobeAnswer()
     {
         CountryClickHandler countryClickHandler = FindObjectOfType<CountryClickHandler>();
 
@@ -130,8 +131,8 @@ public class QuizManager : MonoBehaviour
 
         // Reset the SelectedCountryName
         countryClickHandler.SelectedCountryName = null;
-        // Add a delay before moving to the next question
-        StartCoroutine(ProceedToNextQuestion());
+        //// Add a delay before moving to the next question
+        //StartCoroutine(ProceedToNextQuestion());
     }
 
     private IEnumerator ProceedToNextQuestion()
@@ -152,20 +153,41 @@ public class QuizManager : MonoBehaviour
         countryClickHandler.enabled = true;
         arQuizDashboardAnchorPlacer.enabled = false;
 
+        bool submitClicked = false;
+
         // Wait until the player clicks on a country and it gets lifted
-        while (true)
+        while (!submitClicked)
         {
-            if (countryClickHandler.SelectedCountryName == null)
+            if (countryClickHandler.SelectedCountryName != null)
             {
-                yield return null;
+                // Wait for the user to click the submit button
+                Button submitButton = answerButtons[3];
+                submitButton.onClick.AddListener(() => submitClicked = true);
             }
-            else
-            {
-                break;
-            }
+            yield return null;
         }
 
+        // Check if the selected country is the correct answer
+        if (countryClickHandler.SelectedCountryName == question.targetCountryName)
+        {
+            Debug.Log("Correct answer!");
+            // Increase the score and show the correct feedback (e.g., change color, show a message, etc.)
+        }
+        else
+        {
+            Debug.Log("Wrong answer!");
+            // Show the wrong feedback (e.g., change color, show a message, etc.)
+        }
+
+        // Reset the SelectedCountryName
+        countryClickHandler.SelectedCountryName = null;
+        // Add a delay before moving to the next question
+        yield return new WaitForSeconds(2f);
+
+        // Move to the next question
+        MoveToNextQuestion();
     }
+
 
 
     private void Update()
