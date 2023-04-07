@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
 
 [RequireComponent(typeof(ARRaycastManager))]
 
-public class FreeFoarmCountry : BasePressInputHandler
+public class FreeRoamCountry : BasePressInputHandler
 {
     [SerializeField]
     [Tooltip("Instantiates this prefab on a plane at the touch location.")]
@@ -19,6 +20,9 @@ public class FreeFoarmCountry : BasePressInputHandler
     }
 
     public GameObject SpawnedObject { get; private set; }
+
+    public TextMeshProUGUI OnScreenInstructions;
+
 
     private ARRaycastManager m_RaycastManager;
     private Camera mainCamera;
@@ -55,7 +59,7 @@ public class FreeFoarmCountry : BasePressInputHandler
             DetectCountryTouch(position);
         }
 
-        DetectCountryTouch(position);
+        //DetectCountryTouch(position);
     }
 
     void PlaceGlobe(Vector2 touchPosition)
@@ -65,9 +69,7 @@ public class FreeFoarmCountry : BasePressInputHandler
         if (m_RaycastManager.Raycast(touchPosition, s_Hits, TrackableType.PlaneWithinPolygon))
         {
             var hitPose = s_Hits[0].pose;
-            Vector3 placementPosition = hitPose.position + new Vector3(0, m_PlacedPrefab.transform.localScale.y, 0);
-
-            SpawnedObject = Instantiate(m_PlacedPrefab, placementPosition, hitPose.rotation);
+            PlaceGlobeAtPosition(hitPose.position);
         }
     }
 
@@ -75,7 +77,7 @@ public class FreeFoarmCountry : BasePressInputHandler
     {
         if (!globePlaced)
         {
-            Vector3 placementPosition = position + new Vector3(0, m_PlacedPrefab.transform.localScale.y, 0);
+            Vector3 placementPosition = position + new Vector3(0, m_PlacedPrefab.transform.localScale.y/2, 0);
             SpawnedObject = Instantiate(m_PlacedPrefab, placementPosition, Quaternion.identity);
             globePlaced = true;
         }
@@ -87,13 +89,15 @@ public class FreeFoarmCountry : BasePressInputHandler
 
         Ray ray = mainCamera.ScreenPointToRay(touchPosition);
 
-        if (Physics.Raycast(ray, out RaycastHit hit))
+        int layerMask = 1 << LayerMask.NameToLayer("Countries");
+
+        if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, layerMask))
         {
             GameObject hitObject = hit.collider.gameObject;
             if (hitObject.CompareTag("Country")) // Make sure to set the tag "Country" on each country GameObject
             {
                 Debug.Log("Country touched: " + hitObject.name);
-
+                OnScreenInstructions.text = hitObject.name;
                 if (!countryData.TryGetValue(hitObject, out CountryData data))
                 {
                     Renderer renderer = hitObject.GetComponent<Renderer>();

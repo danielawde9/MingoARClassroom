@@ -2,13 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
-
-
 public class CountryClickHandler : MonoBehaviour
 {
     public string SelectedCountryName { get; set; }
     private bool isLifting = false;
+    private GameObject selectedCountry = null;
 
     private readonly Dictionary<string, CountryData> countriesData = new();
 
@@ -18,7 +16,6 @@ public class CountryClickHandler : MonoBehaviour
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-            // Create a layer mask to only detect objects on the "Countries" layer
             int layerMask = 1 << LayerMask.NameToLayer("Countries");
 
             if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, layerMask))
@@ -32,7 +29,24 @@ public class CountryClickHandler : MonoBehaviour
                     countriesData[country.name] = new CountryData(color);
                 }
 
+                if (selectedCountry != null && selectedCountry != country)
+                {
+                    DeselectCountry(selectedCountry);
+                }
+
                 ChangeCountryColorAndPosition(country, hit, countriesData[country.name]);
+            }
+        }
+    }
+
+    void DeselectCountry(GameObject country)
+    {
+        if (countriesData.ContainsKey(country.name))
+        {
+            CountryData countryData = countriesData[country.name];
+            if (countryData.IsLifted)
+            {
+                ChangeCountryColorAndPosition(country, default(RaycastHit), countryData);
             }
         }
     }
@@ -54,13 +68,14 @@ public class CountryClickHandler : MonoBehaviour
         if (!countryData.IsLifted)
         {
             SelectedCountryName = country.name;
+            selectedCountry = country;
         }
         else
         {
             SelectedCountryName = null;
+            selectedCountry = null;
         }
         isLifting = false;
-
     }
 
     IEnumerator MoveObject(Transform objectTransform, Vector3 startPos, Vector3 endPos, float duration)
@@ -83,6 +98,8 @@ public class CountryClickHandler : MonoBehaviour
 
         public CountryData(Color originalColor)
         {
+
+
             OriginalColor = originalColor;
             IsLifted = false;
         }
