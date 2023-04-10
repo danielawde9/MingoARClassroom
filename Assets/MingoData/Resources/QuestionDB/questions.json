@@ -1,0 +1,28 @@
+{
+  "questions": [
+    {
+      "type": "multiple_choice",
+      "question": "What is the capital of France?",
+      "answers": ["Paris", "London", "Berlin", "Rome"],
+      "correctAnswerIndex": 0
+    },
+    {
+      "type": "multiple_choice",
+      "question": "Which element has the chemical symbol 'H'?",
+      "answers": ["Hydrogen", "Helium", "Oxygen", "Carbon"],
+      "correctAnswerIndex": 0
+    },
+    {
+      "type": "true_false",
+      "question": "Is the Earth flat?",
+      "answers": ["True", "False"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "true_false",
+      "question": "Is water composed of two hydrogen atoms and one oxygen atom?",
+      "answers": ["True", "False"],
+      "correctAnswerIndex": 0
+    }
+  ]
+}

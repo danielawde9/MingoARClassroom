@@ -7,6 +7,7 @@ TagManager:
   - Country
   - Ball
   - Ground
+  - CelestialBody
   layers:
   - Default
   - TransparentFX
