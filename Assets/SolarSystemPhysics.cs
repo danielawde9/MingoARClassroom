@@ -4,7 +4,8 @@ using UnityEngine;
 public class SolarSystemPhysics : MonoBehaviour
 {
     public List<Rigidbody> celestialBodies;
-    public float gravitationalConstant = 3.358f * Mathf.Pow(10, -5);
+    public float gravitationalConstant = 6.674f * Mathf.Pow(10, -7);
+
 
     private void Start()
     {
@@ -34,5 +35,10 @@ public class SolarSystemPhysics : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void UpdateGravitationalConstant(float newGravitationalConstant)
+    {
+        gravitationalConstant = newGravitationalConstant;
     }
 }
