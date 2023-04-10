@@ -21,14 +21,15 @@ Mingo AR Classroom is an AR educational app inspired by Kahoot, designed to gami
 - Immersive questions: Design the quizzes to present questions and answers using AR elements. For instance, if the quiz is about geography, you can project a 3D map in the user's environment and ask them to pinpoint the correct location.
 - Interactive answer selection: Enable users to select their answers by interacting with the AR elements directly. For example, they can tap, swipe, or use gestures to choose the correct option.
 - Collaborative learning: Allow users to invite friends or other users to join their quiz session, creating a multiplayer experience. Users can see other participants' avatars in their environment and work together to solve the questions.
-- AR leaderboards: Display leaderboards in the user's environment, showing the top performers in different categories or quizzes. This can motivate users to improve their performance and compete with others.
+- AR leaderboards: 
+Display leaderboards in the user's environment, showing the top performers in different categories or quizzes. This can motivate users to improve their performance and compete with others.
 - Themed quizzes: Create quizzes with different themes and use AR to enhance the experience. For example, for a history quiz, you can project historical images, artifacts, or scenes in the user's environment.
 - Educational rewards: Offer users virtual rewards, such as badges or trophies, that they can collect and display in their AR environment. These rewards can serve as incentives for users to keep participating in quizzes and improving their knowledge.
 - Dynamic content: Use AR to keep the quizzes fresh and engaging by updating the questions and answers regularly. This can be achieved by adding new topics, themes, and interactive elements.
 - Accessibility: Ensure the app is accessible to users with different abilities by incorporating features like voice recognition, text-to-speech, and customizable font sizes.
 - Analytics and insights: Provide users with insights into their performance, strengths, and weaknesses. Use AR to display graphs and charts that help users visualize their progress over time.
 
-## Getting Started
+## Getting Started.
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
