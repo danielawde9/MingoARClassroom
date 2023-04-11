@@ -29,7 +29,7 @@ Display leaderboards in the user's environment, showing the top performers in di
 - Accessibility: Ensure the app is accessible to users with different abilities by incorporating features like voice recognition, text-to-speech, and customizable font sizes.
 - Analytics and insights: Provide users with insights into their performance, strengths, and weaknesses. Use AR to display graphs and charts that help users visualize their progress over time.
 
-## Getting Started.
+## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
