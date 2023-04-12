@@ -1,0 +1,11 @@
+{
+  "planetName": "Venus",
+  "speedFactor": 0.001,
+  "orbitSpeed": 1.602,
+  "maxOrbitSpeed": 1.602,
+  "selfRotationSpeed": -5832.5,
+  "inclination": 3.39,
+  "semiMajorAxis": 1.08208,
+  "eccentricity": 0.007,
+  "distanceFromSun": 1.08208
+}

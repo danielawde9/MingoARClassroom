@@ -1,0 +1,11 @@
+{
+  "planetName": "Mercury",
+  "speedFactor": 0.001,
+  "orbitSpeed": 4.092,
+  "maxOrbitSpeed": 4.092,
+  "selfRotationSpeed": 1407.6,
+  "inclination": 7.0,
+  "semiMajorAxis": 0.57909,
+  "eccentricity": 0.206,
+  "distanceFromSun": 0.57909
+}

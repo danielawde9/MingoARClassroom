@@ -9,10 +9,14 @@ public class OrbitingPlanet : MonoBehaviour
     public float inclination; // In degrees
     public float semiMajorAxis; // In Unity units
     public float eccentricity;
-    public float distanceFromSun; // In Unity units
+    private  float distanceFromSun; // In Unity units
 
     private float angle; // Current angle of the planet in its orbit
     private LineRenderer trajectoryLine;
+    private int completedOrbits = 0;
+
+    public float sunVortexSpeed = 0.01f;
+    public float sunVortexAngle = 60.0f;
 
     public int numTrajectoryPoints = 1000;
     private void Start()
@@ -23,9 +27,13 @@ public class OrbitingPlanet : MonoBehaviour
 
     private void Update()
     {
+        sun.position += new Vector3(Mathf.Cos(Mathf.Deg2Rad * sunVortexAngle) * sunVortexSpeed, Mathf.Sin(Mathf.Deg2Rad * sunVortexAngle) * sunVortexSpeed, 0) * Time.deltaTime;
+
+        float previousAngle = angle;
+
         // Orbit
         angle += Time.deltaTime * orbitSpeed * speedFactor;
-        float semiMajorAxis = distanceFromSun;
+        distanceFromSun = semiMajorAxis;
         float semiMinorAxis = semiMajorAxis * Mathf.Sqrt(1 - eccentricity * eccentricity);
         float radius = semiMajorAxis * (1 - eccentricity * eccentricity) / (1 + eccentricity * Mathf.Cos(angle));
         float x = sun.position.x + radius * Mathf.Cos(angle);
@@ -35,8 +43,18 @@ public class OrbitingPlanet : MonoBehaviour
 
         // Self-rotation
         transform.Rotate(Vector3.forward, selfRotationSpeed * Time.deltaTime);
-    }
 
+        // Check if the planet has completed a full orbit
+        if (previousAngle > angle)
+        {
+            completedOrbits++;
+            Debug.Log(gameObject.name + " completed " + completedOrbits + " orbits.");
+        }
+    }
+    public int GetCompletedOrbits()
+    {
+        return completedOrbits;
+    }
 
     private void SetupTrajectoryLineRenderer()
     {

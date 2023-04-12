@@ -1,0 +1,11 @@
+{
+  "planetName": "Jupiter",
+  "speedFactor": 0.001,
+  "orbitSpeed": 0.083,
+  "maxOrbitSpeed": 0.083,
+  "selfRotationSpeed": 870.5,
+  "inclination": 1.31,
+  "semiMajorAxis": 7.78299,
+  "eccentricity": 0.048,
+  "distanceFromSun": 7.78299
+}

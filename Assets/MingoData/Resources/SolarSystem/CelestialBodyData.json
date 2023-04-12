@@ -1,0 +1,125 @@
+{
+  "celestialBodies": [
+    {
+      "planetName": "Mercury",
+      "speedFactor": 0.001,
+      "orbitSpeed": 4.092,
+      "maxOrbitSpeed": 4.092,
+      "selfRotationSpeed": 1407.6,
+      "inclination": 7.0,
+      "semiMajorAxis": 5.7909,
+      "eccentricity": 0.206,
+      "distanceFromSun": 5.7909
+    },
+    {
+      "planetName": "Venus",
+      "speedFactor": 0.001,
+      "orbitSpeed": 1.602,
+      "maxOrbitSpeed": 1.602,
+      "selfRotationSpeed": -5832.5,
+      "inclination": 3.39,
+      "semiMajorAxis": 10.8208,
+      "eccentricity": 0.007,
+      "distanceFromSun": 10.8208
+    },
+    {
+      "planetName": "Earth",
+      "speedFactor": 0.001,
+      "orbitSpeed": 0.986,
+      "maxOrbitSpeed": 0.986,
+      "selfRotationSpeed": 360.0,
+      "inclination": 0.0,
+      "semiMajorAxis": 14.9597,
+      "eccentricity": 0.017,
+      "distanceFromSun": 14.9597
+    },
+    {
+      "planetName": "Mars",
+      "speedFactor": 0.001,
+      "orbitSpeed": 0.524,
+      "maxOrbitSpeed": 0.524,
+      "selfRotationSpeed": 350.9,
+      "inclination": 1.85,
+      "semiMajorAxis": 22.7939,
+      "eccentricity": 0.093,
+      "distanceFromSun": 22.7939
+    },
+    {
+      "planetName": "Jupiter",
+      "speedFactor": 0.001,
+      "orbitSpeed": 0.083,
+      "maxOrbitSpeed": 0.083,
+      "selfRotationSpeed": 870.5,
+      "inclination": 1.31,
+      "semiMajorAxis": 77.8299,
+      "eccentricity": 0.048,
+      "distanceFromSun": 77.8299
+    },
+    {
+      "planetName": "Saturn",
+      "speedFactor": 0.001,
+      "orbitSpeed": 0.033,
+      "maxOrbitSpeed": 0.033,
+      "selfRotationSpeed": 810.6,
+      "inclination": 2.49,
+      "semiMajorAxis": 142.6725,
+      "eccentricity": 0.054,
+      "distanceFromSun": 142.6725
+    },
+    {
+      "planetName": "Uranus",
+      "speedFactor": 0.001,
+      "orbitSpeed": 0.012,
+      "maxOrbitSpeed": 0.012,
+      "selfRotationSpeed": -501.2,
+      "inclination": 0.77,
+      "semiMajorAxis": 287.0972,
+      "eccentricity": 0.047,
+      "distanceFromSun": 287.0972
+    },
+    {
+      "planetName": "Neptune",
+      "speedFactor": 0.001,
+      "orbitSpeed": 0.006,
+      "maxOrbitSpeed": 0.006,
+      "selfRotationSpeed": 536.3,
+      "inclination": 1.77,
+      "semiMajorAxis": 449.8252,
+      "eccentricity": 0.009,
+      "distanceFromSun": 449.8252
+    },
+    {
+      "planetName": "Moon",
+      "speedFactor": 0.001,
+      "orbitSpeed": 13.2,
+      "maxOrbitSpeed": 13.2,
+      "selfRotationSpeed": 13.2,
+      "inclination": 5.14,
+      "semiMajorAxis": 0.3844,
+      "eccentricity": 0.055,
+      "distanceFromSun": 0.3844
+    },
+    {
+      "planetName": "Asteroid1",
+      "speedFactor": 0.001,
+      "orbitSpeed": 0.24,
+      "maxOrbitSpeed": 0.24,
+      "selfRotationSpeed": 10,
+      "inclination": 1.0,
+      "semiMajorAxis": 40,
+      "eccentricity": 0.14,
+      "distanceFromSun": 40
+    },
+    {
+      "planetName": "Asteroid2",
+      "speedFactor": 0.001,
+      "orbitSpeed": 0.24,
+      "maxOrbitSpeed": 0.24,
+      "selfRotationSpeed": 10,
+      "inclination": 1.0,
+      "semiMajorAxis": 40,
+      "eccentricity": 0.14,
+      "distanceFromSun": 40
+    }
+  ]
+}

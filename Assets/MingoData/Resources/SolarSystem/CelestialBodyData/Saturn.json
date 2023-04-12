@@ -1,0 +1,11 @@
+{
+  "planetName": "Saturn",
+  "speedFactor": 0.001,
+  "orbitSpeed": 0.033,
+  "maxOrbitSpeed": 0.033,
+  "selfRotationSpeed": 810.6,
+  "inclination": 2.49,
+  "semiMajorAxis": 14.26725,
+  "eccentricity": 0.054,
+  "distanceFromSun": 14.26725
+}
