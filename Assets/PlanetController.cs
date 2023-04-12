@@ -8,7 +8,9 @@ public class PlanetController : MonoBehaviour
     private int orbitCount;
     private int selfRotationCount;
     private float speedFactor;
-    private float orbitSpeed;
+    //private float orbitSpeed;
+    private float maxOrbitSpeed;
+
     private float selfRotationSpeed;
     private float inclination;
     private float semiMajorAxis;
@@ -53,16 +55,22 @@ public class PlanetController : MonoBehaviour
         for (int i = 0; i < 360; i++)
         {
             float angle = i * Mathf.Deg2Rad;
-            float xPos = sun.position.x + distanceFromSun * (1 - eccentricity) * Mathf.Cos(angle);
-            float zPos = sun.position.z + distanceFromSun * Mathf.Sin(angle);
-            Vector3 pointPosition = new Vector3(xPos, sun.position.y + inclination, zPos);
+
+            float semiMinorAxis = semiMajorAxis * Mathf.Sqrt(1 - eccentricity * eccentricity);
+            float radius = semiMajorAxis * (1 - eccentricity * eccentricity) / (1 + eccentricity * Mathf.Cos(angle));
+            float x = sun.position.x + radius * Mathf.Cos(angle);
+            float y = sun.position.y + Mathf.Sin(Mathf.Deg2Rad * inclination) * semiMinorAxis * Mathf.Sin(angle);
+            float z = sun.position.z + radius * Mathf.Sin(angle) * Mathf.Cos(Mathf.Deg2Rad * inclination);
+
+            Vector3 pointPosition = new Vector3(x, y, z);
             orbitLine.SetPosition(i, pointPosition);
         }
     }
+
     public void SetData(SolarSystemController.CelestialBody data)
     {
         speedFactor = data.speedFactor;
-        orbitSpeed = data.orbitSpeed;
+        maxOrbitSpeed = data.maxOrbitSpeed;
         selfRotationSpeed = data.selfRotationSpeed;
         inclination = data.inclination;
         semiMajorAxis = data.semiMajorAxis;
@@ -73,11 +81,14 @@ public class PlanetController : MonoBehaviour
     private void RotateAroundSun()
     {
         float previousAngle = orbitAngle;
-        orbitAngle += Time.deltaTime * orbitSpeed * speedFactor * orbitAcceleration;
         float angleInRadians = orbitAngle * Mathf.Deg2Rad;
 
         float semiMinorAxis = semiMajorAxis * Mathf.Sqrt(1 - eccentricity * eccentricity);
         float radius = semiMajorAxis * (1 - eccentricity * eccentricity) / (1 + eccentricity * Mathf.Cos(angleInRadians));
+        float currentOrbitSpeed = maxOrbitSpeed * Mathf.Sqrt((semiMajorAxis * (1 - eccentricity)) / radius);
+
+        orbitAngle += Time.deltaTime * currentOrbitSpeed * speedFactor * orbitAcceleration;
+
         float x = sun.position.x + radius * Mathf.Cos(angleInRadians);
         float y = sun.position.y + Mathf.Sin(Mathf.Deg2Rad * inclination) * semiMinorAxis * Mathf.Sin(angleInRadians);
         float z = sun.position.z + radius * Mathf.Sin(angleInRadians) * Mathf.Cos(Mathf.Deg2Rad * inclination);
