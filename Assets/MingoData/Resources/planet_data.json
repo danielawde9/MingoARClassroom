@@ -45,7 +45,7 @@
       "diameter": 6792,
       "rotationPeriod": 24.6,
       "lengthOfDay ": 24.7,
-      "distanceFromSun": 22.80,
+      "distanceFromSun": 22.8,
       "orbitalPeriod": 687.0,
       "orbitalInclination": 1.8,
       "orbitalEccentricity": 0.094,
@@ -71,7 +71,7 @@
       "diameter": 120536,
       "rotationPeriod": 10.7,
       "lengthOfDay ": 10.7,
-      "distanceFromSun": 143.20,
+      "distanceFromSun": 143.2,
       "orbitalPeriod": 10747,
       "orbitalInclination": 2.5,
       "orbitalEccentricity": 0.052,
@@ -84,7 +84,7 @@
       "diameter": 51118,
       "rotationPeriod": -17.2,
       "lengthOfDay ": 17.2,
-      "distanceFromSun": 286.70,
+      "distanceFromSun": 286.7,
       "orbitalPeriod": 30589,
       "orbitalInclination": 0.8,
       "orbitalEccentricity": 0.047,
@@ -97,12 +97,25 @@
       "diameter": 49528,
       "rotationPeriod": 16.1,
       "lengthOfDay": 16.1,
-      "distanceFromSun": 451.50,
+      "distanceFromSun": 451.5,
       "orbitalPeriod": 59800,
       "orbitalInclination": 1.8,
       "orbitalEccentricity": 0.01,
       "obliquityToOrbit": 28.3,
       "prefabName": "NeptunePrefab"
+    },
+    {
+      "name": "Sun",
+      "mass": 1989000,
+      "diameter": 1392000,
+      "rotationPeriod": 609.12,
+      "lengthOfDay": 609.12,
+      "distanceFromSun": 0,
+      "orbitalPeriod": 0,
+      "orbitalInclination": 0,
+      "orbitalEccentricity": 0,
+      "obliquityToOrbit": 0,
+      "prefabName": "SunPrefab"
     }
   ]
 }
