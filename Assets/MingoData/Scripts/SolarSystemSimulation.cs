@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor.XR.ARKit;
 using UnityEngine;
 
 public class SolarSystemSimulation : MonoBehaviour
@@ -25,7 +26,13 @@ public class SolarSystemSimulation : MonoBehaviour
         [HideInInspector] public int completedOrbits;
         [HideInInspector] public int completedRotations;
         [HideInInspector] public int completedSelfRotations;
+        [HideInInspector] public Vector3 rotationAxis;
+        [HideInInspector] public float perihelionDistance;
+        [HideInInspector] public float aphelionDistance;
+
     }
+
+
 
     [Serializable]
     public class PlanetDataList
@@ -44,10 +51,13 @@ public class SolarSystemSimulation : MonoBehaviour
     {
         LoadPlanetData();
         SpawnPlanets();
+
+        CreateOrbitLines();
     }
 
     private void LoadPlanetData()
     {
+
         TextAsset jsonFile = Resources.Load<TextAsset>("planet_data");
         planetDataList = JsonUtility.FromJson<PlanetDataList>(jsonFile.text);
         foreach (var planetData in planetDataList.planets)
@@ -56,22 +66,40 @@ public class SolarSystemSimulation : MonoBehaviour
             planetData.rotationPeriod *= 3600;
             // Convert orbitalPeriod from days to seconds
             planetData.orbitalPeriod *= 86400;
+            // Calculate perihelion and aphelion distances
+            planetData.perihelionDistance = planetData.distanceFromSun * (1 - planetData.orbitalEccentricity);
+            planetData.aphelionDistance = planetData.distanceFromSun * (1 + planetData.orbitalEccentricity);
+
         }
     }
 
     private void SpawnPlanets()
     {
+
+        Quaternion rotationCorrection = Quaternion.Euler(-90, 0, 0);
+
         foreach (var planet in planetDataList.planets)
         {
             GameObject prefab = Resources.Load<GameObject>(planet.prefabName);
-            planet.planetInstance = Instantiate(prefab, CalculatePosition(planet, 0f), Quaternion.identity);
-            planet.planetInstance.transform.localScale = new Vector3(1 * scale, 1 * scale, 1 * scale); ;
+            // Apply the rotation correction when instantiating the prefab
+            planet.planetInstance = Instantiate(prefab, CalculatePosition(planet, 0f), prefab.transform.rotation * rotationCorrection);
+            planet.planetInstance.transform.localScale = new Vector3(1 * scale, 1 * scale, 1 * scale);
             planet.rotationSpeed = 360f / planet.rotationPeriod;
             planet.orbitProgress = 0f;
             planet.rotationProgress = 0f;
+
+            // Set the rotation axis based on obliquity to orbit
+            planet.rotationAxis = Quaternion.Euler(0, 0, planet.obliquityToOrbit) * Vector3.up;
+
         }
     }
-
+    private void CreateOrbitLines()
+    {
+        foreach (var planet in planetDataList.planets)
+        {
+            CreateOrbitLine(planet);
+        }
+    }
     private void Update()
     {
         float deltaTime = Time.deltaTime * timeScale;
@@ -111,22 +139,7 @@ public class SolarSystemSimulation : MonoBehaviour
                 UpdateLogText(planet.name, planet.completedSelfRotations, planet.completedOrbits);
             }
 
-            //planet.planetInstance.transform.Rotate(0, planet.rotationSpeed * deltaTime, 0, Space.Self);
-
-            //// Update planet position and rotation around the sun
-            //Vector3 newPosition = CalculatePosition(planet, deltaTime);
-            //planet.planetInstance.transform.position = newPosition;
-            //planet.planetInstance.transform.RotateAround(Vector3.zero, Vector3.up, 360f * deltaTime / planet.orbitalPeriod);
-
-            //// Update self-rotation
-            //float selfRotationSpeed = 360f * (deltaTime / planet.rotationPeriod);
-            //planet.planetInstance.transform.Rotate(Vector3.up, selfRotationSpeed);
-
-
-            //LogProgress(planet, deltaTime);
-
-
-            //CreateOrbitLine(planet);
+            
         }
     }
 
@@ -138,40 +151,44 @@ public class SolarSystemSimulation : MonoBehaviour
         float semiMinorAxis = semiMajorAxis * Mathf.Sqrt(1 - Mathf.Pow(planet.orbitalEccentricity, 2));
         float x = semiMajorAxis * Mathf.Cos(angle);
         float z = semiMinorAxis * Mathf.Sin(angle);
-        return new Vector3(x, 0, z);
+        // Apply the orbital inclination
+        float y = Mathf.Sin(angle) * semiMinorAxis * Mathf.Tan(planet.orbitalInclination * Mathf.Deg2Rad);
+
+
+        return new Vector3(x, y, z);
     }
 
-    //private void LogProgress(PlanetData planet, float deltaTime)
-    //{
-    //    float orbitDelta = deltaTime / planet.orbitalPeriod;
-    //    float rotationDelta = deltaTime / planet.rotationPeriod;
 
-    //    planet.orbitProgress += orbitDelta;
-    //    planet.rotationProgress += rotationDelta;
+    private void CreateOrbitLine(PlanetData planet)
+    {
+        GameObject orbitLine = new GameObject($"{planet.name} Orbit Line");
+        LineRenderer lineRenderer = orbitLine.AddComponent<LineRenderer>();
+        lineRenderer.material = orbitLineMaterial;
+        lineRenderer.widthMultiplier = 0.5f;
+        lineRenderer.positionCount = 360;
 
-    //    if (planet.orbitProgress >= 1)
-    //    {
-    //        planet.orbitProgress %= 1;
-    //        planet.completedOrbits++;
-    //        UpdateLogText();
-    //    }
+        float angleStep = 360f / lineRenderer.positionCount;
+        for (int i = 0; i < lineRenderer.positionCount; i++)
+        {
+            float angle = i * angleStep;
+            Vector3 position = CalculateOrbitLinePosition(planet, angle );
+            lineRenderer.SetPosition(i, position);
+        }
+    }
 
-    //    if (planet.rotationProgress >= 1)
-    //    {
-    //        planet.rotationProgress %= 1;
-    //        planet.completedRotations++;
-    //        UpdateLogText();
-    //    }
-    //}
+    private Vector3 CalculateOrbitLinePosition(PlanetData planet, float angle)
+    {
+        float radians = angle * Mathf.Deg2Rad;
+        float semiMajorAxis = planet.distanceFromSun * scale;
+        float semiMinorAxis = semiMajorAxis * Mathf.Sqrt(1 - Mathf.Pow(planet.orbitalEccentricity, 2));
+        float x = semiMajorAxis * Mathf.Cos(radians);
+        float z = semiMinorAxis * Mathf.Sin(radians);
+        // Apply the orbital inclination
+        float y = Mathf.Sin(radians) * semiMinorAxis * Mathf.Tan(planet.orbitalInclination * Mathf.Deg2Rad);
 
-    //private void UpdateLogText()
-    //{
-    //    logText.text = "";
-    //    foreach (var planet in planetDataList.planets)
-    //    {
-    //        logText.text += $"{planet.name}: {planet.completedOrbits} orbits, {planet.completedRotations} rotations\n";
-    //    }
-    //}
+        return new Vector3(x, y, z);
+    }
+
 
     private void UpdateLogText(string planetName, int completedSelfRotations, int completedOrbits)
     {
@@ -188,33 +205,10 @@ public class SolarSystemSimulation : MonoBehaviour
             }
         }
     }
-    private LineRenderer CreateOrbitLine(PlanetData planet)
-    {
-        GameObject orbitLineObject = new GameObject(planet.name + "_OrbitLine");
-        LineRenderer orbitLine = orbitLineObject.AddComponent<LineRenderer>();
-
-        orbitLine.material = orbitLineMaterial;
-        orbitLine.widthMultiplier = 0.1f;
-        orbitLine.positionCount = 180;
-        orbitLine.loop = true;
-        orbitLine.useWorldSpace = true;
-
-        float angleStep = 360f / orbitLine.positionCount;
-        for (int i = 0; i < orbitLine.positionCount; i++)
-        {
-            float angle = angleStep * i;
-            float deltaTime = angle / 360f * planet.orbitalPeriod;
-            Vector3 newPosition = CalculatePosition(planet, deltaTime);
-
-            orbitLine.SetPosition(i, newPosition);
-        }
-
-        return orbitLine;
-    }
-
 
 
 }
 
 
 // todo fix prefabs 90 angle
+// todo add also the planet orbit
