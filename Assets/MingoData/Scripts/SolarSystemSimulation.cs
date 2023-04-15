@@ -199,3 +199,4 @@ public class SolarSystemSimulation : MonoBehaviour
 
 
 // todo fix prefabs 90 angle
+// todo add lighting
