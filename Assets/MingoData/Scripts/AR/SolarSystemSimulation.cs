@@ -40,6 +40,8 @@ public class SolarSystemSimulation : MonoBehaviour
 
     public float sizeScale = 1.0f;
     public float timeScale = 1.0f;
+    public float distanceScale = 1.0f;
+
     public TextMeshProUGUI logText;
     public Material orbitLineMaterial;
 
@@ -96,13 +98,33 @@ public class SolarSystemSimulation : MonoBehaviour
 
     public void UpdatePlanetScale(PlanetData planet)
     {
-        if (planet.name != "Sun")
+        if (planet.name != "SolarSystem/Sun")
         {
             float diameterScale = planet.diameter * sizeScale;
             planet.planetInstance.transform.localScale = new Vector3(diameterScale, diameterScale, diameterScale);
         }
     }
+    public void UpdateDistanceScale(float value)
+    {
+        distanceScale = value;
+        foreach (var planet in planetDataList.planets)
+        {
+            UpdateOrbitLine(planet);
+        }
+    }
+    // Add this new function
+    private void UpdateOrbitLine(PlanetData planet)
+    {
+        LineRenderer lineRenderer = GameObject.Find($"{planet.name} Orbit Line").GetComponent<LineRenderer>();
 
+        float angleStep = 360f / lineRenderer.positionCount;
+        for (int i = 0; i < lineRenderer.positionCount; i++)
+        {
+            float angle = i * angleStep;
+            Vector3 position = CalculatePosition(planet, angle); // Use the same method for orbit lines
+            lineRenderer.SetPosition(i, position);
+        }
+    }
 
 
     private void Update()
@@ -180,7 +202,7 @@ public class SolarSystemSimulation : MonoBehaviour
         // Apply the orbital inclination
         float y = Mathf.Sin(eccentricAnomaly) * semiMinorAxis * Mathf.Tan(planet.orbitalInclination * Mathf.Deg2Rad);
 
-        return new Vector3(x, y, z);
+        return new Vector3(x * distanceScale, y * distanceScale, z * distanceScale);
     }
 
     private void UpdateLogText(string planetName, int completedSelfRotations, int completedOrbits)
