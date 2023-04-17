@@ -9,6 +9,8 @@ EditorBuildSettings:
     path: Assets/MingoData/Scenes/ARScene.unity
     guid: 754185cb3772e1644b765090801d6483
   m_configObjects:
+    Unity.XR.Oculus.Settings: {fileID: 11400000, guid: aaeb9e6ffcc210d46af94f319262d60a,
+      type: 2}
     Unity.XR.WindowsMR.Settings: {fileID: 11400000, guid: 744b813df90924c169af73489b8325de,
       type: 2}
     UnityEditor.XR.ARCore.ARCoreSettings: {fileID: 11400000, guid: 89a6d18d3df8d3e4fa917b0f9a963bc0,

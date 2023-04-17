@@ -1,0 +1,121 @@
+{
+  "planets": [
+    {
+      "name": "SolarSystem/Mercury",
+      "mass": 0.33,
+      "diameter": 0.004879,
+      "rotationPeriod": 1407.6,
+      "lengthOfDay ": 4222.6,
+      "distanceFromSun": 5.79,
+      "orbitalPeriod": 88.0,
+      "orbitalInclination": 7.0,
+      "orbitalEccentricity": 0.206,
+      "obliquityToOrbit": 0.034,
+      "prefabName": "SolarSystem/MercuryPrefab"
+    },
+    {
+      "name": "SolarSystem/Venus",
+      "mass": 4.87,
+      "diameter": 0.012104,
+      "rotationPeriod": -5832.5,
+      "lengthOfDay ": 2802.0,
+      "distanceFromSun": 10.82,
+      "orbitalPeriod": 224.7,
+      "orbitalInclination": 3.4,
+      "orbitalEccentricity": 0.007,
+      "obliquityToOrbit": 177.4,
+      "prefabName": "SolarSystem/VenusPrefab"
+    },
+    {
+      "name": "SolarSystem/Earth",
+      "mass": 5.97,
+      "diameter": 0.012756,
+      "rotationPeriod": 23.9,
+      "lengthOfDay ": 24,
+      "distanceFromSun": 14.96,
+      "orbitalPeriod": 365.2,
+      "orbitalInclination": 0,
+      "orbitalEccentricity": 0.017,
+      "obliquityToOrbit": 23.4,
+      "prefabName": "SolarSystem/EarthPrefab"
+    },
+    {
+      "name": "SolarSystem/Mars",
+      "mass": 0.642,
+      "diameter": 0.006792,
+      "rotationPeriod": 24.6,
+      "lengthOfDay ": 24.7,
+      "distanceFromSun": 22.8,
+      "orbitalPeriod": 687.0,
+      "orbitalInclination": 1.8,
+      "orbitalEccentricity": 0.094,
+      "obliquityToOrbit": 25.2,
+      "prefabName": "SolarSystem/MarsPrefab"
+    },
+    {
+      "name": "SolarSystem/Jupiter",
+      "mass": 1898,
+      "diameter": 0.142984,
+      "rotationPeriod": 9.9,
+      "lengthOfDay ": 9.9,
+      "distanceFromSun": 77.85,
+      "orbitalPeriod": 4331,
+      "orbitalInclination": 1.3,
+      "orbitalEccentricity": 0.049,
+      "obliquityToOrbit": 3.1,
+      "prefabName": "SolarSystem/JupiterPrefab"
+    },
+    {
+      "name": "SolarSystem/Saturn",
+      "mass": 568,
+      "diameter": 0.120536,
+      "rotationPeriod": 10.7,
+      "lengthOfDay ": 10.7,
+      "distanceFromSun": 143.2,
+      "orbitalPeriod": 10747,
+      "orbitalInclination": 2.5,
+      "orbitalEccentricity": 0.052,
+      "obliquityToOrbit": 26.7,
+      "prefabName": "SolarSystem/SaturnPrefab"
+    },
+    {
+      "name": "SolarSystem/Uranus",
+      "mass": 86.8,
+      "diameter": 0.051118,
+      "rotationPeriod": -17.2,
+      "lengthOfDay ": 17.2,
+      "distanceFromSun": 286.7,
+      "orbitalPeriod": 30589,
+      "orbitalInclination": 0.8,
+      "orbitalEccentricity": 0.047,
+      "obliquityToOrbit": 97.8,
+      "prefabName": "SolarSystem/UranusPrefab"
+    },
+    {
+      "name": "SolarSystem/Neptune",
+      "mass": 102,
+      "diameter": 0.049528,
+      "rotationPeriod": 16.1,
+      "lengthOfDay": 16.1,
+      "distanceFromSun": 451.5,
+      "orbitalPeriod": 59800,
+      "orbitalInclination": 1.8,
+      "orbitalEccentricity": 0.01,
+      "obliquityToOrbit": 28.3,
+      "prefabName": "SolarSystem/NeptunePrefab"
+    },
+    {
+      "name": "SolarSystem/Sun",
+      "mass": 1989000,
+      "diameter": 1.392,
+      "rotationPeriod": 609.12,
+      "lengthOfDay": 609.12,
+      "distanceFromSun": 0,
+      "orbitalPeriod": 0,
+      "orbitalInclination": 0,
+      "orbitalEccentricity": 0,
+      "obliquityToOrbit": 7.25,
+      "prefabName": "SolarSystem/SunPrefab"
+    }
+  ]
+}

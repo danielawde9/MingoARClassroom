@@ -1,0 +1,18 @@
+{
+  "elements": [
+    {
+      "atomicNumber": 9,
+      "symbol": "F",
+      "name": "Fluorine",
+      "group": 17,
+      "period": 2,
+      "atomicMass": 18.99,
+      "electronegativity": 3.98,
+      "ionizationEnergy": 1681,
+      "density": 1.696,
+      "meltingPoint": 53.53,
+      "boilingPoint": 85.03,
+      "color": "Color.paleYellow"
+    }
+  ]
+}
