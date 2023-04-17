@@ -9,7 +9,7 @@ Mingo AR Classroom is an AR educational app inspired by Kahoot, designed to gami
 - Lobby system where students enter the unique code and wait for the teacher to start the game
 - Scoring system based on speed and accuracy, with a leaderboard displayed after each question
 
-## To Do
+## To-Do
 
 - Customizable avatars: Allow users to personalize their in-app characters or icons, making the experience more engaging and enjoyable.
 - Power-ups or rewards: Introduce power-ups or rewards for students who perform well or achieve specific goals. These could be used to boost their scores or provide additional benefits during the game.
