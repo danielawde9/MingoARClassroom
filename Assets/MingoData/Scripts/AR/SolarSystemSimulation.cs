@@ -146,7 +146,7 @@ public class SolarSystemSimulation : MonoBehaviour
                 planet.orbitProgress += orbitDelta;
                 planet.planetInstance.transform.position = CalculatePosition(planet, planet.orbitProgress);
             }
-           
+
             // Update rotation and orbit progress
             planet.rotationProgress += Mathf.Abs(rotationDelta);
 
