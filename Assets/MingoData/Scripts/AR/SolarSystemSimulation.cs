@@ -203,6 +203,7 @@ public class SolarSystemSimulation : MonoBehaviour
         float y = Mathf.Sin(eccentricAnomaly) * semiMinorAxis * Mathf.Tan(planet.orbitalInclination * Mathf.Deg2Rad);
 
         return new Vector3(x * distanceScale, y * distanceScale, z * distanceScale);
+
     }
 
     private void UpdateLogText(string planetName, int completedSelfRotations, int completedOrbits)
