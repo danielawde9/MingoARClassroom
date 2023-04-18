@@ -189,6 +189,7 @@ public class SolarSystemSimulation : MonoBehaviour
     private Vector3 CalculatePosition(PlanetData planet, float angle)
     {
         float radians = angle * Mathf.Deg2Rad;
+
         float semiMajorAxis = planet.distanceFromSun;
         float semiMinorAxis = semiMajorAxis * Mathf.Sqrt(1 - Mathf.Pow(planet.orbitalEccentricity, 2));
 
