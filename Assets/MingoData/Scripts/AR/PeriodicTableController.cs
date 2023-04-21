@@ -14,7 +14,7 @@ public class PeriodicTableController : MonoBehaviour
         public int group;
         public int period;
         public float atomicMass;
-        public float? electronegativity;
+        public float? electroNegativity;
         public int ionizationEnergy;
         public float density;
         public float meltingPoint;
@@ -29,6 +29,10 @@ public class PeriodicTableController : MonoBehaviour
     }
 
     public GameObject bohrModelPrefab;
+
+    public float electronShellDistanceScale = 1.5f;
+    public float nucleusDistanceScale = 0.1f;
+    public float atomSizeScale = 1.0f;
 
     private ElementList elementList;
 
@@ -67,6 +71,9 @@ public class PeriodicTableController : MonoBehaviour
             // Set up electron shells
             SetupElectronShells(bohrModelInstance, elementData.atomicNumber);
 
+            // Set up nucleus (protons and neutrons)
+            SetupNucleus(bohrModelInstance, elementData.atomicNumber, i);
+
             // Update startPosition for the next element
             startPosition.x += xOffset;
             if ((i + 1) % maxColumns == 0)
@@ -76,6 +83,40 @@ public class PeriodicTableController : MonoBehaviour
             }
         }
     }
+    private void SetupNucleus(GameObject bohrModel, int atomicNumber, int elementIndex)
+    {
+        GameObject protonPrefab = bohrModel.transform.Find("Nucleus/Proton").gameObject;
+        GameObject neutronPrefab = bohrModel.transform.Find("Nucleus/Neutron").gameObject;
+
+        Transform nucleusTransform = bohrModel.transform.Find("Nucleus");
+        // Set the nucleus radius based on the number of protons and neutrons
+        float nucleusRadius = Mathf.Pow(atomicNumber, 1f / 3f) * nucleusDistanceScale;
+
+        // Instantiate protons
+        for (int i = 0; i < atomicNumber; i++)
+        {
+            GameObject proton = Instantiate(protonPrefab, nucleusTransform.position, Quaternion.identity, nucleusTransform);
+            proton.SetActive(true);
+            // You can adjust the position of protons within the nucleus here
+            Vector3 randomPosition = Random.insideUnitSphere * nucleusRadius;
+            proton.transform.localPosition = randomPosition;
+
+        }
+
+        // Instantiate neutrons
+        int neutronCount = Mathf.RoundToInt(elementList.elements[elementIndex].atomicMass) - atomicNumber;
+
+        for (int i = 0; i < neutronCount; i++)
+        {
+            GameObject neutron = Instantiate(neutronPrefab, nucleusTransform.position, Quaternion.identity, nucleusTransform);
+            neutron.SetActive(true);
+            // You can adjust the position of neutrons within the nucleus here
+            Vector3 randomPosition = Random.insideUnitSphere * nucleusRadius;
+            neutron.transform.localPosition = randomPosition;
+
+        }
+    }
+
 
     private void SetupElectronShells(GameObject bohrModel, int atomicNumber)
     {
@@ -83,19 +124,33 @@ public class PeriodicTableController : MonoBehaviour
         int remainingElectrons = atomicNumber;
         int shellIndex = 0;
 
+        GameObject electronTemplate = bohrModel.transform.Find("Electron").gameObject;
+
         while (remainingElectrons > 0)
         {
             int electronsInShell = Mathf.Min(remainingElectrons, maxElectronsPerShell[shellIndex]);
+
+            // Create a new empty GameObject to represent the electron shell
+            GameObject electronShell = new GameObject($"ElectronShell{shellIndex + 1}");
+            electronShell.transform.SetParent(bohrModel.transform);
+            electronShell.transform.localPosition = Vector3.zero;
+
             for (int i = 0; i < electronsInShell; i++)
             {
-                GameObject electron = Instantiate(bohrModel.transform.Find("Electron").gameObject, bohrModel.transform.position, Quaternion.identity);
-                electron.transform.SetParent(bohrModel.transform.Find($"ElectronShell{shellIndex + 1}"));
+                GameObject electron = Instantiate(electronTemplate, bohrModel.transform.position, Quaternion.identity);
+                electron.transform.SetParent(electronShell.transform);
                 float angle = 360f / electronsInShell * i;
-                electron.transform.localPosition = Quaternion.Euler(0, angle, 0) * Vector3.right * (shellIndex + 1);
+                electron.SetActive(true); // Enable the instantiated electron
+
+                electron.transform.localPosition = Quaternion.Euler(0, angle, 0) * Vector3.right * (shellIndex + 1)* electronShellDistanceScale;
             }
 
             remainingElectrons -= electronsInShell;
             shellIndex++;
         }
+
+        // Disable the original electron template object
+        electronTemplate.SetActive(false);
     }
+
 }
