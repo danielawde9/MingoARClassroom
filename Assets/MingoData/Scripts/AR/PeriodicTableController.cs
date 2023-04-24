@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class PeriodicTableController : MonoBehaviour
 {
@@ -31,10 +32,10 @@ public class PeriodicTableController : MonoBehaviour
 
     public GameObject bohrModelPrefab;
 
-    public float electronShellDistanceScale = 0.2f;
-    public float nucleusDistanceScale = 0.01f;
-    public float atomSizeScale = 0.06f;
-    public float electronSizeScale = 0.02f;
+    private float electronShellDistanceScale = 0.2f;
+    private float nucleusDistanceScale = 0.01f;
+    private float nucleusSizeScale = 0.06f;
+    private float electronSizeScale = 0.02f;
     public Slider electronShellDistanceSlider;
     public Slider nucleusDistanceSlider;
     public Slider atomSizeSlider;
@@ -53,14 +54,59 @@ public class PeriodicTableController : MonoBehaviour
 
         electronShellDistanceSlider.value = electronShellDistanceScale;
         nucleusDistanceSlider.value = nucleusDistanceScale;
-        atomSizeSlider.value= atomSizeScale;
-        electronSizeSlider.value= electronSizeScale;
+        atomSizeSlider.value = nucleusSizeScale;
+        electronSizeSlider.value = electronSizeScale;
 
         electronShellDistanceSlider.onValueChanged.AddListener(UpdateElectronShellDistanceScale);
         nucleusDistanceSlider.onValueChanged.AddListener(UpdateNucleusDistanceScale);
         atomSizeSlider.onValueChanged.AddListener(UpdateAtomSizeScale);
         electronSizeSlider.onValueChanged.AddListener(UpdateElectronSizeScale);
 
+    }
+
+    private Dictionary<string, Color> subshellColors = new Dictionary<string, Color>
+    {
+        { "s", Color.red },
+        { "p", Color.green },
+        { "d", Color.blue },
+        { "f", Color.yellow }
+    };
+
+
+    private List<(int, string, int)> CalculateElectronConfiguration(int atomicNumber)
+    {
+        List<(int, string, int)> electronConfiguration = new List<(int, string, int)>();
+        int[] maxElectronsPerSubshell = { 2, 6, 10, 14, 18, 22, 26, 30, 34, 38, 42, 46, 50, 54, 58, 62, 66, 70, 74, 78, 82, 86, 90, 94, 98 };
+        string[] subshellLabels = { "s", "p", "d", "f", "g", "h" };
+        int remainingElectrons = atomicNumber;
+        int shellIndex = 0;
+
+        while (remainingElectrons > 0)
+        {
+            for (int subshellIndex = 0; subshellIndex < subshellLabels.Length; subshellIndex++)
+            {
+                if (remainingElectrons == 0)
+                {
+                    break;
+                }
+
+                int maxElectronsInSubshell = maxElectronsPerSubshell[subshellIndex];
+
+                if (shellIndex >= maxElectronsPerSubshell.Length)
+                {
+                    Debug.LogWarning($"Unsupported atomic number '{atomicNumber}'. Electron configuration calculation may be incorrect.");
+                    break;
+                }
+
+                int electronsInSubshell = Mathf.Min(remainingElectrons, maxElectronsInSubshell);
+                electronConfiguration.Add((shellIndex + 1, subshellLabels[subshellIndex], electronsInSubshell));
+                remainingElectrons -= electronsInSubshell;
+            }
+
+            shellIndex++;
+        }
+
+        return electronConfiguration;
     }
 
     private void UpdateElectronShellDistanceScale(float value)
@@ -79,7 +125,7 @@ public class PeriodicTableController : MonoBehaviour
 
     private void UpdateAtomSizeScale(float value)
     {
-        atomSizeScale = value;
+        nucleusSizeScale = value;
         // Update all instances of the elements to reflect the new scale
         UpdateElementScales();
     }
@@ -98,8 +144,6 @@ public class PeriodicTableController : MonoBehaviour
         rotateScript.rotationSpeed = rotationSpeed;
         rotateScript.centerPoint = electron.transform.parent.position;
     }
-
-
 
     private void UpdateElementScales()
     {
@@ -127,9 +171,6 @@ public class PeriodicTableController : MonoBehaviour
             SetupNucleus(bohrModel, nucleusTransform, atomicNumber, elementIndex);
         }
     }
-
-
-
 
     private void LoadElementData()
     {
@@ -175,57 +216,11 @@ public class PeriodicTableController : MonoBehaviour
             }
         }
     }
-    private void SetupNucleus(GameObject bohrModel, Transform nucleusTransform, int atomicNumber, int elementIndex)
-    {
-        GameObject protonPrefab = bohrModel.transform.Find("Nucleus/Proton").gameObject;
-        GameObject neutronPrefab = bohrModel.transform.Find("Nucleus/Neutron").gameObject;
-
-        // Remove old protons and neutrons
-        foreach (Transform child in nucleusTransform)
-        {
-            if (child.gameObject != protonPrefab && child.gameObject != neutronPrefab)
-            {
-                Destroy(child.gameObject);
-            }
-        }
-
-        // Set the nucleus radius based on the number of protons and neutrons
-        float nucleusRadius = Mathf.Pow(atomicNumber, 1f / 3f) * nucleusDistanceScale;
-
-        // Instantiate protons
-        for (int i = 0; i < atomicNumber; i++)
-        {
-            GameObject proton = Instantiate(protonPrefab, nucleusTransform.position, Quaternion.identity, nucleusTransform);
-            proton.SetActive(true);
-            // You can adjust the position of protons within the nucleus here
-            Vector3 randomPosition = Random.insideUnitSphere * nucleusRadius;
-            proton.transform.localPosition = randomPosition;
-            proton.transform.localScale = Vector3.one * atomSizeScale;
-
-
-        }
-
-        // Instantiate neutrons
-        int neutronCount = Mathf.RoundToInt(elementList.elements[elementIndex].atomicMass) - atomicNumber;
-
-        for (int i = 0; i < neutronCount; i++)
-        {
-            GameObject neutron = Instantiate(neutronPrefab, nucleusTransform.position, Quaternion.identity, nucleusTransform);
-            neutron.SetActive(true);
-            // You can adjust the position of neutrons within the nucleus here
-            Vector3 randomPosition = Random.insideUnitSphere * nucleusRadius;
-            neutron.transform.localPosition = randomPosition;
-            neutron.transform.localScale = Vector3.one * atomSizeScale;
-
-        }
-    }
-
-
-
-
     private void SetupElectronShells(GameObject bohrModel, int atomicNumber)
     {
-        int[] maxElectronsPerShell = { 2, 8, 18, 32 };
+        //int[] maxElectronsPerShell = { 2, 8, 18, 32, 50, 72, 98 };
+        int[] maxElectronsPerSubshell = { 2, 6, 10, 14, 18, 22, 26, 30, 34, 38, 42, 46, 50, 54, 58, 62, 66, 70, 74, 78, 82, 86, 90, 94, 98 };
+
         int remainingElectrons = atomicNumber;
         int shellIndex = 0;
 
@@ -240,9 +235,13 @@ public class PeriodicTableController : MonoBehaviour
             }
         }
 
+        List<(int, string, int)> electronConfiguration = CalculateElectronConfiguration(atomicNumber);
+
+        int electronConfigIndex = 0;
+
         while (remainingElectrons > 0)
         {
-            int electronsInShell = Mathf.Min(remainingElectrons, maxElectronsPerShell[shellIndex]);
+            int electronsInShell = Mathf.Min(remainingElectrons, maxElectronsPerSubshell[shellIndex]);
 
             // Create a new empty GameObject to represent the electron shell
             GameObject electronShell = new GameObject($"ElectronShell{shellIndex + 1}");
@@ -265,14 +264,30 @@ public class PeriodicTableController : MonoBehaviour
 
                 AddElectronRotation(electron, rotationSpeed);
 
-                // Change electron color based on spin
-                if (i % 2 == 0)
+                // Change electron color based on subshell
+                if (electronConfigIndex < electronConfiguration.Count)
                 {
-                    electron.GetComponent<Renderer>().material.color = upSpinElectronColor;
+                    var (_, subshellType, _) = electronConfiguration[electronConfigIndex];
+                    if (subshellColors.TryGetValue(subshellType, out Color color))
+                    {
+                        electron.GetComponent<Renderer>().material.color = color;
+                    }
                 }
-                else
+
+                TextMeshPro electronText = electron.GetComponentInChildren<TextMeshPro>();
+                if (electronText != null)
                 {
-                    electron.GetComponent<Renderer>().material.color = downSpinElectronColor;
+                    int shellNumber = electronConfiguration[electronConfigIndex].Item1;
+                    string subshellType = electronConfiguration[electronConfigIndex].Item2;
+                    int subshellCount = electronConfiguration[electronConfigIndex].Item3;
+                    electronText.text = $"{shellNumber}{subshellType}{subshellCount}";
+                }
+
+                // Update electronConfiguration index
+                electronConfiguration[electronConfigIndex] = (electronConfiguration[electronConfigIndex].Item1, electronConfiguration[electronConfigIndex].Item2, electronConfiguration[electronConfigIndex].Item3 - 1);
+                if (electronConfiguration[electronConfigIndex].Item3 == 0)
+                {
+                    electronConfigIndex++;
                 }
             }
 
@@ -285,4 +300,55 @@ public class PeriodicTableController : MonoBehaviour
     }
 
 
+    private void SetupNucleus(GameObject bohrModel, Transform nucleusTransform, int atomicNumber, int elementIndex)
+    {
+        GameObject protonPrefab = bohrModel.transform.Find("Nucleus/Proton").gameObject;
+        GameObject neutronPrefab = bohrModel.transform.Find("Nucleus/Neutron").gameObject;
+
+        // Remove old protons and neutrons
+        foreach (Transform child in nucleusTransform)
+        {
+            if (child.gameObject != protonPrefab && child.gameObject != neutronPrefab)
+            {
+                Destroy(child.gameObject);
+            }
+        }
+
+        int numProtons = atomicNumber;
+        int numNeutrons = Mathf.RoundToInt(elementList.elements[elementIndex].atomicMass) - numProtons;
+
+        // Set the nucleus radius based on the number of protons and neutrons
+        float nucleusRadius = Mathf.Pow(atomicNumber, 1f / 3f) * nucleusDistanceScale;
+
+        // Spawn protons
+        for (int i = 0; i < numProtons; i++)
+        {
+            GameObject newProton = Instantiate(protonPrefab, nucleusTransform);
+            newProton.name = $"Proton_{i}";
+            newProton.SetActive(true);
+
+            newProton.transform.localPosition = RandomInsideSphere(nucleusRadius);
+            newProton.transform.localScale = Vector3.one * nucleusSizeScale;
+        }
+
+        // Spawn neutrons
+        for (int i = 0; i < numNeutrons; i++)
+        {
+            GameObject newNeutron = Instantiate(neutronPrefab, nucleusTransform);
+            newNeutron.SetActive(true);
+            newNeutron.name = $"Neutron_{i}";
+            newNeutron.transform.localPosition = RandomInsideSphere(nucleusRadius);
+            newNeutron.transform.localScale = Vector3.one * nucleusSizeScale;
+        }
+
+        // Deactivate original proton and neutron prefabs
+        protonPrefab.SetActive(false);
+        neutronPrefab.SetActive(false);
+    }
+
+    private Vector3 RandomInsideSphere(float radius)
+    {
+        return Random.insideUnitSphere * radius;
+    }
 }
+
