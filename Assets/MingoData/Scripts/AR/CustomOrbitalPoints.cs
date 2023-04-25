@@ -37,7 +37,6 @@ public class CustomOrbitalPoints : MonoBehaviour
     {
 
         int maxCount = numberOfPoints; // set the max count to the value of numberOfPoints
-        int count = 0; // initialize a count variable to keep track of the number of balls instantiated
 
 
         for (int i = 0; i < numberOfPoints; i++)
@@ -52,7 +51,7 @@ public class CustomOrbitalPoints : MonoBehaviour
 
             _points.Add(point);
 
-            if (count == maxCount) // check if the count equals the max count
+            if (i + 1 == maxCount) // check if the count equals the max count
             {
                 break; // break out of the loop
             }
@@ -66,9 +65,9 @@ public class CustomOrbitalPoints : MonoBehaviour
 
     IEnumerator MovePoints()
     {
-        WaitForSeconds delay = new WaitForSeconds(0.02f);
+        WaitForSeconds delay = new WaitForSeconds(0.1f);
 
-        while (true)
+        while (_points.Count < numberOfPoints)
         {
             for (int i = 0; i < _points.Count; i++)
             {
@@ -85,6 +84,7 @@ public class CustomOrbitalPoints : MonoBehaviour
         }
     }
 
+
     //private Vector3 GetRandomPointInMesh(Mesh mesh)
     //{
     //    Vector3[] vertices = mesh.vertices;
@@ -99,8 +99,8 @@ public class CustomOrbitalPoints : MonoBehaviour
     //    float r2 = Random.value;
     //    float sqrtR1 = Mathf.Sqrt(r1);
 
-    //    float u = 1 - sqrtR1;
-    //    float v = r2 * sqrtR1;
+    //    float u = 1 - Mathf.Pow(1 - sqrtR1, 3);
+    //    float v = r2 * Mathf.Pow(sqrtR1, 3);
 
     //    Vector3 pointInTriangle = (u * v0) + (v * v1) + ((1 - u - v) * v2);
     //    return transform.TransformPoint(pointInTriangle);
@@ -109,27 +109,30 @@ public class CustomOrbitalPoints : MonoBehaviour
 
     private Vector3 GetRandomPointInMesh(Mesh mesh)
     {
-        Vector3 pointInMesh = Vector3.zero;
-        bool pointIsInsideMesh = false;
+        Vector3[] vertices = mesh.vertices;
+        int[] triangles = mesh.triangles;
 
-        // Generate random points inside the mesh's bounding box until one is found that is inside the mesh
-        while (!pointIsInsideMesh)
+        Vector3 center = mesh.bounds.center;
+        Vector3 size = mesh.bounds.size;
+
+        Vector3 point;
+
+        do
         {
-            // Generate a random point inside the mesh's bounding box
-            Vector3 randomPointInBounds = new Vector3(Random.Range(mesh.bounds.min.x, mesh.bounds.max.x),
-                                                       Random.Range(mesh.bounds.min.y, mesh.bounds.max.y),
-                                                       Random.Range(mesh.bounds.min.z, mesh.bounds.max.z));
+            float x = Random.Range(-size.x / 2, size.x / 2);
+            float y = Random.Range(-size.y / 2, size.y / 2);
+            float z = Random.Range(-size.z / 2, size.z / 2);
 
-            // Test if the point is inside the mesh
-            if (IsPointInsideMesh(mesh, randomPointInBounds))
-            {
-                pointInMesh = randomPointInBounds;
-                pointIsInsideMesh = true;
-            }
-        }
+            point = new Vector3(x, y, z);
+            float bias = 0.9f; // Adjust this value to control the concentration of points towards the center
+            point = Vector3.Lerp(point, center, bias);
 
-        return pointInMesh;
+        } while (!IsPointInsideMesh(mesh, point));
+
+        return transform.TransformPoint(point);
     }
+
+
 
     private bool IsPointInsideMesh(Mesh mesh, Vector3 point)
     {
