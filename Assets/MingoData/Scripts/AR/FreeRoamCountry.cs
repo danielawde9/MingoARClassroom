@@ -11,12 +11,12 @@ public class FreeRoamCountry : BasePressInputHandler
 {
     [SerializeField]
     [Tooltip("Instantiates this prefab on a plane at the touch location.")]
-    private GameObject m_PlacedPrefab;
+    private GameObject m_PlacedGlobePrefab;
 
-    public GameObject PlacedPrefab
+    public GameObject PlacedGlobePrefab
     {
-        get { return m_PlacedPrefab; }
-        set { m_PlacedPrefab = value; }
+        get { return m_PlacedGlobePrefab; }
+        set { m_PlacedGlobePrefab = value; }
     }
 
     public GameObject SpawnedObject { get; private set; }
@@ -53,6 +53,7 @@ public class FreeRoamCountry : BasePressInputHandler
         {
             PlaceGlobe(position);
             globePlaced = true;
+            OnScreenInstructions.text = "text";
         }
         else
         {
@@ -77,8 +78,8 @@ public class FreeRoamCountry : BasePressInputHandler
     {
         if (!globePlaced)
         {
-            Vector3 placementPosition = position + new Vector3(0, m_PlacedPrefab.transform.localScale.y/2, 0);
-            SpawnedObject = Instantiate(m_PlacedPrefab, placementPosition, Quaternion.identity);
+            Vector3 placementPosition = position + new Vector3(0, m_PlacedGlobePrefab.transform.localScale.y/2, 0);
+            SpawnedObject = Instantiate(m_PlacedGlobePrefab, placementPosition, Quaternion.identity);
             globePlaced = true;
         }
     }

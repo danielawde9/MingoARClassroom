@@ -4,6 +4,7 @@ using TMPro;
 using UnityEditor.XR.ARKit;
 using UnityEngine;
 using UnityEngine.UIElements;
+using UnityEngine.UI;
 
 public class SolarSystemSimulation : MonoBehaviour
 {
@@ -45,12 +46,23 @@ public class SolarSystemSimulation : MonoBehaviour
     public TextMeshProUGUI logText;
     public Material orbitLineMaterial;
 
+    // Add these new fields
+    public UnityEngine.UI.Slider sizeScaleSlider;
+    public UnityEngine.UI.Slider timeScaleSlider;
+    public UnityEngine.UI.Slider distanceScaleSlider;
+
     public PlanetDataList planetDataList;
 
     private void Start()
     {
+
+        sizeScaleSlider.onValueChanged.AddListener(UpdateSizeScale);
+        timeScaleSlider.onValueChanged.AddListener(UpdateTimeScale);
+        distanceScaleSlider.onValueChanged.AddListener(UpdateDistanceScale);
+
         LoadPlanetData();
         SpawnPlanets();
+
     }
 
     private void LoadPlanetData()
@@ -71,6 +83,30 @@ public class SolarSystemSimulation : MonoBehaviour
         }
     }
 
+
+    // Add these new methods to handle slider value changes
+    private void UpdateSizeScale(float value)
+    {
+        sizeScale = value;
+        foreach (var planet in planetDataList.planets)
+        {
+            UpdatePlanetScale(planet);
+        }
+    }
+
+    private void UpdateTimeScale(float value)
+    {
+        timeScale = value;
+    }
+
+    private void UpdateDistanceScale(float value)
+    {
+        distanceScale = value;
+        foreach (var planet in planetDataList.planets)
+        {
+            UpdateOrbitLine(planet);
+        }
+    }
 
     private void SpawnPlanets()
     {
@@ -104,14 +140,7 @@ public class SolarSystemSimulation : MonoBehaviour
             planet.planetInstance.transform.localScale = new Vector3(diameterScale, diameterScale, diameterScale);
         }
     }
-    public void UpdateDistanceScale(float value)
-    {
-        distanceScale = value;
-        foreach (var planet in planetDataList.planets)
-        {
-            UpdateOrbitLine(planet);
-        }
-    }
+
     // Add this new function
     private void UpdateOrbitLine(PlanetData planet)
     {
