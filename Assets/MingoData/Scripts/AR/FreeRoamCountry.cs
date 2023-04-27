@@ -19,9 +19,12 @@ public class FreeRoamCountry : BasePressInputHandler
         set { m_PlacedGlobePrefab = value; }
     }
 
+    [SerializeField]
+    ARPlaneManager m_PlaneManager;
+
     public GameObject SpawnedObject { get; private set; }
 
-    public TextMeshProUGUI OnScreenInstructions;
+    public TextMeshProUGUI scanningInfoText;
 
 
     private ARRaycastManager m_RaycastManager;
@@ -53,15 +56,13 @@ public class FreeRoamCountry : BasePressInputHandler
         {
             PlaceGlobe(position);
             globePlaced = true;
-            OnScreenInstructions.text = "text";
         }
         else
         {
             DetectCountryTouch(position);
         }
-
-        //DetectCountryTouch(position);
     }
+
 
     void PlaceGlobe(Vector2 touchPosition)
     {
@@ -83,6 +84,31 @@ public class FreeRoamCountry : BasePressInputHandler
             globePlaced = true;
         }
     }
+    private void Update()
+    {
+        float totalArea = CalculateTotalPlaneArea();
+        if (!globePlaced)
+        {
+            if (totalArea < 2)
+            {
+                scanningInfoText.text = $"You need to scan at least 2 meters of the room. Scanned: {totalArea:F2} m²";
+            }
+            else
+            {
+                scanningInfoText.text = "You can place the globe in the scanned area.";
+            }
+        }
+    }
+
+    private float CalculateTotalPlaneArea()
+    {
+        float totalArea = 0f;
+        foreach (var plane in m_PlaneManager.trackables)
+        {
+            totalArea += plane.size.x * plane.size.y;
+        }
+        return totalArea;
+    }
 
     void DetectCountryTouch(Vector2 touchPosition)
     {
@@ -98,7 +124,7 @@ public class FreeRoamCountry : BasePressInputHandler
             if (hitObject.CompareTag("Country")) // Make sure to set the tag "Country" on each country GameObject
             {
                 Debug.Log("Country touched: " + hitObject.name);
-                OnScreenInstructions.text = hitObject.name;
+                scanningInfoText.text = hitObject.name.ToString();
                 if (!countryData.TryGetValue(hitObject, out CountryData data))
                 {
                     Renderer renderer = hitObject.GetComponent<Renderer>();

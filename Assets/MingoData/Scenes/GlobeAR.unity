@@ -241,7 +241,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: s
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -268,7 +268,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 72
+  m_fontSize: 36
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -353,7 +353,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_PlacedGlobePrefab: {fileID: 8770036618065461176, guid: dfee62c98c0bc0543a380c7c6492c210,
     type: 3}
-  OnScreenInstructions: {fileID: 1522999548}
+  m_PlaneManager: {fileID: 1775622093}
+  scanningInfoText: {fileID: 1522999548}
 --- !u!114 &1775622093
 MonoBehaviour:
   m_ObjectHideFlags: 0
