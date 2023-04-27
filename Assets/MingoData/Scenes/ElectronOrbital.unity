@@ -614,8 +614,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   orbitalMeshFilter: {fileID: 625342484}
-  numberOfPoints: 10000
-  atomSpawnDelay: 0.1
+  numberOfPoints: 100000
+  atomSpawnDelay: 0.05
   pointPrefab: {fileID: 552174978083985851, guid: 439aa45c714807f47bf15168607a285e,
     type: 3}
   ballText: {fileID: 1569525100}
@@ -914,6 +914,6 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 0, y: 200}
+  m_AnchoredPosition: {x: 0, y: 100}
   m_SizeDelta: {x: 0, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}

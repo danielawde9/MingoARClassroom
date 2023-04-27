@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UIElements;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
-
 [RequireComponent(typeof(ARRaycastManager))]
 
 public class FreeRoamCountry : BasePressInputHandler
@@ -192,3 +192,19 @@ public class FreeRoamCountry : BasePressInputHandler
 //Thermodynamics(heat, temperature, and energy transfer)
 //Electricity and magnetism (electric fields, circuits, and magnetic fields)
 //Optics(reflection, refraction, and lenses)
+//Mechanics(motion, forces, energy, and momentum):
+//Create 3D objects that users can interact with to apply forces or change their properties (mass, velocity, etc.)
+//Visualize motion paths, vectors representing forces, and other related properties.
+//Waves (sound, light, and electromagnetic waves):
+//Display waveforms in 3D space to show the propagation and interaction of waves.
+//Enable users to adjust wave properties such as frequency, amplitude, and wavelength.
+//Thermodynamics (heat, temperature, and energy transfer):
+//Use color gradients or 3D particle systems to represent heat distribution within objects.
+//Show energy transfer processes (conduction, convection, and radiation) using animated visuals.
+//Electricity and magnetism (electric fields, circuits, and magnetic fields):
+//Display electric field lines and potential surfaces around charged objects.
+//Create interactive 3D circuit components (batteries, resistors, capacitors, etc.) for users to build and test circuits.
+//Visualize magnetic field lines and forces around magnets and current - carrying conductors.
+//Optics(reflection, refraction, and lenses):
+//Create interactive 3D scenes with mirrors, lenses, and light sources to explore reflection, refraction, and image formation.
+//Allow users to manipulate the position and properties of objects in the scene to see how light behaves in different scenarios.
