@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -20,6 +21,11 @@ public class ARQuizDashboardAnchorPlacer : BasePressInputHandler
 
     [SerializeField]
     ARPlaneManager m_PlaneManager;
+
+
+    [SerializeField]
+    private TextMeshProUGUI scanningInfoText;
+
 
     public GameObject SpawnedObject { get; private set; }
 
@@ -52,14 +58,53 @@ public class ARQuizDashboardAnchorPlacer : BasePressInputHandler
 
     void Update()
     {
+        float totalArea = CalculateTotalPlaneArea();
+        Debug.Log($"Total area: {totalArea}, Planes detected: {m_PlaneManager.trackables.count}");
 
         if (Pointer.current == null || m_Pressed == false)
+        {
+            if (totalArea < 2 || m_PlaneManager.trackables.count < 2)
+            {
+                // Update the scanning info text
+                if (scanningInfoText != null)
+                {
+                    scanningInfoText.text = $"You need to scan at least 2 meters of the room. Scanned: {totalArea:F2} m²";
+                }
+                else
+                {
+                    Debug.LogWarning("scanningInfoText is not assigned");
+                }
+            }
+            else
+            {
+                if (SpawnedObject == null)
+                {
+                    // Show the text to press anywhere to place the dashboard
+                    if (scanningInfoText != null)
+                    {
+                        scanningInfoText.text = "Press anywhere to place the dashboard";
+                    }
+                }
+                else
+                {
+                    // Hide the scanning info text when the required area is scanned and the object is placed
+                    if (scanningInfoText != null)
+                    {
+                        scanningInfoText.text = "";
+                    }
+                }
+            }
             return;
+        }
 
         var touchPosition = Pointer.current.position.ReadValue();
-        // Minimum area of 2 square meters or 2 planes detecegted
-        if (CalculateTotalPlaneArea() < 2 || m_PlaneManager.trackables.count < 2) 
+
+        // Minimum area of 2 square meters or 2 planes detected
+        if (totalArea < 2 || m_PlaneManager.trackables.count < 2)
+        {
             return;
+        }
+
 
         if (m_RaycastManager.Raycast(touchPosition, s_Hits, TrackableType.PlaneWithinPolygon))
         {
@@ -90,4 +135,3 @@ public class ARQuizDashboardAnchorPlacer : BasePressInputHandler
 
 }
 // todo add text descrption each scene
-// add menu to choose the scenes
