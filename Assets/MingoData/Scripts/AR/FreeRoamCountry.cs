@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
@@ -183,3 +184,11 @@ public class FreeRoamCountry : BasePressInputHandler
         isMoving = false;
     }
 }
+
+
+
+// Mechanics (motion, forces, energy, and momentum)
+//Waves(sound, light, and electromagnetic waves)
+//Thermodynamics(heat, temperature, and energy transfer)
+//Electricity and magnetism (electric fields, circuits, and magnetic fields)
+//Optics(reflection, refraction, and lenses)

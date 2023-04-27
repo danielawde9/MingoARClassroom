@@ -624,8 +624,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 551319859}
-  - component: {fileID: 551319861}
   - component: {fileID: 551319860}
+  - component: {fileID: 551319861}
   m_Layer: 5
   m_Name: nucleusDistance
   m_TagString: Untagged
@@ -668,8 +668,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c4b2efa07695b94ba1ee3b91832ac2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  solarSystemSimulation: {fileID: 0}
-  sizeScaleSlider: {fileID: 551319861}
 --- !u!114 &551319861
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -807,7 +805,6 @@ GameObject:
   m_Component:
   - component: {fileID: 713484900}
   - component: {fileID: 713484902}
-  - component: {fileID: 713484901}
   m_Layer: 5
   m_Name: electronSize
   m_TagString: Untagged
@@ -838,20 +835,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 130}
   m_SizeDelta: {x: 0, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &713484901
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 713484899}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5c4b2efa07695b94ba1ee3b91832ac2d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  solarSystemSimulation: {fileID: 0}
-  sizeScaleSlider: {fileID: 713484902}
 --- !u!114 &713484902
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1229,7 +1212,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1198068164}
   - component: {fileID: 1198068166}
-  - component: {fileID: 1198068165}
   m_Layer: 5
   m_Name: nucleusSize
   m_TagString: Untagged
@@ -1260,20 +1242,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 50}
   m_SizeDelta: {x: 0, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1198068165
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1198068163}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d3d28fcf637e5dc48a35052eda2e2429, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  solarSystemSimulation: {fileID: 0}
-  distanceScaleSlider: {fileID: 1198068166}
 --- !u!114 &1198068166
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2274,7 +2242,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2064611746}
   - component: {fileID: 2064611748}
-  - component: {fileID: 2064611747}
   m_Layer: 5
   m_Name: electronDistance
   m_TagString: Untagged
@@ -2305,20 +2272,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 13.829956}
   m_SizeDelta: {x: 0, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &2064611747
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2064611745}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0cfbe92ed0ddd94438b7ded9e6526986, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  solarSystemSimulation: {fileID: 0}
-  timeScaleSlider: {fileID: 2064611748}
 --- !u!114 &2064611748
 MonoBehaviour:
   m_ObjectHideFlags: 0

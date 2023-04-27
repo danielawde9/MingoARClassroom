@@ -1,10 +1,7 @@
 using System;
 using System.Collections.Generic;
 using TMPro;
-using UnityEditor.XR.ARKit;
 using UnityEngine;
-using UnityEngine.UIElements;
-using UnityEngine.UI;
 
 public class SolarSystemSimulation : MonoBehaviour
 {
