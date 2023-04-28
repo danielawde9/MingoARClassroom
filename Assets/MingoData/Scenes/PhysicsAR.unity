@@ -524,13 +524,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 937522002}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3d9256fe9cf981148a57f76f70142b4e, type: 3}
+  m_Script: {fileID: 11500000, guid: dcbc5a963cb3a4d45b2a007354beb0e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_PlacedCubePrefab: {fileID: 5866532898389061036, guid: 0ded153450606364d92efc4e27e6bf46,
-    type: 3}
-  m_PlaneManager: {fileID: 937522004}
-  scanningInfoText: {fileID: 348683864}
 --- !u!1 &985244883
 GameObject:
   m_ObjectHideFlags: 0
