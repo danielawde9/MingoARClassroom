@@ -63,7 +63,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 950042044eb8b45cfb957653439b0be7, type: 2}
+  - {fileID: 2100000, guid: aa3cb2f6bec57914c930b694f569cf19, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -428,7 +428,7 @@ MonoBehaviour:
     position: {x: 0, y: 1.0609863, z: -1.5}
     rotation: {x: -0.16100603, y: 0.1567927, z: -0.025916385, w: -0.97407466}
   m_DefaultViewPivot: {x: 0, y: 0, z: 0}
-  m_DefaultViewSize: 2
+  m_DefaultViewSize: 219.65
   m_RenderSettings:
     m_AmbientMode: 1
     m_AmbientSkyColor: {r: 0.77254903, g: 0.73333335, b: 0.7372549, a: 1}
