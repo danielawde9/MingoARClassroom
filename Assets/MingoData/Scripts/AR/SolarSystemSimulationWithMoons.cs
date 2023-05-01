@@ -105,6 +105,10 @@ public class SolarSystemSimulationWithMoons : MonoBehaviour
         foreach (var planet in planetDataList.planets)
         {
             UpdatePlanetScale(planet);
+            foreach(var moon in planet.moons)
+            {
+                UpdateMoonScale(moon);
+            }
         }
     }
 
@@ -124,8 +128,7 @@ public class SolarSystemSimulationWithMoons : MonoBehaviour
 
     private void SpawnPlanets()
     {
-        //Quaternion rotationCorrection = Quaternion.Euler(-90, 0, 0);
-        Quaternion rotationCorrection = Quaternion.Euler(0, 0, 0);
+        Quaternion rotationCorrection = Quaternion.Euler(-90, 0, 0);
 
         foreach (var planet in planetDataList.planets)
         {
