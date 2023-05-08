@@ -105,7 +105,7 @@ public class SolarSystemSimulationWithMoons : MonoBehaviour
         foreach (var planet in planetDataList.planets)
         {
             UpdatePlanetScale(planet);
-            foreach(var moon in planet.moons)
+            foreach (var moon in planet.moons)
             {
                 UpdateMoonScale(moon);
             }
