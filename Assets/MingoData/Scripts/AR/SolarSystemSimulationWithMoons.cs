@@ -107,6 +107,9 @@ public class SolarSystemSimulationWithMoons : MonoBehaviour
             {
                 moonData.rotationPeriod *= 3600;
                 moonData.orbitalPeriod *= 86400;
+                // Calculate moon perihelion and aphelion distances
+                moonData.perihelionDistance = moonData.distanceFromPlanet * (1 - moonData.orbitalEccentricity);
+                moonData.aphelionDistance = moonData.distanceFromPlanet * (1 + moonData.orbitalEccentricity);
             }
         }
     }
@@ -327,7 +330,7 @@ public class SolarSystemSimulationWithMoons : MonoBehaviour
         GameObject orbitLine = new GameObject($"{planet.name} Orbit Line");
         LineRenderer lineRenderer = orbitLine.AddComponent<LineRenderer>();
         lineRenderer.material = orbitLineMaterial;
-        lineRenderer.widthMultiplier = planet.diameter * sizeScale * 0.001f; // Change this value to control the width of the orbit line related to the size of the planet
+        lineRenderer.widthMultiplier = planet.diameter * sizeScale * 1f; // Change this value to control the width of the orbit line related to the size of the planet
         lineRenderer.positionCount = 360;
 
         float angleStep = 360f / lineRenderer.positionCount;
@@ -344,7 +347,7 @@ public class SolarSystemSimulationWithMoons : MonoBehaviour
         GameObject orbitLine = new($"{moon.name} Orbit Line");
         LineRenderer lineRenderer = orbitLine.AddComponent<LineRenderer>();
         lineRenderer.material = orbitLineMaterial;
-        lineRenderer.widthMultiplier = planet.diameter * sizeScale * 1f; // Change this value to control the width of the orbit line related to the size of the moon
+        lineRenderer.widthMultiplier = planet.diameter * sizeScale * 10f; // Change this value to control the width of the orbit line related to the size of the moon
         lineRenderer.positionCount = 360;
 
         float angleStep = 360f / lineRenderer.positionCount;
@@ -411,7 +414,6 @@ public class SolarSystemSimulationWithMoons : MonoBehaviour
         }
     }
 }
-
 // todo lighting 
 // todo day night texture
 // particles 
