@@ -48,10 +48,12 @@
           "mass": 0.073,
           "diameter": 0.003474,
           "rotationPeriod": 655.7,
-          "distanceFromParent": 0.0384,
+          "distanceFromParent": 0.384,
           "orbitalPeriod": 27.3,
           "orbitalInclination": 5.1,
           "orbitalEccentricity": 0.055,
+          "obliquityToOrbit": 1.5424,
+
           "prefabName": "SolarSystemWithMoon/Moon"
         }
       ],
@@ -75,10 +77,12 @@
           "mass": 0.00001,
           "diameter": 0.0000226,
           "rotationPeriod": 7.7,
-          "distanceFromParent": 0.000938,
+          "distanceFromParent": 0.00938,
           "orbitalPeriod": 0.319,
           "orbitalInclination": 1.08,
           "orbitalEccentricity": 0.015,
+          "obliquityToOrbit": 0,
+
           "prefabName": "SolarSystemWithMoon/Phobos"
         },
         {
@@ -86,10 +90,12 @@
           "mass": 0.000002,
           "diameter": 0.0000124,
           "rotationPeriod": 30.3,
-          "distanceFromParent": 0.002346,
+          "distanceFromParent": 0.02346,
           "orbitalPeriod": 1.262,
           "orbitalInclination": 1.79,
           "orbitalEccentricity": 0.0005,
+          "obliquityToOrbit": 0,
+
           "prefabName": "SolarSystemWithMoon/Deimos"
         }
       ],
@@ -113,10 +119,12 @@
           "mass": 0.089,
           "diameter": 0.003643,
           "rotationPeriod": 42.5,
-          "distanceFromParent": 0.04218,
+          "distanceFromParent": 0.4218,
           "orbitalPeriod": 1.77,
           "orbitalInclination": 0.04,
           "orbitalEccentricity": 0.0041,
+          "obliquityToOrbit": 0,
+
           "prefabName": "SolarSystemWithMoon/Io"
         },
         {
@@ -124,10 +132,12 @@
           "mass": 0.048,
           "diameter": 0.003122,
           "rotationPeriod": 85.2,
-          "distanceFromParent": 0.06711,
+          "distanceFromParent": 0.6711,
           "orbitalPeriod": 3.55,
           "orbitalInclination": 0.47,
           "orbitalEccentricity": 0.0094,
+          "obliquityToOrbit": 0.1,
+
           "prefabName": "SolarSystemWithMoon/Europa"
         },
         {
@@ -135,10 +145,12 @@
           "mass": 0.148,
           "diameter": 0.005268,
           "rotationPeriod": 172.0,
-          "distanceFromParent": 0.10704,
+          "distanceFromParent": 1.0704,
           "orbitalPeriod": 7.16,
           "orbitalInclination": 0.2,
           "orbitalEccentricity": 0.0013,
+          "obliquityToOrbit": 0.068,
+
           "prefabName": "SolarSystemWithMoon/Ganymede"
         },
         {
@@ -146,10 +158,12 @@
           "mass": 0.1076,
           "diameter": 0.004821,
           "rotationPeriod": 400.0,
-          "distanceFromParent": 0.18827,
+          "distanceFromParent": 1.8827,
           "orbitalPeriod": 16.69,
           "orbitalInclination": 0.19,
           "orbitalEccentricity": 0.0074,
+          "obliquityToOrbit": 0.192,
+
           "prefabName": "SolarSystemWithMoon/Callisto"
         }
       ],
@@ -173,11 +187,66 @@
           "mass": 0.0225,
           "diameter": 0.005151,
           "rotationPeriod": 382.7,
-          "distanceFromParent": 0.122187,
+          "distanceFromParent": 1.22187,
           "orbitalPeriod": 15.95,
           "orbitalInclination": 0.348,
           "orbitalEccentricity": 0.0288,
+          "obliquityToOrbit": 0.33,
+
           "prefabName": "SolarSystemWithMoon/Titan"
+        },
+        {
+          "name": "Enceladus",
+          "mass": 0.0002521,
+          "diameter": 0.0001982,
+          "rotationPeriod": 1.4,
+          "distanceFromParent": 0.0238,
+          "orbitalPeriod": 0.942,
+          "orbitalInclination": 0.009,
+          "orbitalEccentricity": 0.0047,
+          "obliquityToOrbit": 0,
+
+          "prefabName": "SolarSystemWithMoon/Enceladus"
+        },
+        {
+          "name": "Mimas",
+          "mass": 0.000378,
+          "diameter": 0.000316,
+          "rotationPeriod": 0.4,
+          "distanceFromParent": 0.0185,
+          "orbitalPeriod": 0.942,
+          "orbitalInclination": 1.574,
+
+          "orbitalEccentricity": 0.0202,
+          "obliquityToOrbit": 0,
+
+          "prefabName": "SolarSystemWithMoon/Mimas"
+        },
+        {
+          "name": "Iapetus",
+          "mass": 0.000719,
+          "diameter": 0.0008904,
+          "rotationPeriod": 79.3,
+          "distanceFromParent": 3.568,
+          "orbitalPeriod": 79.33,
+          "orbitalInclination": 15.47,
+          "orbitalEccentricity": 0.0286,
+          "obliquityToOrbit": 15,
+
+          "prefabName": "SolarSystemWithMoon/Iapetus"
+        },
+        {
+          "name": "Dione",
+          "mass": 0.001095,
+          "diameter": 0.0008788,
+          "rotationPeriod": 2.7,
+          "distanceFromParent": 0.37742,
+          "orbitalPeriod": 0.94,
+          "orbitalInclination": 0.0196,
+          "orbitalEccentricity": 0.0022,
+          "obliquityToOrbit": 0,
+
+          "prefabName": "SolarSystemWithMoon/Dione"
         }
       ],
       "rings": [
@@ -201,7 +270,73 @@
       "orbitalEccentricity": 0.047,
       "obliquityToOrbit": 97.8,
       "prefabName": "SolarSystemWithMoon/Uranus",
-      "moons": [],
+      "moons": [
+        {
+          "name": "Titania",
+          "mass": 0.000528,
+          "diameter": 0.0007422,
+          "rotationPeriod": 8.7,
+          "distanceFromParent": 0.4363,
+          "orbitalPeriod": 8.71,
+          "orbitalInclination": 0.0796,
+          "orbitalEccentricity": 0.0011,
+          "obliquityToOrbit": 0.34,
+
+          "prefabName": "SolarSystemWithMoon/Titania"
+        },
+        {
+          "name": "Ariel",
+          "mass": 0.000351,
+          "diameter": 0.000573,
+          "rotationPeriod": 10.8,
+          "distanceFromParent": 0.1909,
+          "orbitalPeriod": 2.52,
+          "orbitalInclination": 0.041,
+          "orbitalEccentricity": 0.0012,
+          "obliquityToOrbit": 0.041,
+
+          "prefabName": "SolarSystemWithMoon/Ariel"
+        },
+        {
+          "name": "Umbriel",
+          "mass": 0.000462,
+          "diameter": 0.0005847,
+          "rotationPeriod": 21.9,
+          "distanceFromParent": 0.266,
+          "orbitalPeriod": 4.14,
+          "orbitalInclination": 0.128,
+          "orbitalEccentricity": 0.0039,
+          "obliquityToOrbit": 0.128,
+
+          "prefabName": "SolarSystemWithMoon/Umbriel"
+        },
+        {
+          "name": "Oberon",
+          "mass": 0.000661,
+          "diameter": 0.0007614,
+          "rotationPeriod": -13.5,
+          "distanceFromParent": 0.5835,
+          "orbitalPeriod": 13.46,
+          "orbitalInclination": 0.068,
+          "orbitalEccentricity": 0.0014,
+          "obliquityToOrbit": 0.058,
+
+          "prefabName": "SolarSystemWithMoon/Oberon"
+        },
+        {
+          "name": "Miranda",
+          "mass": 0.0000243,
+          "diameter": 0.0002358,
+          "rotationPeriod": 1.4,
+          "distanceFromParent": 0.1299,
+          "orbitalPeriod": 1.41,
+          "orbitalInclination": 4.34,
+          "orbitalEccentricity": 0.0013,
+          "obliquityToOrbit": 4.232,
+
+          "prefabName": "SolarSystemWithMoon/Miranda"
+        }
+      ],
       "rings": []
     },
     {
@@ -216,7 +351,62 @@
       "orbitalEccentricity": 0.01,
       "obliquityToOrbit": 28.3,
       "prefabName": "SolarSystemWithMoon/Neptune",
-      "moons": [],
+      "moons": [
+        {
+          "name": "Triton",
+          "mass": 0.00358,
+          "diameter": 0.0027068,
+          "rotationPeriod": -5.9,
+          "distanceFromParent": 0.3548,
+          "orbitalPeriod": -5.876854,
+          "orbitalInclination": 156.865,
+          "orbitalEccentricity": 0.000016,
+          "obliquityToOrbit": 157.345,
+
+          "prefabName": "SolarSystemWithMoon/Triton"
+        },
+        {
+          "name": "Nereid",
+          "mass": 0.0000003,
+          "diameter": 0.0001702,
+          "rotationPeriod": 0.336,
+          "distanceFromParent": 5.51382,
+          "orbitalPeriod": 0.3607,
+          "orbitalInclination": 7.09,
+          "orbitalEccentricity": 0.7512,
+          "obliquityToOrbit": 0,
+
+          "prefabName": "SolarSystemWithMoon/Nereid"
+        }
+      ],
+      "rings": []
+    },
+    {
+      "name": "Pluto",
+      "mass": 0.00218,
+      "diameter": 0.0023779,
+      "rotationPeriod": -6.3872,
+      "lengthOfDay": 6.3872,
+      "distanceFromSun": 5906.4,
+      "orbitalPeriod": 90560,
+      "orbitalInclination": 17.16,
+      "orbitalEccentricity": 0.2488,
+      "obliquityToOrbit": 122.53,
+      "prefabName": "SolarSystemWithMoon/Pluto",
+      "moons": [
+        {
+          "name": "Charon",
+          "mass": 0.000254,
+          "diameter": 0.000372,
+          "rotationPeriod": -6.3872,
+          "distanceFromParent": 0.00128,
+          "orbitalPeriod": 6.3872,
+          "orbitalInclination": 0.0,
+          "orbitalEccentricity": 0.0,
+          "obliquityToOrbit": 0.0,
+          "prefabName": "SolarSystemWithMoon/Charon"
+        }
+      ],
       "rings": []
     },
     {
