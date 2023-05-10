@@ -30,9 +30,11 @@ public class FreeRoamCountry : BasePressInputHandler
 
     private ARRaycastManager m_RaycastManager;
     private Camera mainCamera;
+    private bool globePlaced = false;
+
+
     private bool isMoving = false;
 
-    private bool globePlaced = false;
 
     private class CountryData
     {
@@ -85,6 +87,7 @@ public class FreeRoamCountry : BasePressInputHandler
             globePlaced = true;
         }
     }
+
     private void Update()
     {
         float totalArea = CalculateTotalPlaneArea();

@@ -351,7 +351,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e806f7d0b7dcaad4ea77a4c5bd9caf28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_PlacedGlobePrefab: {fileID: 8770036618065461176, guid: dfee62c98c0bc0543a380c7c6492c210,
+  m_PlacedGlobePrefab: {fileID: 919132149155446097, guid: 90facc6f05342fc4d9f1a47bc456418d,
     type: 3}
   m_PlaneManager: {fileID: 1775622093}
   scanningInfoText: {fileID: 1522999548}

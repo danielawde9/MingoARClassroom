@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.XR.ARFoundation;
+using UnityEngine.XR.ARSubsystems;
 
-public class SolarSystemSimulationWithMoons : MonoBehaviour
+public class SolarSystemSimulationWithMoons : BasePressInputHandler
 {
     [Serializable]
     public class MoonData
@@ -66,7 +68,7 @@ public class SolarSystemSimulationWithMoons : MonoBehaviour
         public List<PlanetData> planets;
     }
 
-    public float sizeScale = 1.0f;
+    public float sizeScale = 200.0f;
     public float timeScale = 1.0f;
     public float distanceScale = 1.0f;
 
@@ -80,6 +82,42 @@ public class SolarSystemSimulationWithMoons : MonoBehaviour
     public PlanetDataList planetDataList;
 
     private GameObject directionalLight;
+
+
+
+
+    [SerializeField]
+    ARPlaneManager m_PlaneManager;
+
+    private ARRaycastManager m_RaycastManager;
+    private Camera mainCamera;
+    private bool solarSystemPlaced = false;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        m_RaycastManager = GetComponent<ARRaycastManager>();
+        mainCamera = Camera.main;
+    }
+
+    protected override void OnPress(Vector3 touchPosition)
+    {
+        if (!solarSystemPlaced)
+        {
+            List<ARRaycastHit> s_Hits = new();
+
+            if (m_RaycastManager.Raycast(touchPosition, s_Hits, TrackableType.PlaneWithinPolygon))
+            {
+                var hitPose = s_Hits[0].pose;
+
+                Vector3 placementPosition = hitPose.position;
+
+                SpawnPlanets(placementPosition);
+            }
+            solarSystemPlaced = true;
+        }
+    }
+
 
     private void CreateDirectionalLight(Transform sunTransform)
     {
@@ -206,7 +244,7 @@ public class SolarSystemSimulationWithMoons : MonoBehaviour
         distanceScaleSlider.onValueChanged.AddListener(UpdateDistanceScale);
 
         LoadPlanetData();
-        SpawnPlanets();
+
     }
 
     private void LoadPlanetData()
@@ -216,26 +254,21 @@ public class SolarSystemSimulationWithMoons : MonoBehaviour
         Debug.Log($"Spawning {planetDataList}");
         foreach (var planetData in planetDataList.planets)
         {
-            // Convert rotationPeriod from hours to seconds
             planetData.rotationPeriod *= 3600;
-            // Convert orbitalPeriod from days to seconds
             planetData.orbitalPeriod *= 86400;
-            // Calculate perihelion and aphelion distances
             planetData.perihelionDistance = planetData.distanceFromSun * (1 - planetData.orbitalEccentricity);
             planetData.aphelionDistance = planetData.distanceFromSun * (1 + planetData.orbitalEccentricity);
-            // Convert moon rotationPeriod from hours to seconds
             foreach (var moonData in planetData.moons)
             {
                 moonData.rotationPeriod *= 3600;
                 moonData.orbitalPeriod *= 86400;
-                // Calculate moon perihelion and aphelion distances
                 moonData.perihelionDistance = moonData.distanceFromPlanet * (1 - moonData.orbitalEccentricity);
                 moonData.aphelionDistance = moonData.distanceFromPlanet * (1 + moonData.orbitalEccentricity);
             }
         }
     }
 
-    private void SpawnPlanets()
+    private void SpawnPlanets(Vector3 placedTouchPosition)
     {
         Quaternion rotationCorrection = Quaternion.Euler(-90, 0, 0);
 
@@ -245,7 +278,8 @@ public class SolarSystemSimulationWithMoons : MonoBehaviour
 
             planet.rotationAxis = Quaternion.Euler(0, 0, planet.obliquityToOrbit) * Vector3.up;
 
-            planet.planetInstance = Instantiate(prefab, CalculatePlanetPosition(planet, 0f), rotationCorrection * prefab.transform.rotation * Quaternion.Euler(planet.rotationAxis));
+            planet.planetInstance = Instantiate(prefab, placedTouchPosition + CalculatePlanetPosition(planet, 0f), rotationCorrection * prefab.transform.rotation * Quaternion.Euler(planet.rotationAxis));
+
             UpdatePlanetScale(planet);
 
             if (prefab == null)
@@ -304,7 +338,7 @@ public class SolarSystemSimulationWithMoons : MonoBehaviour
                 UpdateMoonScale(moon);
                 CreateMoonOrbitLine(moon, planet);
 
-               
+
                 // For moons (inside the moon spawning loop)
                 CreateLabel(moon.moonInstance, moon.name, "Moon", moon.diameter, moon.rotationSpeed, moon.orbitalPeriod);
 
@@ -320,86 +354,94 @@ public class SolarSystemSimulationWithMoons : MonoBehaviour
         label.transform.localRotation = Quaternion.identity;
 
         TextMeshPro tmp = label.AddComponent<TextMeshPro>();
-        float unityWorldSize = celestialObject.transform.localScale.x * sizeScale * 1000;
-        tmp.text = $"{celestialObjectName} ({objectType})\nSize (JSON): {jsonSize}\nUnity world size: {unityWorldSize} meters\nSelf Rotation Speed: {selfRotationSpeed}\nOrbit Speed: {orbitSpeed}";
+        tmp.name = $"{celestialObjectName}_TextMeshPro";
         tmp.alignment = TextAlignmentOptions.Center;
         tmp.fontSize = 0.3f;
         tmp.color = Color.white;
 
+        //UpdateLabel(tmp, celestialObjectName, objectType, jsonSize, selfRotationSpeed, orbitSpeed, 0, 0);
     }
 
+    private void UpdateLabel(TextMeshPro tmp, string celestialObjectName, string objectType, float jsonSize, float selfRotationSpeed, float orbitSpeed, int completedRotations, int completedOrbits)
+    {
+        float unityWorldSize = tmp.transform.parent.parent.localScale.x * sizeScale * 1000;
+
+        tmp.text = $"{celestialObjectName} ({objectType})\nSize (JSON): {jsonSize}\nUnity world size: {unityWorldSize} meters\nSelf Rotation Speed: {selfRotationSpeed}\nOrbit Speed: {orbitSpeed}\nCompleted Self Rotations: {completedRotations}\nCompleted Orbits: {completedOrbits}";
+    }
 
     private void Update()
     {
-        float deltaTime = Time.deltaTime * timeScale;
-
-        foreach (var planet in planetDataList.planets)
+        if (solarSystemPlaced)
         {
-            float rotationDelta = deltaTime / planet.rotationPeriod * 360f;
-            float orbitDelta = deltaTime / planet.orbitalPeriod * 360f;
+            float deltaTime = Time.deltaTime * timeScale;
 
-            planet.planetInstance.transform.Rotate(planet.rotationAxis, rotationDelta, Space.World);
-
-            if (planet.name != "Sun")
+            foreach (var planet in planetDataList.planets)
             {
-                planet.orbitProgress += orbitDelta;
-                planet.planetInstance.transform.position = CalculatePlanetPosition(planet, planet.orbitProgress);
-            }
+                float rotationDelta = deltaTime / planet.rotationPeriod * 360f;
+                float orbitDelta = deltaTime / planet.orbitalPeriod * 360f;
 
-            planet.rotationProgress += Mathf.Abs(rotationDelta);
+                planet.planetInstance.transform.Rotate(planet.rotationAxis, rotationDelta, Space.World);
 
-            int completedSelfRotations = Mathf.FloorToInt(planet.rotationProgress / 360f);
-            int completedOrbits = Mathf.FloorToInt(planet.orbitProgress / 360f);
-
-            if (completedSelfRotations != planet.completedSelfRotations)
-            {
-                planet.completedSelfRotations = completedSelfRotations;
-                UpdateLogText(planet.name, planet.completedSelfRotations, planet.completedOrbits.ToString());
-            }
-
-            if (completedOrbits != planet.completedOrbits)
-            {
-                planet.completedOrbits = completedOrbits;
-                UpdateLogText(planet.name, planet.completedSelfRotations, planet.completedOrbits.ToString());
-            }
-
-
-            // Add this at the beginning of the Update() method
-            if (directionalLight != null)
-            {
-                PlanetData sunData = planetDataList.planets.FirstOrDefault(p => p.name == "Sun");
-                if (sunData != null)
+                if (planet.name != "Sun")
                 {
-                    Vector3 sunDirection = -sunData.planetInstance.transform.position.normalized;
-                    if (sunDirection != Vector3.zero)
+                    planet.orbitProgress += orbitDelta;
+                    planet.planetInstance.transform.position = CalculatePlanetPosition(planet, planet.orbitProgress);
+                }
+
+                planet.rotationProgress += Mathf.Abs(rotationDelta);
+
+                int completedSelfRotations = Mathf.FloorToInt(planet.rotationProgress / 360f);
+                int completedOrbits = Mathf.FloorToInt(planet.orbitProgress / 360f);
+
+                if (completedSelfRotations != planet.completedSelfRotations || completedOrbits != planet.completedOrbits)
+                {
+                    planet.completedSelfRotations = completedSelfRotations;
+                    planet.completedOrbits = completedOrbits;
+
+                    //TextMeshPro planetLabel = planet.planetInstance.transform.Find($"{planet.name}_Label/{planet.name}_TextMeshPro").GetComponent<TextMeshPro>();
+                   // UpdateLabel(planetLabel, planet.name, "Planet", planet.diameter, planet.rotationSpeed, planet.orbitalPeriod, planet.completedSelfRotations, planet.completedOrbits);
+                }
+
+
+                // Add this at the beginning of the Update() method
+                if (directionalLight != null)
+                {
+                    PlanetData sunData = planetDataList.planets.FirstOrDefault(p => p.name == "Sun");
+                    if (sunData != null)
                     {
-                        directionalLight.transform.position = sunData.planetInstance.transform.position;
-                        directionalLight.transform.rotation = Quaternion.LookRotation(sunDirection);
+                        Vector3 sunDirection = -sunData.planetInstance.transform.position.normalized;
+                        if (sunDirection != Vector3.zero)
+                        {
+                            directionalLight.transform.position = sunData.planetInstance.transform.position;
+                            directionalLight.transform.rotation = Quaternion.LookRotation(sunDirection);
+                        }
+                    }
+                }
+
+
+                // Update moons
+                foreach (var moon in planet.moons)
+                {
+                    float moonRotationDelta = deltaTime / moon.rotationPeriod * 360f;
+                    float moonOrbitDelta = deltaTime / moon.orbitalPeriod * 360f;
+
+                    moon.moonInstance.transform.Rotate(planet.rotationAxis, moonRotationDelta, Space.World);
+                    moon.moonInstance.transform.RotateAround(planet.planetInstance.transform.position, Vector3.up, moonOrbitDelta);
+                    moon.rotationProgress += Mathf.Abs(moonRotationDelta);
+
+                    int completedMoonRotations = Mathf.FloorToInt(moon.rotationProgress / 360f);
+
+                    if (completedMoonRotations != moon.completedRotations)
+                    {
+                        moon.completedRotations = completedMoonRotations;
+
+                        //TextMeshPro moonLabel = moon.moonInstance.transform.Find($"{moon.name}_Label/{moon.name}_TextMeshPro").GetComponent<TextMeshPro>();
+                        //UpdateLabel(moonLabel, moon.name, "Moon", moon.diameter, moon.rotationSpeed, moon.orbitalPeriod, moon.completedRotations, 0);
                     }
                 }
             }
-
-
-
-            // Update moons
-            foreach (var moon in planet.moons)
-            {
-                float moonRotationDelta = deltaTime / moon.rotationPeriod * 360f;
-                float moonOrbitDelta = deltaTime / moon.orbitalPeriod * 360f;
-
-                moon.moonInstance.transform.Rotate(planet.rotationAxis, moonRotationDelta, Space.World);
-                moon.moonInstance.transform.RotateAround(planet.planetInstance.transform.position, Vector3.up, moonOrbitDelta);
-                moon.rotationProgress += Mathf.Abs(moonRotationDelta);
-
-                int completedMoonRotations = Mathf.FloorToInt(moon.rotationProgress / 360f);
-
-                if (completedMoonRotations != moon.completedRotations)
-                {
-                    moon.completedRotations = completedMoonRotations;
-                    UpdateLogText(moon.name, moon.completedRotations, $"Rotations around {planet.name}");
-                }
-            }
         }
+
     }
 
     private Vector3 CalculateMoonPosition(MoonData moon, PlanetData planet, float angle)
@@ -436,29 +478,30 @@ public class SolarSystemSimulationWithMoons : MonoBehaviour
         return new Vector3(x * distanceScale, y * distanceScale, z * distanceScale);
     }
 
-    private void UpdateLogText(string celestialObjectName, int completedRotations, string rotationType)
-    {
-        logText.text = "";
-        foreach (var planet in planetDataList.planets)
-        {
-            logText.text += $"{planet.name}: {planet.completedOrbits} orbits, {planet.completedSelfRotations} self rotations, Size: {planet.planetInstance.transform.localScale.x * sizeScale * 1000} meters, Local Scale: {planet.planetInstance.transform.localScale}\n";
-            foreach (var moon in planet.moons)
-            {
-                if (moon.name == celestialObjectName)
-                {
-                    logText.text += $"  {moon.name}: {completedRotations} {rotationType}, Size: {moon.moonInstance.transform.localScale.x * sizeScale * 1000} meters, Local Scale: {moon.moonInstance.transform.localScale}\n";
-                }
-                else
-                {
-                    logText.text += $"  {moon.name}: {moon.completedRotations} Rotations around {planet.name}, Size: {moon.moonInstance.transform.localScale.x * sizeScale * 1000} meters, Local Scale: {moon.moonInstance.transform.localScale}\n";
-                }
-            }
-        }
-    }
+    //private void UpdateLogText(string celestialObjectName, int completedRotations, string rotationType)
+    //{
+    //    logText.text = "";
+    //    foreach (var planet in planetDataList.planets)
+    //    {
+    //        logText.text += $"{planet.name}: {planet.completedOrbits} orbits, {planet.completedSelfRotations} self rotations, Size: {planet.planetInstance.transform.localScale.x * sizeScale * 1000} meters, Local Scale: {planet.planetInstance.transform.localScale}\n";
+    //        foreach (var moon in planet.moons)
+    //        {
+    //            if (moon.name == celestialObjectName)
+    //            {
+    //                logText.text += $"  {moon.name}: {completedRotations} {rotationType}, Size: {moon.moonInstance.transform.localScale.x * sizeScale * 1000} meters, Local Scale: {moon.moonInstance.transform.localScale}\n";
+    //            }
+    //            else
+    //            {
+    //                logText.text += $"  {moon.name}: {moon.completedRotations} Rotations around {planet.name}, Size: {moon.moonInstance.transform.localScale.x * sizeScale * 1000} meters, Local Scale: {moon.moonInstance.transform.localScale}\n";
+    //            }
+    //        }
+    //    }
+    //}
 
 }
-// todo lighting 
 // todo day night texture
 // add the cockpit
-// add text next to each planet
 // todo add new poly
+// todo fix planets and moons text mesh pro 
+// todo fix moon orbit line 
+// fix xizing of plamets ig uess its not working 
