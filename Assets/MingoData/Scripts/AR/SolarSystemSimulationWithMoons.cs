@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 
@@ -78,6 +79,126 @@ public class SolarSystemSimulationWithMoons : MonoBehaviour
 
     public PlanetDataList planetDataList;
 
+    private GameObject directionalLight;
+
+    private void CreateDirectionalLight(Transform sunTransform)
+    {
+        directionalLight = new GameObject("Directional Light");
+        Light lightComponent = directionalLight.AddComponent<Light>();
+        lightComponent.type = LightType.Point;
+        lightComponent.color = Color.white;
+        lightComponent.intensity = 1.0f;
+        lightComponent.range = distanceScale * 100; // Set the range based on the distance scale
+        directionalLight.transform.SetParent(sunTransform);
+        directionalLight.transform.localPosition = Vector3.zero;
+    }
+
+    private void CreatePlanetOrbitLine(PlanetData planet)
+    {
+        GameObject orbitLine = new GameObject($"{planet.name} Orbit Line");
+        LineRenderer lineRenderer = orbitLine.AddComponent<LineRenderer>();
+        lineRenderer.material = orbitLineMaterial;
+        lineRenderer.widthMultiplier = planet.diameter * sizeScale * 1f; // Change this value to control the width of the orbit line related to the size of the planet
+        lineRenderer.positionCount = 360;
+
+        float angleStep = 360f / lineRenderer.positionCount;
+        for (int i = 0; i < lineRenderer.positionCount; i++)
+        {
+            float angle = i * angleStep;
+            Vector3 position = CalculatePlanetPosition(planet, angle);
+            lineRenderer.SetPosition(i, position);
+        }
+    }
+
+    private void CreateMoonOrbitLine(MoonData moon, PlanetData planet)
+    {
+        GameObject orbitLine = new($"{moon.name} Orbit Line");
+        LineRenderer lineRenderer = orbitLine.AddComponent<LineRenderer>();
+        lineRenderer.material = orbitLineMaterial;
+        lineRenderer.widthMultiplier = planet.diameter * sizeScale * 10f; // Change this value to control the width of the orbit line related to the size of the moon
+        lineRenderer.positionCount = 360;
+
+        float angleStep = 360f / lineRenderer.positionCount;
+        for (int i = 0; i < lineRenderer.positionCount; i++)
+        {
+            float angle = i * angleStep;
+            Vector3 position = CalculateMoonPosition(moon, planet, angle);
+            lineRenderer.SetPosition(i, position);
+        }
+    }
+
+    private void UpdateSizeScale(float value)
+    {
+        sizeScale = value;
+        foreach (var planet in planetDataList.planets)
+        {
+            UpdatePlanetScale(planet);
+            foreach (var moon in planet.moons)
+            {
+                UpdateMoonScale(moon);
+            }
+        }
+    }
+
+    private void UpdateTimeScale(float value)
+    {
+        timeScale = value;
+    }
+
+    private void UpdateDistanceScale(float value)
+    {
+        distanceScale = value;
+        foreach (var planet in planetDataList.planets)
+        {
+            UpdatePlanetOrbitLine(planet);
+            foreach (var moon in planet.moons)
+            {
+                UpdateMoonOrbitLine(moon, planet);
+            }
+        }
+    }
+
+    public void UpdateMoonScale(MoonData moon)
+    {
+        float diameterScale = moon.diameter * sizeScale;
+        moon.moonInstance.transform.localScale = new Vector3(diameterScale, diameterScale, diameterScale);
+    }
+
+    public void UpdatePlanetScale(PlanetData planet)
+    {
+        if (planet.name != "Sun")
+        {
+            float diameterScale = planet.diameter * sizeScale;
+            planet.planetInstance.transform.localScale = new Vector3(diameterScale, diameterScale, diameterScale);
+        }
+    }
+
+    private void UpdatePlanetOrbitLine(PlanetData planet)
+    {
+        LineRenderer lineRenderer = GameObject.Find($"{planet.name} Orbit Line").GetComponent<LineRenderer>();
+
+        float angleStep = 360f / lineRenderer.positionCount;
+        for (int i = 0; i < lineRenderer.positionCount; i++)
+        {
+            float angle = i * angleStep;
+            Vector3 position = CalculatePlanetPosition(planet, angle);
+            lineRenderer.SetPosition(i, position);
+        }
+    }
+
+    private void UpdateMoonOrbitLine(MoonData moon, PlanetData planet)
+    {
+        LineRenderer lineRenderer = GameObject.Find($"{moon.name} Orbit Line").GetComponent<LineRenderer>();
+
+        float angleStep = 360f / lineRenderer.positionCount;
+        for (int i = 0; i < lineRenderer.positionCount; i++)
+        {
+            float angle = i * angleStep;
+            Vector3 position = CalculateMoonPosition(moon, planet, angle);
+            lineRenderer.SetPosition(i, position);
+        }
+    }
+
     private void Start()
     {
         sizeScaleSlider.onValueChanged.AddListener(UpdateSizeScale);
@@ -114,47 +235,6 @@ public class SolarSystemSimulationWithMoons : MonoBehaviour
         }
     }
 
-    private void UpdateSizeScale(float value)
-    {
-        sizeScale = value;
-        foreach (var planet in planetDataList.planets)
-        {
-            UpdatePlanetScale(planet);
-            foreach (var moon in planet.moons)
-            {
-                UpdateMoonScale(moon);
-            }
-        }
-    }
-
-    private void UpdateTimeScale(float value)
-    {
-        timeScale = value;
-    }
-
-    private void UpdateDistanceScale(float value)
-    {
-        distanceScale = value;
-        foreach (var planet in planetDataList.planets)
-        {
-            UpdatePlanetOrbitLine(planet);
-            foreach (var moon in planet.moons)
-            {
-                UpdateMoonOrbitLine(moon, planet);
-            }
-        }
-    }
-
-    private void CreateDirectionalLight()
-    {
-        GameObject directionalLightObject = new GameObject("Directional Light");
-        Light directionalLight = directionalLightObject.AddComponent<Light>();
-        directionalLight.type = LightType.Directional;
-        directionalLight.color = Color.white;
-        directionalLight.intensity = 1.0f;
-        directionalLightObject.transform.rotation = Quaternion.Euler(50, -30, 0);
-    }
-
     private void SpawnPlanets()
     {
         Quaternion rotationCorrection = Quaternion.Euler(-90, 0, 0);
@@ -176,13 +256,14 @@ public class SolarSystemSimulationWithMoons : MonoBehaviour
 
             if (planet.name == "Sun")
             {
-                CreateDirectionalLight();
+                CreateDirectionalLight(planet.planetInstance.transform);
+
                 GameObject directionalLight = GameObject.Find("Directional Light");
                 if (directionalLight != null)
                 {
                     directionalLight.transform.SetParent(planet.planetInstance.transform);
                     directionalLight.transform.localPosition = Vector3.zero;
-                    directionalLight.transform.localRotation = Quaternion.Euler(50, -30, 0);
+                    directionalLight.transform.localRotation = Quaternion.Euler(0, 0, 0);
                 }
             }
 
@@ -226,21 +307,6 @@ public class SolarSystemSimulationWithMoons : MonoBehaviour
         }
     }
 
-    public void UpdateMoonScale(MoonData moon)
-    {
-        float diameterScale = moon.diameter * sizeScale;
-        moon.moonInstance.transform.localScale = new Vector3(diameterScale, diameterScale, diameterScale);
-    }
-
-    public void UpdatePlanetScale(PlanetData planet)
-    {
-        if (planet.name != "Sun")
-        {
-            float diameterScale = planet.diameter * sizeScale;
-            planet.planetInstance.transform.localScale = new Vector3(diameterScale, diameterScale, diameterScale);
-        }
-    }
-
     private void Update()
     {
         float deltaTime = Time.deltaTime * timeScale;
@@ -276,6 +342,23 @@ public class SolarSystemSimulationWithMoons : MonoBehaviour
             }
 
 
+            // Add this at the beginning of the Update() method
+            if (directionalLight != null)
+            {
+                PlanetData sunData = planetDataList.planets.FirstOrDefault(p => p.name == "Sun");
+                if (sunData != null)
+                {
+                    Vector3 sunDirection = -sunData.planetInstance.transform.position.normalized;
+                    if (sunDirection != Vector3.zero)
+                    {
+                        directionalLight.transform.position = sunData.planetInstance.transform.position;
+                        directionalLight.transform.rotation = Quaternion.LookRotation(sunDirection);
+                    }
+                }
+            }
+
+
+
             // Update moons
             foreach (var moon in planet.moons)
             {
@@ -294,68 +377,6 @@ public class SolarSystemSimulationWithMoons : MonoBehaviour
                     UpdateLogText(moon.name, moon.completedRotations, $"Rotations around {planet.name}");
                 }
             }
-        }
-    }
-
-
-    private void UpdatePlanetOrbitLine(PlanetData planet)
-    {
-        LineRenderer lineRenderer = GameObject.Find($"{planet.name} Orbit Line").GetComponent<LineRenderer>();
-
-        float angleStep = 360f / lineRenderer.positionCount;
-        for (int i = 0; i < lineRenderer.positionCount; i++)
-        {
-            float angle = i * angleStep;
-            Vector3 position = CalculatePlanetPosition(planet, angle);
-            lineRenderer.SetPosition(i, position);
-        }
-    }
-
-    private void UpdateMoonOrbitLine(MoonData moon, PlanetData planet)
-    {
-        LineRenderer lineRenderer = GameObject.Find($"{moon.name} Orbit Line").GetComponent<LineRenderer>();
-
-        float angleStep = 360f / lineRenderer.positionCount;
-        for (int i = 0; i < lineRenderer.positionCount; i++)
-        {
-            float angle = i * angleStep;
-            Vector3 position = CalculateMoonPosition(moon, planet, angle);
-            lineRenderer.SetPosition(i, position);
-        }
-    }
-
-
-    private void CreatePlanetOrbitLine(PlanetData planet)
-    {
-        GameObject orbitLine = new GameObject($"{planet.name} Orbit Line");
-        LineRenderer lineRenderer = orbitLine.AddComponent<LineRenderer>();
-        lineRenderer.material = orbitLineMaterial;
-        lineRenderer.widthMultiplier = planet.diameter * sizeScale * 1f; // Change this value to control the width of the orbit line related to the size of the planet
-        lineRenderer.positionCount = 360;
-
-        float angleStep = 360f / lineRenderer.positionCount;
-        for (int i = 0; i < lineRenderer.positionCount; i++)
-        {
-            float angle = i * angleStep;
-            Vector3 position = CalculatePlanetPosition(planet, angle);
-            lineRenderer.SetPosition(i, position);
-        }
-    }
-
-    private void CreateMoonOrbitLine(MoonData moon, PlanetData planet)
-    {
-        GameObject orbitLine = new($"{moon.name} Orbit Line");
-        LineRenderer lineRenderer = orbitLine.AddComponent<LineRenderer>();
-        lineRenderer.material = orbitLineMaterial;
-        lineRenderer.widthMultiplier = planet.diameter * sizeScale * 10f; // Change this value to control the width of the orbit line related to the size of the moon
-        lineRenderer.positionCount = 360;
-
-        float angleStep = 360f / lineRenderer.positionCount;
-        for (int i = 0; i < lineRenderer.positionCount; i++)
-        {
-            float angle = i * angleStep;
-            Vector3 position = CalculateMoonPosition(moon, planet, angle);
-            lineRenderer.SetPosition(i, position);
         }
     }
 
@@ -393,7 +414,6 @@ public class SolarSystemSimulationWithMoons : MonoBehaviour
         return new Vector3(x * distanceScale, y * distanceScale, z * distanceScale);
     }
 
-
     private void UpdateLogText(string celestialObjectName, int completedRotations, string rotationType)
     {
         logText.text = "";
@@ -416,5 +436,5 @@ public class SolarSystemSimulationWithMoons : MonoBehaviour
 }
 // todo lighting 
 // todo day night texture
-// particles 
 // add the cockpit
+// add text next to each planet
