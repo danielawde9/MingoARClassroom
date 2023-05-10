@@ -276,6 +276,9 @@ public class SolarSystemSimulationWithMoons : MonoBehaviour
             planet.rotationProgress = 0f;
 
             CreatePlanetOrbitLine(planet);
+            // For planets
+            CreateLabel(planet.planetInstance, planet.name, "Planet", planet.diameter, planet.rotationSpeed, planet.orbitalPeriod);
+
 
             // Spawn moons
             foreach (var moon in planet.moons)
@@ -301,11 +304,30 @@ public class SolarSystemSimulationWithMoons : MonoBehaviour
                 UpdateMoonScale(moon);
                 CreateMoonOrbitLine(moon, planet);
 
+               
+                // For moons (inside the moon spawning loop)
+                CreateLabel(moon.moonInstance, moon.name, "Moon", moon.diameter, moon.rotationSpeed, moon.orbitalPeriod);
 
             }
 
         }
     }
+    private void CreateLabel(GameObject celestialObject, string celestialObjectName, string objectType, float jsonSize, float selfRotationSpeed, float orbitSpeed)
+    {
+        GameObject label = new GameObject($"{celestialObjectName}_Label");
+        label.transform.SetParent(celestialObject.transform);
+        label.transform.localPosition = new Vector3(0, (celestialObject.transform.localScale.y / 2) + 0.5f, 0);
+        label.transform.localRotation = Quaternion.identity;
+
+        TextMeshPro tmp = label.AddComponent<TextMeshPro>();
+        float unityWorldSize = celestialObject.transform.localScale.x * sizeScale * 1000;
+        tmp.text = $"{celestialObjectName} ({objectType})\nSize (JSON): {jsonSize}\nUnity world size: {unityWorldSize} meters\nSelf Rotation Speed: {selfRotationSpeed}\nOrbit Speed: {orbitSpeed}";
+        tmp.alignment = TextAlignmentOptions.Center;
+        tmp.fontSize = 0.3f;
+        tmp.color = Color.white;
+
+    }
+
 
     private void Update()
     {
@@ -419,22 +441,24 @@ public class SolarSystemSimulationWithMoons : MonoBehaviour
         logText.text = "";
         foreach (var planet in planetDataList.planets)
         {
-            logText.text += $"{planet.name}: {planet.completedOrbits} orbits, {planet.completedSelfRotations} self rotations\n";
+            logText.text += $"{planet.name}: {planet.completedOrbits} orbits, {planet.completedSelfRotations} self rotations, Size: {planet.planetInstance.transform.localScale.x * sizeScale * 1000} meters, Local Scale: {planet.planetInstance.transform.localScale}\n";
             foreach (var moon in planet.moons)
             {
                 if (moon.name == celestialObjectName)
                 {
-                    logText.text += $"  {moon.name}: {completedRotations} {rotationType}\n";
+                    logText.text += $"  {moon.name}: {completedRotations} {rotationType}, Size: {moon.moonInstance.transform.localScale.x * sizeScale * 1000} meters, Local Scale: {moon.moonInstance.transform.localScale}\n";
                 }
                 else
                 {
-                    logText.text += $"  {moon.name}: {moon.completedRotations} Rotations around {planet.name}\n";
+                    logText.text += $"  {moon.name}: {moon.completedRotations} Rotations around {planet.name}, Size: {moon.moonInstance.transform.localScale.x * sizeScale * 1000} meters, Local Scale: {moon.moonInstance.transform.localScale}\n";
                 }
             }
         }
     }
+
 }
 // todo lighting 
 // todo day night texture
 // add the cockpit
 // add text next to each planet
+// todo add new poly
