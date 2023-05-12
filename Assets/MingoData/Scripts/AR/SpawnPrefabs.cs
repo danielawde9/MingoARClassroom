@@ -8,7 +8,13 @@ public class SpawnPrefabs : MonoBehaviour
     public float despawnDistance = 5f; // Distance the user must move past the prefab to despawn it
     public int maxSpawnedPrefabs = 10; // Maximum number of prefabs to be spawned at a time
 
-    private List<GameObject> spawnedPrefabs = new List<GameObject>();
+    private readonly List<GameObject> spawnedPrefabs = new ();
+    private GameObject parentObject; // Parent object for all spawned prefabs
+
+    void Start()
+    {
+        parentObject = new GameObject("spawned_prefabs");
+    }
 
     void Update()
     {
@@ -16,7 +22,7 @@ public class SpawnPrefabs : MonoBehaviour
         {
             Vector3 spawnDirection = Random.onUnitSphere;
             Vector3 spawnPosition = transform.position + spawnDirection * spawnRadius;
-            GameObject spawnedPrefab = Instantiate(prefabToSpawn, spawnPosition, Quaternion.identity);
+            GameObject spawnedPrefab = Instantiate(prefabToSpawn, spawnPosition, Quaternion.identity, parentObject.transform);
             spawnedPrefabs.Add(spawnedPrefab);
         }
 

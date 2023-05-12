@@ -83,9 +83,6 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
 
     private GameObject directionalLight;
 
-
-
-
     [SerializeField]
     ARPlaneManager m_PlaneManager;
 
