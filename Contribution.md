@@ -1,6 +1,6 @@
 # Contributing to Mingo AR Classroom
 
-Thank you for your interest in contributing to Mingo AR Classroom! We appreciate your effort and look forward to improving the project with your help. Please follow the guidelines outlined below to ensure a smooth collaboration process
+Thank you for your interest in contributing to Mingo AR Classroom! We appreciate your effort and look forward to improving the project with your help. Please follow the guidelines outlined below to ensure a smooth collaboration process.
 
 ## Getting Started
 
