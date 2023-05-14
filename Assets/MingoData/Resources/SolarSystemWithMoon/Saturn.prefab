@@ -11,9 +11,10 @@ GameObject:
   - component: {fileID: 408095511329572708}
   - component: {fileID: 2752899523677319674}
   - component: {fileID: 28117702777812468}
-  m_Layer: 0
+  - component: {fileID: -5245989142736224762}
+  m_Layer: 6
   m_Name: Saturn
-  m_TagString: Untagged
+  m_TagString: CelestialBody
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -84,6 +85,28 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &-5245989142736224762
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1207666551680288205}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 1780218961503353201, guid: e3c0828df8277d540b314331e583ac77, type: 3}
 --- !u!1 &3120674848234236534
 GameObject:
   m_ObjectHideFlags: 0
@@ -95,7 +118,7 @@ GameObject:
   - component: {fileID: 3326650873690076782}
   - component: {fileID: 7088389689675392723}
   - component: {fileID: 3929534217791767474}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Saturn_Core
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -176,7 +199,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7192821713189378721}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: planet_structure.006
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -211,7 +234,7 @@ GameObject:
   - component: {fileID: 7845726768704435491}
   - component: {fileID: 5965890792336991884}
   - component: {fileID: 310534516370819457}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Saturn_Envelope
   m_TagString: Untagged
   m_Icon: {fileID: 0}

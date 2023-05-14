@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 803539582539787773}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Titania_structure
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -44,7 +44,7 @@ GameObject:
   - component: {fileID: 3512080492687749283}
   - component: {fileID: 559206084129988829}
   - component: {fileID: 8355094523795504577}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Titania_Core
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -127,9 +127,10 @@ GameObject:
   - component: {fileID: 3982103893136707459}
   - component: {fileID: 7998593868943313085}
   - component: {fileID: 272435851966323733}
-  m_Layer: 0
+  - component: {fileID: 3888917137264447874}
+  m_Layer: 6
   m_Name: Titania
-  m_TagString: Untagged
+  m_TagString: CelestialBody
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -200,6 +201,28 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &3888917137264447874
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4989866219415567257}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -8335124873811299577, guid: e3c0828df8277d540b314331e583ac77, type: 3}
 --- !u!1 &5826302611370368354
 GameObject:
   m_ObjectHideFlags: 0
@@ -211,7 +234,7 @@ GameObject:
   - component: {fileID: 6384973131101620732}
   - component: {fileID: 3955716960395224287}
   - component: {fileID: 1812488681125388781}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Titania_Mantle
   m_TagString: Untagged
   m_Icon: {fileID: 0}

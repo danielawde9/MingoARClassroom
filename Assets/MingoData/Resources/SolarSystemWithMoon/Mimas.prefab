@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8544068648008633687}
   - component: {fileID: 452044996019064871}
   - component: {fileID: 1567130160674833438}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Mimas_Core
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,9 +94,10 @@ GameObject:
   - component: {fileID: 8576723663854014852}
   - component: {fileID: 5198903183093943857}
   - component: {fileID: 2945668169816793603}
-  m_Layer: 0
+  - component: {fileID: 2506139297649688316}
+  m_Layer: 6
   m_Name: Mimas
-  m_TagString: Untagged
+  m_TagString: CelestialBody
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -167,6 +168,28 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &2506139297649688316
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2066238794378753071}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 930928597202269606, guid: e3c0828df8277d540b314331e583ac77, type: 3}
 --- !u!1 &2879116630987064242
 GameObject:
   m_ObjectHideFlags: 0
@@ -176,7 +199,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4945182118918252584}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Mimas_structure
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -211,7 +234,7 @@ GameObject:
   - component: {fileID: 4989881969916517207}
   - component: {fileID: 725271799622661260}
   - component: {fileID: 6035220748406619502}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Mimas_Mantle
   m_TagString: Untagged
   m_Icon: {fileID: 0}

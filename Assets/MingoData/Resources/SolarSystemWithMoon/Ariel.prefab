@@ -11,9 +11,10 @@ GameObject:
   - component: {fileID: 6901006470252997279}
   - component: {fileID: 6730132585027634562}
   - component: {fileID: 6426083245462841473}
-  m_Layer: 0
+  - component: {fileID: 4069872679075341160}
+  m_Layer: 6
   m_Name: Ariel
-  m_TagString: Untagged
+  m_TagString: CelestialBody
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -84,6 +85,28 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &4069872679075341160
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1170166823203831611}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 9013875640567001749, guid: e3c0828df8277d540b314331e583ac77, type: 3}
 --- !u!1 &4992256641987913398
 GameObject:
   m_ObjectHideFlags: 0
@@ -93,7 +116,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6796713619201714658}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Ariel_structure
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -128,7 +151,7 @@ GameObject:
   - component: {fileID: 2294068636849168011}
   - component: {fileID: 3668986885987221931}
   - component: {fileID: 5396474288226933432}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Ariel_Core
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -211,7 +234,7 @@ GameObject:
   - component: {fileID: 595455908928293873}
   - component: {fileID: 761353563121590374}
   - component: {fileID: 1478047445505990804}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Ariel_Mantle
   m_TagString: Untagged
   m_Icon: {fileID: 0}

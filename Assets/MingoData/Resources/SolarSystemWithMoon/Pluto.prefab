@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8817884359034534611}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: planet_structure.009
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -45,7 +45,7 @@ GameObject:
   - component: {fileID: 5626011582840042858}
   - component: {fileID: 6919382094735447016}
   - component: {fileID: 4465166189834106641}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Pluto_Crust
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -128,9 +128,10 @@ GameObject:
   - component: {fileID: 6815467946754940138}
   - component: {fileID: 4978318952066494239}
   - component: {fileID: 5950342015605181512}
-  m_Layer: 0
+  - component: {fileID: 7414309768449748342}
+  m_Layer: 6
   m_Name: Pluto
-  m_TagString: Untagged
+  m_TagString: CelestialBody
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -201,6 +202,28 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &7414309768449748342
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6032083367255244064}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -4670792998898415435, guid: e3c0828df8277d540b314331e583ac77, type: 3}
 --- !u!1 &6369649915834363506
 GameObject:
   m_ObjectHideFlags: 0
@@ -212,7 +235,7 @@ GameObject:
   - component: {fileID: 4185273210138772839}
   - component: {fileID: 5737617734218321145}
   - component: {fileID: 4508389301439360193}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Pluto_Mantle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -295,7 +318,7 @@ GameObject:
   - component: {fileID: 6052363731681096528}
   - component: {fileID: 7986577744612023190}
   - component: {fileID: 4485829176944930049}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Pluto_Core
   m_TagString: Untagged
   m_Icon: {fileID: 0}

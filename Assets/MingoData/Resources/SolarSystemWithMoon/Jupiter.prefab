@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2986084168272999113}
   - component: {fileID: 6963417716923925386}
   - component: {fileID: 3983034419375757045}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Jupiter_Core
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,9 +94,10 @@ GameObject:
   - component: {fileID: 5979145551867978012}
   - component: {fileID: 8596848198281050926}
   - component: {fileID: 3102906783782280657}
-  m_Layer: 0
+  - component: {fileID: -5018994566110029492}
+  m_Layer: 6
   m_Name: Jupiter
-  m_TagString: Untagged
+  m_TagString: CelestialBody
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -167,6 +168,28 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &-5018994566110029492
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2068740137790163222}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 2384782780456473445, guid: e3c0828df8277d540b314331e583ac77, type: 3}
 --- !u!1 &4679434451662922476
 GameObject:
   m_ObjectHideFlags: 0
@@ -178,7 +201,7 @@ GameObject:
   - component: {fileID: 2381109429119789857}
   - component: {fileID: 7087394844852178090}
   - component: {fileID: 7658954685221893240}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Jupiter_Envelope
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -259,7 +282,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5376970015373140861}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: planet_structure.005
   m_TagString: Untagged
   m_Icon: {fileID: 0}

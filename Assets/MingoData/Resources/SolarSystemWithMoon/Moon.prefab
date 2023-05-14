@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3218794361708146649}
   - component: {fileID: 7084175532571520467}
   - component: {fileID: 1286865807716138167}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Moon_Mantle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,9 +94,10 @@ GameObject:
   - component: {fileID: 8030276267633108461}
   - component: {fileID: 3643020327318313094}
   - component: {fileID: 6305966706980786534}
-  m_Layer: 0
+  - component: {fileID: 6996230627264012454}
+  m_Layer: 6
   m_Name: Moon
-  m_TagString: Untagged
+  m_TagString: CelestialBody
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -167,6 +168,28 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &6996230627264012454
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7338133832273536234}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 5460216494914580811, guid: e3c0828df8277d540b314331e583ac77, type: 3}
 --- !u!1 &7970273644435593508
 GameObject:
   m_ObjectHideFlags: 0
@@ -176,7 +199,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4970511937090811957}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Moon_structure
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -211,7 +234,7 @@ GameObject:
   - component: {fileID: 5366229698470264745}
   - component: {fileID: 6915171104068255381}
   - component: {fileID: 3439939964432764821}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Moon_Core
   m_TagString: Untagged
   m_Icon: {fileID: 0}

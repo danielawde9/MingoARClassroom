@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3917633790237059259}
   - component: {fileID: 1491956267022538521}
   - component: {fileID: 4512146235965336196}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Oberon_Core
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 8524588371545882778}
   - component: {fileID: 1100305250013690689}
   - component: {fileID: 5899103952027400693}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Oberon_Mantle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -175,7 +175,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4673731370554717007}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Oberon_structure
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -210,9 +210,10 @@ GameObject:
   - component: {fileID: 266486072015414874}
   - component: {fileID: 6246670950440563265}
   - component: {fileID: 8925244601205375445}
-  m_Layer: 0
+  - component: {fileID: -2718560603297804304}
+  m_Layer: 6
   m_Name: Oberon
-  m_TagString: Untagged
+  m_TagString: CelestialBody
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -283,3 +284,25 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &-2718560603297804304
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8637941609982265825}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 8803452205213796858, guid: e3c0828df8277d540b314331e583ac77, type: 3}
