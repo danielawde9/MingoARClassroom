@@ -32,16 +32,16 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
         public List<PlanetData> planets;
     }
 
-    public float sizeScale = 200.0f;
+    public float sizeScale = 1.0f;
     public float timeScale = 1.0f;
     public float distanceScale = 1.0f;
 
     public TextMeshProUGUI logText;
     public Material orbitLineMaterial;
 
-    public Slider sizeScaleSlider;
     public Slider timeScaleSlider;
-    public Slider distanceScaleSlider;
+    /*public Slider sizeScaleSlider;
+    public Slider distanceScaleSlider;*/
 
     public PlanetDataList planetDataList;
 
@@ -77,10 +77,8 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
         }
     }
 
-
     protected override void OnPress(Vector3 touchPosition)
     {
-
         if (!solarSystemPlaced)
         {
             List<ARRaycastHit> s_Hits = new();
@@ -116,6 +114,7 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
             }
         }
     }
+
     void DetectPlanetTouch(Vector2 touchPosition)
     {
         Ray ray = mainCamera.ScreenPointToRay(touchPosition);
@@ -261,26 +260,7 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
                 planet.completedOrbits = completedOrbits;
             }
 
-            // Update moons
-            foreach (var moon in planet.moons)
-            {
-                float moonRotationDelta = deltaTime / moon.rotationPeriod * 360f;
-                float moonOrbitDelta = deltaTime / moon.orbitalPeriod * 360f;
 
-                moon.celestialBodyInstance.transform.Rotate(planet.rotationAxis, moonRotationDelta, Space.World);
-                moon.celestialBodyInstance.transform.RotateAround(planet.celestialBodyInstance.transform.position, planet.celestialBodyInstance.transform.up, moonOrbitDelta);
-                moon.rotationProgress += Mathf.Abs(moonRotationDelta);
-
-                int completedMoonRotations = Mathf.FloorToInt(moon.rotationProgress / 360f);
-
-                if (completedMoonRotations != moon.completedRotations)
-                {
-                    moon.completedRotations = completedMoonRotations;
-                }
-
-                moon.celestialBodyInstance.transform.position = CalculateMoonPosition(moon, planet, moon.orbitProgress);
-
-            }
         }
     }
 
@@ -323,7 +303,8 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
         GameObject orbitLine = new GameObject($"{body.name} Orbit Line");
         LineRenderer lineRenderer = orbitLine.AddComponent<LineRenderer>();
         lineRenderer.material = orbitLineMaterial;
-        lineRenderer.widthMultiplier = body.diameter * sizeScale * diameterScaleFactor;
+       // lineRenderer.widthMultiplier = body.diameter * sizeScale * diameterScaleFactor;
+        lineRenderer.widthMultiplier = 0.1f;
         lineRenderer.positionCount = 360;
 
         float angleStep = 360f / lineRenderer.positionCount;
@@ -373,11 +354,6 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
         }
     }
 
-    private void UpdateTimeScaleSlider(float value)
-    {
-        timeScale = value;
-    }
-
     private void UpdateDistanceScaleSlider(float value)
     {
         distanceScale = value;
@@ -391,6 +367,11 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
         }
     }
 
+    private void UpdateTimeScaleSlider(float value)
+    {
+        timeScale = value;
+    }
+
     public void UpdateCelestialBodyScale(CelestialBodyData body)
     {
         if (body.name != "Sun")
@@ -401,9 +382,9 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
 
     private void Start()
     {
-        sizeScaleSlider.onValueChanged.AddListener(UpdateSizeScaleSlider);
-        timeScaleSlider.onValueChanged.AddListener(UpdateTimeScaleSlider);
-        distanceScaleSlider.onValueChanged.AddListener(UpdateDistanceScaleSlider);
+        //timeScaleSlider.onValueChanged.AddListener(UpdateTimeScaleSlider);
+        /*sizeScaleSlider.onValueChanged.AddListener(UpdateSizeScaleSlider);
+        distanceScaleSlider.onValueChanged.AddListener(UpdateDistanceScaleSlider);*/
         LoadPlanetData();
     }
 
@@ -418,13 +399,13 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
             planetData.orbitalPeriod *= 86400;
             planetData.perihelionDistance = planetData.distanceFromSun * (1 - planetData.orbitalEccentricity);
             planetData.aphelionDistance = planetData.distanceFromSun * (1 + planetData.orbitalEccentricity);
-            foreach (var moonData in planetData.moons)
+            /*foreach (var moonData in planetData.moons)
             {
                 moonData.rotationPeriod *= 3600;
                 moonData.orbitalPeriod *= 86400;
                 moonData.perihelionDistance = moonData.distanceFromPlanet * (1 - moonData.orbitalEccentricity);
                 moonData.aphelionDistance = moonData.distanceFromPlanet * (1 + moonData.orbitalEccentricity);
-            }
+            }*/
         }
     }
 
@@ -440,7 +421,10 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
 
             planet.celestialBodyInstance = Instantiate(prefab, placedTouchPosition + CalculatePlanetPosition(planet, 0f), rotationCorrection * prefab.transform.rotation * Quaternion.Euler(planet.rotationAxis));
 
-            UpdateCelestialBodyScale(planet);
+            // UpdateCelestialBodyScale(planet);
+
+            // Set the name of the instantiated planet
+            planet.celestialBodyInstance.name = planet.name;
 
             originalPositions[planet.celestialBodyInstance] = planet.celestialBodyInstance.transform.position;
 
@@ -471,39 +455,10 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
             // For planets
             //CreateLabel(planet.planetInstance, planet.name, "Planet", planet.diameter, planet.rotationSpeed, planet.orbitalPeriod);
 
-            // Spawn moons
-            foreach (var moon in planet.moons)
-            {
-                GameObject moonPrefab = Resources.Load<GameObject>(moon.prefabName);
-                if (moonPrefab == null)
-                {
-                    Debug.LogError($"Moon prefab not found for {moon.name}");
-                    continue;
-                }
-
-                moon.rotationSpeed = 360f / moon.rotationPeriod;
-                moon.orbitProgress = 0f;
-                moon.rotationProgress = 0f;
-
-                moon.perihelionDistance = moon.distanceFromPlanet * (1 - moon.orbitalEccentricity);
-                moon.aphelionDistance = moon.distanceFromPlanet * (1 + moon.orbitalEccentricity);
-
-                moon.rotationAxis = Quaternion.Euler(0, 0, moon.obliquityToOrbit) * Vector3.up;
-
-                moon.celestialBodyInstance = Instantiate(moonPrefab, CalculateMoonPosition(moon, planet, 0f), rotationCorrection * moonPrefab.transform.rotation * Quaternion.Euler(moon.rotationAxis));
-                moon.celestialBodyInstance.name = moon.name;
-                UpdateCelestialBodyScale(moon);
-                CreateOrbitLine(moon, 10f, (body, angle) => CalculateMoonPosition((MoonData)body, planet, angle));
-
-                originalPositions[moon.celestialBodyInstance] = moon.celestialBodyInstance.transform.position; // Store original position
-
-                // For moons (inside the moon spawning loop)
-                // CreateLabel(moon.moonInstance, moon.name, "Moon", moon.diameter, moon.rotationSpeed, moon.orbitalPeriod);
-
-            }
 
         }
     }
+
     private void CreateLabel(GameObject celestialObject, string celestialObjectName, string objectType, float jsonSize, float selfRotationSpeed, float orbitSpeed)
     {
         GameObject label = new GameObject($"{celestialObjectName}_Label");
@@ -551,8 +506,63 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
 }
 // todo day night texture
 // add the cockpit
-// todo add new poly
 // todo fix planets and moons text mesh pro 
 // todo fix moon orbit line 
 // sun rotatin clockwise
-// add solar eclipse 
+// add solar eclipse
+
+
+// in update fuction 
+/* foreach (var moon in planet.moons)
+{
+    float moonRotationDelta = deltaTime / moon.rotationPeriod * 360f;
+    float moonOrbitDelta = deltaTime / moon.orbitalPeriod * 360f;
+
+    moon.celestialBodyInstance.transform.Rotate(planet.rotationAxis, moonRotationDelta, Space.World);
+    moon.rotationProgress += Mathf.Abs(moonRotationDelta);
+
+    moon.orbitProgress += moonOrbitDelta;
+    moon.celestialBodyInstance.transform.position = CalculateMoonPosition(moon, planet, moon.orbitProgress);
+
+    int completedMoonRotations = Mathf.FloorToInt(moon.rotationProgress / 360f);
+
+    if (completedMoonRotations != moon.completedRotations)
+    {
+        moon.completedRotations = completedMoonRotations;
+    }
+}*/
+
+// in spawn function
+/* foreach (var moon in planet.moons)
+ {
+     GameObject moonPrefab = Resources.Load<GameObject>(moon.prefabName);
+     if (moonPrefab == null)
+     {
+         Debug.LogError($"Moon prefab not found for {moon.name}");
+         continue;
+     }
+
+     moon.rotationSpeed = 360f / moon.rotationPeriod;
+     moon.orbitProgress = 0f;
+     moon.rotationProgress = 0f;
+
+     moon.perihelionDistance = moon.distanceFromPlanet * (1 - moon.orbitalEccentricity);
+     moon.aphelionDistance = moon.distanceFromPlanet * (1 + moon.orbitalEccentricity);
+
+     moon.rotationAxis = Quaternion.Euler(0, 0, moon.obliquityToOrbit) * Vector3.up;
+
+     moon.celestialBodyInstance = Instantiate(moonPrefab, CalculateMoonPosition(moon, planet, 0f), rotationCorrection * moonPrefab.transform.rotation * Quaternion.Euler(moon.rotationAxis));
+     moon.celestialBodyInstance.name = moon.name;
+     // Set the planet instance as the parent of the moon instance
+     moon.celestialBodyInstance.transform.parent = planet.celestialBodyInstance.transform;
+
+     UpdateCelestialBodyScale(moon);
+
+     CreateOrbitLine(moon, 10f, (body, angle) => CalculateMoonPosition((MoonData)body, planet, angle));
+
+     originalPositions[moon.celestialBodyInstance] = moon.celestialBodyInstance.transform.position; // Store original position
+
+     // For moons (inside the moon spawning loop)
+     // CreateLabel(moon.moonInstance, moon.name, "Moon", moon.diameter, moon.rotationSpeed, moon.orbitalPeriod);
+
+ }*/
