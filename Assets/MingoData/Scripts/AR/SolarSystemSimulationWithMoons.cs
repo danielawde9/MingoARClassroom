@@ -14,7 +14,6 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
     [Serializable]
     public class PlanetData : CelestialBodyData
     {
-        // Planet specific properties...
         public List<MoonData> moons;
         public float distanceFromSun;
     }
@@ -22,7 +21,6 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
     [Serializable]
     public class MoonData : CelestialBodyData
     {
-        // Moon specific properties...
         public float distanceFromPlanet;
     }
 
@@ -32,7 +30,7 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
         public List<PlanetData> planets;
     }
 
-    public float sizeScale = 1.0f;
+    //public float sizeScale = 1.0f;
     public float timeScale = 1.0f;
     public float distanceScale = 1.0f;
 
@@ -210,7 +208,8 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
             // Scale the planet up relative to its original scale
             Vector3 originalScale = originalScales[selectedPlanet];
             // Vector3 targetScale = originalScale * 25f;  // Adjust this value to change the scaling factor
-            Vector3 targetScale = new (sizeScale,sizeScale,sizeScale); 
+            //Vector3 targetScale = new (sizeScale,sizeScale,sizeScale); 
+            Vector3 targetScale = originalScale;
             selectedPlanet.transform.localScale = Vector3.Lerp(selectedPlanet.transform.localScale, targetScale, Time.deltaTime);
         }
 
@@ -341,18 +340,18 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
         directionalLight.transform.localPosition = Vector3.zero;
     }
 
-    private void UpdateSizeScaleSlider(float value)
-    {
-        sizeScale = value;
-        foreach (var planet in planetDataList.planets)
-        {
-            UpdateCelestialBodyScale(planet);
-            foreach (var moon in planet.moons)
-            {
-                UpdateCelestialBodyScale(moon);
-            }
-        }
-    }
+    //private void UpdateSizeScaleSlider(float value)
+    //{
+    //    sizeScale = value;
+    //    foreach (var planet in planetDataList.planets)
+    //    {
+    //        UpdateCelestialBodyScale(planet);
+    //        foreach (var moon in planet.moons)
+    //        {
+    //            UpdateCelestialBodyScale(moon);
+    //        }
+    //    }
+    //}
 
     private void UpdateDistanceScaleSlider(float value)
     {
@@ -372,13 +371,13 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
         timeScale = value;
     }
 
-    public void UpdateCelestialBodyScale(CelestialBodyData body)
-    {
-        if (body.name != "Sun")
-        {
-            body.celestialBodyInstance.transform.localScale = new Vector3(sizeScale, sizeScale, sizeScale);
-        }
-    }
+    //public void UpdateCelestialBodyScale(CelestialBodyData body)
+    //{
+    //    if (body.name != "Sun")
+    //    {
+    //        body.celestialBodyInstance.transform.localScale = new Vector3(sizeScale, sizeScale, sizeScale);
+    //    }
+    //}
 
     private void Start()
     {
@@ -425,6 +424,7 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
 
             // Set the name of the instantiated planet
             planet.celestialBodyInstance.name = planet.name;
+            planet.celestialBodyInstance.transform.localScale = new Vector3(planet.diameter, planet.diameter, planet.diameter);
 
             originalPositions[planet.celestialBodyInstance] = planet.celestialBodyInstance.transform.position;
 
@@ -459,28 +459,28 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
         }
     }
 
-    private void CreateLabel(GameObject celestialObject, string celestialObjectName, string objectType, float jsonSize, float selfRotationSpeed, float orbitSpeed)
-    {
-        GameObject label = new GameObject($"{celestialObjectName}_Label");
-        label.transform.SetParent(celestialObject.transform);
-        label.transform.localPosition = new Vector3(0, (celestialObject.transform.localScale.y / 2) + 0.5f, 0);
-        label.transform.localRotation = Quaternion.identity;
+    //private void CreateLabel(GameObject celestialObject, string celestialObjectName, string objectType, float jsonSize, float selfRotationSpeed, float orbitSpeed)
+    //{
+    //    GameObject label = new GameObject($"{celestialObjectName}_Label");
+    //    label.transform.SetParent(celestialObject.transform);
+    //    label.transform.localPosition = new Vector3(0, (celestialObject.transform.localScale.y / 2) + 0.5f, 0);
+    //    label.transform.localRotation = Quaternion.identity;
 
-        TextMeshPro tmp = label.AddComponent<TextMeshPro>();
-        tmp.name = $"{celestialObjectName}_TextMeshPro";
-        tmp.alignment = TextAlignmentOptions.Center;
-        tmp.fontSize = 0.3f;
-        tmp.color = Color.white;
+    //    TextMeshPro tmp = label.AddComponent<TextMeshPro>();
+    //    tmp.name = $"{celestialObjectName}_TextMeshPro";
+    //    tmp.alignment = TextAlignmentOptions.Center;
+    //    tmp.fontSize = 0.3f;
+    //    tmp.color = Color.white;
 
-        //UpdateLabel(tmp, celestialObjectName, objectType, jsonSize, selfRotationSpeed, orbitSpeed, 0, 0);
-    }
+    //    //UpdateLabel(tmp, celestialObjectName, objectType, jsonSize, selfRotationSpeed, orbitSpeed, 0, 0);
+    //}
 
-    private void UpdateLabel(TextMeshPro tmp, string celestialObjectName, string objectType, float jsonSize, float selfRotationSpeed, float orbitSpeed, int completedRotations, int completedOrbits)
-    {
-        float unityWorldSize = tmp.transform.parent.parent.localScale.x * sizeScale * 1000;
+    //private void UpdateLabel(TextMeshPro tmp, string celestialObjectName, string objectType, float jsonSize, float selfRotationSpeed, float orbitSpeed, int completedRotations, int completedOrbits)
+    //{
+    //    float unityWorldSize = tmp.transform.parent.parent.localScale.x * sizeScale * 1000;
 
-        tmp.text = $"{celestialObjectName} ({objectType})\nSize (JSON): {jsonSize}\nUnity world size: {unityWorldSize} meters\nSelf Rotation Speed: {selfRotationSpeed}\nOrbit Speed: {orbitSpeed}\nCompleted Self Rotations: {completedRotations}\nCompleted Orbits: {completedOrbits}";
-    }
+    //    tmp.text = $"{celestialObjectName} ({objectType})\nSize (JSON): {jsonSize}\nUnity world size: {unityWorldSize} meters\nSelf Rotation Speed: {selfRotationSpeed}\nOrbit Speed: {orbitSpeed}\nCompleted Self Rotations: {completedRotations}\nCompleted Orbits: {completedOrbits}";
+    //}
 
 
     //private void UpdateLogText(string celestialObjectName, int completedRotations, string rotationType)

@@ -1,6 +1,12 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/MingoData/Resources/SolarSystemWithMoon/test.meta
+guid: 2f5c4cc1726211e49a59d672d342206e
+folderAsset: yes
+DefaultImporter:
+========
 guid: 60a1e87fe55fe9f4caf1aee57b9fddf8
 NativeFormatImporter:
+>>>>>>>> 6063c1ac6e641eea519862b83949b4f490c24076:Assets/MingoData/Resources/Fonts/BrunoAce-Regular SDF.asset.meta
   externalObjects: {}
   mainObjectFileID: 11400000
   userData: 

@@ -1,6 +1,11 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/MingoData/Resources/SolarSystemWithMoon/test/Callisto.prefab.meta
+guid: 7cadcd07c667f484f9e53d416842973d
+PrefabImporter:
+========
 guid: e526744892dcee942a7c3edba2299d15
 NativeFormatImporter:
+>>>>>>>> 6063c1ac6e641eea519862b83949b4f490c24076:Assets/MingoData/Resources/Fonts/Montserrat-Regular SDF.asset.meta
   externalObjects: {}
   mainObjectFileID: 11400000
   userData: 
