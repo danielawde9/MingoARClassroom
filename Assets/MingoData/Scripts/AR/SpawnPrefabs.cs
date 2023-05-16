@@ -3,47 +3,39 @@ using UnityEngine;
 
 public class SpawnPrefabs : MonoBehaviour
 {
-    public GameObject prefabToSpawn;
-    public float spawnRadius = 5f;
-    public float despawnDistance = 5f;
-    public int maxSpawnedPrefabs = 10;
+    public GameObject prefabToSpawn; // Assign the prefab to spawn in the Inspector
+    public float spawnRadius = 5f; // Radius of the area in which the prefabs will be spawned
+    public float despawnDistance = 5f; // Distance the user must move past the prefab to despawn it
+    public int maxSpawnedPrefabs = 10; // Maximum number of prefabs to be spawned at a time
 
-    private readonly Queue<GameObject> pool = new();
-    private GameObject parentObject;
+    private readonly List<GameObject> spawnedPrefabs = new();
+    private GameObject parentObject; // Parent object for all spawned prefabs
 
     void Start()
     {
-        parentObject = new GameObject("spawned_stardust_prefabs");
-        for (int i = 0; i < maxSpawnedPrefabs; i++)
-        {
-            GameObject prefab = Instantiate(prefabToSpawn, parentObject.transform);
-            prefab.SetActive(false);
-            pool.Enqueue(prefab);
-        }
+        parentObject = new GameObject("spawned_prefabs");
     }
 
     void Update()
     {
-        // Dequeue and repurpose objects that are too far behind the player
-        foreach (GameObject prefab in new List<GameObject>(pool))
+        if (spawnedPrefabs.Count < maxSpawnedPrefabs)
         {
-            if (Vector3.Distance(transform.position, prefab.transform.position) > spawnRadius + despawnDistance)
-            {
-                pool.Dequeue();
-                prefab.SetActive(false);
-                pool.Enqueue(prefab);
-            }
+            Vector3 spawnDirection = Random.onUnitSphere;
+            Vector3 spawnPosition = transform.position + spawnDirection * spawnRadius;
+            GameObject spawnedPrefab = Instantiate(prefabToSpawn, spawnPosition, Quaternion.identity, parentObject.transform);
+            spawnedPrefabs.Add(spawnedPrefab);
         }
 
-        // If there are available prefabs in the pool, spawn one in front of the player
-        if (pool.Count > 0)
+        for (int i = spawnedPrefabs.Count - 1; i >= 0; i--)
         {
-            Vector3 spawnDirection = transform.forward + Random.insideUnitSphere.normalized * spawnRadius;
-            Vector3 spawnPosition = transform.position + spawnDirection;
-            GameObject spawnedPrefab = pool.Dequeue();
-            spawnedPrefab.transform.position = spawnPosition;
-            spawnedPrefab.transform.rotation = Quaternion.identity;
-            spawnedPrefab.SetActive(true);
+            GameObject prefab = spawnedPrefabs[i];
+            float distanceFromUser = Vector3.Distance(transform.position, prefab.transform.position);
+
+            if (distanceFromUser > spawnRadius + despawnDistance)
+            {
+                spawnedPrefabs.RemoveAt(i);
+                Destroy(prefab);
+            }
         }
     }
 }
