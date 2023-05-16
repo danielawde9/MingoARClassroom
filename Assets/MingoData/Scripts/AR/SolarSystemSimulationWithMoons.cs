@@ -225,25 +225,6 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
     }
 
 
-    private Vector3 CalculatePlanetPosition(PlanetData planet, float angle)
-    {
-        float radians = angle * Mathf.Deg2Rad;
-
-        float semiMajorAxis = planet.distanceFromSun;
-        float semiMinorAxis = semiMajorAxis * Mathf.Sqrt(1 - planet.orbitalEccentricitySquared);
-
-        float eccentricAnomaly = 2 * Mathf.Atan(Mathf.Tan(radians / 2) * Mathf.Sqrt((1 - planet.orbitalEccentricitySquared) / (1 + planet.orbitalEccentricity)));
-        float distance = semiMajorAxis * (1 - planet.orbitalEccentricitySquared) / (1 + planet.orbitalEccentricity * Mathf.Cos(eccentricAnomaly));
-
-        float x = distance * Mathf.Cos(eccentricAnomaly);
-        float z = distance * Mathf.Sin(eccentricAnomaly);
-
-        // Apply the orbital inclination
-        float y = Mathf.Sin(eccentricAnomaly) * semiMinorAxis * Mathf.Tan(planet.orbitalInclination * Mathf.Deg2Rad);
-
-        return new Vector3(x * distanceScale, y * distanceScale, z * distanceScale);
-    }
-
     private Vector3 CalculateMoonPosition(MoonData moon, PlanetData planet, float angle)
     {
         float radians = angle * Mathf.Deg2Rad;
@@ -316,7 +297,7 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
         sizeScale = value;
         float realLifeSize = 1f / sizeScale; // Assuming sizeScale is a fraction of the real size
 
-        Debug.Log($"1 unit size in the simulated solar system equals {realLifeSize} units in real life.");
+        Debug.Log($"1 meter size in the simulated solar system equals {realLifeSize} kilometer in real life.");
 
         foreach (var planetData in planetDataDictionary.Values)
         {
@@ -333,7 +314,7 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
         distanceScale = value;
         float realLifeDistance = 1f / distanceScale; // Assuming distanceScale is a fraction of the real distance
 
-        Debug.Log($"1 unit distance in the simulated solar system equals {realLifeDistance} units in real life.");
+        Debug.Log($"1 meter distance in the simulated solar system equals {realLifeDistance} kilometer in real life.");
 
         //foreach (var planetData in planetDataDictionary.Values)
         //{
@@ -362,10 +343,10 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
         distanceScaleSlider.value = initialDistanceScale;
 
         timeScaleSlider.minValue = initialTimeScale;
-        sizeScaleSlider.minValue= initialSizeScale;
+        sizeScaleSlider.minValue= initialSizeScale; 
         distanceScaleSlider.minValue = initialDistanceScale;
 
-        timeScaleSlider.maxValue = 20000000000f;
+        timeScaleSlider.maxValue = 2000000f;
         sizeScaleSlider.maxValue = 0.0001f;
         distanceScaleSlider.maxValue = 0.0001f;
 
@@ -373,6 +354,25 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
         sizeScaleSlider.onValueChanged.AddListener(UpdateSizeScaleSlider);
         distanceScaleSlider.onValueChanged.AddListener(UpdateDistanceScaleSlider);
         LoadPlanetData();
+    }
+
+    private Vector3 CalculatePlanetPosition(PlanetData planet, float angle)
+    {
+        float radians = angle * Mathf.Deg2Rad;
+
+        float semiMajorAxis = planet.distanceFromSun;
+        float semiMinorAxis = semiMajorAxis * Mathf.Sqrt(1 - planet.orbitalEccentricitySquared);
+
+        float eccentricAnomaly = 2 * Mathf.Atan(Mathf.Tan(radians / 2) * Mathf.Sqrt((1 - planet.orbitalEccentricitySquared) / (1 + planet.orbitalEccentricity)));
+        float distance = semiMajorAxis * (1 - planet.orbitalEccentricitySquared) / (1 + planet.orbitalEccentricity * Mathf.Cos(eccentricAnomaly));
+
+        float x = distance * Mathf.Cos(eccentricAnomaly);
+        float z = distance * Mathf.Sin(eccentricAnomaly);
+
+        // Apply the orbital inclination
+        float y = Mathf.Sin(eccentricAnomaly) * semiMinorAxis * Mathf.Tan(planet.orbitalInclination * Mathf.Deg2Rad);
+
+        return new Vector3(x * distanceScale, y * distanceScale, z * distanceScale);
     }
 
     private void LoadPlanetData()
@@ -409,9 +409,11 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
             planet.celestialBodyInstance = Instantiate(prefab, newPosition, rotationCorrection * prefab.transform.rotation * Quaternion.Euler(planet.rotationAxis));
             planet.celestialBodyInstance.name = planet.name;
 
+            sizeScale= initialSizeScale;
             float newScale = initialSizeScale * planet.diameter;
             planet.celestialBodyInstance.transform.localScale = new(newScale, newScale, newScale);
 
+            SpawnInclinationLine(planet, planet.celestialBodyInstance);
 
             originalPositions[planet.celestialBodyInstance] = planet.celestialBodyInstance.transform.position;
 
@@ -505,6 +507,58 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
         }
     }
 
+    private void SpawnInclinationLine(PlanetData planet, GameObject planetInstance)
+    {
+        GameObject inclinationLine = new GameObject(planet.name + "_InclinationLine");
+
+        // Attach the inclination line to the planet
+        inclinationLine.transform.SetParent(planetInstance.transform, false);
+
+        // Position the inclination line at the planet's position
+        inclinationLine.transform.localPosition = Vector3.zero;
+
+        // Orient the inclination line along the planet's orbital inclination
+        inclinationLine.transform.localRotation = Quaternion.Euler(planet.orbitalInclination, 0f, 0f);
+
+        // Add a LineRenderer to visualize the inclination
+        LineRenderer lineRenderer = inclinationLine.AddComponent<LineRenderer>();
+        lineRenderer.useWorldSpace = false;
+        lineRenderer.startWidth = 0.02f; // Adjust this as needed
+        lineRenderer.endWidth = 0.02f; // Adjust this as needed
+        lineRenderer.positionCount = 2;
+        float lineLength = planet.diameter * sizeScale * 1.1f * 0.5f; // 10% larger than the radius
+        lineRenderer.SetPosition(0, Vector3.down * lineLength);
+        lineRenderer.SetPosition(1, Vector3.up * lineLength);
+
+        // Add a TextMeshPro to display the inclination value
+        GameObject text = new GameObject(planet.name + "_InclinationText");
+        text.transform.SetParent(inclinationLine.transform, false);
+        text.transform.localPosition = Vector3.up * (lineLength + 0.1f); // Adjust this as needed
+        text.transform.localRotation = Quaternion.identity;
+        TMPro.TextMeshPro textMeshPro = text.AddComponent<TMPro.TextMeshPro>();
+        textMeshPro.text = planet.orbitalInclination.ToString("F2") + "°";
+        textMeshPro.fontSize = 0.1f; // Adjust this as needed
+        textMeshPro.color = Color.white; // Adjust this as needed
+
+        // Show the Y-axis if the inclination is greater than 2 degrees
+        if (Mathf.Abs(planet.orbitalInclination) > 2f)
+        {
+            GameObject yAxis = new GameObject(planet.name + "_YAxis");
+            yAxis.transform.SetParent(planetInstance.transform, false);
+            yAxis.transform.localPosition = Vector3.zero;
+            yAxis.transform.localRotation = Quaternion.identity;
+
+            LineRenderer yAxisRenderer = yAxis.AddComponent<LineRenderer>();
+            yAxisRenderer.useWorldSpace = false;
+            yAxisRenderer.startWidth = 0.02f; // Adjust this as needed
+            yAxisRenderer.endWidth = 0.02f; // Adjust this as needed
+            yAxisRenderer.positionCount = 2;
+            yAxisRenderer.SetPosition(0, Vector3.down * lineLength);
+            yAxisRenderer.SetPosition(1, Vector3.up * lineLength);
+        }
+    }
+
+
     //private void CreateLabel(GameObject celestialObject, string celestialObjectName, string objectType, float jsonSize, float selfRotationSpeed, float orbitSpeed)
     //{
     //    GameObject label = new GameObject($"{celestialObjectName}_Label");
@@ -556,6 +610,7 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
 // todo fix moon orbit line 
 // sun rotatin clockwise
 // add solar eclipse
+// history of the solar system 
 // scale planet with size to include distance 
 
 // in update fuction 
