@@ -8,6 +8,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
+using static System.Net.Mime.MediaTypeNames;
 
 public class SolarSystemSimulationWithMoons : BasePressInputHandler
 {
@@ -240,7 +241,7 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
         return planetPosition + positionRelativeToPlanet;
     }
 
-    private void CreateOrbitLine(CelestialBodyData body, float diameterScaleFactor, Func<CelestialBodyData, float, Vector3> calculatePosition)
+    private void CreateOrbitLine(GameObject planet, CelestialBodyData body, Func<CelestialBodyData, float, Vector3> calculatePosition)
     {
         GameObject orbitLine = new($"{body.name} Orbit Line");
         LineRenderer lineRenderer = orbitLine.AddComponent<LineRenderer>();
@@ -248,20 +249,7 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
         // lineRenderer.widthMultiplier = body.diameter * sizeScale * diameterScaleFactor;
         lineRenderer.widthMultiplier = 0.1f;
         lineRenderer.positionCount = 360;
-
-        float angleStep = 360f / lineRenderer.positionCount;
-        for (int i = 0; i < lineRenderer.positionCount; i++)
-        {
-            float angle = i * angleStep;
-            Vector3 position = calculatePosition(body, angle);
-            lineRenderer.SetPosition(i, position);
-        }
-    }
-
-    public void UpdateOrbitLine(CelestialBodyData body, string lineObjectName, Func<CelestialBodyData, float, Vector3> calculatePosition)
-    {
-        LineRenderer lineRenderer = GameObject.Find($"{lineObjectName} Orbit Line").GetComponent<LineRenderer>();
-
+        orbitLine.transform.SetParent(planet.transform);
         float angleStep = 360f / lineRenderer.positionCount;
         for (int i = 0; i < lineRenderer.positionCount; i++)
         {
@@ -291,7 +279,6 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
                   $"or {simulatedMonths} months, " +
                   $"or {simulatedYears} years in the simulated solar system.");
     }
-
     private void UpdateSizeScaleSlider(float value)
     {
         sizeScale = value;
@@ -440,7 +427,7 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
             planet.orbitProgress = 0f;
             planet.rotationProgress = 0f;
 
-            CreateOrbitLine(planet, 1f, (body, angle) => CalculatePlanetPosition((PlanetData)body, angle));
+            CreateOrbitLine(planet.celestialBodyInstance, planet, (body, angle) => CalculatePlanetPosition((PlanetData)body, angle));
             // For planets
             //CreateLabel(planet.planetInstance, planet.name, "Planet", planet.diameter, planet.rotationSpeed, planet.orbitalPeriod);
 
@@ -509,55 +496,66 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
 
     private void SpawnInclinationLine(PlanetData planet, GameObject planetInstance)
     {
-        GameObject inclinationLine = new GameObject(planet.name + "_InclinationLine");
+        GameObject inclinationLine = new (planet.name + "_PlanetInfo");
 
         // Attach the inclination line to the planet
         inclinationLine.transform.SetParent(planetInstance.transform, false);
 
-        // Position the inclination line at the planet's position
-        inclinationLine.transform.localPosition = Vector3.zero;
-
         // Orient the inclination line along the planet's orbital inclination
-        inclinationLine.transform.localRotation = Quaternion.Euler(planet.orbitalInclination, 0f, 0f);
+        inclinationLine.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.Euler(planet.obliquityToOrbit, 0f, 0f));
 
         // Add a LineRenderer to visualize the inclination
         LineRenderer lineRenderer = inclinationLine.AddComponent<LineRenderer>();
         lineRenderer.useWorldSpace = false;
-        lineRenderer.startWidth = 0.02f; // Adjust this as needed
-        lineRenderer.endWidth = 0.02f; // Adjust this as needed
+        lineRenderer.startWidth = 0.01f; // Adjust this as needed
+        lineRenderer.endWidth = 0.01f; // Adjust this as needed
         lineRenderer.positionCount = 2;
-        float lineLength = planet.diameter * sizeScale * 1.1f * 0.5f; // 10% larger than the radius
+        float lineLength = 1f; 
         lineRenderer.SetPosition(0, Vector3.down * lineLength);
         lineRenderer.SetPosition(1, Vector3.up * lineLength);
 
         // Add a TextMeshPro to display the inclination value
-        GameObject text = new GameObject(planet.name + "_InclinationText");
-        text.transform.SetParent(inclinationLine.transform, false);
-        text.transform.localPosition = Vector3.up * (lineLength + 0.1f); // Adjust this as needed
-        text.transform.localRotation = Quaternion.identity;
-        TMPro.TextMeshPro textMeshPro = text.AddComponent<TMPro.TextMeshPro>();
-        textMeshPro.text = planet.orbitalInclination.ToString("F2") + "°";
-        textMeshPro.fontSize = 0.1f; // Adjust this as needed
+        GameObject inclinationTextObject = new(planet.name + "_InclinationText");
+        inclinationTextObject.transform.SetParent(inclinationLine.transform, false);
+        inclinationTextObject.transform.SetLocalPositionAndRotation(Vector3.up * (lineLength + 0.1f), Quaternion.identity);
+        TextMeshPro textMeshPro = inclinationTextObject.AddComponent<TextMeshPro>();
+        textMeshPro.text = planet.obliquityToOrbit.ToString("F2") + "°";
+        textMeshPro.fontSize = 4.25f; // Adjust this as needed
         textMeshPro.color = Color.white; // Adjust this as needed
+        textMeshPro.alignment = TextAlignmentOptions.Top;
+        textMeshPro.alignment = TextAlignmentOptions.Center;
+        inclinationTextObject.GetComponent<RectTransform>().sizeDelta = new Vector2(1.5f, 1.5f);
 
         // Show the Y-axis if the inclination is greater than 2 degrees
-        if (Mathf.Abs(planet.orbitalInclination) > 2f)
+        if (Mathf.Abs(planet.obliquityToOrbit) > 2f)
         {
-            GameObject yAxis = new GameObject(planet.name + "_YAxis");
-            yAxis.transform.SetParent(planetInstance.transform, false);
-            yAxis.transform.localPosition = Vector3.zero;
-            yAxis.transform.localRotation = Quaternion.identity;
+            GameObject yAxisGameObject = new (planet.name + "_YAxis");
+            yAxisGameObject.transform.SetParent(planetInstance.transform, false);
+            yAxisGameObject.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
 
-            LineRenderer yAxisRenderer = yAxis.AddComponent<LineRenderer>();
+            LineRenderer yAxisRenderer = yAxisGameObject.AddComponent<LineRenderer>();
             yAxisRenderer.useWorldSpace = false;
-            yAxisRenderer.startWidth = 0.02f; // Adjust this as needed
-            yAxisRenderer.endWidth = 0.02f; // Adjust this as needed
+            yAxisRenderer.startWidth = 0.01f; // Adjust this as needed
+            yAxisRenderer.endWidth = 0.01f; // Adjust this as needed
             yAxisRenderer.positionCount = 2;
             yAxisRenderer.SetPosition(0, Vector3.down * lineLength);
             yAxisRenderer.SetPosition(1, Vector3.up * lineLength);
+            
         }
-    }
 
+        // Instantiate the text prefab
+        GameObject planetTextObject = new ($"{planet.name}_Label");
+        planetTextObject.transform.SetParent(inclinationLine.transform, false);
+        planetTextObject.transform.SetLocalPositionAndRotation(Vector3.down * (lineLength + 0.1f), Quaternion.identity);
+        TextMeshPro planetTextMeshPro = planetTextObject.AddComponent<TextMeshPro>();
+        planetTextMeshPro.text = planet.name;
+        planetTextMeshPro.fontSize = 4.25f; // Adjust this as needed
+        planetTextMeshPro.color = Color.white; // Adjust this as needed
+        planetTextMeshPro.alignment = TextAlignmentOptions.Top;
+        planetTextMeshPro.alignment = TextAlignmentOptions.Center;
+        planetTextObject.GetComponent<RectTransform>().sizeDelta = new Vector2(1.5f, 1.5f);
+
+    }
 
     //private void CreateLabel(GameObject celestialObject, string celestialObjectName, string objectType, float jsonSize, float selfRotationSpeed, float orbitSpeed)
     //{
