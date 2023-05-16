@@ -8,7 +8,6 @@ using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
-using static UnityEngine.Rendering.DebugUI;
 
 public class SolarSystemSimulationWithMoons : BasePressInputHandler
 {
@@ -53,21 +52,21 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
     private Camera mainCamera;
     private bool solarSystemPlaced = false;
     private GameObject selectedPlanet;
-    // Member variable for Sun data
-    private PlanetData sunData = null;
 
     private readonly Dictionary<GameObject, Vector3> originalPositions = new();
     readonly Dictionary<GameObject, Vector3> originalScales = new();
-    public Dictionary<string, PlanetData> planetDataDictionary; 
+    public Dictionary<string, PlanetData> planetDataDictionary;
 
     public GameObject returnButton;
     public TextMeshProUGUI planetNameText;
+    readonly float initialDistanceScale = 1f / 10000000f; 
+    readonly float initialSizeScale = 1f / 1000000f;
+    readonly float initialTimeScale = 1f;
 
     private void CreateDirectionalLight(Transform sunTransform)
     {
         directionalLight = new GameObject("Directional Light");
-        Light lightComponent;
-        if (!directionalLight.TryGetComponent<Light>(out lightComponent))
+        if (!directionalLight.TryGetComponent<Light>(out Light lightComponent))
         {
             lightComponent = directionalLight.AddComponent<Light>();
         }
@@ -76,12 +75,14 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
         lightComponent.intensity = 1.0f;
         if (planetDataDictionary.TryGetValue("Pluto", out var plutoData))
         {
-            float distanceToPluto = Vector3.Distance(Vector3.zero, plutoData.celestialBodyInstance.transform.position);
+            float distanceToPluto = plutoData.distanceFromSun * distanceScale;
             Debug.Log("Distance from Sun to Pluto: " + distanceToPluto);
 
             // Adjust the range of the directional light
+            // todo fix this range and add scale bs yekbar
             lightComponent.range = distanceToPluto;
-        } else
+        }
+        else
         {
             lightComponent.range = distanceScale * 100;
         }
@@ -129,6 +130,9 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
         }
         else
         {
+            // Detect the planet touch if no swipe gesture is detected
+            DetectPlanetTouch(touchPosition);
+
             // Rotate the selected planet if a swipe gesture is detected
             if (selectedPlanet != null && m_DragAction.phase == InputActionPhase.Performed)
             {
@@ -137,14 +141,9 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
                 float rotationSpeed = 0.1f; // Adjust this value to change the rotation speed
                 selectedPlanet.transform.Rotate(0f, -swipeDelta.x * rotationSpeed, 0f, Space.World);
             }
-
-            else
-            {
-                // Detect the planet touch if no swipe gesture is detected
-                DetectPlanetTouch(touchPosition);
-            }
         }
     }
+
 
     void DetectPlanetTouch(Vector2 touchPosition)
     {
@@ -163,7 +162,6 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
                     if (selectedPlanet != hitObject)
                     {
                         // Return the previously selected planet to its original position and scale
-                        StartCoroutine(MoveToOriginalPositionAndScale(selectedPlanet));
                         SelectPlanet(hitObject);
                     }
                 }
@@ -178,10 +176,16 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
 
     void SelectPlanet(GameObject planet)
     {
+        // If another planet is already selected, return it to its original position and scale first
+        if (selectedPlanet != null && selectedPlanet != planet)
+        {
+            ReturnPlanetToOriginalState();
+        }
+
         selectedPlanet = planet;
         planetNameText.text = selectedPlanet.name;
 
-        // When a planet is selected, save its original position and scale
+        // Save the original position and scale of the planet
         if (!originalPositions.ContainsKey(planet))
         {
             originalPositions[planet] = planet.transform.position;
@@ -190,41 +194,36 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
         {
             originalScales[planet] = planet.transform.localScale;
         }
-    }
 
+        // Move the selected planet in front of the user by one unit and scale it to 1,1,1
+        Vector3 newPosition = Camera.main.transform.position + Camera.main.transform.forward;
+        selectedPlanet.transform.position = newPosition;
+        selectedPlanet.transform.localScale = new Vector3(1, 1, 1);
+    }
 
     public void OnReturnButtonClick()
     {
         if (selectedPlanet != null)
         {
-            StartCoroutine(MoveToOriginalPositionAndScale(selectedPlanet));
+            ReturnPlanetToOriginalState();
             planetNameText.text = "";
             selectedPlanet = null;
         }
     }
 
-    private IEnumerator MoveToOriginalPositionAndScale(GameObject planet)
+    void ReturnPlanetToOriginalState()
     {
-        float transitionDuration = 1.0f; // Adjust this value to control the transition speed
-        float elapsed = 0;
-
-        Vector3 originalPosition = originalPositions[planet];
-        Vector3 currentPosition = planet.transform.position;
-        Vector3 originalScale = originalScales[planet];
-        Vector3 currentScale = planet.transform.localScale;
-
-        while (Vector3.Distance(planet.transform.position, originalPosition) > 0.01f || Vector3.Distance(planet.transform.localScale, originalScale) > 0.01f)
+        // Return the planet to its original position and scale
+        if (originalPositions.ContainsKey(selectedPlanet))
         {
-            planet.transform.position = Vector3.Lerp(planet.transform.position, originalPosition, elapsed / transitionDuration);
-            planet.transform.localScale = Vector3.Lerp(planet.transform.localScale, originalScale, elapsed / transitionDuration);
-            elapsed += Time.deltaTime;
-            yield return null;
+            selectedPlanet.transform.position = originalPositions[selectedPlanet];
         }
-
-
-        planet.transform.position = originalPosition;
-        planet.transform.localScale = originalScale;
+        if (originalScales.ContainsKey(selectedPlanet))
+        {
+            selectedPlanet.transform.localScale = originalScales[selectedPlanet];
+        }
     }
+
 
     private Vector3 CalculatePlanetPosition(PlanetData planet, float angle)
     {
@@ -262,10 +261,10 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
 
     private void CreateOrbitLine(CelestialBodyData body, float diameterScaleFactor, Func<CelestialBodyData, float, Vector3> calculatePosition)
     {
-        GameObject orbitLine = new ($"{body.name} Orbit Line");
+        GameObject orbitLine = new($"{body.name} Orbit Line");
         LineRenderer lineRenderer = orbitLine.AddComponent<LineRenderer>();
         lineRenderer.material = orbitLineMaterial;
-       // lineRenderer.widthMultiplier = body.diameter * sizeScale * diameterScaleFactor;
+        // lineRenderer.widthMultiplier = body.diameter * sizeScale * diameterScaleFactor;
         lineRenderer.widthMultiplier = 0.1f;
         lineRenderer.positionCount = 360;
 
@@ -294,15 +293,35 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
     private void UpdateTimeScaleSlider(float value)
     {
         timeScale = value;
+
+        float simulatedSeconds = timeScale;
+        float simulatedMinutes = simulatedSeconds / 60;
+        float simulatedHours = simulatedMinutes / 60;
+        float simulatedDays = simulatedHours / 24;
+        float simulatedWeeks = simulatedDays / 7;
+        float simulatedMonths = simulatedDays / 30.44f; // A month is approximately 30.44 days on average
+        float simulatedYears = simulatedDays / 365.25f; // A year is approximately 365.25 days considering leap years
+
+        Debug.Log($"1 second in real life equals {simulatedSeconds} seconds, " +
+                  $"or {simulatedMinutes} minutes, " +
+                  $"or {simulatedHours} hours, " +
+                  $"or {simulatedDays} days, " +
+                  $"or {simulatedWeeks} weeks, " +
+                  $"or {simulatedMonths} months, " +
+                  $"or {simulatedYears} years in the simulated solar system.");
     }
 
     private void UpdateSizeScaleSlider(float value)
     {
         sizeScale = value;
-        foreach (var planet in planetDataList.planets)
+        float realLifeSize = 1f / sizeScale; // Assuming sizeScale is a fraction of the real size
+
+        Debug.Log($"1 unit size in the simulated solar system equals {realLifeSize} units in real life.");
+
+        foreach (var planetData in planetDataDictionary.Values)
         {
-            UpdateCelestialBodyScale(planet, sizeScale);
-            foreach (var moon in planet.moons)
+            UpdateCelestialBodyScale(planetData, sizeScale);
+            foreach (var moon in planetData.moons)
             {
                 UpdateCelestialBodyScale(moon, sizeScale);
             }
@@ -312,8 +331,11 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
     private void UpdateDistanceScaleSlider(float value)
     {
         distanceScale = value;
+        float realLifeDistance = 1f / distanceScale; // Assuming distanceScale is a fraction of the real distance
 
-        //foreach (var planet in planetDataList.planets)
+        Debug.Log($"1 unit distance in the simulated solar system equals {realLifeDistance} units in real life.");
+
+        //foreach (var planetData in planetDataDictionary.Values)
         //{
         //    UpdateOrbitLine(planet, $"{planet.name}", (body, angle) => CalculatePlanetPosition((PlanetData)body, angle));
         //    foreach (var moon in planet.moons)
@@ -321,13 +343,13 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
         //        UpdateOrbitLine(moon, $"{moon.name}", (body, angle) => CalculateMoonPosition((MoonData)body, planet, angle));
         //    }
         //}
-    }
 
+    }
+    
     public void UpdateCelestialBodyScale(CelestialBodyData body, float newSizeScaleFactor)
     {
         if (body.name != "Sun")
         {
-            //body.celestialBodyInstance.transform.localScale = new Vector3(sizeScale, sizeScale, sizeScale);
             float scale = body.diameter * newSizeScaleFactor;
             body.celestialBodyInstance.transform.localScale = new Vector3(scale, scale, scale);
         }
@@ -335,6 +357,18 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
 
     private void Start()
     {
+        timeScaleSlider.value = initialTimeScale;
+        sizeScaleSlider.value = initialSizeScale;
+        distanceScaleSlider.value = initialDistanceScale;
+
+        timeScaleSlider.minValue = initialTimeScale;
+        sizeScaleSlider.minValue= initialSizeScale;
+        distanceScaleSlider.minValue = initialDistanceScale;
+
+        timeScaleSlider.maxValue = 20000000000f;
+        sizeScaleSlider.maxValue = 0.0001f;
+        distanceScaleSlider.maxValue = 0.0001f;
+
         timeScaleSlider.onValueChanged.AddListener(UpdateTimeScaleSlider);
         sizeScaleSlider.onValueChanged.AddListener(UpdateSizeScaleSlider);
         distanceScaleSlider.onValueChanged.AddListener(UpdateDistanceScaleSlider);
@@ -358,7 +392,6 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
         planetDataDictionary = planetDataList.planets.ToDictionary(p => p.name, p => p);
     }
 
-
     private void SpawnPlanets(Vector3 placedTouchPosition)
     {
         Quaternion rotationCorrection = Quaternion.Euler(0, 0, 0);
@@ -369,23 +402,17 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
 
             planet.rotationAxis = Quaternion.Euler(0, 0, planet.obliquityToOrbit) * Vector3.up;
 
-            float initialDistanceScale = 1f / 10000000f; // initial scale of 1:10,000,000
-            float newDistanceScaleFactor =  initialDistanceScale;
             distanceScale = initialDistanceScale;
-            Debug.Log("New distance scale factor: " + newDistanceScaleFactor);
 
             Vector3 planetPositionRelativeToSun = CalculatePlanetPosition(planet, 0f);
-            Vector3 newPosition = placedTouchPosition + planetPositionRelativeToSun * newDistanceScaleFactor ;
+            Vector3 newPosition = placedTouchPosition + planetPositionRelativeToSun * distanceScale;
             planet.celestialBodyInstance = Instantiate(prefab, newPosition, rotationCorrection * prefab.transform.rotation * Quaternion.Euler(planet.rotationAxis));
-
-            // Set the name of the instantiated planet
             planet.celestialBodyInstance.name = planet.name;
 
-            float initialSizeScale = 1f / 1000000f;
             float newScale = initialSizeScale * planet.diameter;
             planet.celestialBodyInstance.transform.localScale = new(newScale, newScale, newScale);
 
-            float intialTimeScale = 1f;
+
             originalPositions[planet.celestialBodyInstance] = planet.celestialBodyInstance.transform.position;
 
             if (prefab == null)
@@ -427,15 +454,7 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
         {
             // Move the selected planet to a position in front of the camera
             selectedPlanet.transform.position = Vector3.Lerp(selectedPlanet.transform.position, mainCamera.transform.position + mainCamera.transform.forward * 1f, Time.deltaTime);
-
-            // Scale the planet up relative to its original scale
-            Vector3 originalScale = originalScales[selectedPlanet];
-            // Vector3 targetScale = originalScale * 25f;  // Adjust this value to change the scaling factor
-            //Vector3 targetScale = new (sizeScale,sizeScale,sizeScale); 
-            Vector3 targetScale = originalScale;
-            selectedPlanet.transform.localScale = Vector3.Lerp(selectedPlanet.transform.localScale, targetScale, Time.deltaTime);
         }
-
 
         if (directionalLight != null && planetDataDictionary.TryGetValue("Sun", out var sunData))
         {
@@ -485,7 +504,7 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
             yield return null;
         }
     }
-    // todo fix lighting 
+
     //private void CreateLabel(GameObject celestialObject, string celestialObjectName, string objectType, float jsonSize, float selfRotationSpeed, float orbitSpeed)
     //{
     //    GameObject label = new GameObject($"{celestialObjectName}_Label");

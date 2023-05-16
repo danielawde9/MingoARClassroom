@@ -24,25 +24,26 @@ public class SpawnPrefabs : MonoBehaviour
 
     void Update()
     {
-        while (pool.Count > 0)
+        // Dequeue and repurpose objects that are too far behind the player
+        foreach (GameObject prefab in new List<GameObject>(pool))
         {
-            Vector3 spawnDirection = Random.onUnitSphere;
-            Vector3 spawnPosition = transform.position + spawnDirection * spawnRadius;
+            if (Vector3.Distance(transform.position, prefab.transform.position) > spawnRadius + despawnDistance)
+            {
+                pool.Dequeue();
+                prefab.SetActive(false);
+                pool.Enqueue(prefab);
+            }
+        }
+
+        // If there are available prefabs in the pool, spawn one in front of the player
+        if (pool.Count > 0)
+        {
+            Vector3 spawnDirection = transform.forward + Random.insideUnitSphere.normalized * spawnRadius;
+            Vector3 spawnPosition = transform.position + spawnDirection;
             GameObject spawnedPrefab = pool.Dequeue();
             spawnedPrefab.transform.position = spawnPosition;
             spawnedPrefab.transform.rotation = Quaternion.identity;
             spawnedPrefab.SetActive(true);
-        }
-
-        foreach (GameObject prefab in pool)
-        {
-            float distanceFromUser = Vector3.Distance(transform.position, prefab.transform.position);
-
-            if (distanceFromUser > spawnRadius + despawnDistance)
-            {
-                prefab.SetActive(false);
-                pool.Enqueue(prefab);
-            }
         }
     }
 }
