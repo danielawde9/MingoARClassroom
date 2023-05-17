@@ -157,6 +157,9 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
             solarSystemPlaced = true;
 
             m_PlaneManager.enabled = false;
+            
+            panelController.enabled = true;
+            returnButton.SetActive(true);
         }
         else if (solarSystemPlaced && !panelController.isMenuPanelVisible)
         {

@@ -6,21 +6,23 @@ using UnityEngine.UI;
 public class PanelController : MonoBehaviour
 {
     public RectTransform panelRectTransform;
-    public Button button;
+    public Button toggleButton;
     public float transitionDuration = 1f;
 
     private Vector2 initialPosition;
     private Vector2 targetPosition;
     public bool isMenuPanelVisible = false;
-    private TextMeshProUGUI buttonText;
+    private Image buttonImage;
 
+    public Sprite downSprite;
+    public Sprite upSprite;
 
     private void Start()
     {
         initialPosition = panelRectTransform.anchoredPosition;
-        button.onClick.AddListener(TogglePanel);
+        toggleButton.onClick.AddListener(TogglePanel);
         targetPosition = initialPosition + new Vector2(0f, panelRectTransform.rect.height);
-        buttonText = button.GetComponentInChildren<TextMeshProUGUI>();
+        buttonImage = toggleButton.GetComponentInChildren<Image>();
     }
 
     public void TogglePanel()
@@ -30,12 +32,12 @@ public class PanelController : MonoBehaviour
         if (isMenuPanelVisible)
         {
             StartCoroutine(TransitionPanel(initialPosition, targetPosition));
-            buttonText.text = "↓";
+            buttonImage.sprite= downSprite;
         }
         else
         {
             StartCoroutine(TransitionPanel(targetPosition, initialPosition));
-            buttonText.text = "↑";
+            buttonImage.sprite = upSprite;
         }
     }
 
