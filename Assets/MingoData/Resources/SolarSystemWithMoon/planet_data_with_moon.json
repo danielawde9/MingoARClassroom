@@ -163,7 +163,7 @@
     {
       "name": "Sun",
       "diameter": 1392000,
-      "rotationPeriod": -24.47,
+      "rotationPeriod": 24.47,
       "lengthOfDay": 24.47,
       "distanceFromSun": 0,
       "perihelion": 0,

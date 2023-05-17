@@ -11,6 +11,7 @@
   font-size: 20px;
   margin: 0;
   padding: 0;
+  color: white;
 }
 .slider-container {
   display: flex;
@@ -40,8 +41,4 @@
   height: 20px;
   border-radius: 50%;
   border: 0;
-}
-
-.setting-element-container{
-	  color: white;
 }

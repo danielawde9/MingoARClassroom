@@ -1,0 +1,8 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/MingoData/UIToolkit/SliderUSS.uss?fileID=7433441132597879392&amp;guid=33d209bab581c4b41a0eac6c93530290&amp;type=3#SliderUSS" />
+    <ui:VisualElement name="SliderElement" class="slider-container" style="align-items: center; justify-content: space-between; align-self: center; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0;">
+        <MaterialIcon icon="fast_rewind" class="slider-icon" />
+        <ui:Slider highValue="100" lowValue="0" value="4.16" class=" slider-css" style="align-items: flex-start; justify-content: center; align-self: center;" />
+        <MaterialIcon icon="fast_forward" class="slider-icon" />
+    </ui:VisualElement>
+</ui:UXML>

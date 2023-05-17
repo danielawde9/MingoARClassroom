@@ -535,7 +535,7 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
             // Skip the selected planet for orbital motion calculation
             if (planetData.celestialBodyInstance == selectedPlanet) continue;
 
-            float rotationDelta = deltaTime / planetData.rotationPeriod * 360f;
+            float rotationDelta = - deltaTime / planetData.rotationPeriod * 360f;
             float orbitDelta = deltaTime / planetData.orbitalPeriod * 360f;
 
             planetData.celestialBodyInstance.transform.Rotate(planetData.rotationAxis, rotationDelta, Space.World);
@@ -614,10 +614,11 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
     }
 
 }
+// todo seperate line from rotation 
 // todo day night texture
 // todo add the cockpit
 // todo fix moon orbit line 
-// add solar eclipse
+// todo add solar eclipse
 // todo history of the solar system 
 // todo scale planet with size to include distance 
 

@@ -919,7 +919,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 518560485}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1016334707}
+        m_TargetAssemblyTypeName: SolarSystemSimulationWithMoons, Assembly-CSharp
+        m_MethodName: OnFastForwardButtonClicked
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &518560485
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2108,6 +2120,7 @@ MonoBehaviour:
   panelRectTransform: {fileID: 772092436}
   button: {fileID: 1174029316}
   transitionDuration: 0.2
+  isMenuPanelVisible: 0
 --- !u!1 &811200855
 GameObject:
   m_ObjectHideFlags: 0
@@ -2727,10 +2740,11 @@ MonoBehaviour:
   returnButton: {fileID: 384687733}
   pauseButton: {fileID: 1511909425}
   fastForwardButton: {fileID: 518560482}
-  stopButton: {fileID: 1921587052}
+  playButton: {fileID: 0}
   menuTimeText: {fileID: 471438890}
   menuDistanceText: {fileID: 579038157}
   menuSizeText: {fileID: 861801127}
+  panelController: {fileID: 772092439}
   timeScaleSlider: {fileID: 1908259661}
   sizeScaleSlider: {fileID: 278886603}
   distanceScaleSlider: {fileID: 2109284399}
@@ -3648,7 +3662,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1511909428}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1016334707}
+        m_TargetAssemblyTypeName: SolarSystemSimulationWithMoons, Assembly-CSharp
+        m_MethodName: OnPauseButtonClicked
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1511909428
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4457,7 +4483,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1921587055}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1016334707}
+        m_TargetAssemblyTypeName: SolarSystemSimulationWithMoons, Assembly-CSharp
+        m_MethodName: OnPlayButtonClicked
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1921587055
 MonoBehaviour:
   m_ObjectHideFlags: 0
