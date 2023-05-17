@@ -8,7 +8,6 @@ using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
-using static System.Net.Mime.MediaTypeNames;
 
 public class SolarSystemSimulationWithMoons : BasePressInputHandler
 {
@@ -35,16 +34,16 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
     public float timeScale = 1.0f;
     public float distanceScale = 1.0f;
 
+    readonly float initialDistanceScale = 1f / 10000000f;
+    readonly float initialSizeScale = 1f / 1000000f;
+    readonly float initialTimeScale = 1f;
+
     public TextMeshProUGUI logText;
+    // todo hay material 3mla enta 
     public Material orbitLineMaterial;
 
-    public Slider timeScaleSlider;
-    public Slider sizeScaleSlider;
-    public Slider distanceScaleSlider;
-
-    public PlanetDataList planetDataList;
-
     private GameObject directionalLight;
+    private PlanetDataList planetDataList;
 
     [SerializeField]
     ARPlaneManager m_PlaneManager;
@@ -55,14 +54,44 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
     private GameObject selectedPlanet;
 
     private readonly Dictionary<GameObject, Vector3> originalPositions = new();
-    readonly Dictionary<GameObject, Vector3> originalScales = new();
-    public Dictionary<string, PlanetData> planetDataDictionary;
+    private readonly Dictionary<GameObject, Vector3> originalScales = new();
+    private Dictionary<string, PlanetData> planetDataDictionary;
 
+
+    public TextMeshProUGUI menuPlanetNameText;
     public GameObject returnButton;
-    public TextMeshProUGUI planetNameText;
-    readonly float initialDistanceScale = 1f / 10000000f; 
-    readonly float initialSizeScale = 1f / 1000000f;
-    readonly float initialTimeScale = 1f;
+    public GameObject pauseButton;
+    public GameObject fastForwardButton;
+    public GameObject playButton;
+    public TextMeshProUGUI menuTimeText;
+    public TextMeshProUGUI menuDistanceText;
+    public TextMeshProUGUI menuSizeText;
+
+
+    public PanelController panelController;
+
+    public Slider timeScaleSlider;
+    public Slider sizeScaleSlider;
+    public Slider distanceScaleSlider;
+
+    public void OnPauseButtonClicked()
+    {
+        timeScale = 0;
+        UpdateTimeScaleSlider(timeScale);
+    }
+
+    public void OnFastForwardButtonClicked()
+    {
+        timeScale *= 2; // double the speed
+        UpdateTimeScaleSlider(timeScale);
+    }
+
+    public void OnPlayButtonClicked()
+    {
+        timeScale = 1; // reset to real-time
+        UpdateTimeScaleSlider(timeScale);
+    }
+
 
     private void CreateDirectionalLight(Transform sunTransform)
     {
@@ -129,7 +158,7 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
 
             m_PlaneManager.enabled = false;
         }
-        else
+        else if (solarSystemPlaced && !panelController.isMenuPanelVisible)
         {
             // Detect the planet touch if no swipe gesture is detected
             DetectPlanetTouch(touchPosition);
@@ -144,7 +173,6 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
             }
         }
     }
-
 
     void DetectPlanetTouch(Vector2 touchPosition)
     {
@@ -184,7 +212,7 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
         }
 
         selectedPlanet = planet;
-        planetNameText.text = selectedPlanet.name;
+        menuPlanetNameText.text = selectedPlanet.name;
 
         // Save the original position and scale of the planet
         if (!originalPositions.ContainsKey(planet))
@@ -207,7 +235,7 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
         if (selectedPlanet != null)
         {
             ReturnPlanetToOriginalState();
-            planetNameText.text = "";
+            menuPlanetNameText.text = "";
             selectedPlanet = null;
         }
     }
@@ -224,7 +252,6 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
             selectedPlanet.transform.localScale = originalScales[selectedPlanet];
         }
     }
-
 
     private Vector3 CalculateMoonPosition(MoonData moon, PlanetData planet, float angle)
     {
@@ -248,6 +275,8 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
         lineRenderer.material = orbitLineMaterial;
         // lineRenderer.widthMultiplier = body.diameter * sizeScale * diameterScaleFactor;
         lineRenderer.widthMultiplier = 0.1f;
+        body.orbitLineRenderer = lineRenderer;
+
         lineRenderer.positionCount = 360;
         orbitLine.transform.SetParent(planet.transform);
         float angleStep = 360f / lineRenderer.positionCount;
@@ -271,20 +300,46 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
         float simulatedMonths = simulatedDays / 30.44f; // A month is approximately 30.44 days on average
         float simulatedYears = simulatedDays / 365.25f; // A year is approximately 365.25 days considering leap years
 
-        Debug.Log($"1 second in real life equals {simulatedSeconds} seconds, " +
-                  $"or {simulatedMinutes} minutes, " +
-                  $"or {simulatedHours} hours, " +
-                  $"or {simulatedDays} days, " +
-                  $"or {simulatedWeeks} weeks, " +
-                  $"or {simulatedMonths} months, " +
-                  $"or {simulatedYears} years in the simulated solar system.");
+        string timeText;
+
+        if (simulatedYears >= 1)
+        {
+            timeText = $"{simulatedYears} years";
+        }
+        else if (simulatedMonths >= 1)
+        {
+            timeText = $"{simulatedMonths} months";
+        }
+        else if (simulatedWeeks >= 1)
+        {
+            timeText = $"{simulatedWeeks} weeks";
+        }
+        else if (simulatedDays >= 1)
+        {
+            timeText = $"{simulatedDays} days";
+        }
+        else if (simulatedHours >= 1)
+        {
+            timeText = $"{simulatedHours} hours";
+        }
+        else if (simulatedMinutes >= 1)
+        {
+            timeText = $"{simulatedMinutes} minutes";
+        }
+        else
+        {
+            timeText = $"{simulatedSeconds} seconds";
+        }
+
+        menuTimeText.text = $"1 second in real life equals {timeText} in the simulated solar system.";
     }
+
     private void UpdateSizeScaleSlider(float value)
     {
         sizeScale = value;
         float realLifeSize = 1f / sizeScale; // Assuming sizeScale is a fraction of the real size
 
-        Debug.Log($"1 meter size in the simulated solar system equals {realLifeSize} kilometer in real life.");
+        menuSizeText.text = $"1 meter size in the simulated solar system equals {realLifeSize} kilometer in real life.";
 
         foreach (var planetData in planetDataDictionary.Values)
         {
@@ -301,19 +356,28 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
         distanceScale = value;
         float realLifeDistance = 1f / distanceScale; // Assuming distanceScale is a fraction of the real distance
 
-        Debug.Log($"1 meter distance in the simulated solar system equals {realLifeDistance} kilometer in real life.");
+        foreach (var body in planetDataDictionary.Values)
+        {
+            UpdateOrbitLine(body, (body, angle) => CalculatePlanetPosition((PlanetData)body, angle));
+        }
 
-        //foreach (var planetData in planetDataDictionary.Values)
-        //{
-        //    UpdateOrbitLine(planet, $"{planet.name}", (body, angle) => CalculatePlanetPosition((PlanetData)body, angle));
-        //    foreach (var moon in planet.moons)
-        //    {
-        //        UpdateOrbitLine(moon, $"{moon.name}", (body, angle) => CalculateMoonPosition((MoonData)body, planet, angle));
-        //    }
-        //}
+        menuDistanceText.text = $"1 meter distance in the simulated solar system equals {realLifeDistance} kilometer in real life.";
 
     }
-    
+    private void UpdateOrbitLine(CelestialBodyData body, Func<CelestialBodyData, float, Vector3> calculatePosition)
+    {
+        if (body.orbitLineRenderer != null)
+        {
+            float angleStep = 360f / body.orbitLineRenderer.positionCount;
+            for (int i = 0; i < body.orbitLineRenderer.positionCount; i++)
+            {
+                float angle = i * angleStep;
+                Vector3 position = calculatePosition(body, angle);
+                body.orbitLineRenderer.SetPosition(i, position);
+            }
+        }
+    }
+
     public void UpdateCelestialBodyScale(CelestialBodyData body, float newSizeScaleFactor)
     {
         if (body.name != "Sun")
@@ -330,16 +394,21 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
         distanceScaleSlider.value = initialDistanceScale;
 
         timeScaleSlider.minValue = initialTimeScale;
-        sizeScaleSlider.minValue= initialSizeScale; 
-        distanceScaleSlider.minValue = initialDistanceScale;
+        sizeScaleSlider.minValue = initialSizeScale;
+        distanceScaleSlider.minValue = 1f / 100000000f;
+
+        menuTimeText.text = $"1 second in real life equals {initialTimeScale} second in the simulated solar system.";
+        menuSizeText.text = $"1 meter size in the simulated solar system equals {1/ initialSizeScale} kilometer in real life.";
+        menuDistanceText.text = $"1 meter distance in the simulated solar system equals {1/ initialDistanceScale} kilometer in real life.";
 
         timeScaleSlider.maxValue = 2000000f;
-        sizeScaleSlider.maxValue = 0.0001f;
-        distanceScaleSlider.maxValue = 0.0001f;
+        sizeScaleSlider.maxValue = 1f / 10000f;
+        distanceScaleSlider.maxValue = 1f / 5000000f;
 
         timeScaleSlider.onValueChanged.AddListener(UpdateTimeScaleSlider);
         sizeScaleSlider.onValueChanged.AddListener(UpdateSizeScaleSlider);
         distanceScaleSlider.onValueChanged.AddListener(UpdateDistanceScaleSlider);
+
         LoadPlanetData();
     }
 
@@ -396,7 +465,7 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
             planet.celestialBodyInstance = Instantiate(prefab, newPosition, rotationCorrection * prefab.transform.rotation * Quaternion.Euler(planet.rotationAxis));
             planet.celestialBodyInstance.name = planet.name;
 
-            sizeScale= initialSizeScale;
+            sizeScale = initialSizeScale;
             float newScale = initialSizeScale * planet.diameter;
             planet.celestialBodyInstance.transform.localScale = new(newScale, newScale, newScale);
 
@@ -428,8 +497,6 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
             planet.rotationProgress = 0f;
 
             CreateOrbitLine(planet.celestialBodyInstance, planet, (body, angle) => CalculatePlanetPosition((PlanetData)body, angle));
-            // For planets
-            //CreateLabel(planet.planetInstance, planet.name, "Planet", planet.diameter, planet.rotationSpeed, planet.orbitalPeriod);
 
 
         }
@@ -494,122 +561,65 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
         }
     }
 
-    private void SpawnInclinationLine(PlanetData planet, GameObject planetInstance)
+    private GameObject CreateGameObject(string name, GameObject parent, Vector3 localPosition, Quaternion localRotation)
     {
-        GameObject inclinationLine = new (planet.name + "_PlanetInfo");
-
-        // Attach the inclination line to the planet
-        inclinationLine.transform.SetParent(planetInstance.transform, false);
-
-        // Orient the inclination line along the planet's orbital inclination
-        inclinationLine.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.Euler(planet.obliquityToOrbit, 0f, 0f));
-
-        // Add a LineRenderer to visualize the inclination
-        LineRenderer lineRenderer = inclinationLine.AddComponent<LineRenderer>();
-        lineRenderer.useWorldSpace = false;
-        lineRenderer.startWidth = 0.01f; // Adjust this as needed
-        lineRenderer.endWidth = 0.01f; // Adjust this as needed
-        lineRenderer.positionCount = 2;
-        float lineLength = 1f; 
-        lineRenderer.SetPosition(0, Vector3.down * lineLength);
-        lineRenderer.SetPosition(1, Vector3.up * lineLength);
-
-        // Add a TextMeshPro to display the inclination value
-        GameObject inclinationTextObject = new(planet.name + "_InclinationText");
-        inclinationTextObject.transform.SetParent(inclinationLine.transform, false);
-        inclinationTextObject.transform.SetLocalPositionAndRotation(Vector3.up * (lineLength + 0.1f), Quaternion.identity);
-        TextMeshPro textMeshPro = inclinationTextObject.AddComponent<TextMeshPro>();
-        textMeshPro.text = planet.obliquityToOrbit.ToString("F2") + "°";
-        textMeshPro.fontSize = 4.25f; // Adjust this as needed
-        textMeshPro.color = Color.white; // Adjust this as needed
-        textMeshPro.alignment = TextAlignmentOptions.Top;
-        textMeshPro.alignment = TextAlignmentOptions.Center;
-        inclinationTextObject.GetComponent<RectTransform>().sizeDelta = new Vector2(1.5f, 1.5f);
-
-        // Show the Y-axis if the inclination is greater than 2 degrees
-        if (Mathf.Abs(planet.obliquityToOrbit) > 2f)
-        {
-            GameObject yAxisGameObject = new (planet.name + "_YAxis");
-            yAxisGameObject.transform.SetParent(planetInstance.transform, false);
-            yAxisGameObject.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
-
-            LineRenderer yAxisRenderer = yAxisGameObject.AddComponent<LineRenderer>();
-            yAxisRenderer.useWorldSpace = false;
-            yAxisRenderer.startWidth = 0.01f; // Adjust this as needed
-            yAxisRenderer.endWidth = 0.01f; // Adjust this as needed
-            yAxisRenderer.positionCount = 2;
-            yAxisRenderer.SetPosition(0, Vector3.down * lineLength);
-            yAxisRenderer.SetPosition(1, Vector3.up * lineLength);
-            
-        }
-
-        // Instantiate the text prefab
-        GameObject planetTextObject = new ($"{planet.name}_Label");
-        planetTextObject.transform.SetParent(inclinationLine.transform, false);
-        planetTextObject.transform.SetLocalPositionAndRotation(Vector3.down * (lineLength + 0.1f), Quaternion.identity);
-        TextMeshPro planetTextMeshPro = planetTextObject.AddComponent<TextMeshPro>();
-        planetTextMeshPro.text = planet.name;
-        planetTextMeshPro.fontSize = 4.25f; // Adjust this as needed
-        planetTextMeshPro.color = Color.white; // Adjust this as needed
-        planetTextMeshPro.alignment = TextAlignmentOptions.Top;
-        planetTextMeshPro.alignment = TextAlignmentOptions.Center;
-        planetTextObject.GetComponent<RectTransform>().sizeDelta = new Vector2(1.5f, 1.5f);
-
+        GameObject newGameObject = new(name);
+        newGameObject.transform.SetParent(parent.transform, false);
+        newGameObject.transform.SetLocalPositionAndRotation(localPosition, localRotation);
+        return newGameObject;
     }
 
-    //private void CreateLabel(GameObject celestialObject, string celestialObjectName, string objectType, float jsonSize, float selfRotationSpeed, float orbitSpeed)
-    //{
-    //    GameObject label = new GameObject($"{celestialObjectName}_Label");
-    //    label.transform.SetParent(celestialObject.transform);
-    //    label.transform.localPosition = new Vector3(0, (celestialObject.transform.localScale.y / 2) + 0.5f, 0);
-    //    label.transform.localRotation = Quaternion.identity;
+    private TextMeshPro CreateTextMeshPro(GameObject gameObject, string text, float fontSize, Color color, TextAlignmentOptions alignment, Vector2 rectTransformSizeDelta)
+    {
+        TextMeshPro textMeshPro = gameObject.AddComponent<TextMeshPro>();
+        textMeshPro.text = text;
+        textMeshPro.fontSize = fontSize;
+        textMeshPro.color = color;
+        textMeshPro.alignment = alignment;
+        gameObject.GetComponent<RectTransform>().sizeDelta = rectTransformSizeDelta;
+        return textMeshPro;
+    }
 
-    //    TextMeshPro tmp = label.AddComponent<TextMeshPro>();
-    //    tmp.name = $"{celestialObjectName}_TextMeshPro";
-    //    tmp.alignment = TextAlignmentOptions.Center;
-    //    tmp.fontSize = 0.3f;
-    //    tmp.color = Color.white;
+    private LineRenderer CreateLineRenderer(GameObject gameObject, float startWidth, float endWidth, int positionCount, Vector3 startPosition, Vector3 endPosition, Color color)
+    {
+        LineRenderer lineRenderer = gameObject.AddComponent<LineRenderer>();
+        lineRenderer.useWorldSpace = false;
+        lineRenderer.startWidth = startWidth;
+        lineRenderer.endWidth = endWidth;
+        lineRenderer.positionCount = positionCount;
+        lineRenderer.SetPosition(0, startPosition);
+        lineRenderer.SetPosition(1, endPosition);
+        lineRenderer.material = new Material(Shader.Find("Unlit/Color"));
+        lineRenderer.material.color = color; // Set the material color directly
 
-    //    //UpdateLabel(tmp, celestialObjectName, objectType, jsonSize, selfRotationSpeed, orbitSpeed, 0, 0);
-    //}
+        return lineRenderer;
+    }
 
-    //private void UpdateLabel(TextMeshPro tmp, string celestialObjectName, string objectType, float jsonSize, float selfRotationSpeed, float orbitSpeed, int completedRotations, int completedOrbits)
-    //{
-    //    float unityWorldSize = tmp.transform.parent.parent.localScale.x * sizeScale * 1000;
+    private void SpawnInclinationLine(PlanetData planet, GameObject planetInstance)
+    {
+        GameObject inclinationLine = CreateGameObject(planet.name + "_PlanetInfo", planetInstance, Vector3.zero, Quaternion.Euler(planet.obliquityToOrbit, 0f, 0f));
+        CreateLineRenderer(inclinationLine, 0.01f, 0.01f, 2, Vector3.down, Vector3.up, Color.yellow); // Add color parameter
 
-    //    tmp.text = $"{celestialObjectName} ({objectType})\nSize (JSON): {jsonSize}\nUnity world size: {unityWorldSize} meters\nSelf Rotation Speed: {selfRotationSpeed}\nOrbit Speed: {orbitSpeed}\nCompleted Self Rotations: {completedRotations}\nCompleted Orbits: {completedOrbits}";
-    //}
+        GameObject inclinationTextObject = CreateGameObject(planet.name + "_InclinationText", planetInstance, Vector3.up * 1.1f, Quaternion.identity);
+        CreateTextMeshPro(inclinationTextObject, planet.obliquityToOrbit.ToString("F2") + "°", 4.25f, Color.white, TextAlignmentOptions.Center, new Vector2(1.5f, 1.5f));
 
+        if (Mathf.Abs(planet.obliquityToOrbit) > 2f)
+        {
+            GameObject yAxisGameObject = CreateGameObject(planet.name + "_YAxis", planetInstance, Vector3.zero, Quaternion.identity);
+            CreateLineRenderer(yAxisGameObject, 0.01f, 0.01f, 2, Vector3.down, Vector3.up, Color.white); // Add color parameter
+        }
 
-    //private void UpdateLogText(string celestialObjectName, int completedRotations, string rotationType)
-    //{
-    //    logText.text = "";
-    //    foreach (var planet in planetDataList.planets)
-    //    {
-    //        logText.text += $"{planet.name}: {planet.completedOrbits} orbits, {planet.completedSelfRotations} self rotations, Size: {planet.planetInstance.transform.localScale.x * sizeScale * 1000} meters, Local Scale: {planet.planetInstance.transform.localScale}\n";
-    //        foreach (var moon in planet.moons)
-    //        {
-    //            if (moon.name == celestialObjectName)
-    //            {
-    //                logText.text += $"  {moon.name}: {completedRotations} {rotationType}, Size: {moon.moonInstance.transform.localScale.x * sizeScale * 1000} meters, Local Scale: {moon.moonInstance.transform.localScale}\n";
-    //            }
-    //            else
-    //            {
-    //                logText.text += $"  {moon.name}: {moon.completedRotations} Rotations around {planet.name}, Size: {moon.moonInstance.transform.localScale.x * sizeScale * 1000} meters, Local Scale: {moon.moonInstance.transform.localScale}\n";
-    //            }
-    //        }
-    //    }
-    //}
+        GameObject planetTextObject = CreateGameObject($"{planet.name}_Label", planetInstance, Vector3.down * 1.1f, Quaternion.identity);
+        CreateTextMeshPro(planetTextObject, planet.name, 4.25f, Color.white, TextAlignmentOptions.Center, new Vector2(1.5f, 1.5f));
+    }
 
 }
 // todo day night texture
-// add the cockpit
-// todo fix planets and moons text mesh pro 
+// todo add the cockpit
 // todo fix moon orbit line 
-// sun rotatin clockwise
 // add solar eclipse
-// history of the solar system 
-// scale planet with size to include distance 
+// todo history of the solar system 
+// todo scale planet with size to include distance 
 
 // in update fuction 
 /* foreach (var moon in planet.moons)

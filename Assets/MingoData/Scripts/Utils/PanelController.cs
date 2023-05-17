@@ -11,7 +11,7 @@ public class PanelController : MonoBehaviour
 
     private Vector2 initialPosition;
     private Vector2 targetPosition;
-    private bool isPanelVisible = false;
+    public bool isMenuPanelVisible = false;
     private TextMeshProUGUI buttonText;
 
 
@@ -25,9 +25,9 @@ public class PanelController : MonoBehaviour
 
     public void TogglePanel()
     {
-        isPanelVisible = !isPanelVisible;
+        isMenuPanelVisible = !isMenuPanelVisible;
 
-        if (isPanelVisible)
+        if (isMenuPanelVisible)
         {
             StartCoroutine(TransitionPanel(initialPosition, targetPosition));
             buttonText.text = "↓";

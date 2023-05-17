@@ -27,4 +27,6 @@ public class CelestialBodyData
     public Vector3 rotationAxis;
     public int completedSelfRotations;
     public float orbitalEccentricitySquared;
+    public LineRenderer orbitLineRenderer;
+
 }
