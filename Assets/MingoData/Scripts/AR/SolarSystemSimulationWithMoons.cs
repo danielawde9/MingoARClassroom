@@ -106,6 +106,15 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
         UpdateTimeScaleSlider(timeScale);
     }
 
+    public void OnReturnButtonClick()
+    {
+        if (selectedPlanet != null)
+        {
+            ReturnPlanetToOriginalState();
+            menuPlanetNameText.text = "";
+            selectedPlanet = null;
+        }
+    }
 
     private void CreateDirectionalLight(Transform sunTransform)
     {
@@ -134,6 +143,39 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
         directionalLight.transform.SetParent(sunTransform);
         directionalLight.transform.localPosition = Vector3.zero;
     }
+    private GameObject CreateGameObject(string name, GameObject parent, Vector3 localPosition, Quaternion localRotation)
+    {
+        GameObject newGameObject = new(name);
+        newGameObject.transform.SetParent(parent.transform, false);
+        newGameObject.transform.SetLocalPositionAndRotation(localPosition, localRotation);
+        return newGameObject;
+    }
+
+    private TextMeshPro CreateTextMeshPro(GameObject gameObject, string text, float fontSize, Color color, TextAlignmentOptions alignment, Vector2 rectTransformSizeDelta)
+    {
+        TextMeshPro textMeshPro = gameObject.AddComponent<TextMeshPro>();
+        textMeshPro.text = text;
+        textMeshPro.fontSize = fontSize;
+        textMeshPro.color = color;
+        textMeshPro.alignment = alignment;
+        gameObject.GetComponent<RectTransform>().sizeDelta = rectTransformSizeDelta;
+        return textMeshPro;
+    }
+
+    private LineRenderer CreateLineRenderer(GameObject gameObject, float startWidth, float endWidth, int positionCount, Vector3 startPosition, Vector3 endPosition, Color color)
+    {
+        LineRenderer lineRenderer = gameObject.AddComponent<LineRenderer>();
+        lineRenderer.useWorldSpace = false;
+        lineRenderer.startWidth = startWidth;
+        lineRenderer.endWidth = endWidth;
+        lineRenderer.positionCount = positionCount;
+        lineRenderer.SetPosition(0, startPosition);
+        lineRenderer.SetPosition(1, endPosition);
+        lineRenderer.material = new Material(Shader.Find("Unlit/Color"));
+        lineRenderer.material.color = color; // Set the material color directly
+
+        return lineRenderer;
+    }
 
     protected override void Awake()
     {
@@ -149,7 +191,11 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
             Debug.Log("OnDrag: " + delta);
             swipeImageIcon.SetActive(false);
             float rotationSpeed = 0.1f; // Adjust this value to change the rotation speed
+            // Rotate around the y-axis based on x delta (for left/right swipes)
             selectedPlanet.transform.Rotate(0f, -delta.x * rotationSpeed, 0f, Space.World);
+
+            // Rotate around the x-axis based on y delta (for up/down swipes)
+            selectedPlanet.transform.Rotate(delta.y * rotationSpeed, 0f, 0f, Space.World);
         }
     }
 
@@ -252,16 +298,6 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
         Vector3 newPosition = Camera.main.transform.position + Camera.main.transform.forward;
         selectedPlanet.transform.position = newPosition;
         selectedPlanet.transform.localScale = new Vector3(1, 1, 1);
-    }
-
-    public void OnReturnButtonClick()
-    {
-        if (selectedPlanet != null)
-        {
-            ReturnPlanetToOriginalState();
-            menuPlanetNameText.text = "";
-            selectedPlanet = null;
-        }
     }
 
     void ReturnPlanetToOriginalState()
@@ -587,40 +623,7 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
         }
     }
 
-    private GameObject CreateGameObject(string name, GameObject parent, Vector3 localPosition, Quaternion localRotation)
-    {
-        GameObject newGameObject = new(name);
-        newGameObject.transform.SetParent(parent.transform, false);
-        newGameObject.transform.SetLocalPositionAndRotation(localPosition, localRotation);
-        return newGameObject;
-    }
-
-    private TextMeshPro CreateTextMeshPro(GameObject gameObject, string text, float fontSize, Color color, TextAlignmentOptions alignment, Vector2 rectTransformSizeDelta)
-    {
-        TextMeshPro textMeshPro = gameObject.AddComponent<TextMeshPro>();
-        textMeshPro.text = text;
-        textMeshPro.fontSize = fontSize;
-        textMeshPro.color = color;
-        textMeshPro.alignment = alignment;
-        gameObject.GetComponent<RectTransform>().sizeDelta = rectTransformSizeDelta;
-        return textMeshPro;
-    }
-
-    private LineRenderer CreateLineRenderer(GameObject gameObject, float startWidth, float endWidth, int positionCount, Vector3 startPosition, Vector3 endPosition, Color color)
-    {
-        LineRenderer lineRenderer = gameObject.AddComponent<LineRenderer>();
-        lineRenderer.useWorldSpace = false;
-        lineRenderer.startWidth = startWidth;
-        lineRenderer.endWidth = endWidth;
-        lineRenderer.positionCount = positionCount;
-        lineRenderer.SetPosition(0, startPosition);
-        lineRenderer.SetPosition(1, endPosition);
-        lineRenderer.material = new Material(Shader.Find("Unlit/Color"));
-        lineRenderer.material.color = color; // Set the material color directly
-
-        return lineRenderer;
-    }
-
+   
     private void SpawnInclinationLine(PlanetData planet, GameObject planetInstance)
     {
         // Create a parent game object for text and y-axis line. This object doesn't rotate.
