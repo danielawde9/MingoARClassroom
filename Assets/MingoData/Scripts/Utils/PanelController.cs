@@ -12,7 +12,7 @@ public class PanelController : MonoBehaviour
     private Vector2 initialPosition;
     private Vector2 targetPosition;
     public bool isMenuPanelVisible = false;
-    private Image buttonImage;
+    public Image buttonImage;
 
     public Sprite downSprite;
     public Sprite upSprite;
@@ -22,7 +22,6 @@ public class PanelController : MonoBehaviour
         initialPosition = panelRectTransform.anchoredPosition;
         toggleButton.onClick.AddListener(TogglePanel);
         targetPosition = initialPosition + new Vector2(0f, panelRectTransform.rect.height);
-        buttonImage = toggleButton.GetComponentInChildren<Image>();
     }
 
     public void TogglePanel()
