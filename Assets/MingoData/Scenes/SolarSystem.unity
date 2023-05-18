@@ -553,7 +553,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &384687734
 RectTransform:
   m_ObjectHideFlags: 0
@@ -561,18 +561,18 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 384687733}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 138134581}
-  m_Father: {fileID: 1510672709}
+  m_Father: {fileID: 664682161}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 100, y: -50}
+  m_AnchoredPosition: {x: 100, y: -100}
   m_SizeDelta: {x: 100, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &384687735
@@ -598,8 +598,8 @@ MonoBehaviour:
   m_Colors:
     m_NormalColor: {r: 0, g: 0, b: 0, a: 0.5882353}
     m_HighlightedColor: {r: 0, g: 0, b: 0, a: 0.78431374}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.31132078, g: 0.31132078, b: 0.31132078, a: 1}
+    m_SelectedColor: {r: 0.24528301, g: 0.24528301, b: 0.24528301, a: 0.5254902}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -1711,6 +1711,77 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 656676378}
   m_CullTransparentMesh: 1
+--- !u!1 &664682160
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 664682161}
+  - component: {fileID: 664682162}
+  m_Layer: 5
+  m_Name: UIHandler
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &664682161
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 664682160}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 811200856}
+  - {fileID: 1821653758}
+  - {fileID: 384687734}
+  - {fileID: 772092436}
+  - {fileID: 885580658}
+  m_Father: {fileID: 1510672709}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &664682162
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 664682160}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7426db2a4d996984bbe32ff72a7e9771, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  celestialBodyHandler: {fileID: 1016334707}
+  returnButton: {fileID: 384687733}
+  pauseButton: {fileID: 1511909425}
+  fastForwardButton: {fileID: 518560482}
+  playButton: {fileID: 1921587052}
+  timeScaleSlider: {fileID: 1908259661}
+  sizeScaleSlider: {fileID: 278886603}
+  distanceScaleSlider: {fileID: 2109284399}
+  menuTimeText: {fileID: 471438890}
+  menuSizeText: {fileID: 861801127}
+  menuDistanceText: {fileID: 579038157}
+  menuTitleText: {fileID: 1821653759}
+  sliderPanelRectTransform: {fileID: 772092436}
+  sliderPanelToggleButton: {fileID: 1174029316}
+  sliderPanelTransitionDuration: 0.5
+  isMenuPanelVisible: 0
+  buttonImage: {fileID: 2042487221}
 --- !u!1 &717988502
 GameObject:
   m_ObjectHideFlags: 0
@@ -2076,9 +2147,8 @@ GameObject:
   - component: {fileID: 772092436}
   - component: {fileID: 772092438}
   - component: {fileID: 772092437}
-  - component: {fileID: 772092439}
   m_Layer: 5
-  m_Name: SolarSettingsPanel
+  m_Name: SliderPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2091,19 +2161,19 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 772092435}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1174029315}
   - {fileID: 771684901}
-  m_Father: {fileID: 1510672709}
+  m_Father: {fileID: 664682161}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: -212.5}
+  m_AnchoredPosition: {x: 0, y: 212.50003}
   m_SizeDelta: {x: 1080, y: 425}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &772092437
@@ -2144,25 +2214,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 772092435}
   m_CullTransparentMesh: 1
---- !u!114 &772092439
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 772092435}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8252352ec2c653f42914e8c24e1c7d02, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  panelRectTransform: {fileID: 772092436}
-  toggleButton: {fileID: 1174029316}
-  transitionDuration: 0.2
-  isMenuPanelVisible: 0
-  buttonImage: {fileID: 2042487223}
-  downSprite: {fileID: 21300000, guid: 25584baa0f49b41479af9525e33cc493, type: 3}
-  upSprite: {fileID: 21300000, guid: 0c5818c1e3a8d8b46a1463ae84faa363, type: 3}
 --- !u!1 &811200855
 GameObject:
   m_ObjectHideFlags: 0
@@ -2189,11 +2240,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 811200855}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -540, y: -259.81827, z: 0}
-  m_LocalScale: {x: 1.2267151, y: 1.2267151, z: 1.2267151}
+  m_LocalPosition: {x: -540, y: -34.818283, z: 0}
+  m_LocalScale: {x: 1.2267148, y: 1.2267148, z: 1.2267148}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1510672709}
+  m_Father: {fileID: 664682161}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &811200857
@@ -2411,7 +2462,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 885580657}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -2419,7 +2470,7 @@ RectTransform:
   - {fileID: 908815471}
   - {fileID: 1159554389}
   - {fileID: 1122629469}
-  m_Father: {fileID: 1510672709}
+  m_Father: {fileID: 664682161}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -2518,7 +2569,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &908815471
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2715,27 +2766,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13a7aff6e4668534081967f7d2b1d5a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_PlaneManager: {fileID: 1016334702}
   sizeScale: 1
   timeScale: 1
   distanceScale: 1
-  logText: {fileID: 0}
-  orbitLineMaterial: {fileID: 2100000, guid: fb6fd505587f2a94ea93404928674c79, type: 2}
-  m_PlaneManager: {fileID: 1016334702}
-  returnButton: {fileID: 384687733}
-  pauseButton: {fileID: 1511909425}
-  fastForwardButton: {fileID: 518560482}
-  playButton: {fileID: 1921587052}
+  uiHandler: {fileID: 664682162}
   menuPanelController: {fileID: 772092435}
   swipeImageIcon: {fileID: 1122629468}
-  menuPlanetNameText: {fileID: 1821653759}
-  menuTimeText: {fileID: 471438890}
-  menuDistanceText: {fileID: 579038157}
-  menuSizeText: {fileID: 861801127}
   tapFloorIconGameObject: {fileID: 1159554388}
-  panelController: {fileID: 772092439}
-  timeScaleSlider: {fileID: 1908259661}
-  sizeScaleSlider: {fileID: 278886603}
-  distanceScaleSlider: {fileID: 2109284399}
 --- !u!114 &1016334708
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2748,10 +2786,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 388bd955196ee0d4bbf07467517fa343, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  planeManager: {fileID: 1016334702}
+  initialObject: {fileID: 908815470}
+  objectAfterScan: {fileID: 1159554388}
   m_PlaneManager: {fileID: 1016334702}
-  objectToDisable: {fileID: 908815470}
-  objectToEnable: {fileID: 1159554388}
-  titleTextMenu: {fileID: 1821653759}
+  uIHandler: {fileID: 664682162}
 --- !u!1 &1052398253
 GameObject:
   m_ObjectHideFlags: 0
@@ -3133,7 +3172,7 @@ GameObject:
   - component: {fileID: 1174029317}
   - component: {fileID: 1174029316}
   m_Layer: 5
-  m_Name: ToggleCloseButton
+  m_Name: SliderPanelToggleCloseButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3985,11 +4024,7 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 811200856}
-  - {fileID: 772092436}
-  - {fileID: 1821653758}
-  - {fileID: 384687734}
-  - {fileID: 885580658}
+  - {fileID: 664682161}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4552,7 +4587,7 @@ GameObject:
   - component: {fileID: 1821653760}
   - component: {fileID: 1821653759}
   m_Layer: 5
-  m_Name: MenuTitle
+  m_Name: MenuTitleText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4565,18 +4600,18 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1821653757}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1510672709}
+  m_Father: {fileID: 664682161}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -50}
-  m_SizeDelta: {x: 200, y: 50}
+  m_AnchoredPosition: {x: 0, y: -100}
+  m_SizeDelta: {x: 500, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1821653759
 MonoBehaviour:
@@ -4625,11 +4660,11 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 20.05
+  m_fontSize: 44.1
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
-  m_fontSizeMin: 18
+  m_fontSizeMin: 35
   m_fontSizeMax: 72
   m_fontStyle: 0
   m_HorizontalAlignment: 2
@@ -5055,7 +5090,7 @@ GameObject:
   - component: {fileID: 2042487224}
   - component: {fileID: 2042487223}
   m_Layer: 5
-  m_Name: Image
+  m_Name: SliderPanelToggleCloseButtonImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

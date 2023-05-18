@@ -1,28 +1,113 @@
-using System.Collections;
 using System.Collections.Generic;
-using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.XR.ARFoundation;
+using UnityEngine.XR.ARSubsystems;
 
 // this script used to track initially the user to scan the room and show them the image to tap on the scanned area
-public class TrackingStateListener : MonoBehaviour
+public class TrackingStateListener : BasePressInputHandler
 {
-    public ARPlaneManager m_PlaneManager; // The ARPlaneManager
+    public ARPlaneManager planeManager;
+    public GameObject initialObject;
+    public GameObject objectAfterScan;
+    //public GameObject objectAfterClick;
 
-    public GameObject objectToDisable; // Object to disable when count > 0
-    public GameObject objectToEnable; // Object to enable when count > 0
+    [SerializeField]
+    ARPlaneManager m_PlaneManager;
+    private ARRaycastManager m_RaycastManager;
 
-    public TextMeshProUGUI titleTextMenu;
-    void Update()
+    public UIHandler uIHandler;
+
+    private void Start()
     {
-        if (m_PlaneManager.trackables.count > 0)
+        ShowInitial();
+    }
+
+    protected override void Awake()
+    {
+        base.Awake();
+        m_RaycastManager = GetComponent<ARRaycastManager>();
+    }
+
+    private bool isAfterScanShown = false; 
+    private bool isPlaneHit = false;
+
+    protected override void OnPress(Vector3 touchPosition)
+    {
+        List<ARRaycastHit> s_Hits = new();
+
+        if (m_RaycastManager.Raycast(touchPosition, s_Hits, TrackableType.PlaneWithinPolygon))
         {
-            objectToDisable.SetActive(false);
-            objectToEnable.SetActive(true);
-            titleTextMenu.text = "tap on the scanned area to place the solar system";
-            // Optionally, disable this script after we've done the switch
-            this.enabled = false;
+            isPlaneHit = true;
+        }
+        else
+        {
+            isPlaneHit = false;
         }
     }
+
+    void Update()
+    {
+        float totalArea = CalculateTotalPlaneArea();
+
+        if (Pointer.current != null && isPlaneHit)
+        {
+            ShowAfterClick();
+            return;
+        }
+
+        if (totalArea >= 1 && m_PlaneManager.trackables.count >= 1)
+        {
+            if (!isAfterScanShown)
+            {
+                ShowAfterScan();
+                isAfterScanShown = true;
+            }
+        }
+        else
+        {
+            uIHandler.SetMenuTextTitle($"You need to scan at least 2 meters of the room. Scanned: {totalArea:F2} m²");
+        }
+    }
+
+
+    private float CalculateTotalPlaneArea()
+    {
+        float totalArea = 0f;
+        foreach (var plane in m_PlaneManager.trackables)
+        {
+            totalArea += plane.size.x * plane.size.y;
+        }
+        return totalArea;
+    }
+
+    private void ShowInitial()
+    {
+        initialObject.SetActive(true);
+        uIHandler.SetMenuTextTitle("Move your phone to start scanning the room");
+        objectAfterScan.SetActive(false);
+        Debug.Log("show initial");
+
+        // objectAfterClick.SetActive(false);
+    }
+
+    private void ShowAfterScan()
+    {
+        initialObject.SetActive(false);
+        uIHandler.SetMenuTextTitle("Tap on the place the solar system ");
+        objectAfterScan.SetActive(true);
+        //objectAfterClick.SetActive(false);
+        Debug.Log("show after scan");
+
+    }
+
+    private void ShowAfterClick()
+    {
+        initialObject.SetActive(false);
+        objectAfterScan.SetActive(false);
+        Debug.Log("show after click");
+        uIHandler.SetMenuTextTitle("Click on any planet or click on the menu below to display more settings");
+        //objectAfterClick.SetActive(true);
+    }
 }
+// todo move the string to constants 
