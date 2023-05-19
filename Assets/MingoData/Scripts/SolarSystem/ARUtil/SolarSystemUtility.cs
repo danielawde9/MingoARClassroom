@@ -30,20 +30,20 @@ public class SolarSystemUtility
         return new Vector3(x * distanceScale, y * distanceScale, z * distanceScale);
     }
 
-    public static void CreateInclinationLine(PlanetData planet, GameObject planetInstance)
+    public static void CreateInclinationLineAndPlanetName(PlanetData planet, GameObject planetInstance)
     {
         // Create a parent game object for text and y-axis line. This object doesn't rotate.
-        GameObject parentObject = new(planet.name + "_LabelParent");
+        GameObject parentObject = new(planet.name + "_ParentInfo");
         parentObject.transform.SetParent(planetInstance.transform, false);
         parentObject.transform.localPosition = Vector3.zero;
 
         // Make sure the parentObject always faces the camera
         parentObject.AddComponent<FaceCamera>();
 
-        GameObject inclinationLine = CreateGameObject(planet.name + "_PlanetInfo", planetInstance, Vector3.zero, Quaternion.Euler(planet.obliquityToOrbit, 0f, 0f));
+        GameObject inclinationLine = CreateGameObject(planet.name + "_InclinationLine", planetInstance, Vector3.zero, Quaternion.Euler(planet.obliquityToOrbit, 0f, 0f));
         CreateLineRenderer(inclinationLine, 0.01f, 0.01f, 2, Vector3.down, Vector3.up, Color.yellow); // Add color parameter
 
-        GameObject inclinationTextObject = CreateGameObject(planet.name + "_InclinationText", parentObject, Vector3.up * 1.1f, Quaternion.identity);
+        GameObject inclinationTextObject = CreateGameObject(planet.name + "_InclinationLineText", parentObject, Vector3.up * 1.1f, Quaternion.identity);
         CreateTextMeshPro(inclinationTextObject, planet.obliquityToOrbit.ToString("F2") + "°", 4.25f, Color.white, TextAlignmentOptions.Center, new Vector2(1.5f, 1.5f));
 
         if (Mathf.Abs(planet.obliquityToOrbit) > 2f)
@@ -52,20 +52,20 @@ public class SolarSystemUtility
             CreateLineRenderer(yAxisGameObject, 0.01f, 0.01f, 2, Vector3.down, Vector3.up, Color.white); // Add color parameter
         }
 
-        GameObject planetTextObject = CreateGameObject($"{planet.name}_Label", parentObject, Vector3.down * 1.1f, Quaternion.identity);
+        GameObject planetTextObject = CreateGameObject($"{planet.name}_PlanetName", parentObject, Vector3.down * 1.1f, Quaternion.identity);
         CreateTextMeshPro(planetTextObject, planet.name, 4.25f, Color.white, TextAlignmentOptions.Center, new Vector2(1.5f, 1.5f));
     }
 
     public static void CreateOrbitLine(GameObject planet, CelestialBodyData body, Func<CelestialBodyData, float, Vector3> calculatePosition)
     {
-        GameObject orbitLine = new($"{body.name} Orbit Line");
+        GameObject orbitLine = new($"{body.name}_Orbit_Line");
         LineRenderer lineRenderer = orbitLine.AddComponent<LineRenderer>();
 
         lineRenderer.material = new Material(Shader.Find("Unlit/Color"));
         lineRenderer.material.color = Color.white; // Set the material color directly
 
-        // lineRenderer.widthMultiplier = body.diameter * sizeScale * diameterScaleFactor;
-        lineRenderer.widthMultiplier = 0.1f;
+        //lineRenderer.widthMultiplier = body.diameter * sizeScale * diameterScaleFactor;
+        lineRenderer.widthMultiplier = 0.01f;
         body.orbitLineRenderer = lineRenderer;
 
         lineRenderer.positionCount = 360;
@@ -78,6 +78,7 @@ public class SolarSystemUtility
             lineRenderer.SetPosition(i, position);
         }
     }
+
     public static void CreateDirectionalLight(Transform sunTransform, float distanceScale, Dictionary<string, PlanetData> planetDataDictionary)
     {
         directionalLight = new GameObject("Directional Light");
@@ -101,6 +102,7 @@ public class SolarSystemUtility
         directionalLight.transform.SetParent(sunTransform);
         directionalLight.transform.localPosition = Vector3.zero;
     }
+
     public static GameObject CreateGameObject(string name, GameObject parent, Vector3 localPosition, Quaternion localRotation)
     {
         GameObject newGameObject = new(name);
@@ -151,6 +153,7 @@ public class SolarSystemUtility
         }
         planetDataDictionary = planetDataList.planets.ToDictionary(p => p.name, p => p);
     }
+
     public static void UpdateOrbitLine(CelestialBodyData body, Func<CelestialBodyData, float, Vector3> calculatePosition)
     {
         if (body.orbitLineRenderer != null)

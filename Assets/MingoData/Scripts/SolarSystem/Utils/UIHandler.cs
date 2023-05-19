@@ -43,6 +43,16 @@ public class UIHandler : BasePressInputHandler
     public GameObject scanRoomIconObject;
     public GameObject tapIconObject;
     public GameObject swipeIconObject;
+    [HideInInspector]
+    public UnityEvent<bool> onPlanetNameToggleValueChanged;
+    [HideInInspector]
+    public UnityEvent<bool> onOrbitLineToggleValueChanged;
+    [HideInInspector]
+    public UnityEvent<bool> onPlanetInclinationLineToggleValueChanged;
+    public Toggle planetNameToggle;
+    public Toggle orbitLineToggle;
+    public Toggle planetInclinationLineToggle;
+
 
     private void OnPauseButtonClicked()
     {
@@ -113,6 +123,10 @@ public class UIHandler : BasePressInputHandler
 
         Button playButtonComponent = playButton.GetComponent<Button>();
         playButtonComponent.onClick.AddListener(OnPlayButtonClicked);
+
+        planetNameToggle.onValueChanged.AddListener((isOn) => { onPlanetNameToggleValueChanged?.Invoke(isOn); });
+        orbitLineToggle.onValueChanged.AddListener((isOn) => { onOrbitLineToggleValueChanged?.Invoke(isOn); });
+        planetInclinationLineToggle.onValueChanged.AddListener((isOn) => { onPlanetInclinationLineToggleValueChanged?.Invoke(isOn); });
 
 
     }

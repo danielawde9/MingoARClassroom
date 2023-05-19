@@ -225,12 +225,59 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
         }
     }
 
+    private void UpdatePlanetNameVisibility(bool isOn)
+    {
+        foreach (var planet in SolarSystemUtility.planetDataDictionary.Values)
+        {
+            GameObject planetInstance = planet.celestialBodyInstance;
+            GameObject parentObject = planetInstance.transform.Find($"{planet.name}_ParentInfo").gameObject;
+            GameObject planetName = parentObject.transform.Find($"{planet.name}_PlanetName").gameObject;
+            planetName.SetActive(isOn);
+        }
+    }
+    private void UpdateInclinationLineVisibility(bool isOn)
+    {
+        foreach (var planet in SolarSystemUtility.planetDataDictionary.Values)
+        {
+            GameObject planetInstance = planet.celestialBodyInstance;
+            GameObject parentObject = planetInstance.transform.Find($"{planet.name}_ParentInfo").gameObject;
+            GameObject inclinationLineText = parentObject.transform.Find($"{planet.name}_InclinationLineText").gameObject;
+            GameObject yAxis = parentObject.transform.Find($"{planet.name}_YAxis").gameObject;
+            if (yAxis == null)
+            {
+                continue;
+            }
+
+            GameObject inclinationLine = planetInstance.transform.Find($"{planet.name}_InclinationLine").gameObject;
+
+            inclinationLine.SetActive(isOn);
+            inclinationLineText.SetActive(isOn);
+            yAxis.SetActive(isOn);
+        }
+    }
+
+    private void UpdateOrbitLineVisibility(bool isOn)
+    {
+        foreach (var planet in SolarSystemUtility.planetDataDictionary.Values)
+        {
+            GameObject planetInstance = planet.celestialBodyInstance;
+            GameObject orbitLine = planetInstance.transform.Find($"{planet.name}_Orbit_Line").gameObject;
+            orbitLine.SetActive(isOn);
+        }
+    }
+
     private void Start()
     {
         uiHandler.UIShowInitial();
         uiHandler.OnUpdateTimeScaleSlider += UpdateTimeScale;
         uiHandler.OnUpdateSizeScaleSlider += UpdateSizeScale;
         uiHandler.OnUpdateDistanceScaleSlider += UpdateDistanceScale;
+
+        uiHandler.onPlanetNameToggleValueChanged.AddListener(UpdatePlanetNameVisibility);
+        uiHandler.onPlanetInclinationLineToggleValueChanged.AddListener(UpdateInclinationLineVisibility);
+        uiHandler.onOrbitLineToggleValueChanged.AddListener(UpdateOrbitLineVisibility);
+
+
         SolarSystemUtility.LoadPlanetData();
     }
 
@@ -254,7 +301,7 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
             planet.celestialBodyInstance.transform.localScale = new(newScale, newScale, newScale);
 
 
-            SolarSystemUtility.CreateInclinationLine(planet, planet.celestialBodyInstance);
+            SolarSystemUtility.CreateInclinationLineAndPlanetName(planet, planet.celestialBodyInstance);
 
             originalPositions[planet.celestialBodyInstance] = planet.celestialBodyInstance.transform.position;
 
@@ -362,10 +409,11 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
 // todo add seasons 
 // todo add pov planets
 // todo show inner structer
-// todo add toggles for inlination planeets w hek 
 // todo add moons 
 // todo add arabic 
-// todo optimize anitmation icons 
+// TODO SATURN RINGS 
+
+
 
 // in update fuction 
 /* foreach (var moon in planet.moons)
