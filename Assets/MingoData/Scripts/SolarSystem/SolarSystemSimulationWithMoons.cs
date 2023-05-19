@@ -56,7 +56,7 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
 
     protected override void OnDrag(Vector2 delta)
     {
-        if (selectedPlanet != null)
+        if (selectedPlanet != null && !uiHandler.isMenuPanelVisible)
         {
 
             uiHandler.ToggleSwipeIcon(false);
@@ -95,6 +95,7 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
         }
         else if (solarSystemPlaced && !uiHandler.isMenuPanelVisible)
         {
+            Debug.Log(uiHandler.isMenuPanelVisible + "debug menuy");
             // Detect the planet touch if no swipe gesture is detected
             DetectPlanetTouch(touchPosition);
 
