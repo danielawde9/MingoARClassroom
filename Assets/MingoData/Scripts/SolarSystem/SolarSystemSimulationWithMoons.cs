@@ -1,12 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.XR;
-using UnityEngine.UI;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
 
@@ -36,23 +32,20 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
     private ARRaycastManager m_RaycastManager;
     private Camera mainCamera;
 
-    public float sizeScale = 1.0f;
-    public float timeScale = 1.0f;
-    public float distanceScale = 1.0f;
+    public float sizeScale;
+    public float timeScale;
+    public float distanceScale;
 
 
     public UIHandler uiHandler;
 
-    private PlanetDataList planetDataList;
     private bool solarSystemPlaced = false;
     private GameObject selectedPlanet;
     private readonly Dictionary<GameObject, Vector3> originalPositions = new();
     private readonly Dictionary<GameObject, Vector3> originalScales = new();
-    private Dictionary<string, PlanetData> planetDataDictionary;
 
-    public GameObject menuPanelController;
-    public GameObject swipeImageIcon;
-    public GameObject tapFloorIconGameObject;
+    private bool isAfterScanShown = false;
+
 
     protected override void Awake()
     {
@@ -66,7 +59,7 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
         if (selectedPlanet != null)
         {
 
-            swipeImageIcon.SetActive(false);
+            uiHandler.ToggleSwipeIcon(false);
 
             float rotationSpeed = 0.1f; // Adjust this value to change the rotation speed
             // Rotate around the y-axis based on x delta (for left/right swipes)
@@ -88,15 +81,19 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
                 var hitPose = s_Hits[0].pose;
 
                 Vector3 placementPosition = hitPose.position;
+                // todo check if they didnt click on the scanned area
 
                 SpawnPlanets(placementPosition);
+
+                uiHandler.UIShowAfterClick();
+
             }
 
-            SolarSystemPlaced();
+            solarSystemPlaced = true;
+            m_PlaneManager.enabled = false;
 
         }
-        //&& !panelController.isMenuPanelVisible
-        else if (solarSystemPlaced )
+        else if (solarSystemPlaced && !uiHandler.isMenuPanelVisible)
         {
             // Detect the planet touch if no swipe gesture is detected
             DetectPlanetTouch(touchPosition);
@@ -112,16 +109,6 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
         }
     }
 
-    private void SolarSystemPlaced()
-    {
-        uiHandler.SetMenuTextTitle( "");
-        solarSystemPlaced = true;
-        m_PlaneManager.enabled = false;
-        menuPanelController.SetActive(true);
-        //returnButton.SetActive(true);
-        tapFloorIconGameObject.SetActive(false);
-    }
-
     void DetectPlanetTouch(Vector2 touchPosition)
     {
         Ray ray = mainCamera.ScreenPointToRay(touchPosition);
@@ -131,8 +118,6 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
             GameObject hitObject = hit.collider.gameObject;
             if (hitObject.CompareTag("CelestialBody"))
             {
-                Debug.Log("CelestialBody touched: " + hitObject.name);
-
                 if (selectedPlanet != null)
                 {
                     // If the touched object is a different planet
@@ -171,7 +156,8 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
         {
             originalScales[planet] = planet.transform.localScale;
         }
-        swipeImageIcon.SetActive(true);
+
+        uiHandler.ToggleSwipeIcon(true);
 
         // Move the selected planet in front of the user by one unit and scale it to 1,1,1
         Vector3 newPosition = Camera.main.transform.position + Camera.main.transform.forward;
@@ -202,44 +188,30 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
         }
     }
 
-    public void UpdateTimeScaleSlider(float value)
+    public void UpdateTimeScale(float value)
     {
         timeScale = value;
     }
 
-    public void UpdateSizeScaleSlider(float value)
+    public void UpdateSizeScale(float value)
     {
         sizeScale = value;
-        
-        foreach (var planetData in planetDataDictionary.Values)
+
+        foreach (var planetData in SolarSystemUtility.planetDataDictionary.Values)
         {
             UpdateCelestialBodyScale(planetData, sizeScale);
         }
     }
 
-    public void UpdateDistanceScaleSlider(float value)
+    public void UpdateDistanceScale(float value)
     {
         distanceScale = value;
 
-        foreach (var body in planetDataDictionary.Values)
+        foreach (var body in SolarSystemUtility.planetDataDictionary.Values)
         {
-            UpdateOrbitLine(body, (body, angle) => SolarSystemUtility.CalculatePlanetPosition((PlanetData)body, angle, distanceScale));
+            SolarSystemUtility.UpdateOrbitLine(body, (body, angle) => SolarSystemUtility.CalculatePlanetPosition((PlanetData)body, angle, distanceScale));
         }
 
-    }
-
-    private void UpdateOrbitLine(CelestialBodyData body, Func<CelestialBodyData, float, Vector3> calculatePosition)
-    {
-        if (body.orbitLineRenderer != null)
-        {
-            float angleStep = 360f / body.orbitLineRenderer.positionCount;
-            for (int i = 0; i < body.orbitLineRenderer.positionCount; i++)
-            {
-                float angle = i * angleStep;
-                Vector3 position = calculatePosition(body, angle);
-                body.orbitLineRenderer.SetPosition(i, position);
-            }
-        }
     }
 
     public void UpdateCelestialBodyScale(CelestialBodyData body, float newSizeScaleFactor)
@@ -254,54 +226,34 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
 
     private void Start()
     {
-        uiHandler.OnUpdateTimeScaleSlider += UpdateTimeScaleSlider;
-        uiHandler.OnUpdateSizeScaleSlider += UpdateSizeScaleSlider;
-        uiHandler.OnUpdateDistanceScaleSlider += UpdateDistanceScaleSlider;
-
-        LoadPlanetData();
-    }
-
-    private void LoadPlanetData()
-    {
-        TextAsset jsonFile = Resources.Load<TextAsset>("SolarSystemWithMoon/planet_data_with_moon");
-        planetDataList = JsonUtility.FromJson<PlanetDataList>(jsonFile.text);
-        foreach (var planetData in planetDataList.planets)
-        {
-            planetData.rotationPeriod *= 3600; // convert hours to seconds
-            planetData.orbitalPeriod *= 86400; // convert days to seconds
-            planetData.perihelion *= 1E6f; // convert 10^6 km to km
-            planetData.aphelion *= 1E6f; // convert 10^6 km to km
-            planetData.distanceFromSun *= 1E6f; // convert 10^6 km to km
-            planetData.orbitalEccentricitySquared = Mathf.Pow(planetData.orbitalEccentricity, 2);
-
-        }
-        planetDataDictionary = planetDataList.planets.ToDictionary(p => p.name, p => p);
+        uiHandler.UIShowInitial();
+        uiHandler.OnUpdateTimeScaleSlider += UpdateTimeScale;
+        uiHandler.OnUpdateSizeScaleSlider += UpdateSizeScale;
+        uiHandler.OnUpdateDistanceScaleSlider += UpdateDistanceScale;
+        SolarSystemUtility.LoadPlanetData();
     }
 
     private void SpawnPlanets(Vector3 placedTouchPosition)
     {
         Quaternion rotationCorrection = Quaternion.Euler(0, 0, 0);
 
-        foreach (var planet in planetDataList.planets)
+        foreach (var planet in SolarSystemUtility.planetDataDictionary.Values)
         {
             GameObject prefab = Resources.Load<GameObject>(planet.prefabName);
 
             planet.rotationAxis = Quaternion.Euler(0, 0, planet.obliquityToOrbit) * Vector3.up;
 
             distanceScale = Constants.initialDistanceScale;
-
-
             Vector3 planetPositionRelativeToSun = SolarSystemUtility.CalculatePlanetPosition(planet, 0f, distanceScale);
-            Vector3 newPosition = placedTouchPosition + planetPositionRelativeToSun * distanceScale;
+            Vector3 newPosition = placedTouchPosition + planetPositionRelativeToSun;
             planet.celestialBodyInstance = Instantiate(prefab, newPosition, rotationCorrection * prefab.transform.rotation * Quaternion.Euler(planet.rotationAxis));
             planet.celestialBodyInstance.name = planet.name;
 
-            sizeScale = Constants.initialSizeScale;
             float newScale = Constants.initialSizeScale * planet.diameter;
             planet.celestialBodyInstance.transform.localScale = new(newScale, newScale, newScale);
 
 
-           SolarSystemUtility.CreateInclinationLine(planet, planet.celestialBodyInstance);
+            SolarSystemUtility.CreateInclinationLine(planet, planet.celestialBodyInstance);
 
             originalPositions[planet.celestialBodyInstance] = planet.celestialBodyInstance.transform.position;
 
@@ -313,7 +265,7 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
 
             if (planet.name == "Sun")
             {
-                SolarSystemUtility.CreateDirectionalLight(planet.celestialBodyInstance.transform, distanceScale, planetDataDictionary);
+                SolarSystemUtility.CreateDirectionalLight(planet.celestialBodyInstance.transform, distanceScale, SolarSystemUtility.planetDataDictionary);
 
                 GameObject directionalLight = GameObject.Find("Directional Light");
                 if (directionalLight != null)
@@ -335,6 +287,11 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
 
     private void Update()
     {
+        if (!isAfterScanShown && m_PlaneManager.trackables.count >= 1)
+        {
+            uiHandler.UIShowAfterScan();
+            isAfterScanShown = true;
+        }
 
         if (!solarSystemPlaced) return;
 
@@ -344,7 +301,7 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
             selectedPlanet.transform.position = Vector3.Lerp(selectedPlanet.transform.position, mainCamera.transform.position + mainCamera.transform.forward * 1f, Time.deltaTime);
         }
 
-        if (SolarSystemUtility.directionalLight != null && planetDataDictionary.TryGetValue("Sun", out var sunData))
+        if (SolarSystemUtility.directionalLight != null && SolarSystemUtility.planetDataDictionary.TryGetValue("Sun", out var sunData))
         {
             Vector3 sunDirection = -sunData.celestialBodyInstance.transform.position.normalized;
             if (sunDirection != Vector3.zero)
@@ -362,7 +319,7 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
     {
         float deltaTime = Time.deltaTime * timeScale;
 
-        foreach (var planetData in planetDataDictionary.Values)
+        foreach (var planetData in SolarSystemUtility.planetDataDictionary.Values)
         {
             // Skip the selected planet for orbital motion calculation
             if (planetData.celestialBodyInstance == selectedPlanet) continue;
@@ -375,7 +332,7 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
             if (planetData.name != "Sun")
             {
                 planetData.orbitProgress += orbitDelta;
-                planetData.celestialBodyInstance.transform.position = SolarSystemUtility.CalculatePlanetPosition(planetData, planetData.orbitProgress,distanceScale);
+                planetData.celestialBodyInstance.transform.position = SolarSystemUtility.CalculatePlanetPosition(planetData, planetData.orbitProgress, distanceScale);
             }
 
             planetData.rotationProgress += Mathf.Abs(rotationDelta);

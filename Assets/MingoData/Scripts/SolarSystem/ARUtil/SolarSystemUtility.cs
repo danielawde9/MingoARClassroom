@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using static SolarSystemSimulationWithMoons;
@@ -7,6 +8,8 @@ using static SolarSystemSimulationWithMoons;
 public class SolarSystemUtility
 {
     public static GameObject directionalLight;
+    public static PlanetDataList planetDataList;
+    public static Dictionary<string, PlanetData> planetDataDictionary;
 
     public static Vector3 CalculatePlanetPosition(PlanetData planet, float angle, float distanceScale)
     {
@@ -132,4 +135,33 @@ public class SolarSystemUtility
         return lineRenderer;
     }
 
+    public static void LoadPlanetData()
+    {
+        TextAsset jsonFile = Resources.Load<TextAsset>("SolarSystemWithMoon/planet_data_with_moon");
+        planetDataList = JsonUtility.FromJson<PlanetDataList>(jsonFile.text);
+        foreach (var planetData in planetDataList.planets)
+        {
+            planetData.rotationPeriod *= 3600; // convert hours to seconds
+            planetData.orbitalPeriod *= 86400; // convert days to seconds
+            planetData.perihelion *= 1E6f; // convert 10^6 km to km
+            planetData.aphelion *= 1E6f; // convert 10^6 km to km
+            planetData.distanceFromSun *= 1E6f; // convert 10^6 km to km
+            planetData.orbitalEccentricitySquared = Mathf.Pow(planetData.orbitalEccentricity, 2);
+
+        }
+        planetDataDictionary = planetDataList.planets.ToDictionary(p => p.name, p => p);
+    }
+    public static void UpdateOrbitLine(CelestialBodyData body, Func<CelestialBodyData, float, Vector3> calculatePosition)
+    {
+        if (body.orbitLineRenderer != null)
+        {
+            float angleStep = 360f / body.orbitLineRenderer.positionCount;
+            for (int i = 0; i < body.orbitLineRenderer.positionCount; i++)
+            {
+                float angle = i * angleStep;
+                Vector3 position = calculatePosition(body, angle);
+                body.orbitLineRenderer.SetPosition(i, position);
+            }
+        }
+    }
 }

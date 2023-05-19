@@ -618,19 +618,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 384687736}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1016334707}
-        m_TargetAssemblyTypeName: SolarSystemSimulationWithMoons, Assembly-CSharp
-        m_MethodName: OnReturnButtonClick
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &384687736
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1001,19 +989,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 518560485}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1016334707}
-        m_TargetAssemblyTypeName: SolarSystemSimulationWithMoons, Assembly-CSharp
-        m_MethodName: OnFastForwardButtonClicked
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &518560485
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1782,6 +1758,10 @@ MonoBehaviour:
   sliderPanelTransitionDuration: 0.5
   isMenuPanelVisible: 0
   buttonImage: {fileID: 2042487221}
+  menuSliderPanel: {fileID: 772092435}
+  scanRoomIconObject: {fileID: 908815470}
+  tapIconObject: {fileID: 1159554388}
+  swipeIconObject: {fileID: 1122629468}
 --- !u!1 &717988502
 GameObject:
   m_ObjectHideFlags: 0
@@ -2148,7 +2128,7 @@ GameObject:
   - component: {fileID: 772092438}
   - component: {fileID: 772092437}
   m_Layer: 5
-  m_Name: SliderPanel
+  m_Name: MenuSliderPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2672,7 +2652,6 @@ GameObject:
   - component: {fileID: 1016334703}
   - component: {fileID: 1016334702}
   - component: {fileID: 1016334707}
-  - component: {fileID: 1016334708}
   m_Layer: 0
   m_Name: XR Origin
   m_TagString: Untagged
@@ -2767,30 +2746,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_PlaneManager: {fileID: 1016334702}
-  sizeScale: 1
   timeScale: 1
-  distanceScale: 1
   uiHandler: {fileID: 664682162}
-  menuPanelController: {fileID: 772092435}
-  swipeImageIcon: {fileID: 1122629468}
-  tapFloorIconGameObject: {fileID: 1159554388}
---- !u!114 &1016334708
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1016334696}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 388bd955196ee0d4bbf07467517fa343, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  planeManager: {fileID: 1016334702}
-  initialObject: {fileID: 908815470}
-  objectAfterScan: {fileID: 1159554388}
-  m_PlaneManager: {fileID: 1016334702}
-  uIHandler: {fileID: 664682162}
 --- !u!1 &1052398253
 GameObject:
   m_ObjectHideFlags: 0
@@ -4116,19 +4073,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1511909428}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1016334707}
-        m_TargetAssemblyTypeName: SolarSystemSimulationWithMoons, Assembly-CSharp
-        m_MethodName: OnPauseButtonClicked
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1511909428
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4933,19 +4878,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1921587055}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1016334707}
-        m_TargetAssemblyTypeName: SolarSystemSimulationWithMoons, Assembly-CSharp
-        m_MethodName: OnPlayButtonClicked
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1921587055
 MonoBehaviour:
   m_ObjectHideFlags: 0

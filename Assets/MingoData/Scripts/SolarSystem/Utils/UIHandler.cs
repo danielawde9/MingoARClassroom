@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -38,26 +39,30 @@ public class UIHandler : BasePressInputHandler
     float startRotation;
     float endRotation;
     public GameObject buttonImage;
+    public GameObject menuSliderPanel;
+    public GameObject scanRoomIconObject;
+    public GameObject tapIconObject;
+    public GameObject swipeIconObject;
 
-    public void OnPauseButtonClicked()
+    private void OnPauseButtonClicked()
     {
         celestialBodyHandler.timeScale = 0;
         UpdateTimeScale(celestialBodyHandler.timeScale);
     }
 
-    public void OnFastForwardButtonClicked()
+    private void OnFastForwardButtonClicked()
     {
         celestialBodyHandler.timeScale *= 2; // double the speed
         UpdateTimeScale(celestialBodyHandler.timeScale);
     }
 
-    public void OnPlayButtonClicked()
+    private void OnPlayButtonClicked()
     {
         celestialBodyHandler.timeScale = 1; // reset to real-time
         UpdateTimeScale(celestialBodyHandler.timeScale);
     }
 
-    public void OnReturnButtonClick()
+    private void OnReturnButtonClick()
     {
         celestialBodyHandler.ReturnSelectedPlanetToOriginalState();
     }
@@ -93,13 +98,28 @@ public class UIHandler : BasePressInputHandler
         sliderPanelRectTransform.anchoredPosition = new Vector2(sliderPanelRectTransform.anchoredPosition.x, -halfHeight);
 
         initialPosition = sliderPanelRectTransform.anchoredPosition;
-        sliderPanelToggleButton.onClick.AddListener(TogglePanel);
+        sliderPanelToggleButton.onClick.AddListener(ToggleMenuSliderPanel);
         targetPosition = initialPosition + new Vector2(0f, sliderPanelRectTransform.rect.height);
+
+
+        Button returnButtonComponent = returnButton.GetComponent<Button>();
+        returnButtonComponent.onClick.AddListener(OnReturnButtonClick);
+
+        Button pauseButtonComponent = pauseButton.GetComponent<Button>();
+        pauseButtonComponent.onClick.AddListener(OnPauseButtonClicked);
+
+        Button fastForwardButtonComponent = fastForwardButton.GetComponent<Button>();
+        fastForwardButtonComponent.onClick.AddListener(OnFastForwardButtonClicked);
+
+        Button playButtonComponent = playButton.GetComponent<Button>();
+        playButtonComponent.onClick.AddListener(OnPlayButtonClicked);
+
+
     }
 
     public void UpdateTimeScale(float value)
     {
-        celestialBodyHandler.UpdateTimeScaleSlider(value); // Notify SolarSystemSimulationWithMoons
+        celestialBodyHandler.UpdateTimeScale(value); // Notify SolarSystemSimulationWithMoons
 
         // Similar conversion logic you have
         string timeText = TimeScaleConversion(value);
@@ -108,7 +128,7 @@ public class UIHandler : BasePressInputHandler
 
     public void UpdateSizeScale(float value)
     {
-        celestialBodyHandler.UpdateSizeScaleSlider(value); // Notify SolarSystemSimulationWithMoons
+        celestialBodyHandler.UpdateSizeScale(value); // Notify SolarSystemSimulationWithMoons
 
         float realLifeSize = 1f / value;
         menuSizeText.text = $"1 meter size in the simulated solar system equals {realLifeSize} kilometer in real life.";
@@ -116,7 +136,7 @@ public class UIHandler : BasePressInputHandler
 
     public void UpdateDistanceScale(float value)
     {
-        celestialBodyHandler.UpdateDistanceScaleSlider(value); // Notify SolarSystemSimulationWithMoons
+        celestialBodyHandler.UpdateDistanceScale(value); // Notify SolarSystemSimulationWithMoons
 
         float realLifeDistance = 1f / value;
         menuDistanceText.text = $"1 meter distance in the simulated solar system equals {realLifeDistance} kilometer in real life.";
@@ -166,7 +186,7 @@ public class UIHandler : BasePressInputHandler
         return timeText;
     }
 
-    public void TogglePanel()
+    public void ToggleMenuSliderPanel()
     {
         isMenuPanelVisible = !isMenuPanelVisible;
 
@@ -209,7 +229,35 @@ public class UIHandler : BasePressInputHandler
 
     public void SetMenuTextTitle(string text)
     {
-        menuTitleText.text= text;
+        menuTitleText.text = text;
     }
 
+    public void UIShowInitial()
+    {
+        scanRoomIconObject.SetActive(true);
+        SetMenuTextTitle("Move your phone to start scanning the room");
+        tapIconObject.SetActive(false);
+        returnButton.SetActive(false);
+        menuSliderPanel.SetActive(false);
+    }
+
+    public void UIShowAfterScan()
+    {
+        scanRoomIconObject.SetActive(false);
+        SetMenuTextTitle("Tap on the scanned area to  place the solar system ");
+        tapIconObject.SetActive(true);
+    }
+
+    public void UIShowAfterClick()
+    {
+        scanRoomIconObject.SetActive(false);
+        tapIconObject.SetActive(false);
+        menuSliderPanel.SetActive(true);
+        returnButton.SetActive(true);
+        SetMenuTextTitle("Click on any planet or click on the menu below to display more settings");
+    }
+    public void ToggleSwipeIcon(bool toggleState)
+    {
+        swipeIconObject.SetActive(toggleState);
+    }
 }
