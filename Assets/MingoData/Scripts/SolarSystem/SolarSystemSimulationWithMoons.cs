@@ -264,6 +264,17 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
             orbitLine.SetActive(isOn);
         }
     }
+    private void UpdateDistanceFromSunVisibility(bool isOn)
+    {
+        foreach (var planet in SolarSystemUtility.planetDataDictionary.Values)
+        {
+            if (planet.name == "Sun")
+                continue;
+
+            GameObject parentDistanceInfo = GameObject.Find($"{planet.name}_ParentDistanceInfo");
+            parentDistanceInfo.SetActive(isOn);
+        }
+    }
 
     private void Start()
     {
@@ -275,7 +286,7 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
         uiHandler.onPlanetNameToggleValueChanged.AddListener(UpdatePlanetNameVisibility);
         uiHandler.onPlanetInclinationLineToggleValueChanged.AddListener(UpdateInclinationLineVisibility);
         uiHandler.onOrbitLineToggleValueChanged.AddListener(UpdateOrbitLineVisibility);
-
+        uiHandler.onDistanceFromSunToggleValueChanged.AddListener(UpdateDistanceFromSunVisibility);
 
         SolarSystemUtility.LoadPlanetData();
     }
@@ -300,7 +311,14 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
             planet.celestialBodyInstance.transform.localScale = new(newScale, newScale, newScale);
 
             SolarSystemUtility.CreateInclinationLineAndPlanetName(planet, planet.celestialBodyInstance);
-            SolarSystemUtility.CreateDistanceFromSunLine(planet);
+
+            if (planet.name != "Sun")
+            {
+                SolarSystemUtility.CreateDistanceFromSunLine(planet);
+            }
+
+            uiHandler.DisplayPlanetColorLegend(SolarSystemUtility.GetPlanetColorLegend());
+
             originalPositions[planet.celestialBodyInstance] = planet.celestialBodyInstance.transform.position;
 
             if (planetPrefab == null)
@@ -416,8 +434,8 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
 // todo if i didnt drag the planet the icon wont be removed 
 // todo smooth transition for selecting planets
 // todo if i didnt select plane it stuck 
-// todo toggle for the distance line and text 
-
+// TODO ADD meteor 
+//IMPACT W PROFESSIONAL W HALA2 SHU B3ML I TRAINED W 
 
 // in update fuction 
 /* foreach (var moon in planet.moons)

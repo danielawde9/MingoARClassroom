@@ -109,7 +109,7 @@ public class SolarSystemUtility
 
     public static GameObject CreateGameObject(string name, GameObject parent, Vector3 localPosition, Quaternion localRotation)
     {
-        GameObject newGameObject = new GameObject(name);
+        GameObject newGameObject = new(name);
         if (parent != null)
         {
             newGameObject.transform.SetParent(parent.transform, false);
@@ -164,31 +164,34 @@ public class SolarSystemUtility
 
     public static void CreateDistanceFromSunLine(PlanetData planet)
     {
+
+        GameObject parentObject = CreateGameObject($"{planet.name}_ParentDistanceInfo", null, Vector3.zero, Quaternion.identity);
+
         // Create line renderer and text mesh for displaying distance from the sun
-        GameObject lineObject = CreateGameObject($"{planet.name}_DistanceLine", null, Vector3.zero, Quaternion.identity);
+        GameObject lineObject = CreateGameObject($"{planet.name}_DistanceLine", parentObject, Vector3.zero, Quaternion.identity);
         Color planetLineColor = GetRandomPlanetLineColor();
 
         planetColorLegend.Add(planet.name, planetLineColor);
         planet.distanceLineRenderer = CreateLineRenderer(lineObject, 0.01f, 0.01f, 2, Vector3.zero, planet.celestialBodyInstance.transform.position, planetLineColor);
 
-        GameObject textDistanceTextObject = CreateGameObject($"{planet.name}_DistanceText", null, Vector3.zero, Quaternion.identity);
+        GameObject textDistanceTextObject = CreateGameObject($"{planet.name}_DistanceText", parentObject, Vector3.zero, Quaternion.identity);
         textDistanceTextObject.AddComponent<FaceCamera>();
 
         // todo fix distance text 
         planet.distanceText = CreateTextMeshPro(textDistanceTextObject, "", 4.25f, planetLineColor, TextAlignmentOptions.Center, new Vector2(2.0f, 2.0f));
 
-        GameObject planetNameObject = CreateGameObject($"{planet.name}_PlanetName", null, Vector3.zero, Quaternion.identity);
+        GameObject planetNameObject = CreateGameObject($"{planet.name}_PlanetName", parentObject, Vector3.zero, Quaternion.identity);
         planetNameObject.AddComponent<FaceCamera>();
 
         planet.distanceTextPlanetName = CreateTextMeshPro(planetNameObject, "", 4.25f, planetLineColor, TextAlignmentOptions.Center, new Vector2(2.0f, 2.0f));
         planet.distanceTextPlanetName.text = planet.name;
     }
 
+    // todo add text legend 
     public static Dictionary<string, Color> GetPlanetColorLegend()
     {
         return planetColorLegend;
     }
-
 
     private static Color GetRandomPlanetLineColor()
     {

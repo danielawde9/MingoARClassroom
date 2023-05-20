@@ -1,4 +1,6 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
+using System.Text;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -49,10 +51,13 @@ public class UIHandler : BasePressInputHandler
     public UnityEvent<bool> onOrbitLineToggleValueChanged;
     [HideInInspector]
     public UnityEvent<bool> onPlanetInclinationLineToggleValueChanged;
+    [HideInInspector]
+    public UnityEvent<bool> onDistanceFromSunToggleValueChanged;
     public Toggle planetNameToggle;
     public Toggle orbitLineToggle;
     public Toggle planetInclinationLineToggle;
-
+    public Toggle planetDistanceFromSunToggle;
+    public TextMeshProUGUI planetColorLegendTextMeshPro;
 
     private void OnPauseButtonClicked()
     {
@@ -127,9 +132,28 @@ public class UIHandler : BasePressInputHandler
         planetNameToggle.onValueChanged.AddListener((isOn) => { onPlanetNameToggleValueChanged?.Invoke(isOn); });
         orbitLineToggle.onValueChanged.AddListener((isOn) => { onOrbitLineToggleValueChanged?.Invoke(isOn); });
         planetInclinationLineToggle.onValueChanged.AddListener((isOn) => { onPlanetInclinationLineToggleValueChanged?.Invoke(isOn); });
-
+        planetDistanceFromSunToggle.onValueChanged.AddListener((isOn) => { onDistanceFromSunToggleValueChanged?.Invoke(isOn); });
 
     }
+
+    public void DisplayPlanetColorLegend(Dictionary<string, Color> planetColorLegend)
+    {
+        StringBuilder legendText = new StringBuilder();
+
+        foreach (KeyValuePair<string, Color> planet in planetColorLegend)
+        {
+            // Append planet name
+            legendText.Append(planet.Key);
+
+            // Append colored square
+            legendText.Append("<color=#");
+            legendText.Append(UnityEngine.ColorUtility.ToHtmlStringRGB(planet.Value));
+            legendText.Append(">■</color>\n"); // Unicode square character
+        }
+
+        planetColorLegendTextMeshPro.text = legendText.ToString();
+    }
+
 
     public void UpdateTimeScale(float value)
     {
