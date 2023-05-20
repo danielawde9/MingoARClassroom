@@ -436,7 +436,24 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
 // todo if i didnt select plane it stuck 
 // TODO ADD meteor 
 //IMPACT W PROFESSIONAL W HALA2 SHU B3ML I TRAINED W 
+//NullReferenceException: Object reference not set to an instance of an object
+//SolarSystemSimulationWithMoons.UpdateDistanceFromSunVisibility(System.Boolean isOn)(at Assets / MingoData / Scripts / SolarSystem / SolarSystemSimulationWithMoons.cs:275)
+//UnityEngine.Events.InvokableCall`1[T1].Invoke(T1 args0)(at<e17944dc3c824e30af7da0a4ebe81ca3>:0)
+//UnityEngine.Events.UnityEvent`1[T0].Invoke(T0 arg0)(at<e17944dc3c824e30af7da0a4ebe81ca3>:0)
+//UIHandler.< Start > b__41_3(System.Boolean isOn)(at Assets / MingoData / Scripts / SolarSystem / Utils / UIHandler.cs:135)
+//UnityEngine.Events.InvokableCall`1[T1].Invoke(T1 args0)(at<e17944dc3c824e30af7da0a4ebe81ca3>:0)
+//UnityEngine.Events.UnityEvent`1[T0].Invoke(T0 arg0)(at<e17944dc3c824e30af7da0a4ebe81ca3>:0)
+//UnityEngine.UI.Toggle.Set(System.Boolean value, System.Boolean sendCallback)(at./ Library / PackageCache / com.unity.ugui@1.0.0 / Runtime / UI / Core / Toggle.cs:284)
+//UnityEngine.UI.Toggle.set_isOn(System.Boolean value)(at./ Library / PackageCache / com.unity.ugui@1.0.0 / Runtime / UI / Core / Toggle.cs:247)
+//UnityEngine.UI.Toggle.InternalToggle()(at./ Library / PackageCache / com.unity.ugui@1.0.0 / Runtime / UI / Core / Toggle.cs:317)
+//UnityEngine.UI.Toggle.OnPointerClick(UnityEngine.EventSystems.PointerEventData eventData)(at./ Library / PackageCache / com.unity.ugui@1.0.0 / Runtime / UI / Core / Toggle.cs:328)
+//UnityEngine.EventSystems.ExecuteEvents.Execute(UnityEngine.EventSystems.IPointerClickHandler handler, UnityEngine.EventSystems.BaseEventData eventData)(at./ Library / PackageCache / com.unity.ugui@1.0.0 / Runtime / EventSystem / ExecuteEvents.cs:57)
+//UnityEngine.EventSystems.ExecuteEvents.Execute[T](UnityEngine.GameObject target, UnityEngine.EventSystems.BaseEventData eventData, UnityEngine.EventSystems.ExecuteEvents + EventFunction`1[T1] functor)(at./ Library / PackageCache / com.unity.ugui@1.0.0 / Runtime / EventSystem / ExecuteEvents.cs:272)
+//UnityEngine.EventSystems.EventSystem:Update()(at./ Library / PackageCache / com.unity.ugui@1.0.0 / Runtime / EventSystem / EventSystem.cs:530)
 
+
+
+    // fix knob 
 // in update fuction 
 /* foreach (var moon in planet.moons)
 {
