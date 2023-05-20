@@ -16,7 +16,7 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
         public float distanceFromSun;
         [NonSerialized] public LineRenderer distanceLineRenderer;
         [NonSerialized] public TextMeshPro distanceText;
-
+        [NonSerialized] public TextMeshPro distanceTextPlanetName;
     }
 
     [Serializable]
@@ -416,6 +416,8 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
 // todo if i didnt drag the planet the icon wont be removed 
 // todo smooth transition for selecting planets
 // todo if i didnt select plane it stuck 
+// todo toggle for the distance line and text 
+
 
 // in update fuction 
 /* foreach (var moon in planet.moons)
