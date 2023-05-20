@@ -3728,7 +3728,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1760703bbd54c04488a8d10600262ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_PlanePrefab: {fileID: 4776765576899091622, guid: 3738bd65ede154463b2c35064b9e5fdb,
+  m_PlanePrefab: {fileID: 4894736120531429549, guid: 72f22fc38a0e9dc41923ba82acd37b92,
     type: 3}
   m_DetectionMode: 1
 --- !u!114 &1016334703
@@ -6241,9 +6241,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefabToSpawn: {fileID: 2070235436534360326, guid: f760a20f367815a45bb978fe2f63efde,
     type: 3}
-  spawnRadius: 4
-  despawnDistance: 4
-  maxSpawnedPrefabs: 100
+  spawnRadius: 5
+  despawnDistance: 5
+  maxSpawnedPrefabs: 10
 --- !u!4 &1827464140
 Transform:
   m_ObjectHideFlags: 0

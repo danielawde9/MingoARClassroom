@@ -33,7 +33,7 @@ public class SolarSystemUtility
     public static void CreateInclinationLineAndPlanetName(PlanetData planet, GameObject planetInstance)
     {
         // Create a parent game object for text and y-axis line. This object doesn't rotate.
-        GameObject parentObject = new(planet.name + "_ParentInfo");
+        GameObject parentObject = new(planet.name + "_FaceCameraGameObjects");
         parentObject.transform.SetParent(planetInstance.transform, false);
         parentObject.transform.localPosition = Vector3.zero;
 
@@ -46,11 +46,13 @@ public class SolarSystemUtility
         GameObject inclinationTextObject = CreateGameObject(planet.name + "_InclinationLineText", parentObject, Vector3.up * 1.1f, Quaternion.identity);
         CreateTextMeshPro(inclinationTextObject, planet.obliquityToOrbit.ToString("F2") + "°", 4.25f, Color.white, TextAlignmentOptions.Center, new Vector2(1.5f, 1.5f));
 
+        GameObject yAxisGameObject = CreateGameObject(planet.name + "_YAxis", parentObject, Vector3.zero, Quaternion.identity);
+
         if (Mathf.Abs(planet.obliquityToOrbit) > 2f)
         {
-            GameObject yAxisGameObject = CreateGameObject(planet.name + "_YAxis", parentObject, Vector3.zero, Quaternion.identity);
             CreateLineRenderer(yAxisGameObject, 0.01f, 0.01f, 2, Vector3.down, Vector3.up, Color.white); // Add color parameter
         }
+
 
         GameObject planetTextObject = CreateGameObject($"{planet.name}_PlanetName", parentObject, Vector3.down * 1.1f, Quaternion.identity);
         CreateTextMeshPro(planetTextObject, planet.name, 4.25f, Color.white, TextAlignmentOptions.Center, new Vector2(1.5f, 1.5f));
@@ -105,11 +107,15 @@ public class SolarSystemUtility
 
     public static GameObject CreateGameObject(string name, GameObject parent, Vector3 localPosition, Quaternion localRotation)
     {
-        GameObject newGameObject = new(name);
-        newGameObject.transform.SetParent(parent.transform, false);
+        GameObject newGameObject = new GameObject(name);
+        if (parent != null)
+        {
+            newGameObject.transform.SetParent(parent.transform, false);
+        }
         newGameObject.transform.SetLocalPositionAndRotation(localPosition, localRotation);
         return newGameObject;
     }
+
 
     public static TextMeshPro CreateTextMeshPro(GameObject gameObject, string text, float fontSize, Color color, TextAlignmentOptions alignment, Vector2 rectTransformSizeDelta)
     {
@@ -152,6 +158,25 @@ public class SolarSystemUtility
 
         }
         planetDataDictionary = planetDataList.planets.ToDictionary(p => p.name, p => p);
+    }
+    public static void CreateDistanceFromSunLine(PlanetData planet)
+    {
+        // Create line renderer and text mesh for displaying distance from the sun
+        GameObject lineObject = CreateGameObject($"{planet.name}_DistanceLine", null, Vector3.zero, Quaternion.identity);
+        planet.distanceLineRenderer = CreateLineRenderer(lineObject, 0.05f, 0.05f, 2, Vector3.zero, planet.celestialBodyInstance.transform.position, Color.white);
+
+        GameObject textObject = CreateGameObject($"{planet.name}_DistanceText", planet.celestialBodyInstance.transform.gameObject, Vector3.zero, Quaternion.identity);
+        planet.distanceText = CreateTextMeshPro(textObject, "", 4.25f, Color.white, TextAlignmentOptions.Center, new Vector2(1.5f, 1.5f));
+    }
+
+    public static void UpdateDistanceFromSunLine(PlanetData planetData)
+    {
+        // Update distance line and text
+        planetData.distanceLineRenderer.SetPosition(0, Vector3.zero);
+        planetData.distanceLineRenderer.SetPosition(1, planetData.celestialBodyInstance.transform.position - planetData.distanceLineRenderer.transform.position);
+
+        planetData.distanceText.transform.position = planetData.celestialBodyInstance.transform.position / 2f;
+        planetData.distanceText.text = $"{planetData.celestialBodyInstance.transform.position.magnitude:N1} KM";
     }
 
     public static void UpdateOrbitLine(CelestialBodyData body, Func<CelestialBodyData, float, Vector3> calculatePosition)

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.XR.ARFoundation;
@@ -13,6 +14,9 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
     {
         public List<MoonData> moons;
         public float distanceFromSun;
+        [NonSerialized] public LineRenderer distanceLineRenderer;
+        [NonSerialized] public TextMeshPro distanceText;
+
     }
 
     [Serializable]
@@ -132,7 +136,6 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
                 {
                     SelectPlanet(hitObject);
                 }
-
             }
         }
     }
@@ -230,7 +233,7 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
         foreach (var planet in SolarSystemUtility.planetDataDictionary.Values)
         {
             GameObject planetInstance = planet.celestialBodyInstance;
-            GameObject parentObject = planetInstance.transform.Find($"{planet.name}_ParentInfo").gameObject;
+            GameObject parentObject = planetInstance.transform.Find($"{planet.name}_FaceCameraGameObjects").gameObject;
             GameObject planetName = parentObject.transform.Find($"{planet.name}_PlanetName").gameObject;
             planetName.SetActive(isOn);
         }
@@ -240,13 +243,9 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
         foreach (var planet in SolarSystemUtility.planetDataDictionary.Values)
         {
             GameObject planetInstance = planet.celestialBodyInstance;
-            GameObject parentObject = planetInstance.transform.Find($"{planet.name}_ParentInfo").gameObject;
+            GameObject parentObject = planetInstance.transform.Find($"{planet.name}_FaceCameraGameObjects").gameObject;
             GameObject inclinationLineText = parentObject.transform.Find($"{planet.name}_InclinationLineText").gameObject;
             GameObject yAxis = parentObject.transform.Find($"{planet.name}_YAxis").gameObject;
-            if (yAxis == null)
-            {
-                continue;
-            }
 
             GameObject inclinationLine = planetInstance.transform.Find($"{planet.name}_InclinationLine").gameObject;
 
@@ -287,25 +286,24 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
 
         foreach (var planet in SolarSystemUtility.planetDataDictionary.Values)
         {
-            GameObject prefab = Resources.Load<GameObject>(planet.prefabName);
+            GameObject planetPrefab = Resources.Load<GameObject>(planet.prefabName);
 
             planet.rotationAxis = Quaternion.Euler(0, 0, planet.obliquityToOrbit) * Vector3.up;
 
             distanceScale = Constants.initialDistanceScale;
             Vector3 planetPositionRelativeToSun = SolarSystemUtility.CalculatePlanetPosition(planet, 0f, distanceScale);
             Vector3 newPosition = placedTouchPosition + planetPositionRelativeToSun;
-            planet.celestialBodyInstance = Instantiate(prefab, newPosition, rotationCorrection * prefab.transform.rotation * Quaternion.Euler(planet.rotationAxis));
+            planet.celestialBodyInstance = Instantiate(planetPrefab, newPosition, rotationCorrection * planetPrefab.transform.rotation * Quaternion.Euler(planet.rotationAxis));
             planet.celestialBodyInstance.name = planet.name;
 
             float newScale = Constants.initialSizeScale * planet.diameter;
             planet.celestialBodyInstance.transform.localScale = new(newScale, newScale, newScale);
 
-
             SolarSystemUtility.CreateInclinationLineAndPlanetName(planet, planet.celestialBodyInstance);
-
+            SolarSystemUtility.CreateDistanceFromSunLine(planet);
             originalPositions[planet.celestialBodyInstance] = planet.celestialBodyInstance.transform.position;
 
-            if (prefab == null)
+            if (planetPrefab == null)
             {
                 Debug.LogError($"Prefab not found for {planet.name}");
                 continue;
@@ -381,6 +379,9 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
             {
                 planetData.orbitProgress += orbitDelta;
                 planetData.celestialBodyInstance.transform.position = SolarSystemUtility.CalculatePlanetPosition(planetData, planetData.orbitProgress, distanceScale);
+
+                SolarSystemUtility.UpdateDistanceFromSunLine(planetData);
+
             }
 
             planetData.rotationProgress += Mathf.Abs(rotationDelta);
@@ -397,8 +398,8 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
             yield return null;
         }
     }
-
 }
+
 // todo day night texture
 // todo add the cockpit
 // todo fix moon orbit line 
@@ -412,8 +413,9 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
 // todo add moons 
 // todo add arabic 
 // TODO SATURN RINGS 
-
-
+// todo if i didnt drag the planet the icon wont be removed 
+// todo smooth transition for selecting planets
+// todo if i didnt select plane it stuck 
 
 // in update fuction 
 /* foreach (var moon in planet.moons)
