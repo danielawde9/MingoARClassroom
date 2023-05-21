@@ -144,6 +144,7 @@ public class UIHandler : BasePressInputHandler
         {
             // Append planet name
             legendText.Append(planet.Key);
+            legendText.Append("   "); // Add spaces for alignment
 
             // Append colored square
             legendText.Append("<color=#");
