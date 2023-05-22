@@ -9,7 +9,8 @@ public class ToggleController : MonoBehaviour
 
     private Vector2 onPosition;
     private Vector2 offPosition;
-
+    public string onColorHex = "#4CD137"; 
+    public string offColorHex = "#DCDDE1";
     private void Start()
     {
         // Calculate the on and off positions
@@ -32,9 +33,24 @@ public class ToggleController : MonoBehaviour
     private void OnToggleValueChanged(bool isOn)
     {
         // Change the color of the background based on the new value
-        toggle.GetComponent<Image>().color = isOn ? new Color(0.29f, 0.078f, 0.215f) : new Color(0.862f, 0.866f, 1f);
+        toggle.GetComponent<Image>().color = isOn ? HexToColor(onColorHex) : HexToColor(offColorHex);
     }
+    public static Color HexToColor(string hex)
+    {
+        hex = hex.Replace("0x", "");
+        hex = hex.Replace("#", "");
+        byte a = 255;
+        byte r = byte.Parse(hex.Substring(0, 2), System.Globalization.NumberStyles.HexNumber);
+        byte g = byte.Parse(hex.Substring(2, 2), System.Globalization.NumberStyles.HexNumber);
+        byte b = byte.Parse(hex.Substring(4, 2), System.Globalization.NumberStyles.HexNumber);
+
+        // Only use alpha if the string has enough characters
+        if (hex.Length == 8)
+        {
+            a = byte.Parse(hex.Substring(6, 2), System.Globalization.NumberStyles.HexNumber);
+        }
+        return new Color32(r, g, b, a);
+    }
+
 }
 
-
-// todo make all toggles off by default

@@ -132,17 +132,13 @@ public class UIHandler : BasePressInputHandler
         Button playButtonComponent = playButton.GetComponent<Button>();
         playButtonComponent.onClick.AddListener(OnPlayButtonClicked);
 
-
-
-
         // NOTE: Make sure to turn of the parent also from inspector weird bug 
         orbitLineToggle.transform.parent.gameObject.SetActive(false);
         planetNameToggle.transform.parent.gameObject.SetActive(false);
         planetInclinationLineToggle.transform.parent.gameObject.SetActive(false);
         planetDistanceFromSunToggle.transform.parent.gameObject.SetActive(false);
 
-
-        orbitLineToggle.isOn = false;
+        orbitLineToggle.isOn = true;
         planetNameToggle.isOn = false;
         planetInclinationLineToggle.isOn = false;  
         planetDistanceFromSunToggle.isOn = false;

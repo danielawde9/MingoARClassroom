@@ -54,9 +54,11 @@ public class SolarSystemUtility
             CreateLineRenderer(yAxisGameObject, 0.01f, 0.01f, 2, Vector3.down, Vector3.up, Color.white); // Add color parameter
         }
 
-
         GameObject planetTextObject = CreateGameObject($"{planet.name}_PlanetName", parentObject, Vector3.down * 1.1f, Quaternion.identity);
         CreateTextMeshPro(planetTextObject, planet.name, 4.25f, Color.white, TextAlignmentOptions.Center, new Vector2(2f, 2f));
+
+        parentObject.SetActive(false);
+
     }
 
     public static void CreateOrbitLine(GameObject planet, CelestialBodyData body, Func<CelestialBodyData, float, Vector3> calculatePosition)
@@ -80,6 +82,9 @@ public class SolarSystemUtility
             Vector3 position = calculatePosition(body, angle);
             lineRenderer.SetPosition(i, position);
         }
+
+        orbitLine.SetActive(true);
+
     }
 
     public static void CreateDirectionalLight(Transform sunTransform, float distanceScale, Dictionary<string, PlanetData> planetDataDictionary)
@@ -183,6 +188,9 @@ public class SolarSystemUtility
 
         planet.distanceTextPlanetName = CreateTextMeshPro(planetNameObject, "", 4.25f, planetLineColor, TextAlignmentOptions.Center, new Vector2(2.0f, 2.0f));
         planet.distanceTextPlanetName.text = planet.name;
+
+        parentObject.SetActive(false);
+
     }
 
     public static Dictionary<string, Color> GetPlanetColorLegend()

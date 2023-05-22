@@ -86,21 +86,23 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
                 var hitPose = s_Hits[0].pose;
 
                 Vector3 placementPosition = hitPose.position;
-                // todo check if they didnt click on the scanned area
-
                 SpawnPlanets(placementPosition);
 
                 uiHandler.UIShowAfterClick();
 
+                solarSystemPlaced = true;
+                m_PlaneManager.enabled = false;
             }
 
-            solarSystemPlaced = true;
-            m_PlaneManager.enabled = false;
+            else
+            {
+                solarSystemPlaced = false;
+                m_PlaneManager.enabled = true;
+            }
 
         }
         else if (solarSystemPlaced && !uiHandler.isMenuPanelVisible)
         {
-            Debug.Log(uiHandler.isMenuPanelVisible + "debug menuy");
             // Detect the planet touch if no swipe gesture is detected
             DetectPlanetTouch(touchPosition);
         }
@@ -227,6 +229,7 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
             GameObject planetInstance = planet.celestialBodyInstance;
             GameObject parentObject = planetInstance.transform.Find($"{planet.name}_FaceCameraGameObjects").gameObject;
             GameObject planetName = parentObject.transform.Find($"{planet.name}_PlanetName").gameObject;
+            parentObject.SetActive(isOn);
             planetName.SetActive(isOn);
         }
     }
@@ -240,7 +243,7 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
             GameObject yAxis = parentObject.transform.Find($"{planet.name}_YAxis").gameObject;
 
             GameObject inclinationLine = planetInstance.transform.Find($"{planet.name}_InclinationLine").gameObject;
-
+            parentObject.SetActive(isOn);
             inclinationLine.SetActive(isOn);
             inclinationLineText.SetActive(isOn);
             yAxis.SetActive(isOn);
