@@ -47,6 +47,7 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
     private GameObject selectedPlanet;
     private readonly Dictionary<GameObject, Vector3> originalPositions = new();
     private readonly Dictionary<GameObject, Vector3> originalScales = new();
+    private GameObject parentDistanceLinesObject;
 
     private bool isAfterScanShown = false;
 
@@ -165,7 +166,7 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
         if (selectedPlanet != null)
         {
             ReturnPlanetToOriginalState();
-            uiHandler.SetPlanetNameTextTitle("");
+            uiHandler.SetPlanetNameTextTitle("The Solar System");
             selectedPlanet = null;
         }
     }
@@ -257,15 +258,12 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
     }
     private void UpdateDistanceFromSunVisibility(bool isOn)
     {
-        foreach (var planet in SolarSystemUtility.planetDataDictionary.Values)
+        foreach (Transform child in parentDistanceLinesObject.transform)
         {
-            if (planet.name == "Sun")
-                continue;
-
-            GameObject parentDistanceInfo = GameObject.Find($"{planet.name}_ParentDistanceInfo");
-            parentDistanceInfo.SetActive(isOn);
+            child.gameObject.SetActive(isOn);
         }
     }
+
 
     private void Start()
     {
@@ -282,8 +280,12 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
         SolarSystemUtility.LoadPlanetData();
     }
 
+
+
     private void SpawnPlanets(Vector3 placedTouchPosition)
     {
+        parentDistanceLinesObject = new GameObject("ParentDistanceLines");
+
         Quaternion rotationCorrection = Quaternion.Euler(0, 0, 0);
 
         foreach (var planet in SolarSystemUtility.planetDataDictionary.Values)
@@ -303,9 +305,11 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
 
             SolarSystemUtility.CreateInclinationLineAndPlanetName(planet, planet.celestialBodyInstance);
 
+
+
             if (planet.name != "Sun")
             {
-                SolarSystemUtility.CreateDistanceFromSunLine(planet);
+                SolarSystemUtility.CreateDistanceFromSunLine(parentDistanceLinesObject, planet);
             }
 
             //uiHandler.DisplayPlanetColorLegend(SolarSystemUtility.GetPlanetColorLegend());

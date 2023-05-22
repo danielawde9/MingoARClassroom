@@ -56,7 +56,7 @@ public class SolarSystemUtility
 
 
         GameObject planetTextObject = CreateGameObject($"{planet.name}_PlanetName", parentObject, Vector3.down * 1.1f, Quaternion.identity);
-        CreateTextMeshPro(planetTextObject, planet.name, 4.25f, Color.white, TextAlignmentOptions.Center, new Vector2(1.5f, 1.5f));
+        CreateTextMeshPro(planetTextObject, planet.name, 4.25f, Color.white, TextAlignmentOptions.Center, new Vector2(2f, 2f));
     }
 
     public static void CreateOrbitLine(GameObject planet, CelestialBodyData body, Func<CelestialBodyData, float, Vector3> calculatePosition)
@@ -161,10 +161,10 @@ public class SolarSystemUtility
     }
 
 
-    public static void CreateDistanceFromSunLine(PlanetData planet)
+    public static void CreateDistanceFromSunLine(GameObject parentDistanceLinesObject, PlanetData planet)
     {
 
-        GameObject parentObject = CreateGameObject($"{planet.name}_ParentDistanceInfo", null, Vector3.zero, Quaternion.identity);
+        GameObject parentObject = CreateGameObject($"{planet.name}_ParentDistanceInfo", parentDistanceLinesObject, Vector3.zero, Quaternion.identity);
 
         // Create line renderer and text mesh for displaying distance from the sun
         GameObject lineObject = CreateGameObject($"{planet.name}_DistanceLine", parentObject, Vector3.zero, Quaternion.identity);

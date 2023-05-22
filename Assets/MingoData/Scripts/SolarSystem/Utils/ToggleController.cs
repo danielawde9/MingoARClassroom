@@ -32,6 +32,9 @@ public class ToggleController : MonoBehaviour
     private void OnToggleValueChanged(bool isOn)
     {
         // Change the color of the background based on the new value
-        toggle.GetComponent<Image>().color = isOn ? new Color(76, 209, 55) : new Color(220, 221, 225);
+        toggle.GetComponent<Image>().color = isOn ? new Color(0.29f, 0.078f, 0.215f) : new Color(0.862f, 0.866f, 1f);
     }
 }
+
+
+// todo make all toggles off by default

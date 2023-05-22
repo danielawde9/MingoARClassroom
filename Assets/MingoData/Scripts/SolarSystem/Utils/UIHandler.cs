@@ -20,6 +20,8 @@ public class UIHandler : BasePressInputHandler
     public UnityAction<float> OnUpdateSizeScaleSlider;
     public UnityAction<float> OnUpdateDistanceScaleSlider;
 
+    public GameObject legendItemPrefab;
+    public Transform legendParent;
 
     public Slider timeScaleSlider;
     public Slider sizeScaleSlider;
@@ -31,21 +33,11 @@ public class UIHandler : BasePressInputHandler
     public TextMeshProUGUI menuPlanetName;
     public TextMeshProUGUI middleIconsHelperText;
 
-    public RectTransform sliderPanelRectTransform;
-    public Button sliderPanelToggleButton;
-    public float sliderPanelTransitionDuration = 1f;
-
-    private Vector2 initialPosition;
-    private Vector2 targetPosition;
-    public bool isMenuPanelVisible = false;
-
-    float startRotation;
-    float endRotation;
-    public GameObject buttonImage;
     public GameObject menuSliderPanel;
     public GameObject scanRoomIconObject;
     public GameObject tapIconObject;
     public GameObject swipeIconObject;
+
     [HideInInspector]
     public UnityEvent<bool> onPlanetNameToggleValueChanged;
     [HideInInspector]
@@ -58,7 +50,17 @@ public class UIHandler : BasePressInputHandler
     public Toggle orbitLineToggle;
     public Toggle planetInclinationLineToggle;
     public Toggle planetDistanceFromSunToggle;
-   // public TextMeshProUGUI planetColorLegendTextMeshPro;
+
+    public GameObject sliderButtonToggleImage;
+
+    public RectTransform sliderPanelRectTransform;
+    public Button sliderPanelToggleButton;
+    public float sliderPanelTransitionDuration = 1f;
+    private Vector2 initialPosition;
+    private Vector2 targetPosition;
+    public bool isMenuPanelVisible = false;
+    float startRotation;
+    float endRotation;
 
     private void OnPauseButtonClicked()
     {
@@ -130,35 +132,36 @@ public class UIHandler : BasePressInputHandler
         Button playButtonComponent = playButton.GetComponent<Button>();
         playButtonComponent.onClick.AddListener(OnPlayButtonClicked);
 
-        planetNameToggle.onValueChanged.AddListener((isOn) => { onPlanetNameToggleValueChanged?.Invoke(isOn); });
-        orbitLineToggle.onValueChanged.AddListener((isOn) => { onOrbitLineToggleValueChanged?.Invoke(isOn); });
-        planetInclinationLineToggle.onValueChanged.AddListener((isOn) => { onPlanetInclinationLineToggleValueChanged?.Invoke(isOn); });
+
+
+
+        // NOTE: Make sure to turn of the parent also from inspector weird bug 
+        orbitLineToggle.transform.parent.gameObject.SetActive(false);
+        planetNameToggle.transform.parent.gameObject.SetActive(false);
+        planetInclinationLineToggle.transform.parent.gameObject.SetActive(false);
+        planetDistanceFromSunToggle.transform.parent.gameObject.SetActive(false);
+
+
+        orbitLineToggle.isOn = false;
+        planetNameToggle.isOn = false;
+        planetInclinationLineToggle.isOn = false;  
+        planetDistanceFromSunToggle.isOn = false;
+
         planetDistanceFromSunToggle.onValueChanged.AddListener((isOn) => { onDistanceFromSunToggleValueChanged?.Invoke(isOn); });
+        orbitLineToggle.onValueChanged.AddListener((isOn) => { onOrbitLineToggleValueChanged?.Invoke(isOn); });
+        planetNameToggle.onValueChanged.AddListener((isOn) => { onPlanetNameToggleValueChanged?.Invoke(isOn); });
+        planetInclinationLineToggle.onValueChanged.AddListener((isOn) => { onPlanetInclinationLineToggleValueChanged?.Invoke(isOn); });
+
+
+        orbitLineToggle.transform.parent.gameObject.SetActive(true);
+        planetNameToggle.transform.parent.gameObject.SetActive(true);
+        planetInclinationLineToggle.transform.parent.gameObject.SetActive(true);
+        planetDistanceFromSunToggle.transform.parent.gameObject.SetActive(true);
+
 
     }
 
-    //public void DisplayPlanetColorLegend(Dictionary<string, Color> planetColorLegend)
-    //{
-    //    StringBuilder legendText = new StringBuilder();
 
-    //    foreach (KeyValuePair<string, Color> planet in planetColorLegend)
-    //    {
-    //        // Append planet name
-    //        legendText.Append(planet.Key);
-    //        legendText.Append("   "); // Add spaces for alignment
-
-    //        // Append colored square
-    //        legendText.Append("<color=#");
-    //        legendText.Append(UnityEngine.ColorUtility.ToHtmlStringRGB(planet.Value));
-    //        legendText.Append(">■</color>\n"); // Unicode square character
-    //    }
-
-    //    planetColorLegendTextMeshPro.text = legendText.ToString();
-    //}
-
-
-    public GameObject legendItemPrefab; // Assign this in the Inspector
-    public Transform legendParent; // Assign this in the Inspector
 
     public void DisplayPlanetColorLegend(Dictionary<string, Color> planetColorLegend)
     {
@@ -258,7 +261,7 @@ public class UIHandler : BasePressInputHandler
     {
         isMenuPanelVisible = !isMenuPanelVisible;
 
-        startRotation = buttonImage.transform.eulerAngles.z;
+        startRotation = sliderButtonToggleImage.transform.eulerAngles.z;
         endRotation = isMenuPanelVisible ? startRotation + 180 : startRotation - 180;
 
         if (isMenuPanelVisible)
@@ -283,7 +286,7 @@ public class UIHandler : BasePressInputHandler
 
             // Rotation
             float currentRotation = Mathf.Lerp(startRotation, endRotation, t);
-            buttonImage.transform.eulerAngles = new Vector3(0, 0, currentRotation);
+            sliderButtonToggleImage.transform.eulerAngles = new Vector3(0, 0, currentRotation);
 
 
             elapsedTime += Time.deltaTime;
@@ -293,7 +296,7 @@ public class UIHandler : BasePressInputHandler
         sliderPanelRectTransform.anchoredPosition = endPosition;
 
         // Ensure the rotation finishes exactly at the end rotation
-        buttonImage.transform.eulerAngles = new Vector3(0, 0, endRotation);
+        sliderButtonToggleImage.transform.eulerAngles = new Vector3(0, 0, endRotation);
 
     }
 
