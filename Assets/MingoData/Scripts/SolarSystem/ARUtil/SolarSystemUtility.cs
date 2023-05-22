@@ -31,7 +31,6 @@ public class SolarSystemUtility
         return new Vector3(x * distanceScale, y * distanceScale, z * distanceScale);
     }
 
-    // todo you can replace gameobject planet instance with planet.celestialBodyInstance.transform.gameObject.transform
     public static void CreateInclinationLineAndPlanetName(PlanetData planet, GameObject planetInstance)
     {
         // Create a parent game object for text and y-axis line. This object doesn't rotate.
@@ -177,7 +176,6 @@ public class SolarSystemUtility
         GameObject textDistanceTextObject = CreateGameObject($"{planet.name}_DistanceText", parentObject, Vector3.zero, Quaternion.identity);
         textDistanceTextObject.AddComponent<FaceCamera>();
 
-        // todo fix distance text 
         planet.distanceText = CreateTextMeshPro(textDistanceTextObject, "", 4.25f, planetLineColor, TextAlignmentOptions.Center, new Vector2(2.0f, 2.0f));
 
         GameObject planetNameObject = CreateGameObject($"{planet.name}_PlanetName", parentObject, Vector3.zero, Quaternion.identity);
@@ -187,7 +185,6 @@ public class SolarSystemUtility
         planet.distanceTextPlanetName.text = planet.name;
     }
 
-    // todo add text legend 
     public static Dictionary<string, Color> GetPlanetColorLegend()
     {
         return planetColorLegend;

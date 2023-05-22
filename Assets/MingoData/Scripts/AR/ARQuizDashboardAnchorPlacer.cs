@@ -134,4 +134,3 @@ public class ARQuizDashboardAnchorPlacer : BasePressInputHandler
 
 
 }
-// todo add text descrption each scene

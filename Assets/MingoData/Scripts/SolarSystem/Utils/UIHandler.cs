@@ -58,7 +58,7 @@ public class UIHandler : BasePressInputHandler
     public Toggle orbitLineToggle;
     public Toggle planetInclinationLineToggle;
     public Toggle planetDistanceFromSunToggle;
-    public TextMeshProUGUI planetColorLegendTextMeshPro;
+   // public TextMeshProUGUI planetColorLegendTextMeshPro;
 
     private void OnPauseButtonClicked()
     {
@@ -137,24 +137,52 @@ public class UIHandler : BasePressInputHandler
 
     }
 
+    //public void DisplayPlanetColorLegend(Dictionary<string, Color> planetColorLegend)
+    //{
+    //    StringBuilder legendText = new StringBuilder();
+
+    //    foreach (KeyValuePair<string, Color> planet in planetColorLegend)
+    //    {
+    //        // Append planet name
+    //        legendText.Append(planet.Key);
+    //        legendText.Append("   "); // Add spaces for alignment
+
+    //        // Append colored square
+    //        legendText.Append("<color=#");
+    //        legendText.Append(UnityEngine.ColorUtility.ToHtmlStringRGB(planet.Value));
+    //        legendText.Append(">■</color>\n"); // Unicode square character
+    //    }
+
+    //    planetColorLegendTextMeshPro.text = legendText.ToString();
+    //}
+
+
+    public GameObject legendItemPrefab; // Assign this in the Inspector
+    public Transform legendParent; // Assign this in the Inspector
+
     public void DisplayPlanetColorLegend(Dictionary<string, Color> planetColorLegend)
     {
-        StringBuilder legendText = new StringBuilder();
+        // Remove all previous legend items
+        foreach (Transform child in legendParent)
+        {
+            Destroy(child.gameObject);
+        }
 
         foreach (KeyValuePair<string, Color> planet in planetColorLegend)
         {
-            // Append planet name
-            legendText.Append(planet.Key);
-            legendText.Append("   "); // Add spaces for alignment
+            // Instantiate new legend item
+            GameObject newLegendItem = Instantiate(legendItemPrefab, legendParent);
 
-            // Append colored square
-            legendText.Append("<color=#");
-            legendText.Append(UnityEngine.ColorUtility.ToHtmlStringRGB(planet.Value));
-            legendText.Append(">■</color>\n"); // Unicode square character
+            // Assign planet name to Text component
+            TextMeshProUGUI textComponent = newLegendItem.GetComponentInChildren<TextMeshProUGUI>();
+            textComponent.text = planet.Key;
+
+            // Assign color to Image component
+            Image imageComponent = newLegendItem.GetComponentInChildren<Image>();
+            imageComponent.color = planet.Value;
         }
-
-        planetColorLegendTextMeshPro.text = legendText.ToString();
     }
+
 
 
     public void UpdateTimeScale(float value)
