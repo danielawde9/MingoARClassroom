@@ -27,21 +27,21 @@ public class TabsController : MonoBehaviour
         {
             int index = i;
             tabButtons[i].onClick.AddListener(() => ShowTab(index));
+
+            TextMeshProUGUI textComponent = tabButtons[i].GetComponentInChildren<TextMeshProUGUI>();
+            if (textComponent != null)
+            {
+                tabTexts.Add(textComponent);
+            }
+            else
+            {
+                Debug.LogError("No TextMeshProUGUI component found for button at index " + i);
+            }
         }
 
-        TextMeshProUGUI textComponent = tabButtons[i].GetComponentInChildren<TextMeshProUGUI>();
-        if (textComponent != null)
-        {
-            tabTexts.Add(textComponent);
-        }
-        else
-        {
-            Debug.LogError("No TextMeshProUGUI component found for button at index " + i);
-        }
         if (tabPanels.Count > 0)
             ShowTab(0);
     }
-
     private void ShowTab(int index)
     {
         if (currentlySelectedTab != -1)

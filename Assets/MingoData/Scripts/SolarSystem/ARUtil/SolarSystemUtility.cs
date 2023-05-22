@@ -47,6 +47,8 @@ public class SolarSystemUtility
         GameObject inclinationTextObject = CreateGameObject(planet.name + "_InclinationLineText", parentObject, Vector3.up * 1.1f, Quaternion.identity);
         CreateTextMeshPro(inclinationTextObject, planet.obliquityToOrbit.ToString("F2") + "°", 4.25f, Color.white, TextAlignmentOptions.Center, new Vector2(1.5f, 1.5f));
 
+        inclinationTextObject.SetActive(false);
+
         GameObject yAxisGameObject = CreateGameObject(planet.name + "_YAxis", parentObject, Vector3.zero, Quaternion.identity);
 
         if (Mathf.Abs(planet.obliquityToOrbit) > 2f)
