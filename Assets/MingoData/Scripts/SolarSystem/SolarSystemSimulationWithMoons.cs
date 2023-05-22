@@ -92,10 +92,13 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
 
                 solarSystemPlaced = true;
                 m_PlaneManager.enabled = false;
+                Debug.Log("yes");
             }
 
             else
             {
+                Debug.Log("no");
+
                 solarSystemPlaced = false;
                 m_PlaneManager.enabled = true;
             }
