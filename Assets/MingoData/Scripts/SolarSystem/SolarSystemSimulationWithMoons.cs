@@ -62,8 +62,8 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
     {
         if (selectedPlanet != null && !uiHandler.isMenuPanelVisible)
         {
-
             uiHandler.ToggleSwipeIcon(false);
+
 
             float rotationSpeed = 0.1f; // Adjust this value to change the rotation speed
             // Rotate around the y-axis based on x delta (for left/right swipes)
@@ -102,15 +102,6 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
             Debug.Log(uiHandler.isMenuPanelVisible + "debug menuy");
             // Detect the planet touch if no swipe gesture is detected
             DetectPlanetTouch(touchPosition);
-
-            // Rotate the selected planet if a swipe gesture is detected
-            if (selectedPlanet != null && m_DragAction.phase == InputActionPhase.Performed)
-            {
-                Vector2 swipeDelta = m_DragAction.ReadValue<Vector2>();
-
-                float rotationSpeed = 0.1f; // Adjust this value to change the rotation speed
-                selectedPlanet.transform.Rotate(0f, -swipeDelta.x * rotationSpeed, 0f, Space.World);
-            }
         }
     }
 
@@ -149,7 +140,8 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
         }
 
         selectedPlanet = planet;
-        uiHandler.SetMenuTextTitle(selectedPlanet.name);
+        uiHandler.SetPlanetNameTextTitle(selectedPlanet.name);
+        uiHandler.ToggleSwipeIcon(true);
 
         // Save the original position and scale of the planet
         if (!originalPositions.ContainsKey(planet))
@@ -160,8 +152,7 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
         {
             originalScales[planet] = planet.transform.localScale;
         }
-
-        uiHandler.ToggleSwipeIcon(true);
+        
 
         // Move the selected planet in front of the user by one unit and scale it to 1,1,1
         Vector3 newPosition = Camera.main.transform.position + Camera.main.transform.forward;
@@ -174,7 +165,7 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
         if (selectedPlanet != null)
         {
             ReturnPlanetToOriginalState();
-            uiHandler.SetMenuTextTitle("");
+            uiHandler.SetPlanetNameTextTitle("");
             selectedPlanet = null;
         }
     }

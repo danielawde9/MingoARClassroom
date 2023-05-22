@@ -28,7 +28,8 @@ public class UIHandler : BasePressInputHandler
     public TextMeshProUGUI menuTimeText;
     public TextMeshProUGUI menuSizeText;
     public TextMeshProUGUI menuDistanceText;
-    public TextMeshProUGUI menuTitleText;
+    public TextMeshProUGUI menuPlanetName;
+    public TextMeshProUGUI middleIconsHelperText;
 
     public RectTransform sliderPanelRectTransform;
     public Button sliderPanelToggleButton;
@@ -235,6 +236,8 @@ public class UIHandler : BasePressInputHandler
         if (isMenuPanelVisible)
         {
             StartCoroutine(TransitionPanel(initialPosition, targetPosition));
+            if (middleIconsHelperText.transform.parent.gameObject.activeInHierarchy)
+                middleIconsHelperText.transform.parent.gameObject.SetActive(false);
         }
         else
         {
@@ -266,15 +269,24 @@ public class UIHandler : BasePressInputHandler
 
     }
 
-    public void SetMenuTextTitle(string text)
+    public void SetPlanetNameTextTitle(string text)
     {
-        menuTitleText.text = text;
+        menuPlanetName.transform.parent.gameObject.SetActive(true);
+        menuPlanetName.text = text;
     }
+
+
+    public void SetMiddleIconsHelperText(string text)
+    {
+        middleIconsHelperText.text = text;
+    }
+
 
     public void UIShowInitial()
     {
+        menuPlanetName.transform.parent.gameObject.SetActive(false);
         scanRoomIconObject.SetActive(true);
-        SetMenuTextTitle("Move your phone to start scanning the room");
+        SetMiddleIconsHelperText("Move your phone to start scanning the room");
         tapIconObject.SetActive(false);
         returnButton.SetActive(false);
         menuSliderPanel.SetActive(false);
@@ -283,7 +295,7 @@ public class UIHandler : BasePressInputHandler
     public void UIShowAfterScan()
     {
         scanRoomIconObject.SetActive(false);
-        SetMenuTextTitle("Tap on the scanned area to  place the solar system ");
+        SetMiddleIconsHelperText("Tap on the scanned area to place the solar system ");
         tapIconObject.SetActive(true);
     }
 
@@ -293,10 +305,17 @@ public class UIHandler : BasePressInputHandler
         tapIconObject.SetActive(false);
         menuSliderPanel.SetActive(true);
         returnButton.SetActive(true);
-        SetMenuTextTitle("Click on any planet or click on the menu below to display more settings");
+        SetMiddleIconsHelperText("Click on any planet or click on the menu below to display more settings");
     }
     public void ToggleSwipeIcon(bool toggleState)
     {
+        SetMiddleIconsHelperText("Touch and drag to move the planet Around");
         swipeIconObject.SetActive(toggleState);
+        ToggleMiddleIconHelper(toggleState);
+    }
+
+    public void ToggleMiddleIconHelper(bool toggleState)
+    {
+        middleIconsHelperText.transform.parent.gameObject.SetActive(toggleState);
     }
 }
