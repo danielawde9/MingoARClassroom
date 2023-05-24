@@ -30,3 +30,16 @@ public class CelestialBodyData
     public LineRenderer orbitLineRenderer;
 
 }
+/*
+diameter in km
+rotation period in hours 
+lenght of day also in hours
+distance from sun 10^6 km 
+Perihelion (10^6 km)
+Aphelion (10^6 km)
+Orbital Period (days)
+Orbital Velocity (km/s)	
+Orbital Inclination (degrees)
+Obliquity to Orbit (degrees)
+rotation speed degrees per second
+*/
