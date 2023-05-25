@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
 using TMPro;
 using Unity.VisualScripting;
@@ -23,6 +24,9 @@ public class UIHandler : BasePressInputHandler
     public GameObject legendItemPrefab;
     public Transform legendParent;
 
+    public GameObject planetInfoItemPrefab;
+    public Transform planetInfoItemParent;
+        
     public Slider timeScaleSlider;
     public Slider sizeScaleSlider;
     public Slider distanceScaleSlider;
@@ -157,6 +161,41 @@ public class UIHandler : BasePressInputHandler
 
     }
 
+    public void DisplayCelestialBodyData(CelestialBodyData celestialBodyData)
+    {
+        // Remove all previous items
+        foreach (Transform child in planetInfoItemParent)
+        {
+            Destroy(child.gameObject);
+        }
+
+        // Using reflection to get all fields in the CelestialBodyData class
+        FieldInfo[] fields = typeof(CelestialBodyData).GetFields();
+
+        foreach (FieldInfo field in fields)
+        {
+            // Instantiate new data item
+            GameObject newDataItem = Instantiate(planetInfoItemPrefab, planetInfoItemParent);
+
+            // Assign field name to Text component
+            TextMeshProUGUI textComponent = newDataItem.GetComponentsInChildren<TextMeshProUGUI>()[0];
+            textComponent.text = field.Name;
+
+            // Assign field value to another Text component
+            TextMeshProUGUI valueComponent = newDataItem.GetComponentsInChildren<TextMeshProUGUI>()[1];
+
+            // Check for null value before trying to convert to string
+            object fieldValue = field.GetValue(celestialBodyData);
+            if (fieldValue != null)
+            {
+                valueComponent.text = fieldValue.ToString();
+            }
+            else
+            {
+                valueComponent.text = "null";
+            }
+        }
+    }
 
 
     public void DisplayPlanetColorLegend(Dictionary<string, Color> planetColorLegend)
@@ -302,6 +341,11 @@ public class UIHandler : BasePressInputHandler
         menuPlanetName.text = text;
     }
 
+    public void SetPlanetInfo(string text)
+    {
+        menuPlanetName.transform.parent.gameObject.SetActive(true);
+        menuPlanetName.text = text;
+    }
 
     public void SetMiddleIconsHelperText(string text)
     {

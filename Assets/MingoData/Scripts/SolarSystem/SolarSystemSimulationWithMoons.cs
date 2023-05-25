@@ -65,7 +65,6 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
         {
             uiHandler.ToggleSwipeIcon(false);
 
-
             float rotationSpeed = 0.1f; // Adjust this value to change the rotation speed
             // Rotate around the y-axis based on x delta (for left/right swipes)
             selectedPlanet.transform.Rotate(0f, -delta.x * rotationSpeed, 0f, Space.World);
@@ -148,6 +147,8 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
         selectedPlanet = planet;
         uiHandler.SetPlanetNameTextTitle(selectedPlanet.name);
         uiHandler.ToggleSwipeIcon(true);
+        CelestialBodyData celestialBodyData = planet.GetComponent<CelestialBodyData>();
+        uiHandler.DisplayCelestialBodyData(celestialBodyData);
 
         // Save the original position and scale of the planet
         if (!originalPositions.ContainsKey(planet))
@@ -320,7 +321,6 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
 
             //uiHandler.DisplayPlanetColorLegend(SolarSystemUtility.GetPlanetColorLegend());
             uiHandler.DisplayPlanetColorLegend(SolarSystemUtility.GetPlanetColorLegend());
-
             originalPositions[planet.celestialBodyInstance] = planet.celestialBodyInstance.transform.position;
 
             if (planetPrefab == null)
@@ -365,6 +365,8 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
         {
             // Move the selected planet to a position in front of the camera
             selectedPlanet.transform.position = Vector3.Lerp(selectedPlanet.transform.position, mainCamera.transform.position + mainCamera.transform.forward * 1f, Time.deltaTime);
+
+
         }
 
         if (SolarSystemUtility.directionalLight != null && SolarSystemUtility.planetDataDictionary.TryGetValue("Sun", out var sunData))
