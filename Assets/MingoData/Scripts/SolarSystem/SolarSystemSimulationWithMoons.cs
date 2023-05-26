@@ -147,8 +147,6 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
         selectedPlanet = planet;
         uiHandler.SetPlanetNameTextTitle(selectedPlanet.name);
         uiHandler.ToggleSwipeIcon(true);
-        CelestialBodyData celestialBodyData = planet.GetComponent<CelestialBodyData>();
-        uiHandler.DisplayCelestialBodyData(celestialBodyData);
 
         // Save the original position and scale of the planet
         if (!originalPositions.ContainsKey(planet))
@@ -159,7 +157,8 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
         {
             originalScales[planet] = planet.transform.localScale;
         }
-        
+
+       uiHandler.DisplayCelestialBodyData(SolarSystemUtility.planetDataDictionary[planet.name]);
 
         // Move the selected planet in front of the user by one unit and scale it to 1,1,1
         Vector3 newPosition = Camera.main.transform.position + Camera.main.transform.forward;

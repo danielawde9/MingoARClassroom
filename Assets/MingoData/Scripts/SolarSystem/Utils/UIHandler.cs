@@ -196,7 +196,7 @@ public class UIHandler : BasePressInputHandler
             }
         }
     }
-
+    // todo set the font and aligment and incase no planet is selected default text
 
     public void DisplayPlanetColorLegend(Dictionary<string, Color> planetColorLegend)
     {
