@@ -132,6 +132,7 @@ public class UIHandler : BasePressInputHandler
         // Add listener to the toggle button
         sliderPanelToggleButton.onClick.AddListener(ToggleMenuSliderPanel);
 
+
         Button returnButtonComponent = returnButton.GetComponent<Button>();
         returnButtonComponent.onClick.AddListener(OnReturnButtonClick);
 
