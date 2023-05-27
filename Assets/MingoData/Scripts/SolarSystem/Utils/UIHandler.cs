@@ -117,11 +117,20 @@ public class UIHandler : BasePressInputHandler
 
 
         float halfHeight = sliderPanelRectTransform.rect.height / 2;
-        sliderPanelRectTransform.anchoredPosition = new Vector2(sliderPanelRectTransform.anchoredPosition.x, -halfHeight);
 
-        initialPosition = sliderPanelRectTransform.anchoredPosition;
+        // Set the height of the sliding panel to be half of the screen's height
+        float screenHeight = Screen.height;
+        float halfScreenHeight = screenHeight / 2;
+
+        sliderPanelRectTransform.sizeDelta = new Vector2(sliderPanelRectTransform.sizeDelta.x, halfScreenHeight);
+        sliderPanelRectTransform.anchoredPosition = new Vector2(sliderPanelRectTransform.anchoredPosition.x, -halfScreenHeight/2);
+
+        // Set the target position of the panel
+        targetPosition = sliderPanelRectTransform.anchoredPosition + new Vector2(0f, halfScreenHeight);
+        initialPosition = new Vector2(sliderPanelRectTransform.anchoredPosition.x, -halfScreenHeight / 2);
+
+        // Add listener to the toggle button
         sliderPanelToggleButton.onClick.AddListener(ToggleMenuSliderPanel);
-        targetPosition = initialPosition + new Vector2(0f, sliderPanelRectTransform.rect.height);
 
 
         Button returnButtonComponent = returnButton.GetComponent<Button>();
