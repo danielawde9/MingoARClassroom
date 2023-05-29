@@ -186,11 +186,10 @@ public class SolarSystemUtility
 
         planet.distanceText = CreateTextMeshPro(textDistanceTextObject, "", 4.25f, planetLineColor, TextAlignmentOptions.Center, new Vector2(2.0f, 2.0f));
 
-        GameObject planetNameObject = CreateGameObject($"{planet.name}_PlanetName", parentObject, Vector3.zero, Quaternion.identity);
-        planetNameObject.AddComponent<FaceCamera>();
-
-        planet.distanceTextPlanetName = CreateTextMeshPro(planetNameObject, "", 4.25f, planetLineColor, TextAlignmentOptions.Center, new Vector2(2.0f, 2.0f));
-        planet.distanceTextPlanetName.text = planet.name;
+        //GameObject planetNameObject = CreateGameObject($"{planet.name}_PlanetName", parentObject, Vector3.zero, Quaternion.identity);
+        //planetNameObject.AddComponent<FaceCamera>();
+        //planet.distanceTextPlanetName = CreateTextMeshPro(planetNameObject, "", 4.25f, planetLineColor, TextAlignmentOptions.Center, new Vector2(2.0f, 2.0f));
+        //planet.distanceTextPlanetName.text = planet.name;
 
         parentObject.SetActive(false);
 
@@ -218,8 +217,9 @@ public class SolarSystemUtility
         planetData.distanceLineRenderer.SetPosition(1, planetData.celestialBodyInstance.transform.position - planetData.distanceLineRenderer.transform.position);
 
         planetData.distanceText.transform.position = planetData.celestialBodyInstance.transform.position / 2f + new Vector3(0,-0.5f) ; 
-        planetData.distanceTextPlanetName.transform.position = planetData.celestialBodyInstance.transform.position / 2f + new Vector3(0, 0.5f); 
+        //planetData.distanceTextPlanetName.transform.position = planetData.celestialBodyInstance.transform.position / 2f + new Vector3(0, 0.5f); 
         planetData.distanceText.text = $"{planetData.celestialBodyInstance.transform.position.magnitude:N1} KM";
+        //todo fix hay
     }
 
     public static void UpdateOrbitLine(CelestialBodyData body, Func<CelestialBodyData, float, Vector3> calculatePosition)

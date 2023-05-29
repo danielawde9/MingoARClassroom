@@ -1,0 +1,13 @@
+{
+  "pauseButton": "Pause",
+  "fastForwardButton": "Fast Forward",
+  "playButton": "Play",
+  "returnButton": "Return",
+  "menuTimeText": "1 second in real life equals {0} second in the simulated solar system.",
+  "menuSizeText": "1 meter size in the simulated solar system equals {0} kilometer in real life.",
+  "menuDistanceText": "1 meter distance in the simulated solar system equals {0} kilometer in real life.",
+  "middleIconsHelperText": "Move your phone to start scanning the room",
+  "scanRoom": "Scan Room",
+  "tapIconObject": "Tap",
+  "swipeIconObject": "Swipe"
+}

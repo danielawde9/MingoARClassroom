@@ -355,12 +355,6 @@ public class UIHandler : MonoBehaviour
         menuPlanetName.text = text;
     }
 
-    public void SetPlanetInfo(string text)
-    {
-        menuPlanetName.transform.parent.gameObject.SetActive(true);
-        menuPlanetName.text = text;
-    }
-
     public void SetMiddleIconsHelperText(string text)
     {
         middleIconsHelperText.text = text;

@@ -16,7 +16,6 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
         public float distanceFromSun;
         [NonSerialized] public LineRenderer distanceLineRenderer;
         [NonSerialized] public TextMeshPro distanceText;
-        [NonSerialized] public TextMeshPro distanceTextPlanetName;
     }
 
     [Serializable]
@@ -86,18 +85,13 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
 
                 Vector3 placementPosition = hitPose.position;
                 SpawnPlanets(placementPosition);
-
                 uiHandler.UIShowAfterClick();
-
                 solarSystemPlaced = true;
                 m_PlaneManager.enabled = false;
-                Debug.Log("yes");
             }
 
             else
             {
-                Debug.Log("no");
-
                 solarSystemPlaced = false;
                 m_PlaneManager.enabled = true;
             }
@@ -163,7 +157,7 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
         // Move the selected planet in front of the user by one unit and scale it to 1,1,1
         Vector3 newPosition = Camera.main.transform.position + Camera.main.transform.forward;
         selectedPlanet.transform.position = newPosition;
-        selectedPlanet.transform.localScale = new Vector3(1, 1, 1);
+        selectedPlanet.transform.localScale = new Vector3(0.75f, 0.75f, 0.75f);
     }
 
     public void ReturnSelectedPlanetToOriginalState()
@@ -421,7 +415,6 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
     }
 }
 
-// todo contnue the tabs
 // todo day night texture
 // todo add the cockpit
 // todo fix moon orbit line 
@@ -441,6 +434,7 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
 // todo remove the back button when not selected 
 // todo remove name fo2 distance 
 // todo login screen mtl ios planet background 
+// todo yellow inclination line is on at first
 
 // in update fuction 
 /* foreach (var moon in planet.moons)

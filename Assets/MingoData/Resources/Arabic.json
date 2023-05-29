@@ -1,0 +1,13 @@
+{
+  "pauseButton": "إيقاف مؤقت",
+  "fastForwardButton": "تقديم سريع",
+  "playButton": "شغل",
+  "returnButton": "عودة",
+  "menuTimeText": "1 ثانية في الحياة الواقعية تعادل {0} ثانية في النظام الشمسي المحاكي.",
+  "menuSizeText": "1 متر في النظام الشمسي المحاكي يعادل {0} كيلومتر في الحياة الواقعية.",
+  "menuDistanceText": "1 متر في النظام الشمسي المحاكي يعادل {0} كيلومتر في الحياة الواقعية.",
+  "middleIconsHelperText": "حرك هاتفك لبدء فحص الغرفة",
+  "scanRoom": "فحص الغرفة",
+  "tapIconObject": "انقر",
+  "swipeIconObject": "مرر"
+}
