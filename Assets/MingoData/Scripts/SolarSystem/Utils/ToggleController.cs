@@ -10,7 +10,7 @@ public class ToggleController : MonoBehaviour
     private Vector2 onPosition;
     private Vector2 offPosition;
     public string onColorHex = "#4CD137"; 
-    public string offColorHex = "#DCDDE1";
+    public string offColorHex = "#2F3640";
     private void Start()
     {
         // Calculate the on and off positions

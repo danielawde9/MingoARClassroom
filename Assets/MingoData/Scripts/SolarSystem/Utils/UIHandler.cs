@@ -8,7 +8,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-public class UIHandler : BasePressInputHandler
+public class UIHandler : MonoBehaviour
 {
     public SolarSystemSimulationWithMoons celestialBodyHandler;
 
@@ -89,6 +89,16 @@ public class UIHandler : BasePressInputHandler
         celestialBodyHandler.ReturnSelectedPlanetToOriginalState();
     }
 
+    private void Awake()
+    {
+        // NOTE: Make sure to turn of the parent also from inspector weird bug 
+        orbitLineToggle.transform.gameObject.SetActive(false);
+        planetNameToggle.transform.gameObject.SetActive(false);
+        planetInclinationLineToggle.transform.gameObject.SetActive(false);
+        planetDistanceFromSunToggle.transform.gameObject.SetActive(false);
+
+    }
+
     private void Start()
     {
         timeScaleSlider.value = Constants.initialTimeScale;
@@ -145,11 +155,6 @@ public class UIHandler : BasePressInputHandler
         Button playButtonComponent = playButton.GetComponent<Button>();
         playButtonComponent.onClick.AddListener(OnPlayButtonClicked);
 
-        // NOTE: Make sure to turn of the parent also from inspector weird bug 
-        orbitLineToggle.transform.parent.gameObject.SetActive(false);
-        planetNameToggle.transform.parent.gameObject.SetActive(false);
-        planetInclinationLineToggle.transform.parent.gameObject.SetActive(false);
-        planetDistanceFromSunToggle.transform.parent.gameObject.SetActive(false);
 
         orbitLineToggle.isOn = true;
         planetNameToggle.isOn = false;
@@ -162,10 +167,10 @@ public class UIHandler : BasePressInputHandler
         planetInclinationLineToggle.onValueChanged.AddListener((isOn) => { onPlanetInclinationLineToggleValueChanged?.Invoke(isOn); });
 
 
-        orbitLineToggle.transform.parent.gameObject.SetActive(true);
-        planetNameToggle.transform.parent.gameObject.SetActive(true);
-        planetInclinationLineToggle.transform.parent.gameObject.SetActive(true);
-        planetDistanceFromSunToggle.transform.parent.gameObject.SetActive(true);
+        orbitLineToggle.transform.gameObject.SetActive(true);
+        planetNameToggle.transform.gameObject.SetActive(true);
+        planetInclinationLineToggle.transform.gameObject.SetActive(true);
+        planetDistanceFromSunToggle.transform.gameObject.SetActive(true);
 
 
     }

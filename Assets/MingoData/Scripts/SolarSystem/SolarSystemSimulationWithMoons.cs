@@ -438,8 +438,9 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
 // todo smooth transition for selecting planets
 // todo if i didnt select plane it stuck 
 // TODO ADD meteor 
-
-
+// todo remove the back button when not selected 
+// todo remove name fo2 distance 
+// todo login screen mtl ios planet background 
 
 // in update fuction 
 /* foreach (var moon in planet.moons)
