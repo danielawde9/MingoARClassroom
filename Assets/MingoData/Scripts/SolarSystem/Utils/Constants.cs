@@ -7,6 +7,7 @@ public static class Constants
     public const float minDistance = 1f / 100000000f;
     public const float maxTime = 2000000f;
     public const float maxSize = 1f / 10000f;
+    public const float minSize = 1f / 100000f;
     public const float maxDistance = 1f / 5000000f;
     public const string MULTIPLE_CHOICE = "multiple_choice";
     public const string TRUE_FALSE = "true_false";

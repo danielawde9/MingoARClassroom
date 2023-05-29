@@ -96,7 +96,7 @@ public class UIHandler : BasePressInputHandler
         distanceScaleSlider.value = Constants.initialDistanceScale;
 
         timeScaleSlider.minValue = Constants.initialTimeScale;
-        sizeScaleSlider.minValue = Constants.initialSizeScale;
+        sizeScaleSlider.minValue = Constants.minSize;
         distanceScaleSlider.minValue = Constants.minDistance;
 
         menuTimeText.text = $"1 second in real life equals {Constants.initialTimeScale} second in the simulated solar system.";
