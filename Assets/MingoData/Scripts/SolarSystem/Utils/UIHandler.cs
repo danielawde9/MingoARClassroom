@@ -1,9 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Text;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -11,37 +9,61 @@ using UnityEngine.UI;
 public class UIHandler : MonoBehaviour
 {
     public SolarSystemSimulationWithMoons celestialBodyHandler;
+    public LocalizationManager localizationManager;
 
+
+    [Header("Panel Menu")]
+    public GameObject menuSliderPanel;
+    public GameObject sliderPanelToggleButton;
+    [HideInInspector]
+    public bool isMenuPanelVisible = false;
+    private GameObject sliderButtonToggleImage;
+    private RectTransform sliderPanelRectTransform;
+    private readonly float sliderPanelTransitionDuration = 0.2f;
+    private Vector2 initialPosition;
+    private Vector2 targetPosition;
+    private float startRotation;
+    private float endRotation;
+
+    [Header("Top Menu Bar")]
+    public TextMeshProUGUI menuPlanetName;
     public GameObject returnButton;
-    public GameObject pauseButton;
-    public GameObject fastForwardButton;
-    public GameObject playButton;
 
-    public UnityAction<float> OnUpdateTimeScaleSlider;
-    public UnityAction<float> OnUpdateSizeScaleSlider;
-    public UnityAction<float> OnUpdateDistanceScaleSlider;
-
+    [Header("Planet Legends List")]
+    public TextMeshProUGUI planetLegendsListTitle;
     public GameObject legendItemPrefab;
     public Transform legendParent;
 
-    public GameObject planetInfoItemPrefab;
-    public Transform planetInfoItemParent;
-        
+    [Header("Solar System Toggle")]
+    public TextMeshProUGUI solarSystemToggleTitle;
+    public Toggle planetDistanceFromSunToggle;
+    public Toggle planetNameToggle;
+    public Toggle planetInclinationLineToggle;
+    public Toggle orbitLineToggle;
+    public TextMeshProUGUI planetDistanceFromSunToggleTextMeshPro;
+    public TextMeshProUGUI planetNameToggleTextMeshPro;
+    public TextMeshProUGUI planetInclinationLineToggleTextMeshPro;
+    public TextMeshProUGUI orbitLineToggleTextMeshPro;
+
+
+    [Header("Solar System Slider")]
+    public TextMeshProUGUI solarSystemSliderTitle;
     public Slider timeScaleSlider;
     public Slider sizeScaleSlider;
     public Slider distanceScaleSlider;
-
     public TextMeshProUGUI menuTimeText;
     public TextMeshProUGUI menuSizeText;
     public TextMeshProUGUI menuDistanceText;
-    public TextMeshProUGUI menuPlanetName;
-    public TextMeshProUGUI middleIconsHelperText;
 
-    public GameObject menuSliderPanel;
+    [Header("Middle Icons Text Helper")]
+    public TextMeshProUGUI middleIconsHelperText;
     public GameObject scanRoomIconObject;
     public GameObject tapIconObject;
     public GameObject swipeIconObject;
 
+    public UnityAction<float> OnUpdateTimeScaleSlider;
+    public UnityAction<float> OnUpdateSizeScaleSlider;
+    public UnityAction<float> OnUpdateDistanceScaleSlider;
     [HideInInspector]
     public UnityEvent<bool> onPlanetNameToggleValueChanged;
     [HideInInspector]
@@ -50,21 +72,20 @@ public class UIHandler : MonoBehaviour
     public UnityEvent<bool> onPlanetInclinationLineToggleValueChanged;
     [HideInInspector]
     public UnityEvent<bool> onDistanceFromSunToggleValueChanged;
-    public Toggle planetNameToggle;
-    public Toggle orbitLineToggle;
-    public Toggle planetInclinationLineToggle;
-    public Toggle planetDistanceFromSunToggle;
 
-    public GameObject sliderButtonToggleImage;
 
-    public RectTransform sliderPanelRectTransform;
-    public Button sliderPanelToggleButton;
-    public float sliderPanelTransitionDuration = 1f;
-    private Vector2 initialPosition;
-    private Vector2 targetPosition;
-    public bool isMenuPanelVisible = false;
-    float startRotation;
-    float endRotation;
+    [Header("Horizontal Buttons")]
+    public TextMeshProUGUI horizontalButtonsTitle;
+    public GameObject pauseButton;
+    public GameObject fastForwardButton;
+    public GameObject playButton;
+    private TextMeshProUGUI pauseButtonTextMeshPro;
+    private TextMeshProUGUI fastForwardButtonTextMeshPro;
+    private TextMeshProUGUI playButtonTextMeshPro;
+
+    [Header("Planet Info 2nd tab List")]
+    public GameObject planetInfoItemPrefab;
+    public Transform planetInfoItemParent;
 
     private void OnPauseButtonClicked()
     {
@@ -91,7 +112,7 @@ public class UIHandler : MonoBehaviour
 
     private void Awake()
     {
-        // NOTE: Make sure to turn of the parent also from inspector weird bug 
+        // NOTE: These are added here due to weird bug, set initally all the toggles are false then in start set them active 
         orbitLineToggle.transform.gameObject.SetActive(false);
         planetNameToggle.transform.gameObject.SetActive(false);
         planetInclinationLineToggle.transform.gameObject.SetActive(false);
@@ -101,48 +122,37 @@ public class UIHandler : MonoBehaviour
 
     private void Start()
     {
-        timeScaleSlider.value = Constants.initialTimeScale;
-        sizeScaleSlider.value = Constants.initialSizeScale;
-        distanceScaleSlider.value = Constants.initialDistanceScale;
+        MenuTransistionInit();
 
-        timeScaleSlider.minValue = Constants.initialTimeScale;
-        sizeScaleSlider.minValue = Constants.minSize;
-        distanceScaleSlider.minValue = Constants.minDistance;
+        ClickListenerInit();
 
-        menuTimeText.text = $"1 second in real life equals {Constants.initialTimeScale} second in the simulated solar system.";
-        menuSizeText.text = $"1 meter size in the simulated solar system equals {1 / Constants.initialSizeScale} kilometer in real life.";
-        menuDistanceText.text = $"1 meter distance in the simulated solar system equals {1 / Constants.initialDistanceScale} kilometer in real life.";
+        SliderInit();
 
-        timeScaleSlider.maxValue = Constants.maxTime;
-        sizeScaleSlider.maxValue = Constants.maxSize;
-        distanceScaleSlider.maxValue = Constants.maxDistance;
+        ToggleInit();
 
-        OnUpdateTimeScaleSlider = new UnityAction<float>(UpdateTimeScale);
-        OnUpdateSizeScaleSlider = new UnityAction<float>(UpdateSizeScale);
-        OnUpdateDistanceScaleSlider = new UnityAction<float>(UpdateDistanceScale);
+        localizationManager.SetLanguage("arabic");
+        localizationManager.LoadLocalizedText();
 
-        timeScaleSlider.onValueChanged.AddListener(OnUpdateTimeScaleSlider);
-        sizeScaleSlider.onValueChanged.AddListener(OnUpdateSizeScaleSlider);
-        distanceScaleSlider.onValueChanged.AddListener(OnUpdateDistanceScaleSlider);
+        menuTimeText.text = string.Format(localizationManager.GetLocalizedValue("1_second_real_life_equals"), Constants.initialTimeScale.ToString());
+        menuSizeText.text = string.Format(localizationManager.GetLocalizedValue("1_meter_size_equals"), 1 / Constants.initialSizeScale);
+        menuDistanceText.text = string.Format(localizationManager.GetLocalizedValue("1_meter_distance_equals"), 1 / Constants.initialDistanceScale);
 
+        pauseButtonTextMeshPro = pauseButton.GetComponent<TextMeshProUGUI>();
+        fastForwardButtonTextMeshPro = fastForwardButton.GetComponent<TextMeshProUGUI>();
+        playButtonTextMeshPro = playButton.GetComponent<TextMeshProUGUI>();
 
-        float halfHeight = sliderPanelRectTransform.rect.height / 2;
+        pauseButtonTextMeshPro.text = localizationManager.GetLocalizedValue("Pause");
+        fastForwardButtonTextMeshPro.text = localizationManager.GetLocalizedValue("Fast_Forward");
+        playButtonTextMeshPro.text = localizationManager.GetLocalizedValue("Play");
+        horizontalButtonsTitle.text = localizationManager.GetLocalizedValue("Playback_Time_Settings");
+        solarSystemSliderTitle.text = localizationManager.GetLocalizedValue("Planet_Settings");
+        solarSystemToggleTitle.text = localizationManager.GetLocalizedValue("Orbital_Settings");
+        planetLegendsListTitle.text = localizationManager.GetLocalizedValue("Planets_legend");
 
-        // Set the height of the sliding panel to be half of the screen's height
-        float screenHeight = Screen.height;
-        float halfScreenHeight = screenHeight / 2;
+    }
 
-        sliderPanelRectTransform.sizeDelta = new Vector2(sliderPanelRectTransform.sizeDelta.x, halfScreenHeight);
-        sliderPanelRectTransform.anchoredPosition = new Vector2(sliderPanelRectTransform.anchoredPosition.x, -halfScreenHeight/2);
-
-        // Set the target position of the panel
-        targetPosition = sliderPanelRectTransform.anchoredPosition + new Vector2(0f, halfScreenHeight);
-        initialPosition = new Vector2(sliderPanelRectTransform.anchoredPosition.x, -halfScreenHeight / 2);
-
-        // Add listener to the toggle button
-        sliderPanelToggleButton.onClick.AddListener(ToggleMenuSliderPanel);
-
-
+    private void ClickListenerInit()
+    {
         Button returnButtonComponent = returnButton.GetComponent<Button>();
         returnButtonComponent.onClick.AddListener(OnReturnButtonClick);
 
@@ -155,10 +165,13 @@ public class UIHandler : MonoBehaviour
         Button playButtonComponent = playButton.GetComponent<Button>();
         playButtonComponent.onClick.AddListener(OnPlayButtonClicked);
 
+    }
 
+    private void ToggleInit()
+    {
         orbitLineToggle.isOn = true;
         planetNameToggle.isOn = false;
-        planetInclinationLineToggle.isOn = false;  
+        planetInclinationLineToggle.isOn = false;
         planetDistanceFromSunToggle.isOn = false;
 
         planetDistanceFromSunToggle.onValueChanged.AddListener((isOn) => { onDistanceFromSunToggleValueChanged?.Invoke(isOn); });
@@ -171,8 +184,50 @@ public class UIHandler : MonoBehaviour
         planetNameToggle.transform.gameObject.SetActive(true);
         planetInclinationLineToggle.transform.gameObject.SetActive(true);
         planetDistanceFromSunToggle.transform.gameObject.SetActive(true);
+    }
 
+    private void MenuTransistionInit()
+    {
+        sliderButtonToggleImage = sliderPanelToggleButton.transform.GetChild(0).gameObject;
+        sliderPanelRectTransform = menuSliderPanel.GetComponent<RectTransform>();
+        float halfHeight = menuSliderPanel.GetComponent<RectTransform>().rect.height / 2;
 
+        // Set the height of the sliding panel to be half of the screen's height
+        float screenHeight = Screen.height;
+        float halfScreenHeight = screenHeight / 2;
+
+        sliderPanelRectTransform.sizeDelta = new Vector2(sliderPanelRectTransform.sizeDelta.x, halfScreenHeight);
+        sliderPanelRectTransform.anchoredPosition = new Vector2(sliderPanelRectTransform.anchoredPosition.x, -halfScreenHeight / 2);
+
+        // Set the target position of the panel
+        targetPosition = sliderPanelRectTransform.anchoredPosition + new Vector2(0f, halfScreenHeight);
+        initialPosition = new Vector2(sliderPanelRectTransform.anchoredPosition.x, -halfScreenHeight / 2);
+
+        // Add listener to the toggle button
+        sliderPanelToggleButton.GetComponent<Button>().onClick.AddListener(ToggleMenuSliderPanel);
+    }
+
+    private void SliderInit()
+    {
+        timeScaleSlider.value = Constants.initialTimeScale;
+        sizeScaleSlider.value = Constants.initialSizeScale;
+        distanceScaleSlider.value = Constants.initialDistanceScale;
+
+        timeScaleSlider.minValue = Constants.initialTimeScale;
+        sizeScaleSlider.minValue = Constants.minSize;
+        distanceScaleSlider.minValue = Constants.minDistance;
+
+        timeScaleSlider.maxValue = Constants.maxTime;
+        sizeScaleSlider.maxValue = Constants.maxSize;
+        distanceScaleSlider.maxValue = Constants.maxDistance;
+
+        OnUpdateTimeScaleSlider = new UnityAction<float>(UpdateTimeScale);
+        OnUpdateSizeScaleSlider = new UnityAction<float>(UpdateSizeScale);
+        OnUpdateDistanceScaleSlider = new UnityAction<float>(UpdateDistanceScale);
+
+        timeScaleSlider.onValueChanged.AddListener(OnUpdateTimeScaleSlider);
+        sizeScaleSlider.onValueChanged.AddListener(OnUpdateSizeScaleSlider);
+        distanceScaleSlider.onValueChanged.AddListener(OnUpdateDistanceScaleSlider);
     }
 
     public void DisplayCelestialBodyData(CelestialBodyData celestialBodyData)
@@ -210,7 +265,6 @@ public class UIHandler : MonoBehaviour
             }
         }
     }
-    // todo set the font and aligment and incase no planet is selected default text
 
     public void DisplayPlanetColorLegend(Dictionary<string, Color> planetColorLegend)
     {
@@ -235,15 +289,13 @@ public class UIHandler : MonoBehaviour
         }
     }
 
-
-
     public void UpdateTimeScale(float value)
     {
         celestialBodyHandler.UpdateTimeScale(value); // Notify SolarSystemSimulationWithMoons
 
         // Similar conversion logic you have
         string timeText = TimeScaleConversion(value);
-        menuTimeText.text = $"1 second in real life equals {timeText} in the simulated solar system.";
+        menuTimeText.text = string.Format(localizationManager.GetLocalizedValue("1_second_real_life_equals"), timeText);
     }
 
     public void UpdateSizeScale(float value)
@@ -251,7 +303,7 @@ public class UIHandler : MonoBehaviour
         celestialBodyHandler.UpdateSizeScale(value); // Notify SolarSystemSimulationWithMoons
 
         float realLifeSize = 1f / value;
-        menuSizeText.text = $"1 meter size in the simulated solar system equals {realLifeSize} kilometer in real life.";
+        menuSizeText.text = string.Format(localizationManager.GetLocalizedValue("1_meter_size_equals"), realLifeSize);
     }
 
     public void UpdateDistanceScale(float value)
@@ -259,7 +311,7 @@ public class UIHandler : MonoBehaviour
         celestialBodyHandler.UpdateDistanceScale(value); // Notify SolarSystemSimulationWithMoons
 
         float realLifeDistance = 1f / value;
-        menuDistanceText.text = $"1 meter distance in the simulated solar system equals {realLifeDistance} kilometer in real life.";
+        menuDistanceText.text = string.Format(localizationManager.GetLocalizedValue("1_meter_distance_equals"), realLifeDistance);
     }
 
     private string TimeScaleConversion(float timeScale)
@@ -349,10 +401,11 @@ public class UIHandler : MonoBehaviour
 
     }
 
-    public void SetPlanetNameTextTitle(string text)
+    public void SetPlanetNameTextTitle(string text, bool showGameObjectHolder)
     {
-        menuPlanetName.transform.parent.gameObject.SetActive(true);
+        menuPlanetName.transform.parent.gameObject.SetActive(showGameObjectHolder);
         menuPlanetName.text = text;
+        returnButton.SetActive(showGameObjectHolder);
     }
 
     public void SetMiddleIconsHelperText(string text)
@@ -360,12 +413,11 @@ public class UIHandler : MonoBehaviour
         middleIconsHelperText.text = text;
     }
 
-
     public void UIShowInitial()
     {
         menuPlanetName.transform.parent.gameObject.SetActive(false);
         scanRoomIconObject.SetActive(true);
-        SetMiddleIconsHelperText("Move your phone to start scanning the room");
+        SetMiddleIconsHelperText(localizationManager.GetLocalizedValue("Move_your_phone_to_start_scanning_the_room"));
         tapIconObject.SetActive(false);
         returnButton.SetActive(false);
         menuSliderPanel.SetActive(false);
@@ -374,7 +426,7 @@ public class UIHandler : MonoBehaviour
     public void UIShowAfterScan()
     {
         scanRoomIconObject.SetActive(false);
-        SetMiddleIconsHelperText("Tap on the scanned area to place the solar system ");
+        SetMiddleIconsHelperText(localizationManager.GetLocalizedValue("Tap_on_the_scanned_area_to_place_the_solar_system"));
         tapIconObject.SetActive(true);
     }
 
@@ -383,12 +435,13 @@ public class UIHandler : MonoBehaviour
         scanRoomIconObject.SetActive(false);
         tapIconObject.SetActive(false);
         menuSliderPanel.SetActive(true);
-        returnButton.SetActive(true);
-        SetMiddleIconsHelperText("Click on any planet or click on the menu below to display more settings");
+        returnButton.SetActive(false);
+        SetMiddleIconsHelperText(localizationManager.GetLocalizedValue("Click_on_any_planet_or_click_on_the_menu_below_to_display_more_settings"));
     }
+
     public void ToggleSwipeIcon(bool toggleState)
     {
-        SetMiddleIconsHelperText("Touch and drag to move the planet Around");
+        SetMiddleIconsHelperText(localizationManager.GetLocalizedValue("Touch_and_drag_to_move_the_planet_Around"));
         swipeIconObject.SetActive(toggleState);
         ToggleMiddleIconHelper(toggleState);
     }

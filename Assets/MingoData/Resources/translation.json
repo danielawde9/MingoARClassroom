@@ -1,0 +1,74 @@
+{
+  "items": [
+    {
+      "key": "1_second_real_life_equals",
+      "english": "1 second in real life equals {0} in the simulated solar system.",
+      "arabic": "1 ثانية في الحياة الحقيقية تعادل {0} في النظام الشمسي المحاكي."
+    },
+    {
+      "key": "1_meter_size_equals",
+      "english": "1 meter size in the simulated solar system equals {0} kilometer in real life.",
+      "arabic": "حجم 1 متر في النظام الشمسي المحاكي يساوي {0} كيلومتر في الحياة الحقيقية."
+    },
+    {
+      "key": "1_meter_distance_equals",
+      "english": "1 meter distance in the simulated solar system equals {0} kilometer in real life.",
+      "arabic": "1 متر مسافة في النظام الشمسي المحاكي يعادل {0} كيلومتر في الحياة الحقيقية."
+    },
+    {
+      "key": "Pause",
+      "english": "Pause",
+      "arabic": "توقف مؤقت"
+    },
+    {
+      "key": "Fast_Forward",
+      "english": "Fast Forward",
+      "arabic": "تقدم سريع"
+    },
+    {
+      "key": "Play",
+      "english": "Play",
+      "arabic": "تشغيل"
+    },
+    {
+      "key": "Playback_Time_Settings",
+      "english": "Playback Time Settings",
+      "arabic": "إعدادات زمن التشغيل"
+    },
+    {
+      "key": "Planet_Settings",
+      "english": "Planet Settings",
+      "arabic": "إعدادات الكوكب"
+    },
+    {
+      "key": "Orbital_Settings",
+      "english": "Orbital Settings",
+      "arabic": "إعدادات المدار"
+    },
+    {
+      "key": "Planets_legend",
+      "english": "Planets legend",
+      "arabic": "أساطير الكواكب"
+    },
+    {
+      "key": "Move_your_phone_to_start_scanning_the_room",
+      "english": "Move your phone to start scanning the room",
+      "arabic": "حرك هاتفك لبدء فحص الغرفة"
+    },
+    {
+      "key": "Tap_on_the_scanned_area_to_place_the_solar_system",
+      "english": "Tap on the scanned area to place the solar system",
+      "arabic": "اضغط على المنطقة التي تم فحصها لوضع النظام الشمسي"
+    },
+    {
+      "key": "Click_on_any_planet_or_click_on_the_menu_below_to_display_more_settings",
+      "english": "Click on any planet or click on the menu below to display more settings",
+      "arabic": "انقر على أي كوكب أو انقر على القائمة أدناه لعرض المزيد من الإعدادات"
+    },
+    {
+      "key": "Touch_and_drag_to_move_the_planet_Around",
+      "english": "Touch and drag to move the planet Around",
+      "arabic": "المس واسحب لتحريك الكوكب حول"
+    }
+  ]
+}

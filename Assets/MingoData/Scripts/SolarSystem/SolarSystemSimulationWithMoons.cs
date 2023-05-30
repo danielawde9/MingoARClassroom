@@ -47,7 +47,7 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
     private readonly Dictionary<GameObject, Vector3> originalPositions = new();
     private readonly Dictionary<GameObject, Vector3> originalScales = new();
     private GameObject parentDistanceLinesObject;
-
+    private const float planetSelectedScale = 0.5f;
     private bool isAfterScanShown = false;
 
 
@@ -139,7 +139,7 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
         }
 
         selectedPlanet = planet;
-        uiHandler.SetPlanetNameTextTitle(selectedPlanet.name);
+        uiHandler.SetPlanetNameTextTitle(selectedPlanet.name, true);
         uiHandler.ToggleSwipeIcon(true);
 
         // Save the original position and scale of the planet
@@ -157,7 +157,7 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
         // Move the selected planet in front of the user by one unit and scale it to 1,1,1
         Vector3 newPosition = Camera.main.transform.position + Camera.main.transform.forward;
         selectedPlanet.transform.position = newPosition;
-        selectedPlanet.transform.localScale = new Vector3(0.75f, 0.75f, 0.75f);
+        selectedPlanet.transform.localScale = new Vector3(planetSelectedScale, planetSelectedScale, planetSelectedScale);
     }
 
     public void ReturnSelectedPlanetToOriginalState()
@@ -165,7 +165,7 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
         if (selectedPlanet != null)
         {
             ReturnPlanetToOriginalState();
-            uiHandler.SetPlanetNameTextTitle("The Solar System");
+            uiHandler.SetPlanetNameTextTitle("", false);
             selectedPlanet = null;
         }
     }
@@ -415,26 +415,26 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
     }
 }
 
-// todo day night texture
-// todo add the cockpit
-// todo fix moon orbit line 
-// todo add solar eclipse
-// todo history of the solar system 
-// todo scale planet with size to include distance 
-// todo add poimt of intresets
+// fixes
+// todo default text for the planet info incase no planet is seletected
+// todo planet selected info set only needed info
+
+// features
+// todo add arabic 
+// todo add songs and click sound
 // todo add seasons 
 // todo add pov planets
-// todo show inner structer
+// todo add solar eclipse
+// todo day night texture
+// todo add the cockpit
 // todo add moons 
-// todo add arabic 
-// TODO SATURN RINGS 
-// todo smooth transition for selecting planets
-// todo if i didnt select plane it stuck 
-// TODO ADD meteor 
-// todo remove the back button when not selected 
-// todo remove name fo2 distance 
-// todo login screen mtl ios planet background 
-// todo yellow inclination line is on at first
+// TODO add meteor 
+// todo add login screen mtl ios planet background 
+// todo add smooth transition for selecting planets
+// TODO add SATURN RINGS 
+// todo add point of intresets on planets
+// todo add history of the solar system 
+// todo add show inner structer
 
 // in update fuction 
 /* foreach (var moon in planet.moons)

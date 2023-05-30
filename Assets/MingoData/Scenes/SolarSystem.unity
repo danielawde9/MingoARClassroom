@@ -223,7 +223,7 @@ GameObject:
   - component: {fileID: 14855138}
   - component: {fileID: 14855137}
   m_Layer: 5
-  m_Name: TimeSettings
+  m_Name: HorizontalButtonsTitleText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -293,8 +293,8 @@ MonoBehaviour:
 
 '
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 2f5c4cc1726211e49a59d672d342206e, type: 2}
-  m_sharedMaterial: {fileID: -5174123422764042941, guid: 2f5c4cc1726211e49a59d672d342206e,
+  m_fontAsset: {fileID: 11400000, guid: 0f0394412b22b6e49ab7b51036fc362d, type: 2}
+  m_sharedMaterial: {fileID: 4495231316275320855, guid: 0f0394412b22b6e49ab7b51036fc362d,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -1394,7 +1394,7 @@ GameObject:
   - component: {fileID: 331867777}
   - component: {fileID: 331867779}
   m_Layer: 5
-  m_Name: OrbitalSettings
+  m_Name: SolarSystemToggleTitleText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1442,8 +1442,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Orbital Settings
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 2f5c4cc1726211e49a59d672d342206e, type: 2}
-  m_sharedMaterial: {fileID: -5174123422764042941, guid: 2f5c4cc1726211e49a59d672d342206e,
+  m_fontAsset: {fileID: 11400000, guid: 0f0394412b22b6e49ab7b51036fc362d, type: 2}
+  m_sharedMaterial: {fileID: 4495231316275320855, guid: 0f0394412b22b6e49ab7b51036fc362d,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -1575,7 +1575,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 200, y: -100}
+  m_AnchoredPosition: {x: 135, y: -100}
   m_SizeDelta: {x: 180, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &384687735
@@ -1872,8 +1872,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Change Time
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 2f5c4cc1726211e49a59d672d342206e, type: 2}
-  m_sharedMaterial: {fileID: -5174123422764042941, guid: 2f5c4cc1726211e49a59d672d342206e,
+  m_fontAsset: {fileID: 11400000, guid: 0f0394412b22b6e49ab7b51036fc362d, type: 2}
+  m_sharedMaterial: {fileID: 4495231316275320855, guid: 0f0394412b22b6e49ab7b51036fc362d,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -2494,8 +2494,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Change Distance
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 2f5c4cc1726211e49a59d672d342206e, type: 2}
-  m_sharedMaterial: {fileID: -5174123422764042941, guid: 2f5c4cc1726211e49a59d672d342206e,
+  m_fontAsset: {fileID: 11400000, guid: 0f0394412b22b6e49ab7b51036fc362d, type: 2}
+  m_sharedMaterial: {fileID: 4495231316275320855, guid: 0f0394412b22b6e49ab7b51036fc362d,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -3104,25 +3104,33 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   celestialBodyHandler: {fileID: 1016334707}
+  localizationManager: {fileID: 1016334708}
+  menuSliderPanel: {fileID: 772092435}
+  sliderPanelToggleButton: {fileID: 1174029314}
+  isMenuPanelVisible: 0
+  menuPlanetName: {fileID: 1618326869}
   returnButton: {fileID: 384687733}
-  pauseButton: {fileID: 1511909425}
-  fastForwardButton: {fileID: 518560482}
-  playButton: {fileID: 1921587052}
+  planetLegendsListTitle: {fileID: 1532080737}
   legendItemPrefab: {fileID: 8928009388362277743, guid: 56b4d558652b0e14c91d477d73a5a583,
     type: 3}
   legendParent: {fileID: 7622102719811871575}
-  planetInfoItemPrefab: {fileID: 1332000304113803821, guid: 97d8944bc47522d4bb31f0a753b1663d,
-    type: 3}
-  planetInfoItemParent: {fileID: 922851108}
+  solarSystemToggleTitle: {fileID: 331867777}
+  planetDistanceFromSunToggle: {fileID: 1175387854}
+  planetNameToggle: {fileID: 1499321345}
+  planetInclinationLineToggle: {fileID: 321942656}
+  orbitLineToggle: {fileID: 589325438}
+  planetDistanceFromSunToggleTextMeshPro: {fileID: 1314796814}
+  planetNameToggleTextMeshPro: {fileID: 1007148641}
+  planetInclinationLineToggleTextMeshPro: {fileID: 1702546275}
+  orbitLineToggleTextMeshPro: {fileID: 1777596911}
+  solarSystemSliderTitle: {fileID: 1866458184}
   timeScaleSlider: {fileID: 1908259661}
   sizeScaleSlider: {fileID: 278886603}
   distanceScaleSlider: {fileID: 2109284399}
   menuTimeText: {fileID: 471438890}
   menuSizeText: {fileID: 861801127}
   menuDistanceText: {fileID: 579038157}
-  menuPlanetName: {fileID: 1618326869}
   middleIconsHelperText: {fileID: 1821653759}
-  menuSliderPanel: {fileID: 772092435}
   scanRoomIconObject: {fileID: 908815470}
   tapIconObject: {fileID: 1159554388}
   swipeIconObject: {fileID: 1122629468}
@@ -3138,15 +3146,13 @@ MonoBehaviour:
   onDistanceFromSunToggleValueChanged:
     m_PersistentCalls:
       m_Calls: []
-  planetNameToggle: {fileID: 1499321345}
-  orbitLineToggle: {fileID: 589325438}
-  planetInclinationLineToggle: {fileID: 321942656}
-  planetDistanceFromSunToggle: {fileID: 1175387854}
-  sliderButtonToggleImage: {fileID: 2042487221}
-  sliderPanelRectTransform: {fileID: 772092436}
-  sliderPanelToggleButton: {fileID: 1174029316}
-  sliderPanelTransitionDuration: 0.5
-  isMenuPanelVisible: 0
+  horizontalButtonsTitle: {fileID: 14855138}
+  pauseButton: {fileID: 1511909425}
+  fastForwardButton: {fileID: 518560482}
+  playButton: {fileID: 1921587052}
+  planetInfoItemPrefab: {fileID: 1332000304113803821, guid: 97d8944bc47522d4bb31f0a753b1663d,
+    type: 3}
+  planetInfoItemParent: {fileID: 922851108}
 --- !u!1 &717988502
 GameObject:
   m_ObjectHideFlags: 0
@@ -3304,8 +3310,9 @@ MonoBehaviour:
       m_Calls: []
   m_text: Fast
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 0f0394412b22b6e49ab7b51036fc362d, type: 2}
+  m_sharedMaterial: {fileID: 4495231316275320855, guid: 0f0394412b22b6e49ab7b51036fc362d,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -3492,7 +3499,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: -1388.8}
+  m_AnchoredPosition: {x: 0, y: -723.6}
   m_SizeDelta: {x: 1080, y: 2516.84}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &772092437
@@ -3937,8 +3944,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Change Size
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 2f5c4cc1726211e49a59d672d342206e, type: 2}
-  m_sharedMaterial: {fileID: -5174123422764042941, guid: 2f5c4cc1726211e49a59d672d342206e,
+  m_fontAsset: {fileID: 11400000, guid: 0f0394412b22b6e49ab7b51036fc362d, type: 2}
+  m_sharedMaterial: {fileID: 4495231316275320855, guid: 0f0394412b22b6e49ab7b51036fc362d,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -4729,8 +4736,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Display Planet Name
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 2f5c4cc1726211e49a59d672d342206e, type: 2}
-  m_sharedMaterial: {fileID: -5174123422764042941, guid: 2f5c4cc1726211e49a59d672d342206e,
+  m_fontAsset: {fileID: 11400000, guid: 0f0394412b22b6e49ab7b51036fc362d, type: 2}
+  m_sharedMaterial: {fileID: 4495231316275320855, guid: 0f0394412b22b6e49ab7b51036fc362d,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -4819,6 +4826,7 @@ GameObject:
   - component: {fileID: 1016334703}
   - component: {fileID: 1016334702}
   - component: {fileID: 1016334707}
+  - component: {fileID: 1016334708}
   m_Layer: 0
   m_Name: XR Origin
   m_TagString: Untagged
@@ -4917,6 +4925,19 @@ MonoBehaviour:
   timeScale: 1
   distanceScale: 1
   uiHandler: {fileID: 664682162}
+--- !u!114 &1016334708
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1016334696}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63ef7ae5cdb58204fbc899ce4dfcf811, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  localizationFile: {fileID: 4900000, guid: f9289066ba75ad943bd4c527fcf7a566, type: 3}
 --- !u!1 &1052398253
 GameObject:
   m_ObjectHideFlags: 0
@@ -5968,8 +5989,9 @@ MonoBehaviour:
       m_Calls: []
   m_text: Play
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 0f0394412b22b6e49ab7b51036fc362d, type: 2}
+  m_sharedMaterial: {fileID: 4495231316275320855, guid: 0f0394412b22b6e49ab7b51036fc362d,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -6226,8 +6248,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Display Distance From Sun
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 2f5c4cc1726211e49a59d672d342206e, type: 2}
-  m_sharedMaterial: {fileID: -5174123422764042941, guid: 2f5c4cc1726211e49a59d672d342206e,
+  m_fontAsset: {fileID: 11400000, guid: 0f0394412b22b6e49ab7b51036fc362d, type: 2}
+  m_sharedMaterial: {fileID: 4495231316275320855, guid: 0f0394412b22b6e49ab7b51036fc362d,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -6906,8 +6928,9 @@ MonoBehaviour:
       m_Calls: []
   m_text: Settings
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 0f0394412b22b6e49ab7b51036fc362d, type: 2}
+  m_sharedMaterial: {fileID: 4495231316275320855, guid: 0f0394412b22b6e49ab7b51036fc362d,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -7511,7 +7534,7 @@ GameObject:
   - component: {fileID: 1532080737}
   - component: {fileID: 1532080739}
   m_Layer: 5
-  m_Name: PlanetLegend
+  m_Name: PlanetLegendsListTitleText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7559,8 +7582,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Planets Legend
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 2f5c4cc1726211e49a59d672d342206e, type: 2}
-  m_sharedMaterial: {fileID: -5174123422764042941, guid: 2f5c4cc1726211e49a59d672d342206e,
+  m_fontAsset: {fileID: 11400000, guid: 0f0394412b22b6e49ab7b51036fc362d, type: 2}
+  m_sharedMaterial: {fileID: 4495231316275320855, guid: 0f0394412b22b6e49ab7b51036fc362d,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -7667,7 +7690,7 @@ GameObject:
   - component: {fileID: 1587830344}
   - component: {fileID: 1587830343}
   m_Layer: 5
-  m_Name: PlanetInfo
+  m_Name: PlanetInfoText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7715,7 +7738,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: Planet's Info
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 2f5c4cc1726211e49a59d672d342206e, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 0f0394412b22b6e49ab7b51036fc362d, type: 2}
   m_sharedMaterial: {fileID: -5174123422764042941, guid: 2f5c4cc1726211e49a59d672d342206e,
     type: 2}
   m_fontSharedMaterials: []
@@ -7780,7 +7803,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &1587830344
@@ -7917,8 +7940,9 @@ MonoBehaviour:
       m_Calls: []
   m_text: Earth
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 0f0394412b22b6e49ab7b51036fc362d, type: 2}
+  m_sharedMaterial: {fileID: 4495231316275320855, guid: 0f0394412b22b6e49ab7b51036fc362d,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -8221,8 +8245,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Display Inclination Line
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 2f5c4cc1726211e49a59d672d342206e, type: 2}
-  m_sharedMaterial: {fileID: -5174123422764042941, guid: 2f5c4cc1726211e49a59d672d342206e,
+  m_fontAsset: {fileID: 11400000, guid: 0f0394412b22b6e49ab7b51036fc362d, type: 2}
+  m_sharedMaterial: {fileID: 4495231316275320855, guid: 0f0394412b22b6e49ab7b51036fc362d,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -8377,8 +8401,9 @@ MonoBehaviour:
       m_Calls: []
   m_text: Pause
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 0f0394412b22b6e49ab7b51036fc362d, type: 2}
+  m_sharedMaterial: {fileID: 4495231316275320855, guid: 0f0394412b22b6e49ab7b51036fc362d,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -8551,7 +8576,7 @@ GameObject:
   - component: {fileID: 1777596911}
   - component: {fileID: 1777596913}
   m_Layer: 5
-  m_Name: PlanetOrbit
+  m_Name: PlanetOrbitText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8601,8 +8626,8 @@ MonoBehaviour:
 
 '
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 2f5c4cc1726211e49a59d672d342206e, type: 2}
-  m_sharedMaterial: {fileID: -5174123422764042941, guid: 2f5c4cc1726211e49a59d672d342206e,
+  m_fontAsset: {fileID: 11400000, guid: 0f0394412b22b6e49ab7b51036fc362d, type: 2}
+  m_sharedMaterial: {fileID: 4495231316275320855, guid: 0f0394412b22b6e49ab7b51036fc362d,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -9080,10 +9105,11 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Move your phone to start scaning the room
+  m_text: 
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 0f0394412b22b6e49ab7b51036fc362d, type: 2}
+  m_sharedMaterial: {fileID: 4495231316275320855, guid: 0f0394412b22b6e49ab7b51036fc362d,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -9107,7 +9133,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 60
+  m_fontSize: 36
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -9173,7 +9199,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1827464139
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9225,7 +9251,7 @@ GameObject:
   - component: {fileID: 1866458184}
   - component: {fileID: 1866458186}
   m_Layer: 5
-  m_Name: PlanetSettings
+  m_Name: SolarSystemSliderTitleText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9275,8 +9301,8 @@ MonoBehaviour:
 
 '
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 2f5c4cc1726211e49a59d672d342206e, type: 2}
-  m_sharedMaterial: {fileID: -5174123422764042941, guid: 2f5c4cc1726211e49a59d672d342206e,
+  m_fontAsset: {fileID: 11400000, guid: 0f0394412b22b6e49ab7b51036fc362d, type: 2}
+  m_sharedMaterial: {fileID: 4495231316275320855, guid: 0f0394412b22b6e49ab7b51036fc362d,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -10007,8 +10033,9 @@ MonoBehaviour:
       m_Calls: []
   m_text: The Solar System
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 0f0394412b22b6e49ab7b51036fc362d, type: 2}
+  m_sharedMaterial: {fileID: 4495231316275320855, guid: 0f0394412b22b6e49ab7b51036fc362d,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

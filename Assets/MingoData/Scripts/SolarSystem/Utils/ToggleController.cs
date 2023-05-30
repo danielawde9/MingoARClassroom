@@ -16,8 +16,9 @@ public class ToggleController : MonoBehaviour
         // Calculate the on and off positions
         float knobWidth = knobTransform.rect.width;
         float toggleWidth = toggle.GetComponent<RectTransform>().rect.width;
-        onPosition = new Vector2(toggleWidth / 2 - knobWidth / 2, 0);
-        offPosition = new Vector2(-toggleWidth / 2 + knobWidth / 2, 0);
+        float offset = 5f; // Adjust the offset value as per your requirement
+        onPosition = new Vector2((toggleWidth / 2 - knobWidth / 2) - offset, 0);
+        offPosition = new Vector2((-toggleWidth / 2 + knobWidth / 2) + offset, 0);
 
         // Add listener for when the value changes
         toggle.onValueChanged.AddListener(OnToggleValueChanged);

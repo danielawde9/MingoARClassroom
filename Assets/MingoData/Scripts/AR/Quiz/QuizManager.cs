@@ -72,21 +72,21 @@ public class QuizManager : MonoBehaviour
         questionText.text = currentQuestion.question;
         correctAnswerIndex = currentQuestion.correctAnswerIndex;
 
-        switch (currentQuestion.type)
-        {
-            case MULTIPLE_CHOICE:
-                DisplayAnswers(currentQuestion.answers, 4);
-                break;
-            case TRUE_FALSE:
-                DisplayAnswers(currentQuestion.answers, 2);
-                break;
-            //case GLOBE_QUESTION:
-            //    break;
-            default:
-                Debug.LogError($"Unsupported question type: {currentQuestion.type}");
-                MoveToNextQuestion();
-                break;
-        }
+        //switch (currentQuestion.type)
+        //{
+        //    case MULTIPLE_CHOICE:
+        //        DisplayAnswers(currentQuestion.answers, 4);
+        //        break;
+        //    case TRUE_FALSE:
+        //        DisplayAnswers(currentQuestion.answers, 2);
+        //        break;
+        //    //case GLOBE_QUESTION:
+        //    //    break;
+        //    default:
+        //        Debug.LogError($"Unsupported question type: {currentQuestion.type}");
+        //        MoveToNextQuestion();
+        //        break;
+        //}
     }
 
     private void Update()

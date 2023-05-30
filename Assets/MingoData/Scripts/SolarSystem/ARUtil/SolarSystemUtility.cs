@@ -7,6 +7,7 @@ using static SolarSystemSimulationWithMoons;
 
 public class SolarSystemUtility
 {
+
     public static GameObject directionalLight;
     public static PlanetDataList planetDataList;
     public static Dictionary<string, PlanetData> planetDataDictionary;
@@ -43,6 +44,8 @@ public class SolarSystemUtility
 
         GameObject inclinationLine = CreateGameObject(planet.name + "_InclinationLine", planetInstance, Vector3.zero, Quaternion.Euler(planet.obliquityToOrbit, 0f, 0f));
         CreateLineRenderer(inclinationLine, 0.01f, 0.01f, 2, Vector3.down, Vector3.up, Color.yellow); // Add color parameter
+
+        inclinationLine.SetActive(false);
 
         GameObject inclinationTextObject = CreateGameObject(planet.name + "_InclinationLineText", parentObject, Vector3.up * 1.1f, Quaternion.identity);
         CreateTextMeshPro(inclinationTextObject, planet.obliquityToOrbit.ToString("F2") + "°", 4.25f, Color.white, TextAlignmentOptions.Center, new Vector2(1.5f, 1.5f));
