@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using ArabicSupport;
+using TMPro;
 
 [System.Serializable]
 public class LocalizationItem
@@ -20,8 +21,8 @@ public class LocalizationManager : MonoBehaviour
 
     private Dictionary<string, LocalizationItem> localizedText;
     private bool isReady = false;
-    private string missingTextString = "Localized text not found";
-    private string currentLanguage = "english";
+    private readonly string missingTextString = "Localized text not found";
+    private string currentLanguage = Constants.AR;
 
     public void LoadLocalizedText()
     {
@@ -46,7 +47,7 @@ public class LocalizationManager : MonoBehaviour
         }
     }
 
-    public string GetLocalizedValue(string key, params object[] formatArgs)
+    public string GetLocalizedValue(string key, TextMeshProUGUI textComponent , params object[] formatArgs)
     {
         string result = missingTextString;
         if (localizedText.ContainsKey(key))
@@ -54,15 +55,14 @@ public class LocalizationManager : MonoBehaviour
             switch (currentLanguage)
             {
                 case "english":
-                    Debug.Log("English format string: " + localizedText[key].english);
-                    Debug.Log("English format args: " + string.Join(", ", formatArgs));
                     result = string.Format(localizedText[key].english, formatArgs);
+                    textComponent.alignment = TextAlignmentOptions.MidlineLeft;
                     break;
                 case "arabic":
-                    Debug.Log("Arabic format string before fix: " + localizedText[key].arabic);
-                    Debug.Log("Arabic format args: " + string.Join(", ", formatArgs));
                     result = string.Format(localizedText[key].arabic, formatArgs);
                     result = ArabicFixer.Fix(result, true, true);
+                    textComponent.alignment = TextAlignmentOptions.MidlineRight;
+
                     break;
             }
         }
@@ -70,6 +70,10 @@ public class LocalizationManager : MonoBehaviour
         return result;
     }
 
+    public string GetCurrentLanguage()
+    {
+        return currentLanguage;
+    }
 
     public void SetLanguage(string language)
     {

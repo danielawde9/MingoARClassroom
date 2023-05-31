@@ -9,4 +9,6 @@ public static class Constants
     public const float maxSize = 1f / 10000f;
     public const float minSize = 1f / 100000f;
     public const float maxDistance = 1f / 5000000f;
+    public const string AR = "arabic";
+
 }

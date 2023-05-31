@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3563573581608091826}
   - component: {fileID: 6004011784039172067}
   m_Layer: 5
-  m_Name: LegendColorImae
+  m_Name: LegendColorImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

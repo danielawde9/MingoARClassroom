@@ -152,7 +152,7 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
             originalScales[planet] = planet.transform.localScale;
         }
 
-       uiHandler.DisplayCelestialBodyData(SolarSystemUtility.planetDataDictionary[planet.name]);
+       uiHandler.SetCelestialBodyData(SolarSystemUtility.planetDataDictionary[planet.name]);
 
         // Move the selected planet in front of the user by one unit and scale it to 1,1,1
         Vector3 newPosition = Camera.main.transform.position + Camera.main.transform.forward;
@@ -313,7 +313,7 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
             }
 
             //uiHandler.DisplayPlanetColorLegend(SolarSystemUtility.GetPlanetColorLegend());
-            uiHandler.DisplayPlanetColorLegend(SolarSystemUtility.GetPlanetColorLegend());
+            uiHandler.SetPlanetColorLegend(SolarSystemUtility.GetPlanetColorLegend());
             originalPositions[planet.celestialBodyInstance] = planet.celestialBodyInstance.transform.position;
 
             if (planetPrefab == null)

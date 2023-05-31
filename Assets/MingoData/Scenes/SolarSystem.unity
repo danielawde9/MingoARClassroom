@@ -1250,6 +1250,7 @@ MonoBehaviour:
   toggle: {fileID: 321942656}
   knobTransform: {fileID: 865328605}
   speed: 5
+  localizationManager: {fileID: 1016334708}
   onColorHex: '#4CD137'
   offColorHex: '#2F3640'
 --- !u!114 &321942654
@@ -2604,6 +2605,7 @@ MonoBehaviour:
   toggle: {fileID: 589325438}
   knobTransform: {fileID: 617882919}
   speed: 5
+  localizationManager: {fileID: 1016334708}
   onColorHex: '#4CD137'
   offColorHex: '#2F3640'
 --- !u!114 &589325436
@@ -5610,6 +5612,7 @@ MonoBehaviour:
   toggle: {fileID: 1175387854}
   knobTransform: {fileID: 419026852}
   speed: 5
+  localizationManager: {fileID: 1016334708}
   onColorHex: '#4CD137'
   offColorHex: '#2F3640'
 --- !u!114 &1175387852
@@ -7064,6 +7067,7 @@ MonoBehaviour:
   toggle: {fileID: 1499321345}
   knobTransform: {fileID: 1328873386}
   speed: 5
+  localizationManager: {fileID: 1016334708}
   onColorHex: '#4CD137'
   offColorHex: '#2F3640'
 --- !u!114 &1499321343
