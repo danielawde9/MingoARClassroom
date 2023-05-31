@@ -69,6 +69,231 @@
       "key": "Touch_and_drag_to_move_the_planet_Around",
       "english": "Touch and drag to move the planet Around",
       "arabic": "المس واسحب لتحريك الكوكب حول"
+    },
+    {
+      "key": "Years",
+      "english": "years",
+      "arabic": "سنوات"
+    },
+    {
+      "key": "Months",
+      "english": "months",
+      "arabic": "أشهر"
+    },
+    {
+      "key": "Weeks",
+      "english": "weeks",
+      "arabic": "أسابيع"
+    },
+    {
+      "key": "Days",
+      "english": "days",
+      "arabic": "أيام"
+    },
+    {
+      "key": "Hours",
+      "english": "hours",
+      "arabic": "ساعات"
+    },
+    {
+      "key": "Minutes",
+      "english": "minutes",
+      "arabic": "دقائق"
+    },
+    {
+      "key": "Seconds",
+      "english": "seconds",
+      "arabic": "ثواني"
+    },
+    {
+      "key": "Display_Distance_From_Sun",
+      "english": "Display Distance From Sun",
+      "arabic": "عرض المسافة من الشمس"
+    },
+    {
+      "key": "Display_Planet_Name",
+      "english": "Display Planet Name",
+      "arabic": "عرض اسم الكوكب"
+    },
+    {
+      "key": "Display_Inclination_Line",
+      "english": "Display Inclination Line",
+      "arabic": "عرض خط الميل"
+    },
+    {
+      "key": "Display_Planet_Orbit",
+      "english": "Display Planet Orbit",
+      "arabic": "عرض مدار الكوكب"
+    },
+    {
+      "key": "Settings",
+      "english": "Settings",
+      "arabic": "الإعدادات"
+    },
+    {
+      "key": "The_Solar_System",
+      "english": "The Solar System",
+      "arabic": "النظام الشمسي"
+    },
+    {
+      "key": "Mercury",
+      "english": "Mercury",
+      "arabic": "عطارد"
+    },
+    {
+      "key": "Venus",
+      "english": "Venus",
+      "arabic": "الزهرة"
+    },
+    {
+      "key": "Earth",
+      "english": "Earth",
+      "arabic": "الأرض"
+    },
+    {
+      "key": "Mount_Everest",
+      "english": "Mount Everest",
+      "arabic": "جبل إيفرست"
+    },
+    {
+      "key": "Grand_Canyon",
+      "english": "Grand Canyon",
+      "arabic": "كانيون غراند"
+    },
+    {
+      "key": "Mars",
+      "english": "Mars",
+      "arabic": "المريخ"
+    },
+    {
+      "key": "Phobos",
+      "english": "Phobos",
+      "arabic": "فوبوس"
+    },
+    {
+      "key": "Deimos",
+      "english": "Deimos",
+      "arabic": "ديموس"
+    },
+    {
+      "key": "Jupiter",
+      "english": "Jupiter",
+      "arabic": "المشتري"
+    },
+    {
+      "key": "Io",
+      "english": "Io",
+      "arabic": "آيو"
+    },
+    {
+      "key": "Europa",
+      "english": "Europa",
+      "arabic": "أوروبا"
+    },
+    {
+      "key": "Ganymede",
+      "english": "Ganymede",
+      "arabic": "جانيميد"
+    },
+    {
+      "key": "Callisto",
+      "english": "Callisto",
+      "arabic": "كاليستو"
+    },
+    {
+      "key": "Saturn",
+      "english": "Saturn",
+      "arabic": "زحل"
+    },
+    {
+      "key": "Titan",
+      "english": "Titan",
+      "arabic": "تايتان"
+    },
+    {
+      "key": "Enceladus",
+      "english": "Enceladus",
+      "arabic": "انسيلادوس"
+    },
+    {
+      "key": "Mimas",
+      "english": "Mimas",
+      "arabic": "ميماس"
+    },
+    {
+      "key": "Iapetus",
+      "english": "Iapetus",
+      "arabic": "إيابيتوس"
+    },
+    {
+      "key": "Dione",
+      "english": "Dione",
+      "arabic": "ديوني"
+    },
+    {
+      "key": "SaturnRing",
+      "english": "SaturnRing",
+      "arabic": "حلقة زحل"
+    },
+    {
+      "key": "Uranus",
+      "english": "Uranus",
+      "arabic": "أورانوس"
+    },
+    {
+      "key": "Titania",
+      "english": "Titania",
+      "arabic": "تيتانيا"
+    },
+    {
+      "key": "Ariel",
+      "english": "Ariel",
+      "arabic": "آرييل"
+    },
+    {
+      "key": "Umbriel",
+      "english": "Umbriel",
+      "arabic": "أمبرييل"
+    },
+    {
+      "key": "Oberon",
+      "english": "Oberon",
+      "arabic": "أوبيرون"
+    },
+    {
+      "key": "Miranda",
+      "english": "Miranda",
+      "arabic": "ميراندا"
+    },
+    {
+      "key": "Neptune",
+      "english": "Neptune",
+      "arabic": "نبتون"
+    },
+    {
+      "key": "Triton",
+      "english": "Triton",
+      "arabic": "تريتون"
+    },
+    {
+      "key": "Nereid",
+      "english": "Nereid",
+      "arabic": "نيريد"
+    },
+    {
+      "key": "Pluto",
+      "english": "Pluto",
+      "arabic": "بلوتو"
+    },
+    {
+      "key": "Charon",
+      "english": "Charon",
+      "arabic": "شارون"
+    },
+    {
+      "key": "Sun",
+      "english": "Sun",
+      "arabic": "الشمس"
     }
   ]
 }

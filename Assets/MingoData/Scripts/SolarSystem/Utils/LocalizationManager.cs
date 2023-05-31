@@ -62,7 +62,7 @@ public class LocalizationManager : MonoBehaviour
                     Debug.Log("Arabic format string before fix: " + localizedText[key].arabic);
                     Debug.Log("Arabic format args: " + string.Join(", ", formatArgs));
                     result = string.Format(localizedText[key].arabic, formatArgs);
-                    result = ArabicFixer.Fix(result);
+                    result = ArabicFixer.Fix(result, true, true);
                     break;
             }
         }

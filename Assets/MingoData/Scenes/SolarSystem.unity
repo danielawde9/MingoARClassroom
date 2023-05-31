@@ -689,7 +689,6 @@ GameObject:
   - component: {fileID: 216993475}
   - component: {fileID: 216993477}
   - component: {fileID: 216993476}
-  - component: {fileID: 216993478}
   m_Layer: 5
   m_Name: TabsLayout
   m_TagString: Untagged
@@ -765,28 +764,6 @@ MonoBehaviour:
   m_ChildScaleWidth: 1
   m_ChildScaleHeight: 1
   m_ReverseArrangement: 0
---- !u!114 &216993478
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 216993474}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 66943424ac4cf40439f0ba9e1fb0bf2a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tabButtons:
-  - {fileID: 1298678991}
-  - {fileID: 810710056}
-  tabPanels:
-  - {fileID: 319203921}
-  - {fileID: 1642278452}
-  selectedButtonColor: {r: 0, g: 0, b: 0, a: 0}
-  deselectedButtonColor: {r: 0, g: 0, b: 0, a: 0}
-  selectedTextColor: {r: 0, g: 0, b: 0, a: 0}
-  deselectedTextColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!1 &231280011
 GameObject:
   m_ObjectHideFlags: 0
@@ -3105,6 +3082,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   celestialBodyHandler: {fileID: 1016334707}
   localizationManager: {fileID: 1016334708}
+  tabButtons:
+  - {fileID: 1298678991}
+  - {fileID: 810710056}
+  tabPanels:
+  - {fileID: 319203921}
+  - {fileID: 1642278452}
   menuSliderPanel: {fileID: 772092435}
   sliderPanelToggleButton: {fileID: 1174029314}
   isMenuPanelVisible: 0

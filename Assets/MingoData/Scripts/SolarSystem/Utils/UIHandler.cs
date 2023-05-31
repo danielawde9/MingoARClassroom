@@ -11,6 +11,21 @@ public class UIHandler : MonoBehaviour
     public SolarSystemSimulationWithMoons celestialBodyHandler;
     public LocalizationManager localizationManager;
 
+    [Header("Tabs Toggle Layout")]
+    public List<Button> tabButtons;
+    public List<GameObject> tabPanels;
+
+    private TextMeshProUGUI settingsTabTextMeshPro;
+    private TextMeshProUGUI planetInfoTabTextMeshPro;
+
+    private Color selectedButtonColor;
+    private Color deselectedButtonColor;
+    private Color selectedTextColor;
+    private Color deselectedTextColor;
+
+    private List<TextMeshProUGUI> tabTexts = new List<TextMeshProUGUI>();
+    private int currentlySelectedTab = -1;
+
 
     [Header("Panel Menu")]
     public GameObject menuSliderPanel;
@@ -128,18 +143,19 @@ public class UIHandler : MonoBehaviour
 
         SliderInit();
 
-        ToggleInit();
+        ToggleButtonsInit();
 
         localizationManager.SetLanguage("arabic");
         localizationManager.LoadLocalizedText();
 
-        menuTimeText.text = string.Format(localizationManager.GetLocalizedValue("1_second_real_life_equals"), Constants.initialTimeScale.ToString());
-        menuSizeText.text = string.Format(localizationManager.GetLocalizedValue("1_meter_size_equals"), 1 / Constants.initialSizeScale);
-        menuDistanceText.text = string.Format(localizationManager.GetLocalizedValue("1_meter_distance_equals"), 1 / Constants.initialDistanceScale);
+        menuTimeText.text = localizationManager.GetLocalizedValue("1_second_real_life_equals", Constants.initialTimeScale.ToString());
+        menuSizeText.text = localizationManager.GetLocalizedValue("1_meter_size_equals", (1 / Constants.initialSizeScale).ToString());
+        menuDistanceText.text = localizationManager.GetLocalizedValue("1_meter_distance_equals", (1 / Constants.initialDistanceScale).ToString());
 
-        pauseButtonTextMeshPro = pauseButton.GetComponent<TextMeshProUGUI>();
-        fastForwardButtonTextMeshPro = fastForwardButton.GetComponent<TextMeshProUGUI>();
-        playButtonTextMeshPro = playButton.GetComponent<TextMeshProUGUI>();
+
+        pauseButtonTextMeshPro = pauseButton.GetComponentInChildren<TextMeshProUGUI>();
+        fastForwardButtonTextMeshPro = fastForwardButton.GetComponentInChildren<TextMeshProUGUI>();
+        playButtonTextMeshPro = playButton.GetComponentInChildren<TextMeshProUGUI>();
 
         pauseButtonTextMeshPro.text = localizationManager.GetLocalizedValue("Pause");
         fastForwardButtonTextMeshPro.text = localizationManager.GetLocalizedValue("Fast_Forward");
@@ -148,7 +164,71 @@ public class UIHandler : MonoBehaviour
         solarSystemSliderTitle.text = localizationManager.GetLocalizedValue("Planet_Settings");
         solarSystemToggleTitle.text = localizationManager.GetLocalizedValue("Orbital_Settings");
         planetLegendsListTitle.text = localizationManager.GetLocalizedValue("Planets_legend");
+        planetDistanceFromSunToggleTextMeshPro.text = localizationManager.GetLocalizedValue("Display_Distance_From_Sun");
+        planetNameToggleTextMeshPro.text = localizationManager.GetLocalizedValue("Display_Planet_Name");
+        planetInclinationLineToggleTextMeshPro.text = localizationManager.GetLocalizedValue("Display_Inclination_Line");
+        orbitLineToggleTextMeshPro.text = localizationManager.GetLocalizedValue("Display_Planet_Orbit");
 
+
+        settingsTabTextMeshPro = tabButtons[0].GetComponentInChildren<TextMeshProUGUI>();
+        planetInfoTabTextMeshPro = tabButtons[1].GetComponentInChildren<TextMeshProUGUI>();
+
+
+        settingsTabTextMeshPro.text = localizationManager.GetLocalizedValue("Settings");
+        planetInfoTabTextMeshPro.text = localizationManager.GetLocalizedValue("The_Solar_System");
+
+        TabSwitchLayoutInit();
+    }
+
+    private void TabSwitchLayoutInit()
+    {
+        selectedButtonColor = HexToColor("#7F8FA6");
+        deselectedButtonColor = HexToColor("#DCDDE1");
+        selectedTextColor = HexToColor("#F5F6FA");
+        deselectedTextColor = HexToColor("#2F3640");
+
+        for (int i = 0; i < tabButtons.Count; i++)
+        {
+            int index = i;
+            tabButtons[i].onClick.AddListener(() => ShowTab(index));
+
+            TextMeshProUGUI textComponent = tabButtons[i].GetComponentInChildren<TextMeshProUGUI>();
+            if (textComponent != null)
+            {
+                tabTexts.Add(textComponent);
+            }
+            else
+            {
+                Debug.LogError("No TextMeshProUGUI component found for button at index " + i);
+            }
+        }
+
+        if (tabPanels.Count > 0)
+            ShowTab(0);
+    }
+
+    private void ShowTab(int index)
+    {
+        if (currentlySelectedTab != -1)
+        {
+            tabButtons[currentlySelectedTab].GetComponent<Image>().color = deselectedButtonColor;
+            tabTexts[currentlySelectedTab].color = deselectedTextColor;
+            tabPanels[currentlySelectedTab].SetActive(false);
+        }
+
+        tabButtons[index].GetComponent<Image>().color = selectedButtonColor;
+        tabTexts[index].color = selectedTextColor;
+        tabPanels[index].SetActive(true);
+
+        currentlySelectedTab = index;
+    }
+
+    private Color HexToColor(string hex)
+    {
+        byte r = byte.Parse(hex.Substring(1, 2), System.Globalization.NumberStyles.HexNumber);
+        byte g = byte.Parse(hex.Substring(3, 2), System.Globalization.NumberStyles.HexNumber);
+        byte b = byte.Parse(hex.Substring(5, 2), System.Globalization.NumberStyles.HexNumber);
+        return new Color32(r, g, b, 255);
     }
 
     private void ClickListenerInit()
@@ -167,7 +247,7 @@ public class UIHandler : MonoBehaviour
 
     }
 
-    private void ToggleInit()
+    private void ToggleButtonsInit()
     {
         orbitLineToggle.isOn = true;
         planetNameToggle.isOn = false;
@@ -281,7 +361,17 @@ public class UIHandler : MonoBehaviour
 
             // Assign planet name to Text component
             TextMeshProUGUI textComponent = newLegendItem.GetComponentInChildren<TextMeshProUGUI>();
-            textComponent.text = planet.Key;
+
+            // Use localizationManager to get the localized planet name
+            string localizedPlanetName = localizationManager.GetLocalizedValue(planet.Key);
+
+            // If the localized name is not found, fall back to the English name
+            if (string.IsNullOrEmpty(localizedPlanetName))
+            {
+                localizedPlanetName = planet.Key;
+            }
+
+            textComponent.text = localizedPlanetName;
 
             // Assign color to Image component
             Image imageComponent = newLegendItem.GetComponentInChildren<Image>();
@@ -289,13 +379,16 @@ public class UIHandler : MonoBehaviour
         }
     }
 
+
     public void UpdateTimeScale(float value)
     {
         celestialBodyHandler.UpdateTimeScale(value); // Notify SolarSystemSimulationWithMoons
 
         // Similar conversion logic you have
         string timeText = TimeScaleConversion(value);
-        menuTimeText.text = string.Format(localizationManager.GetLocalizedValue("1_second_real_life_equals"), timeText);
+
+        menuTimeText.text = localizationManager.GetLocalizedValue("1_second_real_life_equals", timeText.ToString());
+
     }
 
     public void UpdateSizeScale(float value)
@@ -303,7 +396,8 @@ public class UIHandler : MonoBehaviour
         celestialBodyHandler.UpdateSizeScale(value); // Notify SolarSystemSimulationWithMoons
 
         float realLifeSize = 1f / value;
-        menuSizeText.text = string.Format(localizationManager.GetLocalizedValue("1_meter_size_equals"), realLifeSize);
+        menuSizeText.text = localizationManager.GetLocalizedValue("1_meter_size_equals", realLifeSize.ToString());
+
     }
 
     public void UpdateDistanceScale(float value)
@@ -311,7 +405,8 @@ public class UIHandler : MonoBehaviour
         celestialBodyHandler.UpdateDistanceScale(value); // Notify SolarSystemSimulationWithMoons
 
         float realLifeDistance = 1f / value;
-        menuDistanceText.text = string.Format(localizationManager.GetLocalizedValue("1_meter_distance_equals"), realLifeDistance);
+        menuDistanceText.text = localizationManager.GetLocalizedValue("1_meter_distance_equals", realLifeDistance.ToString());
+
     }
 
     private string TimeScaleConversion(float timeScale)
@@ -328,31 +423,31 @@ public class UIHandler : MonoBehaviour
 
         if (simulatedYears >= 1)
         {
-            timeText = $"{simulatedYears} years";
+            timeText = $"{simulatedYears} {localizationManager.GetLocalizedValue("Years")}";
         }
         else if (simulatedMonths >= 1)
         {
-            timeText = $"{simulatedMonths} months";
+            timeText = $"{simulatedYears} {localizationManager.GetLocalizedValue("Months")}";
         }
         else if (simulatedWeeks >= 1)
         {
-            timeText = $"{simulatedWeeks} weeks";
+            timeText = $"{simulatedYears} {localizationManager.GetLocalizedValue("Weeks")}";
         }
         else if (simulatedDays >= 1)
         {
-            timeText = $"{simulatedDays} days";
+            timeText = $"{simulatedYears} {localizationManager.GetLocalizedValue("Days")}";
         }
         else if (simulatedHours >= 1)
         {
-            timeText = $"{simulatedHours} hours";
+            timeText = $"{simulatedYears} {localizationManager.GetLocalizedValue("Hours")}";
         }
         else if (simulatedMinutes >= 1)
         {
-            timeText = $"{simulatedMinutes} minutes";
+            timeText = $"{simulatedYears} {localizationManager.GetLocalizedValue("Minutes")}";
         }
         else
         {
-            timeText = $"{simulatedSeconds} seconds";
+            timeText = $"{simulatedYears} {localizationManager.GetLocalizedValue("Seconds")}";
         }
 
         return timeText;
