@@ -21,7 +21,7 @@ public class ToggleController : MonoBehaviour
         float offset = 5f; // Adjust the offset value as per your requirement
 
         // If language is Arabic, swap the positions
-        if (localizationManager.GetCurrentLanguage() == Constants.AR)
+        if (localizationManager.GetCurrentLanguage() == Constants.Lang_AR)
         {
             onPosition = new Vector2((-toggleWidth / 2 + knobWidth / 2) + offset, 0);
             offPosition = new Vector2((toggleWidth / 2 - knobWidth / 2) - offset, 0);

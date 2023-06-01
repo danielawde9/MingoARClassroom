@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using ArabicSupport;
+using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using TMPro;
@@ -145,7 +146,7 @@ public class UIHandler : MonoBehaviour
 
         ToggleButtonsInit();
 
-        localizationManager.SetLanguage(Constants.AR);
+        localizationManager.SetLanguage(Constants.Lang_AR);
         localizationManager.LoadLocalizedText();
 
         menuTimeText.text = localizationManager.GetLocalizedValue("1_second_real_life_equals", menuTimeText, Constants.initialTimeScale.ToString());
@@ -268,23 +269,21 @@ public class UIHandler : MonoBehaviour
 
 
         HorizontalLayoutGroup planetDistanceFromSunToggleLayoutGroup = planetDistanceFromSunToggle.transform.parent.GetComponent<HorizontalLayoutGroup>();
-        planetDistanceFromSunToggleLayoutGroup.reverseArrangement = (localizationManager.GetCurrentLanguage() == Constants.AR);
-        Debug.Log(planetDistanceFromSunToggleLayoutGroup.ToString());
-        Debug.Log((localizationManager.GetCurrentLanguage() == Constants.AR));
+        planetDistanceFromSunToggleLayoutGroup.reverseArrangement = (localizationManager.GetCurrentLanguage() == Constants.Lang_AR);
         HorizontalLayoutGroup planetNameToggleLayoutGroup = planetNameToggle.transform.parent.GetComponent<HorizontalLayoutGroup>();
-        planetNameToggleLayoutGroup.reverseArrangement = (localizationManager.GetCurrentLanguage() == Constants.AR);
+        planetNameToggleLayoutGroup.reverseArrangement = (localizationManager.GetCurrentLanguage() == Constants.Lang_AR);
 
         HorizontalLayoutGroup planetInclinationLineToggleLayoutGroup = planetInclinationLineToggle.transform.parent.GetComponent<HorizontalLayoutGroup>();
-        planetInclinationLineToggleLayoutGroup.reverseArrangement = (localizationManager.GetCurrentLanguage() == Constants.AR);
+        planetInclinationLineToggleLayoutGroup.reverseArrangement = (localizationManager.GetCurrentLanguage() == Constants.Lang_AR);
 
         HorizontalLayoutGroup orbitLineToggleLayoutGroup = orbitLineToggle.transform.parent.GetComponent<HorizontalLayoutGroup>();
-        orbitLineToggleLayoutGroup.reverseArrangement = (localizationManager.GetCurrentLanguage() == Constants.AR);
+        orbitLineToggleLayoutGroup.reverseArrangement = (localizationManager.GetCurrentLanguage() == Constants.Lang_AR);
 
     }
 
     public void ReverseOrderIfArabic(HorizontalLayoutGroup layoutGroup)
     {
-        if (localizationManager.GetCurrentLanguage() == Constants.AR)
+        if (localizationManager.GetCurrentLanguage() == Constants.Lang_AR)
         {
             layoutGroup.reverseArrangement = true;
         }
@@ -424,16 +423,6 @@ public class UIHandler : MonoBehaviour
         middleIconsHelperText.text = text;
     }
 
-    public void UpdateTimeScale(float value)
-    {
-        celestialBodyHandler.UpdateTimeScale(value); // Notify SolarSystemSimulationWithMoons
-
-        // Similar conversion logic you have
-        string timeText = TimeScaleConversion(value);
-
-        menuTimeText.text = localizationManager.GetLocalizedValue("1_second_real_life_equals", menuTimeText, timeText.ToString());
-
-    }
 
     public void UpdateSizeScale(float value)
     {
@@ -451,7 +440,21 @@ public class UIHandler : MonoBehaviour
         float realLifeDistance = 1f / value;
         menuDistanceText.text = localizationManager.GetLocalizedValue("1_meter_distance_equals", menuDistanceText, realLifeDistance.ToString());
     }
+    //        if (localizationManager.GetCurrentLanguage() == Constants.Lang_AR)
 
+    public void UpdateTimeScale(float value)
+    {
+        celestialBodyHandler.UpdateTimeScale(value); // Notify SolarSystemSimulationWithMoons
+
+        // Similar conversion logic you have
+        string timeText = TimeScaleConversion(value);
+
+        string mainText = localizationManager.GetLocalizedValue("1_second_real_life_equals", menuTimeText);
+
+        // Append the time text to the main sentence
+        menuTimeText.text = mainText + timeText;
+    }
+    // todo fix phrase start from bottom
     private string TimeScaleConversion(float timeScale)
     {
         float simulatedSeconds = timeScale;
@@ -466,31 +469,38 @@ public class UIHandler : MonoBehaviour
 
         if (simulatedYears >= 1)
         {
-            timeText = $"{simulatedYears} {localizationManager.GetLocalizedValue("Years", menuTimeText)}";
+            string timeUnit = localizationManager.GetLocalizedValue("Years", menuTimeText);
+            timeText = timeUnit + " " + simulatedYears;
         }
         else if (simulatedMonths >= 1)
         {
-            timeText = $"{simulatedYears} {localizationManager.GetLocalizedValue("Months", menuTimeText)}";
+            string timeUnit = localizationManager.GetLocalizedValue("Months", menuTimeText);
+            timeText = timeUnit + " " + simulatedMonths;
         }
         else if (simulatedWeeks >= 1)
         {
-            timeText = $"{simulatedYears} {localizationManager.GetLocalizedValue("Weeks", menuTimeText)}";
+            string timeUnit = localizationManager.GetLocalizedValue("Weeks", menuTimeText);
+            timeText = timeUnit + " " + simulatedWeeks;
         }
         else if (simulatedDays >= 1)
         {
-            timeText = $"{simulatedYears} {localizationManager.GetLocalizedValue("Days", menuTimeText)}";
+            string timeUnit = localizationManager.GetLocalizedValue("Days", menuTimeText);
+            timeText = timeUnit + " " + simulatedDays;
         }
         else if (simulatedHours >= 1)
         {
-            timeText = $"{simulatedYears} {localizationManager.GetLocalizedValue("Hours", menuTimeText)}";
+            string timeUnit = localizationManager.GetLocalizedValue("Hours", menuTimeText);
+            timeText = timeUnit + " " + simulatedHours;
         }
         else if (simulatedMinutes >= 1)
         {
-            timeText = $"{simulatedYears} {localizationManager.GetLocalizedValue("Minutes", menuTimeText)}";
+            string timeUnit = localizationManager.GetLocalizedValue("Minutes", menuTimeText);
+            timeText = timeUnit + " " + simulatedMinutes;
         }
         else
         {
-            timeText = $"{simulatedYears} {localizationManager.GetLocalizedValue("Seconds", menuTimeText)}";
+            string timeUnit = localizationManager.GetLocalizedValue("Seconds", menuTimeText);
+            timeText = timeUnit + " " + simulatedSeconds;
         }
 
         return timeText;

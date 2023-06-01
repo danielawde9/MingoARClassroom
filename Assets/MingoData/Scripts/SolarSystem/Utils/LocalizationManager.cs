@@ -22,7 +22,7 @@ public class LocalizationManager : MonoBehaviour
     private Dictionary<string, LocalizationItem> localizedText;
     private bool isReady = false;
     private readonly string missingTextString = "Localized text not found";
-    private string currentLanguage = Constants.AR;
+    private string currentLanguage = Constants.Lang_AR;
 
     public void LoadLocalizedText()
     {
@@ -47,9 +47,13 @@ public class LocalizationManager : MonoBehaviour
         }
     }
 
-    public string GetLocalizedValue(string key, TextMeshProUGUI textComponent , params object[] formatArgs)
+    public string GetLocalizedValue(string key, TextMeshProUGUI textComponent, params object[] formatArgs)
     {
         string result = missingTextString;
+
+        // Debug statement
+        Debug.Log("GetLocalizedValue: key = " + key);
+
         if (localizedText.ContainsKey(key))
         {
             switch (currentLanguage)
@@ -60,15 +64,23 @@ public class LocalizationManager : MonoBehaviour
                     break;
                 case "arabic":
                     result = string.Format(localizedText[key].arabic, formatArgs);
-                    result = ArabicFixer.Fix(result, true, true);
                     textComponent.alignment = TextAlignmentOptions.MidlineRight;
-
+                    result = ArabicFixer.Fix(result, true, true);
                     break;
             }
+
+            // Debug statement
+            Debug.Log("GetLocalizedValue: result = " + result);
+        }
+        else
+        {
+            // Debug statement
+            Debug.Log("GetLocalizedValue: key not found in localizedText");
         }
 
         return result;
     }
+
 
     public string GetCurrentLanguage()
     {
@@ -79,7 +91,6 @@ public class LocalizationManager : MonoBehaviour
     {
         currentLanguage = language;
     }
-
     public bool GetIsReady()
     {
         return isReady;
