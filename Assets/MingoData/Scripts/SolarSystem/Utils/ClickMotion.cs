@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VectorGraphics;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class ClickMotion : MonoBehaviour
 {
 
-    public Image imageObject; // The UI Image object
+    public SVGImage imageObject; // The UI Image object
 
     public float clickScale = 0.9f; // The scale when clicked
     public float animationDuration = 0.1f; // Duration of the animation

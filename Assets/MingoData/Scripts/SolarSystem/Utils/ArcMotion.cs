@@ -1,10 +1,11 @@
 using System.Collections;
+using Unity.VectorGraphics;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class ArcMotion : MonoBehaviour
 {
-    public Image imageObject; // The UI Image object
+    public SVGImage imageObject; // The UI Image object
     public float speed = 1f;  // Speed of the movement
     public float angle = 22.5f; // Angle of rotation
 
