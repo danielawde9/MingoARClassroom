@@ -449,11 +449,8 @@ public class UIHandler : MonoBehaviour
         celestialBodyHandler.UpdateDistanceScale(value); // Notify SolarSystemSimulationWithMoons
 
         float realLifeDistance = 1f / value;
-        string formattedDistance = string.Format("{0:n2}", realLifeDistance);
         menuDistanceText.text = localizationManager.GetLocalizedValue("1_meter_distance_equals", menuDistanceText, false, realLifeDistance.ToString("N0"));
     }
-
-    //        if (localizationManager.GetCurrentLanguage() == Constants.Lang_AR)
 
     public void UpdateTimeScale(float value)
     {

@@ -86,6 +86,11 @@
       "arabic": " متر مسافة في النظام الشمسي المحاكي يعادل {0} كيلومتر في الحياة الحقيقية"
     },
     {
+      "key": "Distance_In_KM",
+      "english": "{0} KM",
+      "arabic": "{0} كيلومتر"
+    },
+    {
       "key": "Pause",
       "english": "Pause",
       "arabic": "توقف مؤقت"
@@ -165,6 +170,11 @@
       "key": "Settings",
       "english": "Settings",
       "arabic": "الإعدادات"
+    },
+    {
+      "key": "Degrees",
+      "english": "{0} °",
+      "arabic": "{0} °"
     },
     {
       "key": "The_Solar_System",

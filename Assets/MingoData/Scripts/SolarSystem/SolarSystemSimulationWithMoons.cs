@@ -49,6 +49,7 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
     private GameObject parentDistanceLinesObject;
     private const float planetSelectedScale = 0.5f;
     private bool isAfterScanShown = false;
+    public LocalizationManager localizationManager;
 
 
     protected override void Awake()
@@ -224,9 +225,7 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
         foreach (var planet in SolarSystemUtility.planetDataDictionary.Values)
         {
             GameObject planetInstance = planet.celestialBodyInstance;
-            GameObject parentObject = planetInstance.transform.Find($"{planet.name}_FaceCameraGameObjects").gameObject;
-            GameObject planetName = parentObject.transform.Find($"{planet.name}_PlanetName").gameObject;
-            parentObject.SetActive(isOn);
+            GameObject planetName = planetInstance.transform.Find($"{planet.name}_PlanetName").gameObject;
             planetName.SetActive(isOn);
         }
     }
@@ -267,7 +266,9 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
 
     private void Start()
     {
-        uiHandler.UIShowInitial();
+
+
+    uiHandler.UIShowInitial();
         uiHandler.OnUpdateTimeScaleSlider += UpdateTimeScale;
         uiHandler.OnUpdateSizeScaleSlider += UpdateSizeScale;
         uiHandler.OnUpdateDistanceScaleSlider += UpdateDistanceScale;
@@ -303,8 +304,8 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
             float newScale = Constants.initialSizeScale * planet.diameter;
             planet.celestialBodyInstance.transform.localScale = new(newScale, newScale, newScale);
 
-            SolarSystemUtility.CreateInclinationLineAndPlanetName(planet, planet.celestialBodyInstance);
-
+            SolarSystemUtility.CreateInclinationLine(planet, planet.celestialBodyInstance , localizationManager);
+            SolarSystemUtility.CreatePlanetName(planet, planet.celestialBodyInstance , localizationManager);
 
 
             if (planet.name != "Sun")
@@ -395,7 +396,8 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
                 planetData.orbitProgress += orbitDelta;
                 planetData.celestialBodyInstance.transform.position = SolarSystemUtility.CalculatePlanetPosition(planetData, planetData.orbitProgress, distanceScale);
 
-                SolarSystemUtility.UpdateDistanceFromSunLine(planetData);
+                // todo IMPOTRANT turn off ashya eza msh 3eyzina aw eza msh on 
+                SolarSystemUtility.UpdateDistanceFromSunLine(planetData, localizationManager);
 
             }
 
@@ -417,10 +419,8 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
 
 // fixes
 // todo default text for the planet info incase no planet is seletected
-// todo planet selected info set only needed info
 
 // features
-// todo add arabic 
 // todo add songs and click sound
 // todo add seasons 
 // todo add pov planets

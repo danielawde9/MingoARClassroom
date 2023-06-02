@@ -11,8 +11,7 @@ public class SolarSystemUtility
     public static GameObject directionalLight;
     public static PlanetDataList planetDataList;
     public static Dictionary<string, PlanetData> planetDataDictionary;
-    private static Dictionary<string, Color> planetColorLegend = new Dictionary<string, Color>();
-
+    private static readonly Dictionary<string, Color> planetColorLegend = new ();
     public static Vector3 CalculatePlanetPosition(PlanetData planet, float angle, float distanceScale)
     {
         float radians = angle * Mathf.Deg2Rad;
@@ -32,10 +31,19 @@ public class SolarSystemUtility
         return new Vector3(x * distanceScale, y * distanceScale, z * distanceScale);
     }
 
-    public static void CreateInclinationLineAndPlanetName(PlanetData planet, GameObject planetInstance)
+    public static void CreatePlanetName(PlanetData planet, GameObject planetInstance, LocalizationManager localizationManager)
+    {
+        GameObject planetTextObject = CreateGameObject($"{planet.name}_PlanetName", planetInstance, Vector3.down * 1.1f, Quaternion.identity);
+        TextMeshPro planetNameTextMeshPro = CreateTextMeshPro(planetTextObject, null, 4.25f, Color.white, TextAlignmentOptions.Center, new Vector2(2f, 2f));
+        planetNameTextMeshPro.text = localizationManager.GetLocalizedValue(planet.name, planetNameTextMeshPro, true);
+        planetTextObject.AddComponent<FaceCamera>();
+        planetTextObject.SetActive(false);
+    }
+    
+    public static void CreateInclinationLine(PlanetData planet, GameObject planetInstance, LocalizationManager localizationManager)
     {
         // Create a parent game object for text and y-axis line. This object doesn't rotate.
-        GameObject parentObject = new(planet.name + "_FaceCameraGameObjects");
+        GameObject parentObject = new GameObject(planet.name + "_FaceCameraGameObjects");
         parentObject.transform.SetParent(planetInstance.transform, false);
         parentObject.transform.localPosition = Vector3.zero;
 
@@ -48,7 +56,8 @@ public class SolarSystemUtility
         inclinationLine.SetActive(false);
 
         GameObject inclinationTextObject = CreateGameObject(planet.name + "_InclinationLineText", parentObject, Vector3.up * 1.1f, Quaternion.identity);
-        CreateTextMeshPro(inclinationTextObject, planet.obliquityToOrbit.ToString("F2") + "°", 4.25f, Color.white, TextAlignmentOptions.Center, new Vector2(1.5f, 1.5f));
+        TextMeshPro inlinationText = CreateTextMeshPro(inclinationTextObject, null, 4.25f, Color.white, TextAlignmentOptions.Center, new Vector2(1.5f, 1.5f));
+        inlinationText.text = localizationManager.GetLocalizedValue("Degrees", inlinationText, true, planet.obliquityToOrbit.ToString("F2"));
 
         inclinationTextObject.SetActive(false);
 
@@ -58,12 +67,8 @@ public class SolarSystemUtility
         {
             CreateLineRenderer(yAxisGameObject, 0.01f, 0.01f, 2, Vector3.down, Vector3.up, Color.white); // Add color parameter
         }
-
-        GameObject planetTextObject = CreateGameObject($"{planet.name}_PlanetName", parentObject, Vector3.down * 1.1f, Quaternion.identity);
-        CreateTextMeshPro(planetTextObject, planet.name, 4.25f, Color.white, TextAlignmentOptions.Center, new Vector2(2f, 2f));
-
         parentObject.SetActive(false);
-
+      
     }
 
     public static void CreateOrbitLine(GameObject planet, CelestialBodyData body, Func<CelestialBodyData, float, Vector3> calculatePosition)
@@ -134,13 +139,15 @@ public class SolarSystemUtility
         textMeshPro.fontSize = fontSize;
         textMeshPro.color = color;
         textMeshPro.alignment = alignment;
+        textMeshPro.font = Resources.Load<TMP_FontAsset>("Fonts/IBMPlexSansArabic"); // Set the font to IBMPlexSansArabic inside the "Fonts" folder
         gameObject.GetComponent<RectTransform>().sizeDelta = rectTransformSizeDelta;
         return textMeshPro;
+
     }
 
     public static LineRenderer CreateLineRenderer(GameObject gameObject, float startWidth, float endWidth, int positionCount, Vector3 startPosition, Vector3 endPosition, Color color)
     {
-        // unity editor: Edit->Project Settings-> Graphics Then in the inspector where it says "Always Included Shaders" add "Unlit/Color"
+        // NOTE: unity editor: Edit->Project Settings-> Graphics Then in the inspector where it says "Always Included Shaders" add "Unlit/Color"
         LineRenderer lineRenderer = gameObject.AddComponent<LineRenderer>();
         lineRenderer.useWorldSpace = false;
         lineRenderer.startWidth = startWidth;
@@ -189,11 +196,6 @@ public class SolarSystemUtility
 
         planet.distanceText = CreateTextMeshPro(textDistanceTextObject, "", 4.25f, planetLineColor, TextAlignmentOptions.Center, new Vector2(2.0f, 2.0f));
 
-        //GameObject planetNameObject = CreateGameObject($"{planet.name}_PlanetName", parentObject, Vector3.zero, Quaternion.identity);
-        //planetNameObject.AddComponent<FaceCamera>();
-        //planet.distanceTextPlanetName = CreateTextMeshPro(planetNameObject, "", 4.25f, planetLineColor, TextAlignmentOptions.Center, new Vector2(2.0f, 2.0f));
-        //planet.distanceTextPlanetName.text = planet.name;
-
         parentObject.SetActive(false);
 
     }
@@ -214,15 +216,18 @@ public class SolarSystemUtility
     }
 
 
-    public static void UpdateDistanceFromSunLine(PlanetData planetData)
+    public static void UpdateDistanceFromSunLine(PlanetData planetData, LocalizationManager localizationManager)
     {
         planetData.distanceLineRenderer.SetPosition(0, Vector3.zero);
         planetData.distanceLineRenderer.SetPosition(1, planetData.celestialBodyInstance.transform.position - planetData.distanceLineRenderer.transform.position);
 
         planetData.distanceText.transform.position = planetData.celestialBodyInstance.transform.position / 2f + new Vector3(0,-0.5f) ; 
-        //planetData.distanceTextPlanetName.transform.position = planetData.celestialBodyInstance.transform.position / 2f + new Vector3(0, 0.5f); 
-        planetData.distanceText.text = $"{planetData.celestialBodyInstance.transform.position.magnitude:N1} KM";
         //todo fix hay
+
+        float distanceInKm = planetData.celestialBodyInstance.transform.position.magnitude * Mathf.Pow(10, 6);
+        string formattedDistance = distanceInKm.ToString("N0");
+        planetData.distanceText.text = localizationManager.GetLocalizedValue("Distance_In_KM", planetData.distanceText, false, formattedDistance);
+
     }
 
     public static void UpdateOrbitLine(CelestialBodyData body, Func<CelestialBodyData, float, Vector3> calculatePosition)

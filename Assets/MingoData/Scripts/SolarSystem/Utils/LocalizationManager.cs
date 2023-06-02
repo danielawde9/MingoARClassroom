@@ -48,7 +48,7 @@ public class LocalizationManager : MonoBehaviour
             Debug.LogError("Localization file not assigned!");
         }
     }
-    public string GetLocalizedValue(string key, TextMeshProUGUI textComponent, bool centerText, params object[] formatArgs)
+    public string GetLocalizedValue(string key, TMP_Text textComponent, bool centerText, params object[] formatArgs)
     {
         string result = missingTextString;
 
