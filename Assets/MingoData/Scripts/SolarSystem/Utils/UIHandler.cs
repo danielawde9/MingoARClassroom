@@ -149,35 +149,35 @@ public class UIHandler : MonoBehaviour
         localizationManager.SetLanguage(Constants.Lang_AR);
         localizationManager.LoadLocalizedText();
 
-        menuTimeText.text = localizationManager.GetLocalizedValue("1_second_real_life_equals", menuTimeText, Constants.initialTimeScale.ToString());
-        menuSizeText.text = localizationManager.GetLocalizedValue("1_meter_size_equals", menuSizeText, (1 / Constants.initialSizeScale).ToString());
-        menuDistanceText.text = localizationManager.GetLocalizedValue("1_meter_distance_equals", menuDistanceText, (1 / Constants.initialDistanceScale).ToString());
+        menuTimeText.text = localizationManager.GetLocalizedValue("1_second_real_life_equals", menuTimeText,false,  Constants.initialTimeScale.ToString());
+        menuSizeText.text = localizationManager.GetLocalizedValue("1_meter_size_equals", menuSizeText, false, (1 / Constants.initialSizeScale).ToString());
+        menuDistanceText.text = localizationManager.GetLocalizedValue("1_meter_distance_equals", menuDistanceText, false, (1 / Constants.initialDistanceScale).ToString());
 
 
         pauseButtonTextMeshPro = pauseButton.GetComponentInChildren<TextMeshProUGUI>();
         fastForwardButtonTextMeshPro = fastForwardButton.GetComponentInChildren<TextMeshProUGUI>();
         playButtonTextMeshPro = playButton.GetComponentInChildren<TextMeshProUGUI>();
 
-        pauseButtonTextMeshPro.text = localizationManager.GetLocalizedValue("Pause", pauseButtonTextMeshPro);
-        fastForwardButtonTextMeshPro.text = localizationManager.GetLocalizedValue("Fast_Forward", fastForwardButtonTextMeshPro);
-        playButtonTextMeshPro.text = localizationManager.GetLocalizedValue("Play", playButtonTextMeshPro);
-        horizontalButtonsTitle.text = localizationManager.GetLocalizedValue("Playback_Time_Settings", horizontalButtonsTitle);
-        solarSystemSliderTitle.text = localizationManager.GetLocalizedValue("Planet_Settings", solarSystemSliderTitle);
-        solarSystemToggleTitle.text = localizationManager.GetLocalizedValue("Orbital_Settings", solarSystemToggleTitle);
-        planetLegendsListTitle.text = localizationManager.GetLocalizedValue("Planets_legend", planetLegendsListTitle);
+        pauseButtonTextMeshPro.text = localizationManager.GetLocalizedValue("Pause", pauseButtonTextMeshPro, true);
+        fastForwardButtonTextMeshPro.text = localizationManager.GetLocalizedValue("Fast_Forward", fastForwardButtonTextMeshPro, true);
+        playButtonTextMeshPro.text = localizationManager.GetLocalizedValue("Play", playButtonTextMeshPro, true);
+        horizontalButtonsTitle.text = localizationManager.GetLocalizedValue("Playback_Time_Settings", horizontalButtonsTitle, false);
+        solarSystemSliderTitle.text = localizationManager.GetLocalizedValue("Planet_Settings", solarSystemSliderTitle, false);
+        solarSystemToggleTitle.text = localizationManager.GetLocalizedValue("Orbital_Settings", solarSystemToggleTitle, false);
+        planetLegendsListTitle.text = localizationManager.GetLocalizedValue("Planets_legend", planetLegendsListTitle, false);
 
-        planetDistanceFromSunToggleTextMeshPro.text = localizationManager.GetLocalizedValue("Display_Distance_From_Sun", planetDistanceFromSunToggleTextMeshPro);
-        planetNameToggleTextMeshPro.text = localizationManager.GetLocalizedValue("Display_Planet_Name", planetNameToggleTextMeshPro);
-        planetInclinationLineToggleTextMeshPro.text = localizationManager.GetLocalizedValue("Display_Inclination_Line", planetInclinationLineToggleTextMeshPro);
-        orbitLineToggleTextMeshPro.text = localizationManager.GetLocalizedValue("Display_Planet_Orbit", orbitLineToggleTextMeshPro);
+        planetDistanceFromSunToggleTextMeshPro.text = localizationManager.GetLocalizedValue("Display_Distance_From_Sun", planetDistanceFromSunToggleTextMeshPro, false);
+        planetNameToggleTextMeshPro.text = localizationManager.GetLocalizedValue("Display_Planet_Name", planetNameToggleTextMeshPro, false);
+        planetInclinationLineToggleTextMeshPro.text = localizationManager.GetLocalizedValue("Display_Inclination_Line", planetInclinationLineToggleTextMeshPro, false);
+        orbitLineToggleTextMeshPro.text = localizationManager.GetLocalizedValue("Display_Planet_Orbit", orbitLineToggleTextMeshPro, false);
 
 
         settingsTabTextMeshPro = tabButtons[0].GetComponentInChildren<TextMeshProUGUI>();
         planetInfoTabTextMeshPro = tabButtons[1].GetComponentInChildren<TextMeshProUGUI>();
 
 
-        settingsTabTextMeshPro.text = localizationManager.GetLocalizedValue("Settings", settingsTabTextMeshPro);
-        planetInfoTabTextMeshPro.text = localizationManager.GetLocalizedValue("The_Solar_System", planetInfoTabTextMeshPro);
+        settingsTabTextMeshPro.text = localizationManager.GetLocalizedValue("Settings", settingsTabTextMeshPro, true);
+        planetInfoTabTextMeshPro.text = localizationManager.GetLocalizedValue("The_Solar_System", planetInfoTabTextMeshPro, true);
 
         TabSwitchLayoutInit();
     }
@@ -391,7 +391,7 @@ public class UIHandler : MonoBehaviour
             TextMeshProUGUI textComponent = newLegendItem.GetComponentInChildren<TextMeshProUGUI>();
 
             // Use localizationManager to get the localized planet name
-            string localizedPlanetName = localizationManager.GetLocalizedValue(planet.Key, textComponent);
+            string localizedPlanetName = localizationManager.GetLocalizedValue(planet.Key, textComponent, false);
 
             // If the localized name is not found, fall back to the English name
             if (string.IsNullOrEmpty(localizedPlanetName))
@@ -414,9 +414,21 @@ public class UIHandler : MonoBehaviour
     public void SetPlanetNameTextTitle(string text, bool showGameObjectHolder)
     {
         menuPlanetName.transform.parent.gameObject.SetActive(showGameObjectHolder);
-        menuPlanetName.text = text;
+
+        // Use localizationManager to get the localized planet name
+        string localizedPlanetName = localizationManager.GetLocalizedValue(text, menuPlanetName, false);
+
+        // If the localized name is not found, fall back to the English name
+        if (string.IsNullOrEmpty(localizedPlanetName))
+        {
+            localizedPlanetName = text;
+        }
+
+        menuPlanetName.text = localizedPlanetName;
+
         returnButton.SetActive(showGameObjectHolder);
     }
+
 
     public void SetMiddleIconsHelperText(string text)
     {
@@ -429,7 +441,7 @@ public class UIHandler : MonoBehaviour
         celestialBodyHandler.UpdateSizeScale(value); // Notify SolarSystemSimulationWithMoons
 
         float realLifeSize = 1f / value;
-        menuSizeText.text = localizationManager.GetLocalizedValue("1_meter_size_equals", menuSizeText, realLifeSize.ToString());
+        menuSizeText.text = localizationManager.GetLocalizedValue("1_meter_size_equals", menuSizeText, false, realLifeSize.ToString());
 
     }
 
@@ -438,7 +450,7 @@ public class UIHandler : MonoBehaviour
         celestialBodyHandler.UpdateDistanceScale(value); // Notify SolarSystemSimulationWithMoons
 
         float realLifeDistance = 1f / value;
-        menuDistanceText.text = localizationManager.GetLocalizedValue("1_meter_distance_equals", menuDistanceText, realLifeDistance.ToString());
+        menuDistanceText.text = localizationManager.GetLocalizedValue("1_meter_distance_equals", menuDistanceText, false, realLifeDistance.ToString());
     }
     //        if (localizationManager.GetCurrentLanguage() == Constants.Lang_AR)
 
@@ -449,7 +461,7 @@ public class UIHandler : MonoBehaviour
         // Similar conversion logic you have
         string timeText = TimeScaleConversion(value);
 
-        string mainText = localizationManager.GetLocalizedValue("1_second_real_life_equals", menuTimeText);
+        string mainText = localizationManager.GetLocalizedValue("1_second_real_life_equals", menuTimeText, false);
 
         // Append the time text to the main sentence
         menuTimeText.text = mainText + timeText;
@@ -469,37 +481,37 @@ public class UIHandler : MonoBehaviour
 
         if (simulatedYears >= 1)
         {
-            string timeUnit = localizationManager.GetLocalizedValue("Years", menuTimeText);
+            string timeUnit = localizationManager.GetLocalizedValue("Years", menuTimeText, false);
             timeText = timeUnit + " " + simulatedYears;
         }
         else if (simulatedMonths >= 1)
         {
-            string timeUnit = localizationManager.GetLocalizedValue("Months", menuTimeText);
+            string timeUnit = localizationManager.GetLocalizedValue("Months", menuTimeText, false);
             timeText = timeUnit + " " + simulatedMonths;
         }
         else if (simulatedWeeks >= 1)
         {
-            string timeUnit = localizationManager.GetLocalizedValue("Weeks", menuTimeText);
+            string timeUnit = localizationManager.GetLocalizedValue("Weeks", menuTimeText, false);
             timeText = timeUnit + " " + simulatedWeeks;
         }
         else if (simulatedDays >= 1)
         {
-            string timeUnit = localizationManager.GetLocalizedValue("Days", menuTimeText);
+            string timeUnit = localizationManager.GetLocalizedValue("Days", menuTimeText, false);
             timeText = timeUnit + " " + simulatedDays;
         }
         else if (simulatedHours >= 1)
         {
-            string timeUnit = localizationManager.GetLocalizedValue("Hours", menuTimeText);
+            string timeUnit = localizationManager.GetLocalizedValue("Hours", menuTimeText, false);
             timeText = timeUnit + " " + simulatedHours;
         }
         else if (simulatedMinutes >= 1)
         {
-            string timeUnit = localizationManager.GetLocalizedValue("Minutes", menuTimeText);
+            string timeUnit = localizationManager.GetLocalizedValue("Minutes", menuTimeText, false);
             timeText = timeUnit + " " + simulatedMinutes;
         }
         else
         {
-            string timeUnit = localizationManager.GetLocalizedValue("Seconds", menuTimeText);
+            string timeUnit = localizationManager.GetLocalizedValue("Seconds", menuTimeText, false);
             timeText = timeUnit + " " + simulatedSeconds;
         }
 
@@ -554,7 +566,7 @@ public class UIHandler : MonoBehaviour
     {
         menuPlanetName.transform.parent.gameObject.SetActive(false);
         scanRoomIconObject.SetActive(true);
-        SetMiddleIconsHelperText(localizationManager.GetLocalizedValue("Move_your_phone_to_start_scanning_the_room", middleIconsHelperText));
+        SetMiddleIconsHelperText(localizationManager.GetLocalizedValue("Move_your_phone_to_start_scanning_the_room", middleIconsHelperText, false));
         tapIconObject.SetActive(false);
         returnButton.SetActive(false);
         menuSliderPanel.SetActive(false);
@@ -563,7 +575,7 @@ public class UIHandler : MonoBehaviour
     public void UIShowAfterScan()
     {
         scanRoomIconObject.SetActive(false);
-        SetMiddleIconsHelperText(localizationManager.GetLocalizedValue("Tap_on_the_scanned_area_to_place_the_solar_system", middleIconsHelperText));
+        SetMiddleIconsHelperText(localizationManager.GetLocalizedValue("Tap_on_the_scanned_area_to_place_the_solar_system", middleIconsHelperText, false));
         tapIconObject.SetActive(true);
     }
 
@@ -573,12 +585,12 @@ public class UIHandler : MonoBehaviour
         tapIconObject.SetActive(false);
         menuSliderPanel.SetActive(true);
         returnButton.SetActive(false);
-        SetMiddleIconsHelperText(localizationManager.GetLocalizedValue("Click_on_any_planet_or_click_on_the_menu_below_to_display_more_settings", middleIconsHelperText));
+        SetMiddleIconsHelperText(localizationManager.GetLocalizedValue("Click_on_any_planet_or_click_on_the_menu_below_to_display_more_settings", middleIconsHelperText, false));
     }
 
     public void ToggleSwipeIcon(bool toggleState)
     {
-        SetMiddleIconsHelperText(localizationManager.GetLocalizedValue("Touch_and_drag_to_move_the_planet_Around", middleIconsHelperText));
+        SetMiddleIconsHelperText(localizationManager.GetLocalizedValue("Touch_and_drag_to_move_the_planet_Around", middleIconsHelperText, false));
         swipeIconObject.SetActive(toggleState);
         ToggleMiddleIconHelper(toggleState);
     }

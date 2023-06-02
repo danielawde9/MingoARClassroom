@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using ArabicSupport;
 using TMPro;
+using System.Linq;
 
 [System.Serializable]
 public class LocalizationItem
@@ -46,8 +47,7 @@ public class LocalizationManager : MonoBehaviour
             Debug.LogError("Localization file not assigned!");
         }
     }
-
-    public string GetLocalizedValue(string key, TextMeshProUGUI textComponent, params object[] formatArgs)
+    public string GetLocalizedValue(string key, TextMeshProUGUI textComponent, bool centerText, params object[] formatArgs)
     {
         string result = missingTextString;
 
@@ -60,12 +60,16 @@ public class LocalizationManager : MonoBehaviour
             {
                 case "english":
                     result = string.Format(localizedText[key].english, formatArgs);
-                    textComponent.alignment = TextAlignmentOptions.MidlineLeft;
+                    if (centerText) textComponent.alignment = TextAlignmentOptions.Midline;
+                    else textComponent.alignment = TextAlignmentOptions.MidlineLeft;
                     break;
                 case "arabic":
-                    result = string.Format(localizedText[key].arabic, formatArgs);
-                    textComponent.alignment = TextAlignmentOptions.MidlineRight;
+                    result = string.Format(localizedText[key].arabic, formatArgs); 
                     result = ArabicFixer.Fix(result, true, true);
+                    textComponent.isRightToLeftText = true;
+                    result = new string(result.ToCharArray().Reverse().ToArray());
+                    if (centerText) textComponent.alignment = TextAlignmentOptions.Midline;
+                    else textComponent.alignment = TextAlignmentOptions.MidlineRight;
                     break;
             }
 
