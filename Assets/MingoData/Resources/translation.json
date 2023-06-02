@@ -37,18 +37,53 @@
     },
     {
       "key": "1_second_real_life_equals",
-      "english": "1 second in real life equals in the simulated solar system: ",
-      "arabic": " ثانية في الحياة الحقيقية تعادل في النظام الشمسي المحاكي \n"
+      "english": "1 second in the simulated real solar system equals 1 second in real life",
+      "arabic": "ثانية واحدة في محاكاة النظام الشمسي الحقيقي تساوي 1 ثواني في الحياة الواقعية"
+    },
+    {
+      "key": "1_second_real_life_equals_years",
+      "english": "1 second in the simulated real solar system equals {0} years in real life",
+      "arabic": "ثانية واحدة في محاكاة النظام الشمسي الحقيقي تساوي {0} سنوات في الحياة الواقعية"
+    },
+    {
+      "key": "1_second_real_life_equals_months",
+      "english": "1 second in the simulated real solar system equals {0} months in real life",
+      "arabic": "ثانية واحدة في محاكاة النظام الشمسي الحقيقي تساوي {0} أشهر في الحياة الواقعية"
+    },
+    {
+      "key": "1_second_real_life_equals_weeks",
+      "english": "1 second in the simulated real solar system equals {0} weeks in real life",
+      "arabic": "ثانية واحدة في محاكاة النظام الشمسي الحقيقي تساوي {0} أسابيع في الحياة الواقعية"
+    },
+    {
+      "key": "1_second_real_life_equals_days",
+      "english": "1 second in the simulated real solar system equals {0} days in real life",
+      "arabic": "ثانية واحدة في محاكاة النظام الشمسي الحقيقي تساوي {0} أيام في الحياة الواقعية"
+    },
+    {
+      "key": "1_second_real_life_equals_hours",
+      "english": "1 second in the simulated real solar system equals {0} hours in real life",
+      "arabic": "ثانية واحدة في محاكاة النظام الشمسي الحقيقي تساوي {0} ساعات في الحياة الواقعية"
+    },
+    {
+      "key": "1_second_real_life_equals_minutes",
+      "english": "1 second in the simulated real solar system equals {0} minutes in real life",
+      "arabic": "ثانية واحدة في محاكاة النظام الشمسي الحقيقي تساوي {0} دقائق في الحياة الواقعية"
+    },
+    {
+      "key": "1_second_real_life_equals_seconds",
+      "english": "1 second in the simulated real solar system equals {0} seconds in real life",
+      "arabic": "ثانية واحدة في محاكاة النظام الشمسي الحقيقي تساوي {0} ثواني في الحياة الواقعية"
     },
     {
       "key": "1_meter_size_equals",
       "english": "1 meter size in the simulated solar system equals {0} kilometer in real life.",
-      "arabic": " متر في النظام الشمسي المحاكي يساوي\n {0} كيلومتر في الحياة الحقيقية"
+      "arabic": " متر في النظام الشمسي المحاكي يساوي {0} كيلومتر في الحياة الحقيقية"
     },
     {
       "key": "1_meter_distance_equals",
       "english": "1 meter distance in the simulated solar system equals {0} kilometer in real life.",
-      "arabic": " متر مسافة في النظام الشمسي المحاكي يعادل\n {0} كيلومتر في الحياة الحقيقية"
+      "arabic": " متر مسافة في النظام الشمسي المحاكي يعادل {0} كيلومتر في الحياة الحقيقية"
     },
     {
       "key": "Pause",

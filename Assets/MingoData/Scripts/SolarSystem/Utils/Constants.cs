@@ -10,5 +10,6 @@ public static class Constants
     public const float minSize = 1f / 100000f;
     public const float maxDistance = 1f / 5000000f;
     public const string Lang_AR = "arabic";
+    public const string Lang_EN = "english";
 
 }

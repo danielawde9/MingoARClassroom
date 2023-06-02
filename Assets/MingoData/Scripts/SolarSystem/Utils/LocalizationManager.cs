@@ -1,8 +1,8 @@
-using System.Collections.Generic;
-using UnityEngine;
 using ArabicSupport;
-using TMPro;
+using System.Collections.Generic;
 using System.Linq;
+using TMPro;
+using UnityEngine;
 
 [System.Serializable]
 public class LocalizationItem
@@ -23,7 +23,8 @@ public class LocalizationManager : MonoBehaviour
     private Dictionary<string, LocalizationItem> localizedText;
     private bool isReady = false;
     private readonly string missingTextString = "Localized text not found";
-    private string currentLanguage = Constants.Lang_AR;
+     private string currentLanguage = Constants.Lang_AR;
+    //private string currentLanguage = Constants.Lang_EN;
 
     public void LoadLocalizedText()
     {
@@ -58,18 +59,25 @@ public class LocalizationManager : MonoBehaviour
         {
             switch (currentLanguage)
             {
-                case "english":
+                case Constants.Lang_EN:
                     result = string.Format(localizedText[key].english, formatArgs);
-                    if (centerText) textComponent.alignment = TextAlignmentOptions.Midline;
-                    else textComponent.alignment = TextAlignmentOptions.MidlineLeft;
+                    if (textComponent != null)
+                    {
+                        textComponent.isRightToLeftText = false;
+                        if (centerText) textComponent.alignment = TextAlignmentOptions.Midline;
+                        else textComponent.alignment = TextAlignmentOptions.MidlineLeft;
+                    }
                     break;
-                case "arabic":
-                    result = string.Format(localizedText[key].arabic, formatArgs); 
+                case Constants.Lang_AR:
+                    result = string.Format(localizedText[key].arabic, formatArgs);
                     result = ArabicFixer.Fix(result, true, true);
-                    textComponent.isRightToLeftText = true;
+                    if (textComponent != null)
+                    {
+                        textComponent.isRightToLeftText = true;
+                        if (centerText) textComponent.alignment = TextAlignmentOptions.Midline;
+                        else textComponent.alignment = TextAlignmentOptions.MidlineRight;
+                    }
                     result = new string(result.ToCharArray().Reverse().ToArray());
-                    if (centerText) textComponent.alignment = TextAlignmentOptions.Midline;
-                    else textComponent.alignment = TextAlignmentOptions.MidlineRight;
                     break;
             }
 
@@ -84,6 +92,75 @@ public class LocalizationManager : MonoBehaviour
 
         return result;
     }
+    private (string timeUnitKey, string timeValue) TimeScaleConversion(float timeScale)
+    {
+        if (timeScale <= 1)
+        {
+            return ("1_second_real_life_equals_seconds", (timeScale).ToString("F2"));
+        }
+        else if (timeScale < 60)
+        {
+            return ("1_second_real_life_equals_minutes", (timeScale).ToString("F2"));
+        }
+        else if (timeScale < 3600)
+        {
+            return ("1_second_real_life_equals_hours", (timeScale / 60).ToString("F2"));
+        }
+        else if (timeScale < 86400)
+        {
+            return ("1_second_real_life_equals_days", (timeScale / 3600).ToString("F2"));
+        }
+        else if (timeScale < 604800)
+        {
+            return ("1_second_real_life_equals_weeks", (timeScale / 86400).ToString("F2"));
+        }
+        else if (timeScale < 2629800)
+        {
+            return ("1_second_real_life_equals_months", (timeScale / 604800).ToString("F2"));
+        }
+        else
+        {
+            return ("1_second_real_life_equals_years", (timeScale / 2629800).ToString("F2"));
+        }
+    }
+
+    public string GetLocalizedTimeValue(float timeScale, TextMeshProUGUI textComponent, bool centerText)
+    {
+        // Get time unit and time text
+        var (timeUnitKey, timeValue) = TimeScaleConversion(timeScale);
+
+        string result = missingTextString;
+
+        // Check if there is a localized string for the given time unit
+        if (localizedText.ContainsKey(timeUnitKey))
+        {
+            switch (currentLanguage)
+            {
+                case "english":
+                    result = string.Format(localizedText[timeUnitKey].english, timeValue);
+                    if (textComponent != null)
+                    {
+                        if (centerText) textComponent.alignment = TextAlignmentOptions.Midline;
+                        else textComponent.alignment = TextAlignmentOptions.MidlineLeft;
+                    }
+                    break;
+                case "arabic":
+                    result = string.Format(localizedText[timeUnitKey].arabic, timeValue);
+                    result = ArabicFixer.Fix(result, true, true);
+                    if (textComponent != null)
+                    {
+                        textComponent.isRightToLeftText = true;
+                        if (centerText) textComponent.alignment = TextAlignmentOptions.Midline;
+                        else textComponent.alignment = TextAlignmentOptions.MidlineRight;
+                    }
+                    result = new string(result.ToCharArray().Reverse().ToArray());
+                    break;
+            }
+        }
+
+        return result;
+    }
+
 
 
     public string GetCurrentLanguage()

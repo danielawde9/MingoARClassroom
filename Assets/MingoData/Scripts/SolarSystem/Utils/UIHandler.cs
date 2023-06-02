@@ -146,12 +146,11 @@ public class UIHandler : MonoBehaviour
 
         ToggleButtonsInit();
 
-        localizationManager.SetLanguage(Constants.Lang_AR);
         localizationManager.LoadLocalizedText();
 
         menuTimeText.text = localizationManager.GetLocalizedValue("1_second_real_life_equals", menuTimeText,false,  Constants.initialTimeScale.ToString());
-        menuSizeText.text = localizationManager.GetLocalizedValue("1_meter_size_equals", menuSizeText, false, (1 / Constants.initialSizeScale).ToString());
-        menuDistanceText.text = localizationManager.GetLocalizedValue("1_meter_distance_equals", menuDistanceText, false, (1 / Constants.initialDistanceScale).ToString());
+        menuSizeText.text = localizationManager.GetLocalizedValue("1_meter_size_equals", menuSizeText, false, (1 / Constants.initialSizeScale).ToString("N0"));
+        menuDistanceText.text = localizationManager.GetLocalizedValue("1_meter_distance_equals", menuDistanceText, false, (1 / Constants.initialDistanceScale).ToString("N0"));
 
 
         pauseButtonTextMeshPro = pauseButton.GetComponentInChildren<TextMeshProUGUI>();
@@ -441,7 +440,7 @@ public class UIHandler : MonoBehaviour
         celestialBodyHandler.UpdateSizeScale(value); // Notify SolarSystemSimulationWithMoons
 
         float realLifeSize = 1f / value;
-        menuSizeText.text = localizationManager.GetLocalizedValue("1_meter_size_equals", menuSizeText, false, realLifeSize.ToString());
+        menuSizeText.text = localizationManager.GetLocalizedValue("1_meter_size_equals", menuSizeText, false, realLifeSize.ToString("N0"));
 
     }
 
@@ -450,73 +449,21 @@ public class UIHandler : MonoBehaviour
         celestialBodyHandler.UpdateDistanceScale(value); // Notify SolarSystemSimulationWithMoons
 
         float realLifeDistance = 1f / value;
-        menuDistanceText.text = localizationManager.GetLocalizedValue("1_meter_distance_equals", menuDistanceText, false, realLifeDistance.ToString());
+        string formattedDistance = string.Format("{0:n2}", realLifeDistance);
+        menuDistanceText.text = localizationManager.GetLocalizedValue("1_meter_distance_equals", menuDistanceText, false, realLifeDistance.ToString("N0"));
     }
+
     //        if (localizationManager.GetCurrentLanguage() == Constants.Lang_AR)
 
     public void UpdateTimeScale(float value)
     {
         celestialBodyHandler.UpdateTimeScale(value); // Notify SolarSystemSimulationWithMoons
 
-        // Similar conversion logic you have
-        string timeText = TimeScaleConversion(value);
+        string timeText = localizationManager.GetLocalizedTimeValue(value, menuTimeText, false);
 
-        string mainText = localizationManager.GetLocalizedValue("1_second_real_life_equals", menuTimeText, false);
-
-        // Append the time text to the main sentence
-        menuTimeText.text = mainText + timeText;
+        menuTimeText.text = timeText;
     }
-    // todo fix phrase start from bottom
-    private string TimeScaleConversion(float timeScale)
-    {
-        float simulatedSeconds = timeScale;
-        float simulatedMinutes = simulatedSeconds / 60;
-        float simulatedHours = simulatedMinutes / 60;
-        float simulatedDays = simulatedHours / 24;
-        float simulatedWeeks = simulatedDays / 7;
-        float simulatedMonths = simulatedDays / 30.44f; // A month is approximately 30.44 days on average
-        float simulatedYears = simulatedDays / 365.25f; // A year is approximately 365.25 days considering leap years
 
-        string timeText;
-
-        if (simulatedYears >= 1)
-        {
-            string timeUnit = localizationManager.GetLocalizedValue("Years", menuTimeText, false);
-            timeText = timeUnit + " " + simulatedYears;
-        }
-        else if (simulatedMonths >= 1)
-        {
-            string timeUnit = localizationManager.GetLocalizedValue("Months", menuTimeText, false);
-            timeText = timeUnit + " " + simulatedMonths;
-        }
-        else if (simulatedWeeks >= 1)
-        {
-            string timeUnit = localizationManager.GetLocalizedValue("Weeks", menuTimeText, false);
-            timeText = timeUnit + " " + simulatedWeeks;
-        }
-        else if (simulatedDays >= 1)
-        {
-            string timeUnit = localizationManager.GetLocalizedValue("Days", menuTimeText, false);
-            timeText = timeUnit + " " + simulatedDays;
-        }
-        else if (simulatedHours >= 1)
-        {
-            string timeUnit = localizationManager.GetLocalizedValue("Hours", menuTimeText, false);
-            timeText = timeUnit + " " + simulatedHours;
-        }
-        else if (simulatedMinutes >= 1)
-        {
-            string timeUnit = localizationManager.GetLocalizedValue("Minutes", menuTimeText, false);
-            timeText = timeUnit + " " + simulatedMinutes;
-        }
-        else
-        {
-            string timeUnit = localizationManager.GetLocalizedValue("Seconds", menuTimeText, false);
-            timeText = timeUnit + " " + simulatedSeconds;
-        }
-
-        return timeText;
-    }
 
     public void ToggleMenuSliderPanel()
     {
