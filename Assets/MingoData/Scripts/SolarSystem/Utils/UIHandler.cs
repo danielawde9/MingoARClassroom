@@ -1,6 +1,7 @@
 ﻿using ArabicSupport;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using TMPro;
 using UnityEngine;
@@ -105,6 +106,8 @@ public class UIHandler : MonoBehaviour
     [Header("Planet Info 2nd tab List")]
     public GameObject planetInfoItemPrefab;
     public Transform planetInfoItemParent;
+    public TextMeshProUGUI soplanetInfoItemParentTitle;
+
 
     private void OnPauseButtonClicked()
     {
@@ -175,12 +178,12 @@ public class UIHandler : MonoBehaviour
         solarSystemSliderTitle.text = localizationManager.GetLocalizedValue("Planet_Settings", solarSystemSliderTitle, false);
         solarSystemToggleTitle.text = localizationManager.GetLocalizedValue("Orbital_Settings", solarSystemToggleTitle, false);
         planetLegendsListTitle.text = localizationManager.GetLocalizedValue("Planets_legend", planetLegendsListTitle, false);
+        soplanetInfoItemParentTitle.text = localizationManager.GetLocalizedValue("Planets_Info", soplanetInfoItemParentTitle, false);
 
         planetDistanceFromSunToggleTextMeshPro.text = localizationManager.GetLocalizedValue("Display_Distance_From_Sun", planetDistanceFromSunToggleTextMeshPro, false);
         planetNameToggleTextMeshPro.text = localizationManager.GetLocalizedValue("Display_Planet_Name", planetNameToggleTextMeshPro, false);
         planetInclinationLineToggleTextMeshPro.text = localizationManager.GetLocalizedValue("Display_Inclination_Line", planetInclinationLineToggleTextMeshPro, false);
         orbitLineToggleTextMeshPro.text = localizationManager.GetLocalizedValue("Display_Planet_Orbit", orbitLineToggleTextMeshPro, false);
-
 
         settingsTabTextMeshPro = tabButtons[0].GetComponentInChildren<TextMeshProUGUI>();
         planetInfoTabTextMeshPro = tabButtons[1].GetComponentInChildren<TextMeshProUGUI>();
@@ -213,8 +216,8 @@ public class UIHandler : MonoBehaviour
         for (int i = 0; i < tabButtons.Count; i++)
         {
             int index = i;
-            //tabButtons[i].onClick.AddListener(() => ShowTab(index));
-            tabButtons[i].onClick.AddListener(ToggleMenuSliderPanel);
+            tabButtons[i].onClick.AddListener(() => ShowTab(index));
+            //tabButtons[i].onClick.AddListener(ToggleMenuSliderPanel);
 
             TextMeshProUGUI textComponent = tabButtons[i].GetComponentInChildren<TextMeshProUGUI>();
             if (textComponent != null)
@@ -364,7 +367,7 @@ public class UIHandler : MonoBehaviour
 
     }
 
-    public void SetCelestialBodyData(CelestialBodyData celestialBodyData)
+    public void SetCelestialBodyData(CelestialBodyData celestialBodyData, LocalizationManager localizationManager)
     {
         // Remove all previous items
         foreach (Transform child in planetInfoItemParent)
@@ -375,30 +378,88 @@ public class UIHandler : MonoBehaviour
         // Using reflection to get all fields in the CelestialBodyData class
         FieldInfo[] fields = typeof(CelestialBodyData).GetFields();
 
-        foreach (FieldInfo field in fields)
+        // Check if celestialBodyData is null (no planet is selected)
+        if (celestialBodyData == null)
         {
             // Instantiate new data item
             GameObject newDataItem = Instantiate(planetInfoItemPrefab, planetInfoItemParent);
 
             // Assign field name to Text component
             TextMeshProUGUI textComponent = newDataItem.GetComponentsInChildren<TextMeshProUGUI>()[0];
-            textComponent.text = field.Name;
+            textComponent.text = localizationManager.GetLocalizedValue("no_planet_selected", textComponent, false);
 
             // Assign field value to another Text component
             TextMeshProUGUI valueComponent = newDataItem.GetComponentsInChildren<TextMeshProUGUI>()[1];
+            valueComponent.text = "";
+
+            return;
+        }
+
+
+        foreach (FieldInfo field in fields)
+        {
+
+            // Instantiate new data item
+            GameObject newDataItem = Instantiate(planetInfoItemPrefab, planetInfoItemParent);
+
+            // Assign field name to Text component
+            TextMeshProUGUI textComponent = newDataItem.GetComponentsInChildren<TextMeshProUGUI>()[0];
+            textComponent.text = localizationManager.GetLocalizedValue(field.Name, textComponent, false);
+
+            // Assign field value to another Text component
+            TextMeshProUGUI valueComponent = newDataItem.GetComponentsInChildren<TextMeshProUGUI>()[1];
+
+            HorizontalLayoutGroup layoutGroup = textComponent.transform.parent.GetComponent<HorizontalLayoutGroup>();
+
+            ReverseOrderIfArabic(layoutGroup);
 
             // Check for null value before trying to convert to string
             object fieldValue = field.GetValue(celestialBodyData);
             if (fieldValue != null)
             {
-                valueComponent.text = fieldValue.ToString();
+                if (localizationManager.GetCurrentLanguage() == Constants.Lang_AR)
+                {
+
+                    // Check if fieldValue is a number
+                    if (float.TryParse(fieldValue.ToString(), out float number))
+                    {
+                        string formattedNumber = number.ToString("N0");
+                        valueComponent.text = string.Format("{0}", new string(ArabicFixer.Fix(formattedNumber, true, true).ToCharArray().Reverse().ToArray()));
+                    }
+                    else
+                    {
+                        valueComponent.text = localizationManager.GetLocalizedValue(fieldValue.ToString(),valueComponent,false);
+                    }
+
+                    valueComponent.isRightToLeftText = true;
+                    valueComponent.alignment = TextAlignmentOptions.MidlineLeft;
+                }
+                else
+                {
+
+                    // Check if fieldValue is a number
+                    if (float.TryParse(fieldValue.ToString(), out float number))
+                    {
+                        string formattedNumber = number.ToString("N0");
+                        valueComponent.text = string.Format("{0}", formattedNumber);
+                    }
+                    else
+                    {
+                        valueComponent.text = localizationManager.GetLocalizedValue(fieldValue.ToString(), valueComponent, false);
+                    }
+
+                    valueComponent.isRightToLeftText = false;
+                    valueComponent.alignment = TextAlignmentOptions.MidlineRight;
+                }
+
             }
             else
             {
-                valueComponent.text = "null";
+                valueComponent.text = localizationManager.GetLocalizedValue("null", valueComponent, false);
             }
         }
     }
+
 
     public void SetPlanetColorLegend(Dictionary<string, Color> planetColorLegend)
     {

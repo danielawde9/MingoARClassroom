@@ -1,345 +1,458 @@
 {
-  "items": [
-    {
-      "key": "Years",
-      "english": "years",
-      "arabic": "سنوات"
-    },
-    {
-      "key": "Months",
-      "english": "months",
-      "arabic": "أشهر"
-    },
-    {
-      "key": "Weeks",
-      "english": "weeks",
-      "arabic": "أسابيع"
-    },
-    {
-      "key": "Days",
-      "english": "days",
-      "arabic": "أيام"
-    },
-    {
-      "key": "Hours",
-      "english": "hours",
-      "arabic": "ساعات"
-    },
-    {
-      "key": "Minutes",
-      "english": "minutes",
-      "arabic": "دقائق"
-    },
-    {
-      "key": "Seconds",
-      "english": "seconds",
-      "arabic": "ثواني"
-    },
-    {
-      "key": "1_second_real_life_equals",
-      "english": "1 second in the simulated real solar system equals 1 second in real life",
-      "arabic": "ثانية واحدة في محاكاة النظام الشمسي الحقيقي تساوي 1 ثواني في الحياة الواقعية"
-    },
-    {
-      "key": "1_second_real_life_equals_years",
-      "english": "1 second in the simulated real solar system equals {0} years in real life",
-      "arabic": "ثانية واحدة في محاكاة النظام الشمسي الحقيقي تساوي {0} سنوات في الحياة الواقعية"
-    },
-    {
-      "key": "1_second_real_life_equals_months",
-      "english": "1 second in the simulated real solar system equals {0} months in real life",
-      "arabic": "ثانية واحدة في محاكاة النظام الشمسي الحقيقي تساوي {0} أشهر في الحياة الواقعية"
-    },
-    {
-      "key": "1_second_real_life_equals_weeks",
-      "english": "1 second in the simulated real solar system equals {0} weeks in real life",
-      "arabic": "ثانية واحدة في محاكاة النظام الشمسي الحقيقي تساوي {0} أسابيع في الحياة الواقعية"
-    },
-    {
-      "key": "1_second_real_life_equals_days",
-      "english": "1 second in the simulated real solar system equals {0} days in real life",
-      "arabic": "ثانية واحدة في محاكاة النظام الشمسي الحقيقي تساوي {0} أيام في الحياة الواقعية"
-    },
-    {
-      "key": "1_second_real_life_equals_hours",
-      "english": "1 second in the simulated real solar system equals {0} hours in real life",
-      "arabic": "ثانية واحدة في محاكاة النظام الشمسي الحقيقي تساوي {0} ساعات في الحياة الواقعية"
-    },
-    {
-      "key": "1_second_real_life_equals_minutes",
-      "english": "1 second in the simulated real solar system equals {0} minutes in real life",
-      "arabic": "ثانية واحدة في محاكاة النظام الشمسي الحقيقي تساوي {0} دقائق في الحياة الواقعية"
-    },
-    {
-      "key": "1_second_real_life_equals_seconds",
-      "english": "1 second in the simulated real solar system equals {0} seconds in real life",
-      "arabic": "ثانية واحدة في محاكاة النظام الشمسي الحقيقي تساوي {0} ثواني في الحياة الواقعية"
-    },
-    {
-      "key": "1_meter_size_equals",
-      "english": "1 meter size in the simulated solar system equals {0} kilometer in real life.",
-      "arabic": " متر في النظام الشمسي المحاكي يساوي {0} كيلومتر في الحياة الحقيقية"
-    },
-    {
-      "key": "1_meter_distance_equals",
-      "english": "1 meter distance in the simulated solar system equals {0} kilometer in real life.",
-      "arabic": " متر مسافة في النظام الشمسي المحاكي يعادل {0} كيلومتر في الحياة الحقيقية"
-    },
-    {
-      "key": "Distance_In_KM",
-      "english": "{0} KM",
-      "arabic": "{0} كيلومتر"
-    },
-    {
-      "key": "Pause",
-      "english": "Pause",
-      "arabic": "توقف مؤقت"
-    },
-    {
-      "key": "Fast_Forward",
-      "english": "Fast Forward",
-      "arabic": "تقدم سريع"
-    },
-    {
-      "key": "Play",
-      "english": "Play",
-      "arabic": "تشغيل"
-    },
-    {
-      "key": "Playback_Time_Settings",
-      "english": "Playback Time Settings",
-      "arabic": "إعدادات زمن التشغيل"
-    },
-    {
-      "key": "Planet_Settings",
-      "english": "Planet Settings",
-      "arabic": "إعدادات الكوكب"
-    },
-    {
-      "key": "Orbital_Settings",
-      "english": "Orbital Settings",
-      "arabic": "إعدادات المدار"
-    },
-    {
-      "key": "Planets_legend",
-      "english": "Planets legend",
-      "arabic": "أساطير الكواكب"
-    },
-    {
-      "key": "Move_your_phone_to_start_scanning_the_room",
-      "english": "Move your phone to start scanning the room",
-      "arabic": "حرك هاتفك لبدء فحص الغرفة"
-    },
-    {
-      "key": "Tap_on_the_scanned_area_to_place_the_solar_system",
-      "english": "Tap on the scanned area to place the solar system",
-      "arabic": "اضغط على المنطقة التي تم فحصها لوضع النظام الشمسي"
-    },
-    {
-      "key": "Click_on_any_planet_or_click_on_the_menu_below_to_display_more_settings",
-      "english": "Click on any planet or click on the menu below to display more settings",
-      "arabic": "انقر على أي كوكب أو انقر على القائمة أدناه لعرض المزيد من الإعدادات"
-    },
-    {
-      "key": "Touch_and_drag_to_move_the_planet_Around",
-      "english": "Touch and drag to move the planet Around",
-      "arabic": "المس واسحب لتحريك الكوكب حول"
-    },
+    "items": [
+        {
+            "key": "no_planet_selected",
+            "english": "No planet selected, Please select a planet to get its info",
+            "arabic": "لم يتم اختيار كوكب, الرجاء اختيار كوكب للحصول على معلوماته"
+        },
+        {
+            "key": "Planets_Info",
+            "english": "Plannet Info",
+            "arabic": "معلومات عن الكوكب"
+        },
+  {
+    "key": "name",
+    "english": "Name",
+    "arabic": "اسم"
+  },
+  {
+    "key": "diameter",
+    "english": "Diameter",
+    "arabic": "قطر"
+  },
+  {
+    "key": "rotationSpeed",
+    "english": "Rotation Speed",
+    "arabic": "سرعة الدوران"
+  },
+  {
+    "key": "rotationPeriod",
+    "english": "Rotation Period",
+    "arabic": "فترة الدوران"
+  },
+  {
+    "key": "lengthOfDay",
+    "english": "Length of Day",
+    "arabic": "طول اليوم"
+  },
+  {
+    "key": "perihelion",
+    "english": "Perihelion",
+    "arabic": "الحضيض"
+  },
+  {
+    "key": "aphelion",
+    "english": "Aphelion",
+    "arabic": "الأوج"
+  },
+  {
+    "key": "orbitalPeriod",
+    "english": "Orbital Period",
+    "arabic": "الفترة المدارية"
+  },
+  {
+    "key": "orbitalVelocity",
+    "english": "Orbital Velocity",
+    "arabic": "السرعة المدارية"
+  },
+  {
+    "key": "orbitalInclination",
+    "english": "Orbital Inclination",
+    "arabic": "ميل المدار"
+  },
+  {
+    "key": "orbitalEccentricity",
+    "english": "Orbital Eccentricity",
+    "arabic": "الشذوذ المداري"
+  },
+  {
+    "key": "obliquityToOrbit",
+    "english": "Obliquity to Orbit",
+    "arabic": "الميل إلى المدار"
+  },
+  {
+    "key": "prefabName",
+    "english": "Prefab Name",
+    "arabic": "اسم التجهيز المسبق"
+  },
+  {
+    "key": "orbitProgress",
+    "english": "Orbit Progress",
+    "arabic": "تقدم المدار"
+  },
+  {
+    "key": "rotationProgress",
+    "english": "Rotation Progress",
+    "arabic": "تقدم الدوران"
+  },
+  {
+    "key": "completedOrbits",
+    "english": "Completed Orbits",
+    "arabic": "المدارات المكتملة"
+  },
+  {
+    "key": "completedRotations",
+    "english": "Completed Rotations",
+    "arabic": "الدورات المكتملة"
+  },
+  {
+    "key": "completedSelfRotations",
+    "english": "Completed Self Rotations",
+    "arabic": "الدورات الذاتية المكتملة"
+  },
+  {
+    "key": "orbitalEccentricitySquared",
+    "english": "Orbital Eccentricity Squared",
+    "arabic": "تربيع الشذوذ المداري"
+  },
+  {
+    "key": "rotationAxis",
+    "english": "Rotation Axis",
+    "arabic": "محور الدوران"
+  },
 
-    {
-      "key": "Display_Distance_From_Sun",
-      "english": "Display Distance From Sun",
-      "arabic": "عرض المسافة من الشمس"
-    },
-    {
-      "key": "Display_Planet_Name",
-      "english": "Display Planet Name",
-      "arabic": "عرض اسم الكوكب"
-    },
-    {
-      "key": "Display_Inclination_Line",
-      "english": "Display Inclination Line",
-      "arabic": "عرض خط الميل"
-    },
-    {
-      "key": "Display_Planet_Orbit",
-      "english": "Display Planet Orbit",
-      "arabic": "عرض مدار الكوكب"
-    },
-    {
-      "key": "Settings",
-      "english": "Settings",
-      "arabic": "الإعدادات"
-    },
-    {
-      "key": "Degrees",
-      "english": "{0} °",
-      "arabic": "{0} °"
-    },
-    {
-      "key": "The_Solar_System",
-      "english": "The Solar System",
-      "arabic": "النظام الشمسي"
-    },
-    {
-      "key": "Mercury",
-      "english": "Mercury",
-      "arabic": "عطارد"
-    },
-    {
-      "key": "Venus",
-      "english": "Venus",
-      "arabic": "الزهرة"
-    },
-    {
-      "key": "Earth",
-      "english": "Earth",
-      "arabic": "الأرض"
-    },
-    {
-      "key": "Mount_Everest",
-      "english": "Mount Everest",
-      "arabic": "جبل إيفرست"
-    },
-    {
-      "key": "Grand_Canyon",
-      "english": "Grand Canyon",
-      "arabic": "كانيون غراند"
-    },
-    {
-      "key": "Mars",
-      "english": "Mars",
-      "arabic": "المريخ"
-    },
-    {
-      "key": "Phobos",
-      "english": "Phobos",
-      "arabic": "فوبوس"
-    },
-    {
-      "key": "Deimos",
-      "english": "Deimos",
-      "arabic": "ديموس"
-    },
-    {
-      "key": "Jupiter",
-      "english": "Jupiter",
-      "arabic": "المشتري"
-    },
-    {
-      "key": "Io",
-      "english": "Io",
-      "arabic": "آيو"
-    },
-    {
-      "key": "Europa",
-      "english": "Europa",
-      "arabic": "أوروبا"
-    },
-    {
-      "key": "Ganymede",
-      "english": "Ganymede",
-      "arabic": "جانيميد"
-    },
-    {
-      "key": "Callisto",
-      "english": "Callisto",
-      "arabic": "كاليستو"
-    },
-    {
-      "key": "Saturn",
-      "english": "Saturn",
-      "arabic": "زحل"
-    },
-    {
-      "key": "Titan",
-      "english": "Titan",
-      "arabic": "تايتان"
-    },
-    {
-      "key": "Enceladus",
-      "english": "Enceladus",
-      "arabic": "انسيلادوس"
-    },
-    {
-      "key": "Mimas",
-      "english": "Mimas",
-      "arabic": "ميماس"
-    },
-    {
-      "key": "Iapetus",
-      "english": "Iapetus",
-      "arabic": "إيابيتوس"
-    },
-    {
-      "key": "Dione",
-      "english": "Dione",
-      "arabic": "ديوني"
-    },
-    {
-      "key": "SaturnRing",
-      "english": "SaturnRing",
-      "arabic": "حلقة زحل"
-    },
-    {
-      "key": "Uranus",
-      "english": "Uranus",
-      "arabic": "أورانوس"
-    },
-    {
-      "key": "Titania",
-      "english": "Titania",
-      "arabic": "تيتانيا"
-    },
-    {
-      "key": "Ariel",
-      "english": "Ariel",
-      "arabic": "آرييل"
-    },
-    {
-      "key": "Umbriel",
-      "english": "Umbriel",
-      "arabic": "أمبرييل"
-    },
-    {
-      "key": "Oberon",
-      "english": "Oberon",
-      "arabic": "أوبيرون"
-    },
-    {
-      "key": "Miranda",
-      "english": "Miranda",
-      "arabic": "ميراندا"
-    },
-    {
-      "key": "Neptune",
-      "english": "Neptune",
-      "arabic": "نبتون"
-    },
-    {
-      "key": "Triton",
-      "english": "Triton",
-      "arabic": "تريتون"
-    },
-    {
-      "key": "Nereid",
-      "english": "Nereid",
-      "arabic": "نيريد"
-    },
-    {
-      "key": "Pluto",
-      "english": "Pluto",
-      "arabic": "بلوتو"
-    },
-    {
-      "key": "Charon",
-      "english": "Charon",
-      "arabic": "شارون"
-    },
-    {
-      "key": "Sun",
-      "english": "Sun",
-      "arabic": "الشمس"
-    }
-  ]
+
+
+        {
+            "key": "Years",
+            "english": "years",
+            "arabic": "سنوات"
+        },
+        {
+            "key": "Months",
+            "english": "months",
+            "arabic": "أشهر"
+        },
+        {
+            "key": "Weeks",
+            "english": "weeks",
+            "arabic": "أسابيع"
+        },
+        {
+            "key": "Days",
+            "english": "days",
+            "arabic": "أيام"
+        },
+        {
+            "key": "Hours",
+            "english": "hours",
+            "arabic": "ساعات"
+        },
+        {
+            "key": "Minutes",
+            "english": "minutes",
+            "arabic": "دقائق"
+        },
+        {
+            "key": "Seconds",
+            "english": "seconds",
+            "arabic": "ثواني"
+        },
+        {
+            "key": "1_second_real_life_equals",
+            "english": "1 second in the simulated real solar system equals 1 second in real life",
+            "arabic": "ثانية واحدة في محاكاة النظام الشمسي الحقيقي تساوي 1 ثواني في الحياة الواقعية"
+        },
+        {
+            "key": "1_second_real_life_equals_years",
+            "english": "1 second in the simulated real solar system equals {0} years in real life",
+            "arabic": "ثانية واحدة في محاكاة النظام الشمسي الحقيقي تساوي {0} سنوات في الحياة الواقعية"
+        },
+        {
+            "key": "1_second_real_life_equals_months",
+            "english": "1 second in the simulated real solar system equals {0} months in real life",
+            "arabic": "ثانية واحدة في محاكاة النظام الشمسي الحقيقي تساوي {0} أشهر في الحياة الواقعية"
+        },
+        {
+            "key": "1_second_real_life_equals_weeks",
+            "english": "1 second in the simulated real solar system equals {0} weeks in real life",
+            "arabic": "ثانية واحدة في محاكاة النظام الشمسي الحقيقي تساوي {0} أسابيع في الحياة الواقعية"
+        },
+        {
+            "key": "1_second_real_life_equals_days",
+            "english": "1 second in the simulated real solar system equals {0} days in real life",
+            "arabic": "ثانية واحدة في محاكاة النظام الشمسي الحقيقي تساوي {0} أيام في الحياة الواقعية"
+        },
+        {
+            "key": "1_second_real_life_equals_hours",
+            "english": "1 second in the simulated real solar system equals {0} hours in real life",
+            "arabic": "ثانية واحدة في محاكاة النظام الشمسي الحقيقي تساوي {0} ساعات في الحياة الواقعية"
+        },
+        {
+            "key": "1_second_real_life_equals_minutes",
+            "english": "1 second in the simulated real solar system equals {0} minutes in real life",
+            "arabic": "ثانية واحدة في محاكاة النظام الشمسي الحقيقي تساوي {0} دقائق في الحياة الواقعية"
+        },
+        {
+            "key": "1_second_real_life_equals_seconds",
+            "english": "1 second in the simulated real solar system equals {0} seconds in real life",
+            "arabic": "ثانية واحدة في محاكاة النظام الشمسي الحقيقي تساوي {0} ثواني في الحياة الواقعية"
+        },
+        {
+            "key": "1_meter_size_equals",
+            "english": "1 meter size in the simulated solar system equals {0} kilometer in real life.",
+            "arabic": " متر في النظام الشمسي المحاكي يساوي {0} كيلومتر في الحياة الحقيقية"
+        },
+        {
+            "key": "1_meter_distance_equals",
+            "english": "1 meter distance in the simulated solar system equals {0} kilometer in real life.",
+            "arabic": " متر مسافة في النظام الشمسي المحاكي يعادل {0} كيلومتر في الحياة الحقيقية"
+        },
+        {
+            "key": "Distance_In_KM",
+            "english": "{0} KM",
+            "arabic": "{0} كيلومتر"
+        },
+        {
+            "key": "Pause",
+            "english": "Pause",
+            "arabic": "توقف مؤقت"
+        },
+        {
+            "key": "Fast_Forward",
+            "english": "Fast Forward",
+            "arabic": "تقدم سريع"
+        },
+        {
+            "key": "Play",
+            "english": "Play",
+            "arabic": "تشغيل"
+        },
+        {
+            "key": "Playback_Time_Settings",
+            "english": "Playback Time Settings",
+            "arabic": "إعدادات زمن التشغيل"
+        },
+        {
+            "key": "Planet_Settings",
+            "english": "Planet Settings",
+            "arabic": "إعدادات الكوكب"
+        },
+        {
+            "key": "Orbital_Settings",
+            "english": "Orbital Settings",
+            "arabic": "إعدادات المدار"
+        },
+        {
+            "key": "Planets_legend",
+            "english": "Planets legend",
+            "arabic": "أساطير الكواكب"
+        },
+        {
+            "key": "Move_your_phone_to_start_scanning_the_room",
+            "english": "Move your phone to start scanning the room",
+            "arabic": "حرك هاتفك لبدء فحص الغرفة"
+        },
+        {
+            "key": "Tap_on_the_scanned_area_to_place_the_solar_system",
+            "english": "Tap on the scanned area to place the solar system",
+            "arabic": "اضغط على المنطقة التي تم فحصها لوضع النظام الشمسي"
+        },
+        {
+            "key": "Click_on_any_planet_or_click_on_the_menu_below_to_display_more_settings",
+            "english": "Click on any planet or click on the menu below to display more settings",
+            "arabic": "انقر على أي كوكب أو انقر على القائمة أدناه لعرض المزيد من الإعدادات"
+        },
+        {
+            "key": "Touch_and_drag_to_move_the_planet_Around",
+            "english": "Touch and drag to move the planet Around",
+            "arabic": "المس واسحب لتحريك الكوكب حول"
+        },
+
+        {
+            "key": "Display_Distance_From_Sun",
+            "english": "Display Distance From Sun",
+            "arabic": "عرض المسافة من الشمس"
+        },
+        {
+            "key": "Display_Planet_Name",
+            "english": "Display Planet Name",
+            "arabic": "عرض اسم الكوكب"
+        },
+        {
+            "key": "Display_Inclination_Line",
+            "english": "Display Inclination Line",
+            "arabic": "عرض خط الميل"
+        },
+        {
+            "key": "Display_Planet_Orbit",
+            "english": "Display Planet Orbit",
+            "arabic": "عرض مدار الكوكب"
+        },
+        {
+            "key": "Settings",
+            "english": "Settings",
+            "arabic": "الإعدادات"
+        },
+        {
+            "key": "Degrees",
+            "english": "{0} °",
+            "arabic": "{0} °"
+        },
+        {
+            "key": "The_Solar_System",
+            "english": "The Solar System",
+            "arabic": "النظام الشمسي"
+        },
+        {
+            "key": "Mercury",
+            "english": "Mercury",
+            "arabic": "عطارد"
+        },
+        {
+            "key": "Venus",
+            "english": "Venus",
+            "arabic": "الزهرة"
+        },
+        {
+            "key": "Earth",
+            "english": "Earth",
+            "arabic": "الأرض"
+        },
+        {
+            "key": "Mount_Everest",
+            "english": "Mount Everest",
+            "arabic": "جبل إيفرست"
+        },
+        {
+            "key": "Grand_Canyon",
+            "english": "Grand Canyon",
+            "arabic": "كانيون غراند"
+        },
+        {
+            "key": "Mars",
+            "english": "Mars",
+            "arabic": "المريخ"
+        },
+        {
+            "key": "Phobos",
+            "english": "Phobos",
+            "arabic": "فوبوس"
+        },
+        {
+            "key": "Deimos",
+            "english": "Deimos",
+            "arabic": "ديموس"
+        },
+        {
+            "key": "Jupiter",
+            "english": "Jupiter",
+            "arabic": "المشتري"
+        },
+        {
+            "key": "Io",
+            "english": "Io",
+            "arabic": "آيو"
+        },
+        {
+            "key": "Europa",
+            "english": "Europa",
+            "arabic": "أوروبا"
+        },
+        {
+            "key": "Ganymede",
+            "english": "Ganymede",
+            "arabic": "جانيميد"
+        },
+        {
+            "key": "Callisto",
+            "english": "Callisto",
+            "arabic": "كاليستو"
+        },
+        {
+            "key": "Saturn",
+            "english": "Saturn",
+            "arabic": "زحل"
+        },
+        {
+            "key": "Titan",
+            "english": "Titan",
+            "arabic": "تايتان"
+        },
+        {
+            "key": "Enceladus",
+            "english": "Enceladus",
+            "arabic": "انسيلادوس"
+        },
+        {
+            "key": "Mimas",
+            "english": "Mimas",
+            "arabic": "ميماس"
+        },
+        {
+            "key": "Iapetus",
+            "english": "Iapetus",
+            "arabic": "إيابيتوس"
+        },
+        {
+            "key": "Dione",
+            "english": "Dione",
+            "arabic": "ديوني"
+        },
+        {
+            "key": "SaturnRing",
+            "english": "SaturnRing",
+            "arabic": "حلقة زحل"
+        },
+        {
+            "key": "Uranus",
+            "english": "Uranus",
+            "arabic": "أورانوس"
+        },
+        {
+            "key": "Titania",
+            "english": "Titania",
+            "arabic": "تيتانيا"
+        },
+        {
+            "key": "Ariel",
+            "english": "Ariel",
+            "arabic": "آرييل"
+        },
+        {
+            "key": "Umbriel",
+            "english": "Umbriel",
+            "arabic": "أمبرييل"
+        },
+        {
+            "key": "Oberon",
+            "english": "Oberon",
+            "arabic": "أوبيرون"
+        },
+        {
+            "key": "Miranda",
+            "english": "Miranda",
+            "arabic": "ميراندا"
+        },
+        {
+            "key": "Neptune",
+            "english": "Neptune",
+            "arabic": "نبتون"
+        },
+        {
+            "key": "Triton",
+            "english": "Triton",
+            "arabic": "تريتون"
+        },
+        {
+            "key": "Nereid",
+            "english": "Nereid",
+            "arabic": "نيريد"
+        },
+        {
+            "key": "Pluto",
+            "english": "Pluto",
+            "arabic": "بلوتو"
+        },
+        {
+            "key": "Charon",
+            "english": "Charon",
+            "arabic": "شارون"
+        },
+        {
+            "key": "Sun",
+            "english": "Sun",
+            "arabic": "الشمس"
+        }
+    ]
 }

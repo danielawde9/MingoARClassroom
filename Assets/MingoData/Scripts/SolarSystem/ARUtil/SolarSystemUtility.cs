@@ -221,6 +221,7 @@ public class SolarSystemUtility
         parentObject.SetActive(false);
     }
 
+
     public static void UpdateDistanceFromSunLine(PlanetData planetData)
     {
         planetData.distanceLineRenderer.SetPosition(0, Vector3.zero);

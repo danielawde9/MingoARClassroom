@@ -153,7 +153,7 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
             originalScales[planet] = planet.transform.localScale;
         }
 
-       uiHandler.SetCelestialBodyData(SolarSystemUtility.planetDataDictionary[planet.name]);
+       uiHandler.SetCelestialBodyData(SolarSystemUtility.planetDataDictionary[planet.name], localizationManager);
 
         // Move the selected planet in front of the user by one unit and scale it to 1,1,1
         Vector3 newPosition = Camera.main.transform.position + Camera.main.transform.forward;
@@ -168,6 +168,8 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
             ReturnPlanetToOriginalState();
             uiHandler.SetPlanetNameTextTitle("", false);
             selectedPlanet = null;
+            uiHandler.SetCelestialBodyData(null, localizationManager);
+
         }
     }
 
@@ -281,6 +283,7 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
         uiHandler.onPlanetInclinationLineToggleValueChanged.AddListener(UpdateInclinationLineVisibility);
         uiHandler.onOrbitLineToggleValueChanged.AddListener(UpdateOrbitLineVisibility);
         uiHandler.onDistanceFromSunToggleValueChanged.AddListener(UpdateDistanceFromSunVisibility);
+        uiHandler.SetCelestialBodyData(null, localizationManager);
 
         SolarSystemUtility.LoadPlanetData();
     }
@@ -416,8 +419,10 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
 
 // fixes
 // todo default text for the planet info incase no planet is seletected
+// todo fix the sun
 
 // features
+// todo add toggle for normizaling the planets size 
 // todo add songs and click sound
 // todo add seasons 
 // todo add pov planets
