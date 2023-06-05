@@ -418,7 +418,6 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
 }
 
 // fixes
-// todo default text for the planet info incase no planet is seletected
 // todo fix the sun
 
 // features
