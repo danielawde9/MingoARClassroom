@@ -216,19 +216,22 @@ public class SolarSystemUtility
     }
 
 
-    public static void UpdateDistanceFromSunLine(PlanetData planetData, LocalizationManager localizationManager)
+    public static void UpdateDistanceFromSunLine(PlanetData planetData)
     {
         planetData.distanceLineRenderer.SetPosition(0, Vector3.zero);
         planetData.distanceLineRenderer.SetPosition(1, planetData.celestialBodyInstance.transform.position - planetData.distanceLineRenderer.transform.position);
 
         planetData.distanceText.transform.position = planetData.celestialBodyInstance.transform.position / 2f + new Vector3(0,-0.5f) ; 
-        //todo fix hay
 
+    }
+
+    public static void UpdateDistanceText(PlanetData planetData, LocalizationManager localizationManager)
+    {
         float distanceInKm = planetData.celestialBodyInstance.transform.position.magnitude * Mathf.Pow(10, 6);
         string formattedDistance = distanceInKm.ToString("N0");
         planetData.distanceText.text = localizationManager.GetLocalizedValue("Distance_In_KM", planetData.distanceText, false, formattedDistance);
-
     }
+
 
     public static void UpdateOrbitLine(CelestialBodyData body, Func<CelestialBodyData, float, Vector3> calculatePosition)
     {

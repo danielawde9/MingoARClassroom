@@ -31,6 +31,9 @@ public class UIHandler : MonoBehaviour
     [Header("Panel Menu")]
     public GameObject menuSliderPanel;
     public GameObject sliderPanelToggleButton;
+    public ScrollRect sliderPanelScrollRect;
+    private Shadow sliderPanelToggleButtonShadow;
+
     [HideInInspector]
     public bool isMenuPanelVisible = false;
     private GameObject sliderButtonToggleImage;
@@ -135,7 +138,13 @@ public class UIHandler : MonoBehaviour
         planetDistanceFromSunToggle.transform.gameObject.SetActive(false);
 
     }
-
+    // This method will be called whenever the ScrollView's position changes
+    private void OnUserScroll(Vector2 scrollPosition)
+    {
+        // If the scroll position is at the top, disable the shadow
+        // otherwise, enable the shadow
+        sliderPanelToggleButtonShadow.enabled = !(scrollPosition.y >= 1.0f);
+    }
     private void Start()
     {
         MenuTransistionInit();
@@ -145,6 +154,14 @@ public class UIHandler : MonoBehaviour
         SliderInit();
 
         ToggleButtonsInit();
+
+        sliderPanelToggleButtonShadow = sliderPanelToggleButton.GetComponent<Shadow>();
+
+        // Ensure the shadow is disabled at the start if the user is at the top of the ScrollView
+        sliderPanelToggleButtonShadow.enabled = !(sliderPanelScrollRect.normalizedPosition.y >= 1.0f);
+
+        // Add a listener to the ScrollView's onValueChanged event
+        sliderPanelScrollRect.onValueChanged.AddListener(OnUserScroll);
 
         localizationManager.LoadLocalizedText();
 
@@ -191,7 +208,8 @@ public class UIHandler : MonoBehaviour
         for (int i = 0; i < tabButtons.Count; i++)
         {
             int index = i;
-            tabButtons[i].onClick.AddListener(() => ShowTab(index));
+            //tabButtons[i].onClick.AddListener(() => ShowTab(index));
+            tabButtons[i].onClick.AddListener(ToggleMenuSliderPanel);
 
             TextMeshProUGUI textComponent = tabButtons[i].GetComponentInChildren<TextMeshProUGUI>();
             if (textComponent != null)
@@ -301,13 +319,17 @@ public class UIHandler : MonoBehaviour
         // Set the height of the sliding panel to be half of the screen's height
         float screenHeight = Screen.height;
         float halfScreenHeight = screenHeight / 2;
+        float tabsLayoutHeight = tabButtons[0].transform.parent.gameObject.GetComponent<RectTransform>().rect.height;
+        Debug.Log(tabsLayoutHeight + "heigh hon");
+        float sliderToggleButtonLayoutHeight = sliderPanelToggleButton.transform.gameObject.GetComponent<RectTransform>().rect.height;
 
-        sliderPanelRectTransform.sizeDelta = new Vector2(sliderPanelRectTransform.sizeDelta.x, halfScreenHeight);
-        sliderPanelRectTransform.anchoredPosition = new Vector2(sliderPanelRectTransform.anchoredPosition.x, -halfScreenHeight / 2);
+        sliderPanelRectTransform.sizeDelta = new Vector2(sliderPanelRectTransform.sizeDelta.x, halfScreenHeight + sliderToggleButtonLayoutHeight / 2);
 
         // Set the target position of the panel
-        targetPosition = sliderPanelRectTransform.anchoredPosition + new Vector2(0f, halfScreenHeight);
-        initialPosition = new Vector2(sliderPanelRectTransform.anchoredPosition.x, -halfScreenHeight / 2);
+        targetPosition = sliderPanelRectTransform.anchoredPosition + new Vector2(0f, halfScreenHeight - sliderToggleButtonLayoutHeight/2);
+        initialPosition = new Vector2(sliderPanelRectTransform.anchoredPosition.x, -halfScreenHeight / 2 + tabsLayoutHeight + sliderToggleButtonLayoutHeight);
+
+        sliderPanelRectTransform.anchoredPosition = initialPosition;
 
         // Add listener to the toggle button
         sliderPanelToggleButton.GetComponent<Button>().onClick.AddListener(ToggleMenuSliderPanel);

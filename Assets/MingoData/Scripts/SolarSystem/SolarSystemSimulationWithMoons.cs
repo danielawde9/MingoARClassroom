@@ -206,6 +206,8 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
         foreach (var body in SolarSystemUtility.planetDataDictionary.Values)
         {
             SolarSystemUtility.UpdateOrbitLine(body, (body, angle) => SolarSystemUtility.CalculatePlanetPosition((PlanetData)body, angle, distanceScale));
+            SolarSystemUtility.UpdateDistanceText(body, localizationManager);
+
         }
 
     }
@@ -219,7 +221,7 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
             body.celestialBodyInstance.transform.localScale = new Vector3(scale, scale, scale);
         }
     }
-
+        
     private void UpdatePlanetNameVisibility(bool isOn)
     {
         foreach (var planet in SolarSystemUtility.planetDataDictionary.Values)
@@ -307,6 +309,7 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
             SolarSystemUtility.CreateInclinationLine(planet, planet.celestialBodyInstance , localizationManager);
             SolarSystemUtility.CreatePlanetName(planet, planet.celestialBodyInstance , localizationManager);
 
+            //SolarSystemUtility.UpdateDistanceText(planet, localizationManager);
 
             if (planet.name != "Sun")
             {
@@ -395,10 +398,6 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
             {
                 planetData.orbitProgress += orbitDelta;
                 planetData.celestialBodyInstance.transform.position = SolarSystemUtility.CalculatePlanetPosition(planetData, planetData.orbitProgress, distanceScale);
-
-                // todo IMPOTRANT turn off ashya eza msh 3eyzina aw eza msh on 
-                SolarSystemUtility.UpdateDistanceFromSunLine(planetData, localizationManager);
-
             }
 
             planetData.rotationProgress += Mathf.Abs(rotationDelta);
