@@ -190,6 +190,7 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
     }
 
     public void UpdateSizeScale(float value)
+
     {
         sizeScale = value;
 
@@ -206,8 +207,11 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
         foreach (var body in SolarSystemUtility.planetDataDictionary.Values)
         {
             SolarSystemUtility.UpdateOrbitLine(body, (body, angle) => SolarSystemUtility.CalculatePlanetPosition((PlanetData)body, angle, distanceScale));
-            SolarSystemUtility.UpdateDistanceText(body, localizationManager);
+            if(body.name != "Sun")
+            {
+                SolarSystemUtility.UpdateDistanceFromSunText(body, localizationManager);
 
+            }
         }
 
     }
@@ -227,7 +231,7 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
         foreach (var planet in SolarSystemUtility.planetDataDictionary.Values)
         {
             GameObject planetInstance = planet.celestialBodyInstance;
-            GameObject planetName = planetInstance.transform.Find($"{planet.name}_PlanetName").gameObject;
+            GameObject planetName = planetInstance.transform.Find($"{planet.name}_PlanetNameParent").gameObject;
             planetName.SetActive(isOn);
         }
     }
@@ -236,7 +240,7 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
         foreach (var planet in SolarSystemUtility.planetDataDictionary.Values)
         {
             GameObject planetInstance = planet.celestialBodyInstance;
-            GameObject parentObject = planetInstance.transform.Find($"{planet.name}_FaceCameraGameObjects").gameObject;
+            GameObject parentObject = planetInstance.transform.Find($"{planet.name}_InclinationLinesParent").gameObject;
             GameObject inclinationLineText = parentObject.transform.Find($"{planet.name}_InclinationLineText").gameObject;
             GameObject yAxis = parentObject.transform.Find($"{planet.name}_YAxis").gameObject;
 
@@ -268,9 +272,7 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
 
     private void Start()
     {
-
-
-    uiHandler.UIShowInitial();
+        uiHandler.UIShowInitial();
         uiHandler.OnUpdateTimeScaleSlider += UpdateTimeScale;
         uiHandler.OnUpdateSizeScaleSlider += UpdateSizeScale;
         uiHandler.OnUpdateDistanceScaleSlider += UpdateDistanceScale;
@@ -282,8 +284,6 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
 
         SolarSystemUtility.LoadPlanetData();
     }
-
-
 
     private void SpawnPlanets(Vector3 placedTouchPosition)
     {
@@ -307,26 +307,16 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
             planet.celestialBodyInstance.transform.localScale = new(newScale, newScale, newScale);
 
             SolarSystemUtility.CreateInclinationLine(planet, planet.celestialBodyInstance , localizationManager);
+
             SolarSystemUtility.CreatePlanetName(planet, planet.celestialBodyInstance , localizationManager);
 
-            //SolarSystemUtility.UpdateDistanceText(planet, localizationManager);
 
             if (planet.name != "Sun")
             {
-                SolarSystemUtility.CreateDistanceFromSunLine(parentDistanceLinesObject, planet);
+                SolarSystemUtility.CreateDistanceLineAndTextFromSun(parentDistanceLinesObject, planet);
+                SolarSystemUtility.UpdateDistanceFromSunText(planet, localizationManager);
             }
-
-            //uiHandler.DisplayPlanetColorLegend(SolarSystemUtility.GetPlanetColorLegend());
-            uiHandler.SetPlanetColorLegend(SolarSystemUtility.GetPlanetColorLegend());
-            originalPositions[planet.celestialBodyInstance] = planet.celestialBodyInstance.transform.position;
-
-            if (planetPrefab == null)
-            {
-                Debug.LogError($"Prefab not found for {planet.name}");
-                continue;
-            }
-
-            if (planet.name == "Sun")
+            else
             {
                 SolarSystemUtility.CreateDirectionalLight(planet.celestialBodyInstance.transform, distanceScale, SolarSystemUtility.planetDataDictionary);
 
@@ -338,6 +328,10 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
                 }
             }
 
+            uiHandler.SetPlanetColorLegend(SolarSystemUtility.GetPlanetColorLegend());
+
+            originalPositions[planet.celestialBodyInstance] = planet.celestialBodyInstance.transform.position;
+
             planet.rotationSpeed = 360f / planet.rotationPeriod;
 
             planet.orbitProgress = 0f;
@@ -345,6 +339,11 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
 
             SolarSystemUtility.CreateOrbitLine(planet.celestialBodyInstance, planet, (body, angle) => SolarSystemUtility.CalculatePlanetPosition((PlanetData)body, angle, distanceScale));
 
+            if (planetPrefab == null)
+            {
+                Debug.LogError($"Prefab not found for {planet.name}");
+                continue;
+            }
         }
     }
 
@@ -362,8 +361,6 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
         {
             // Move the selected planet to a position in front of the camera
             selectedPlanet.transform.position = Vector3.Lerp(selectedPlanet.transform.position, mainCamera.transform.position + mainCamera.transform.forward * 1f, Time.deltaTime);
-
-
         }
 
         if (SolarSystemUtility.directionalLight != null && SolarSystemUtility.planetDataDictionary.TryGetValue("Sun", out var sunData))
@@ -398,6 +395,7 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
             {
                 planetData.orbitProgress += orbitDelta;
                 planetData.celestialBodyInstance.transform.position = SolarSystemUtility.CalculatePlanetPosition(planetData, planetData.orbitProgress, distanceScale);
+                SolarSystemUtility.UpdateDistanceFromSunLine(planetData);
             }
 
             planetData.rotationProgress += Mathf.Abs(rotationDelta);

@@ -33,17 +33,23 @@ public class SolarSystemUtility
 
     public static void CreatePlanetName(PlanetData planet, GameObject planetInstance, LocalizationManager localizationManager)
     {
-        GameObject planetTextObject = CreateGameObject($"{planet.name}_PlanetName", planetInstance, Vector3.down * 1.1f, Quaternion.identity);
+        GameObject parentObject = new GameObject(planet.name + "_PlanetNameParent");
+        parentObject.transform.SetParent(planetInstance.transform, false);
+        parentObject.transform.localPosition = Vector3.zero;
+        // Make sure the parentObject always faces the camera
+        parentObject.AddComponent<FaceCamera>();
+
+
+        GameObject planetTextObject = CreateGameObject($"{planet.name}_PlanetName", parentObject, Vector3.down * 1.1f, Quaternion.identity);
         TextMeshPro planetNameTextMeshPro = CreateTextMeshPro(planetTextObject, null, 4.25f, Color.white, TextAlignmentOptions.Center, new Vector2(2f, 2f));
         planetNameTextMeshPro.text = localizationManager.GetLocalizedValue(planet.name, planetNameTextMeshPro, true);
-        planetTextObject.AddComponent<FaceCamera>();
-        planetTextObject.SetActive(false);
+        parentObject.SetActive(false);
     }
     
     public static void CreateInclinationLine(PlanetData planet, GameObject planetInstance, LocalizationManager localizationManager)
     {
         // Create a parent game object for text and y-axis line. This object doesn't rotate.
-        GameObject parentObject = new GameObject(planet.name + "_FaceCameraGameObjects");
+        GameObject parentObject = new GameObject(planet.name + "_InclinationLinesParent");
         parentObject.transform.SetParent(planetInstance.transform, false);
         parentObject.transform.localPosition = Vector3.zero;
 
@@ -179,7 +185,23 @@ public class SolarSystemUtility
     }
 
 
-    public static void CreateDistanceFromSunLine(GameObject parentDistanceLinesObject, PlanetData planet)
+
+    public static Dictionary<string, Color> GetPlanetColorLegend()
+    {
+        return planetColorLegend;
+    }
+
+    private static Color GetRandomPlanetLineColor()
+    {
+        // Generate a random line color for each planet
+        System.Random random = new();
+        float r = (float)random.NextDouble();
+        float g = (float)random.NextDouble();
+        float b = (float)random.NextDouble();
+        return new Color(r, g, b);
+    }
+
+    public static void CreateDistanceLineAndTextFromSun(GameObject parentDistanceLinesObject, PlanetData planet)
     {
 
         GameObject parentObject = CreateGameObject($"{planet.name}_ParentDistanceInfo", parentDistanceLinesObject, Vector3.zero, Quaternion.identity);
@@ -197,35 +219,17 @@ public class SolarSystemUtility
         planet.distanceText = CreateTextMeshPro(textDistanceTextObject, "", 4.25f, planetLineColor, TextAlignmentOptions.Center, new Vector2(2.0f, 2.0f));
 
         parentObject.SetActive(false);
-
     }
-
-    public static Dictionary<string, Color> GetPlanetColorLegend()
-    {
-        return planetColorLegend;
-    }
-
-    private static Color GetRandomPlanetLineColor()
-    {
-        // Generate a random line color for each planet
-        System.Random random = new();
-        float r = (float)random.NextDouble();
-        float g = (float)random.NextDouble();
-        float b = (float)random.NextDouble();
-        return new Color(r, g, b);
-    }
-
 
     public static void UpdateDistanceFromSunLine(PlanetData planetData)
     {
         planetData.distanceLineRenderer.SetPosition(0, Vector3.zero);
         planetData.distanceLineRenderer.SetPosition(1, planetData.celestialBodyInstance.transform.position - planetData.distanceLineRenderer.transform.position);
-
         planetData.distanceText.transform.position = planetData.celestialBodyInstance.transform.position / 2f + new Vector3(0,-0.5f) ; 
 
     }
 
-    public static void UpdateDistanceText(PlanetData planetData, LocalizationManager localizationManager)
+    public static void UpdateDistanceFromSunText(PlanetData planetData, LocalizationManager localizationManager)
     {
         float distanceInKm = planetData.celestialBodyInstance.transform.position.magnitude * Mathf.Pow(10, 6);
         string formattedDistance = distanceInKm.ToString("N0");
