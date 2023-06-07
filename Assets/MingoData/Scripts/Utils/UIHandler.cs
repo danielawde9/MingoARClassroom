@@ -333,16 +333,14 @@ public class UIHandler : MonoBehaviour
         float tabsLayoutHeight = tabsLayout.GetComponent<RectTransform>().rect.height;
         float sliderToggleButtonLayoutHeight = sliderPanelToggleButton.transform.gameObject.GetComponent<RectTransform>().rect.height;
 
-        sliderPanelRectTransform.sizeDelta = new Vector2(sliderPanelRectTransform.sizeDelta.x, halfScreenHeight);
+        Vector2 sizeDelta = sliderPanelRectTransform.sizeDelta;
+        sizeDelta = new Vector2(sizeDelta.x, halfScreenHeight);
+        sliderPanelRectTransform.sizeDelta = sizeDelta;
 
         // Set the target position of the panel
-        Vector2 anchoredPosition = sliderPanelRectTransform.anchoredPosition;
-        targetPosition = anchoredPosition + new Vector2(0f, halfScreenHeight - sliderToggleButtonLayoutHeight/2);
-        initialPosition = new Vector2(anchoredPosition.x, -halfScreenHeight / 2 + tabsLayoutHeight + sliderToggleButtonLayoutHeight);
-
-        anchoredPosition = initialPosition;
-        sliderPanelRectTransform.anchoredPosition = anchoredPosition;
-
+        targetPosition =  new Vector2(0f, sizeDelta.y/2 + tabsLayoutHeight);
+        initialPosition = new Vector2(0f, -halfScreenHeight / 2 + tabsLayoutHeight + sliderToggleButtonLayoutHeight);
+        sliderPanelRectTransform.anchoredPosition = initialPosition;
         // Add listener to the toggle button
         sliderPanelToggleButton.GetComponent<Button>().onClick.AddListener(ToggleMenuSliderPanel);
     }
@@ -452,7 +450,7 @@ public class UIHandler : MonoBehaviour
         valueComponent.alignment = TextAlignmentOptions.MidlineLeft;
     }
 
-    private void AssignNonArabicFieldValue(object fieldValue, TextMeshProUGUI valueComponent)
+    private void AssignNonArabicFieldValue(object fieldValue, TMP_Text valueComponent)
     {
         // Check if fieldValue is a number
         if (float.TryParse(fieldValue.ToString(), out float number))
