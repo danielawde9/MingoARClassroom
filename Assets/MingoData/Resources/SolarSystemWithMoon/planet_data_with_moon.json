@@ -1,0 +1,372 @@
+  {
+    "planets": [
+      {
+        "name": "Mercury",
+        "diameter": 4879,
+        "rotationPeriod": 1407.6,
+        "lengthOfDay": 4222.6,
+        "distanceFromSun": 57.9,
+        "perihelion": 46,
+        "aphelion": 69.8,
+        "orbitalPeriod": 88,
+        "orbitalVelocity": 47.4,
+        "orbitalInclination": 7,
+        "orbitalEccentricity": 0.206,
+        "obliquityToOrbit": 0.034,
+        "prefabName": "SolarSystemWithMoon/Mercury",
+        "moons": [],
+        "rings": []
+      },
+      {
+        "name": "Venus",
+        "diameter": 12104,
+        "rotationPeriod": -5832.5,
+        "lengthOfDay": 2802,
+        "distanceFromSun": 108.2,
+        "perihelion": 107.5,
+        "aphelion": 108.9,
+        "orbitalPeriod": 224.7,
+        "orbitalVelocity": 35,
+        "orbitalInclination": 3.4,
+        "orbitalEccentricity": 0.007,
+        "obliquityToOrbit": 177.4,
+        "prefabName": "SolarSystemWithMoon/Venus",
+        "moons": [],
+        "rings": []
+      },
+      {
+        "name": "Earth",
+        "diameter": 12756,
+        "rotationPeriod": 23.9,
+        "lengthOfDay": 24,
+        "distanceFromSun": 149.6,
+        "perihelion": 147.1,
+        "aphelion": 152.1,
+        "orbitalPeriod": 365.2,
+        "orbitalVelocity": 29.8,
+        "orbitalInclination": 0,
+        "orbitalEccentricity": 0.017,
+        "obliquityToOrbit": 23.4,
+        "prefabName": "SolarSystemWithMoon/Earth",
+        "moons": [],
+        "rings": [],
+        "pointsOfInterest": [
+          {
+            "name": "Mount Everest",
+            "description": "The highest peak on Earth",
+            "latitude": 27.9881,
+            "longitude": 86.925
+          },
+          {
+            "name": "Grand Canyon",
+            "description": "A steep-sided canyon carved by the Colorado River",
+            "latitude": 36.1069,
+            "longitude": -112.1129
+          }
+        ]
+      },
+      {
+        "name": "Mars",
+        "diameter": 6792,
+        "rotationPeriod": 24.6,
+        "lengthOfDay": 24.7,
+        "distanceFromSun": 228,
+        "perihelion": 206.7,
+        "aphelion": 249.3,
+        "orbitalPeriod": 687,
+        "orbitalVelocity": 24.1,
+        "orbitalInclination": 1.8,
+        "orbitalEccentricity": 0.094,
+        "obliquityToOrbit": 25.2,
+        "prefabName": "SolarSystemWithMoon/Mars",
+        "moons": [
+          {
+            "name": "Phobos",
+            "diameter": 22.2,
+            "rotationPeriod": 0.319,
+            "lengthOfDay": 0.319,
+            "distanceFromPlanet": 9376,
+            "orbitalPeriod": 0.319,
+            "prefabName": "SolarSystemWithMoon/Phobos"
+          },
+          {
+            "name": "Deimos",
+            "diameter": 12.6,
+            "rotationPeriod": 1.262,
+            "lengthOfDay": 1.262,
+            "distanceFromPlanet": 23463.2,
+            "orbitalPeriod": 1.262,
+            "prefabName": "SolarSystemWithMoon/Deimos"
+          }
+        ],
+        "rings": []
+      },
+      {
+        "name": "Jupiter",
+        "diameter": 142984,
+        "rotationPeriod": 9.9,
+        "lengthOfDay": 9.9,
+        "distanceFromSun": 778.5,
+        "perihelion": 816.4,
+        "aphelion": 4331,
+        "orbitalPeriod": 4331,
+        "orbitalVelocity": 13.1,
+        "orbitalInclination": 1.3,
+        "orbitalEccentricity": 0.049,
+        "obliquityToOrbit": 3.1,
+        "prefabName": "SolarSystemWithMoon/Jupiter",
+        "moons": [
+          {
+            "name": "Io",
+            "diameter": 3643.2,
+            "rotationPeriod": 1.769,
+            "lengthOfDay": 1.769,
+            "distanceFromPlanet": 421700,
+            "orbitalPeriod": 1.769,
+            "prefabName": "SolarSystemWithMoon/Io"
+          },
+          {
+            "name": "Europa",
+            "diameter": 3121.6,
+            "rotationPeriod": 3.551,
+            "lengthOfDay": 3.551,
+            "distanceFromPlanet": 670900,
+            "orbitalPeriod": 3.551,
+            "prefabName": "SolarSystemWithMoon/Europa"
+          },
+          {
+            "name": "Ganymede",
+            "diameter": 5262.4,
+            "rotationPeriod": 7.155,
+            "lengthOfDay": 7.155,
+            "distanceFromPlanet": 1070400,
+            "orbitalPeriod": 7.155,
+            "prefabName": "SolarSystemWithMoon/Ganymede"
+          },
+          {
+            "name": "Callisto",
+            "diameter": 4820.6,
+            "rotationPeriod": 16.689,
+            "lengthOfDay": 16.689,
+            "distanceFromPlanet": 1882700,
+            "orbitalPeriod": 16.689,
+            "prefabName": "SolarSystemWithMoon/Callisto"
+          }
+        ],
+        "rings": []
+      },
+      {
+        "name": "Saturn",
+        "diameter": 120536,
+        "rotationPeriod": 10.7,
+        "lengthOfDay": 10.7,
+        "distanceFromSun": 1432,
+        "perihelion": 1357.6,
+        "aphelion": 1506.5,
+        "orbitalPeriod": 10747,
+        "orbitalVelocity": 9.7,
+        "orbitalInclination": 2.5,
+        "orbitalEccentricity": 0.052,
+        "obliquityToOrbit": 26.7,
+        "prefabName": "SolarSystemWithMoon/Saturn",
+        "moons": [
+          {
+            "name": "Titan",
+            "diameter": 5151,
+            "rotationPeriod": 15.945,
+            "lengthOfDay": 15.945,
+            "distanceFromPlanet": 1221870,
+            "orbitalPeriod": 15.945,
+            "prefabName": "SolarSystemWithMoon/Titan"
+          },
+          {
+            "name": "Enceladus",
+            "diameter": 504.2,
+            "rotationPeriod": 1.37,
+            "lengthOfDay": 1.37,
+            "distanceFromPlanet": 238042,
+            "orbitalPeriod": 1.37,
+            "prefabName": "SolarSystemWithMoon/Enceladus"
+          },
+          {
+            "name": "Mimas",
+            "diameter": 396.4,
+            "rotationPeriod": 0.942,
+            "lengthOfDay": 0.942,
+            "distanceFromPlanet": 185520,
+            "orbitalPeriod": 0.942,
+            "prefabName": "SolarSystemWithMoon/Mimas"
+          },
+          {
+            "name": "Iapetus",
+            "diameter": 1468.8,
+            "rotationPeriod": 79.322,
+            "lengthOfDay": 79.322,
+            "distanceFromPlanet": 3561309,
+            "orbitalPeriod": 79.322,
+            "prefabName": "SolarSystemWithMoon/Iapetus"
+          },
+          {
+            "name": "Dione",
+            "diameter": 1122.8,
+            "rotationPeriod": 2.737,
+            "lengthOfDay": 2.737,
+            "distanceFromPlanet": 377400,
+            "orbitalPeriod": 2.737,
+            "prefabName": "SolarSystemWithMoon/Dione"
+          }
+        ],
+        "rings": [
+          {
+            "name": "SaturnRing",
+            "innerRadius": 0.0669,
+            "outerRadius": 0.1407,
+            "prefabName": "SolarSystemWithMoon/SaturnRing"
+          }
+        ]
+      },
+      {
+        "name": "Uranus",
+        "diameter": 51118,
+        "rotationPeriod": -17.2,
+        "lengthOfDay": 17.2,
+        "distanceFromSun": 2867,
+        "perihelion": 2732.7,
+        "aphelion": 3001.4,
+        "orbitalPeriod": 30589,
+        "orbitalVelocity": 6.8,
+        "orbitalInclination": 0.8,
+        "orbitalEccentricity": 0.047,
+        "obliquityToOrbit": 97.8,
+        "prefabName": "SolarSystemWithMoon/Uranus",
+        "moons": [
+          {
+            "name": "Titania",
+            "diameter": 1577.8,
+            "rotationPeriod": 8.706,
+            "lengthOfDay": 8.706,
+            "distanceFromPlanet": 435910,
+            "orbitalPeriod": 8.706,
+            "prefabName": "SolarSystemWithMoon/Titania"
+          },
+          {
+            "name": "Ariel",
+            "diameter": 1157.8,
+            "rotationPeriod": 2.52,
+            "lengthOfDay": 2.52,
+            "distanceFromPlanet": 191020,
+            "orbitalPeriod": 2.52,
+            "prefabName": "SolarSystemWithMoon/Ariel"
+          },
+          {
+            "name": "Umbriel",
+            "diameter": 1169.4,
+            "rotationPeriod": 4.144,
+            "lengthOfDay": 4.144,
+            "distanceFromPlanet": 266300,
+            "orbitalPeriod": 4.144,
+            "prefabName": "SolarSystemWithMoon/Umbriel"
+          },
+          {
+            "name": "Oberon",
+            "diameter": 1522.8,
+            "rotationPeriod": 13.463,
+            "lengthOfDay": 13.463,
+            "distanceFromPlanet": 583500,
+            "orbitalPeriod": 13.463,
+            "prefabName": "SolarSystemWithMoon/Oberon"
+          },
+          {
+            "name": "Miranda",
+            "diameter": 471.6,
+            "rotationPeriod": 1.413,
+            "lengthOfDay": 1.413,
+            "distanceFromPlanet": 129390,
+            "orbitalPeriod": 1.413,
+            "prefabName": "SolarSystemWithMoon/Miranda"
+          }
+        ],
+        "rings": []
+      },
+      {
+        "name": "Neptune",
+        "diameter": 49528,
+        "rotationPeriod": 16.1,
+        "lengthOfDay": 16.1,
+        "distanceFromSun": 4515,
+        "perihelion": 4471.1,
+        "aphelion": 4558.9,
+        "orbitalPeriod": 59800,
+        "orbitalVelocity": 5.4,
+        "orbitalInclination": 1.8,
+        "orbitalEccentricity": 0.01,
+        "obliquityToOrbit": 28.3,
+        "prefabName": "SolarSystemWithMoon/Neptune",
+        "moons": [
+          {
+            "name": "Triton",
+            "diameter": 2706.8,
+            "rotationPeriod": -5.877,
+            "lengthOfDay": 5.877,
+            "distanceFromPlanet": 354759,
+            "orbitalPeriod": 5.877,
+            "prefabName": "SolarSystemWithMoon/Triton"
+          },
+          {
+            "name": "Nereid",
+            "diameter": 340,
+            "rotationPeriod": 0.495,
+            "lengthOfDay": 0.495,
+            "distanceFromPlanet": 5513400,
+            "orbitalPeriod": 0.495,
+            "prefabName": "SolarSystemWithMoon/Nereid"
+          }
+        ],
+        "rings": []
+      },
+      {
+        "name": "Pluto",
+        "diameter": 23779,
+        "rotationPeriod": -6.3872,
+        "lengthOfDay": 6.3872,
+        "distanceFromSun": 5906.4,
+        "perihelion": 4436.8,
+        "aphelion": 7375.9,
+        "orbitalPeriod": 90560,
+        "orbitalVelocity": 4.7,
+        "orbitalInclination": 17.16,
+        "orbitalEccentricity": 0.2488,
+        "obliquityToOrbit": 122.53,
+        "prefabName": "SolarSystemWithMoon/Pluto",
+        "moons": [
+          {
+            "name": "Charon",
+            "diameter": 1212,
+            "rotationPeriod": 6.387,
+            "lengthOfDay": 6.387,
+            "distanceFromPlanet": 19591,
+            "orbitalPeriod": 6.387,
+            "prefabName": "SolarSystemWithMoon/Charon"
+          }
+        ],
+        "rings": []
+      },
+      {
+        "name": "Sun",
+        "diameter": 1392000,
+        "rotationPeriod": 24.47,
+        "lengthOfDay": 24.47,
+        "distanceFromSun": 0,
+        "perihelion": 0,
+        "aphelion": 0,
+        "orbitalPeriod": 0,
+        "orbitalVelocity": 0,
+        "orbitalInclination": 0,
+        "orbitalEccentricity": 0,
+        "obliquityToOrbit": 7.25,
+        "prefabName": "SolarSystemWithMoon/Sun",
+        "moons": [],
+        "rings": []
+      }
+    ]
+  }
