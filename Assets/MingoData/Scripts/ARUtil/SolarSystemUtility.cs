@@ -15,9 +15,9 @@ public abstract class SolarSystemUtility
     private static readonly Dictionary<string, Color> PlanetColorLegend = new Dictionary<string, Color>();
     public static GameObject directionalLight;
 
-    public static void AssignDirectionalLight(Transform planetInstance, float distanceScale)
+    public static void AssignDirectionalLight(Transform planetInstance, float distanceScale, List<string> desiredPlanets)
     {
-        CreateDirectionalLight(planetInstance, distanceScale, SolarSystemUtility.planetDataDictionary);
+        CreateDirectionalLight(planetInstance, distanceScale, SolarSystemUtility.planetDataDictionary, desiredPlanets);
         GameObject localDirectionalLight = GameObject.Find("Directional Light");
         if (localDirectionalLight == null)
             return;
@@ -127,7 +127,7 @@ public abstract class SolarSystemUtility
         orbitLine.SetActive(true);
 
     }
-    private static void CreateDirectionalLight(Transform sunTransform, float distanceScale, IReadOnlyDictionary<string, PlanetData> localPlanetDataDictionary)
+    private static void CreateDirectionalLight(Transform sunTransform, float distanceScale, IReadOnlyDictionary<string, PlanetData> localPlanetDataDictionary, List<string> allowedPlanets)
     {
         directionalLight = new GameObject("Directional Light");
         if (!directionalLight.TryGetComponent(out Light lightComponent))
@@ -137,9 +137,13 @@ public abstract class SolarSystemUtility
         lightComponent.type = LightType.Point;
         lightComponent.color = Color.white;
         lightComponent.intensity = 1.0f;
-        if (localPlanetDataDictionary.TryGetValue("Pluto", out PlanetData plutoData))
+        
+        string lastAllowedPlanet = allowedPlanets[^1];
+        
+        if (localPlanetDataDictionary.TryGetValue(lastAllowedPlanet, out PlanetData plutoData))
         {
-            float distanceToPluto = plutoData.distanceFromSun * distanceScale;
+            // todo fix distance light 
+            float distanceToPluto = plutoData.distanceFromSun * distanceScale * 10;
             Debug.Log("Distance from Sun to Pluto: " + distanceToPluto);
 
             // Adjust the range of the directional light
@@ -196,7 +200,7 @@ public abstract class SolarSystemUtility
     {
         TextAsset jsonFile = Resources.Load<TextAsset>("SolarSystemWithMoon/planet_data_with_moon");
         _planetDataList = JsonUtility.FromJson<PlanetDataList>(jsonFile.text);
-        foreach (var planetData in _planetDataList.planets)
+        foreach (PlanetData planetData in _planetDataList.planets)
         {
             planetData.rotationPeriod *= 3600; // convert hours to seconds
             planetData.orbitalPeriod *= 86400; // convert days to seconds
@@ -228,6 +232,18 @@ public abstract class SolarSystemUtility
 
     public static void CreateDistanceLineAndTextFromSun(GameObject parentDistanceLinesObject, PlanetData planet)
     {
+        if (parentDistanceLinesObject == null)
+        {
+            Debug.LogError("parentDistanceLinesObject is null");
+            return;
+        }
+
+        if (planet == null)
+        {
+            Debug.LogError("planet is null");
+            return;
+        }
+        
 
         GameObject parentObject = CreateGameObject($"{planet.name}_ParentDistanceInfo", parentDistanceLinesObject, Vector3.zero, Quaternion.identity);
 

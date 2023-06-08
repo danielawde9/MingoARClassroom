@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.XR.ARFoundation;
@@ -69,6 +70,7 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
         "completedSelfRotations"
     };
 
+    private readonly List<string> desiredPlanets = new List<string> {"Sun",  "Venus", "Earth" };
 
 
     protected override void Awake()
@@ -82,6 +84,7 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
     {
         if (selectedPlanet == null || uiHandler.isMenuPanelVisible)
             return;
+        // todo it keep running 
         uiHandler.ToggleSwipeIcon(false);
 
         const float rotationSpeed = 0.1f; // Adjust this value to change the rotation speed
@@ -219,7 +222,7 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
 
     public void UpdateDistanceScale(float value)
     {
-        distanceScale = value;
+        distanceScale = Mathf.Clamp(value, Constants.minDistance, Constants.maxDistance);
 
         foreach (PlanetData body in SolarSystemUtility.planetDataDictionary.Values)
         {
@@ -227,7 +230,6 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
             if (body.name != "Sun")
             {
                 SolarSystemUtility.UpdateDistanceFromSunText(body, localizationManager);
-
             }
         }
     }
@@ -305,6 +307,14 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
 
     private void InstantiatePlanet(PlanetData planet, Vector3 placedTouchPosition, Quaternion rotationCorrection)
     {
+        
+        // Only instantiate the planet if its name is in the allowed planets list
+        // if (!allowedPlanets.Contains(planet.name))
+        // {
+        //     return;
+        // }
+        
+        
         GameObject planetPrefab = Resources.Load<GameObject>(planet.prefabName);
         if (planetPrefab == null)
         {
@@ -345,7 +355,7 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
         parentDistanceLinesObject = new GameObject("ParentDistanceLines");
         Quaternion rotationCorrection = Quaternion.Euler(0, 0, 0);
 
-        foreach (PlanetData planet in SolarSystemUtility.planetDataDictionary.Values)
+        foreach (PlanetData planet in SolarSystemUtility.planetDataDictionary.Values.Where(planet => desiredPlanets.Contains(planet.name)))
         {
             InstantiatePlanet(planet, placedTouchPosition, rotationCorrection);
 
@@ -356,7 +366,7 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
             }
             else
             {
-                SolarSystemUtility.AssignDirectionalLight(planet.celestialBodyInstance.transform, distanceScale);
+                SolarSystemUtility.AssignDirectionalLight(planet.celestialBodyInstance.transform, distanceScale, desiredPlanets);
             }
 
             uiHandler.SetPlanetColorLegend(SolarSystemUtility.GetPlanetColorLegend());
@@ -476,6 +486,38 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
 // todo add history of the solar system 
 // todo add show inner structers
 // todo move the static funtion 3a janab
+
+
+/*
+ *
+ * untiy iphone TLS Allocator ALLOC_TEMP_TLS, underlying allocator ALLOC_TEMP_MAIN has unfreed allocations, size 366
+UnityEngine.GUIUtility:ProcessEvent (int,intptr,bool&)
+
+Internal: Stack allocator ALLOC_TEMP_MAIN has unfreed allocations, size 366
+
+To Debug, run app with -diag-temp-memory-leak-validation cmd line argument. This will output the callstacks of the leaked allocations.
+
+TLS Allocator ALLOC_TEMP_TLS, underlying allocator ALLOC_TEMP_MAIN has unfreed allocations, size 366
+UnityEngine.GUIUtility:ProcessEvent (int,intptr,bool&)
+
+ChatGPT
+The error message you're receiving, "TLS Allocator ALLOC_TEMP_TLS, underlying allocator ALLOC_TEMP_MAIN has unfreed allocations, size 366", is indicating that some temporary memory that was allocated was not freed. This is often caused by a memory leak in the game's code.
+
+The debugging advice given in the error message ("To Debug, run app with -diag-temp-memory-leak-validation cmd line argument. This will output the callstacks of the leaked allocations.") can be quite helpful. It's suggesting that you run your application with the -diag-temp-memory-leak-validation command line argument. This will output callstacks of the leaked allocations, which can give you a good starting point for tracking down where the leak is happening in your code.
+
+Unfortunately, without the specific code causing this issue, I can't give you a precise solution. But, in general, this type of error occurs when a piece of allocated memory isn't properly released. This can occur if you're allocating memory for an object, array, or other data structure but not properly freeing it when it's no longer needed.
+
+You'll want to check your code to ensure you're correctly managing memory. For example, if you're using new to create objects or arrays, make sure you're calling Destroy when they're no longer needed. Similarly, if you're using methods that allocate memory (like some of the Texture2D methods), ensure you're calling the corresponding Release method when done.
+
+Also, check that you're not holding references to objects that you're done with, as this can prevent Unity's garbage collector from freeing up that memory.
+
+
+
+
+
+
+
+ */
 // in update function 
 /* foreach (var moon in planet.moons)
 {
