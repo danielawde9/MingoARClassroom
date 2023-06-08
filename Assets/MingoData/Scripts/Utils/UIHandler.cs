@@ -19,8 +19,7 @@ public class UIHandler : MonoBehaviour
     [Header("Tabs Toggle Layout")]
     public List<Button> tabButtons;
     public List<GameObject> tabPanels;
-
-    private Image darkImageBackground;
+    public Image darkImageBackground;
     private TextMeshProUGUI settingsTabTextMeshPro;
     private TextMeshProUGUI planetInfoTabTextMeshPro;
     private GameObject tabsLayout;
@@ -321,8 +320,9 @@ public class UIHandler : MonoBehaviour
     private void MenuTransitionInit()
     {
         tabsLayout = tabButtons[0].transform.parent.gameObject;
-        darkImageBackground = GetComponent<Image>();
+        darkImageBackground.GetComponent<Image>();
         darkImageBackground.enabled = false;
+        darkImageBackground.GetComponent<Button>().onClick.AddListener(ToggleMenuSliderPanel);
         
         sliderButtonToggleImage = sliderPanelToggleButton.transform.GetChild(0).gameObject;
         sliderPanelRectTransform = menuSliderPanel.GetComponent<RectTransform>();

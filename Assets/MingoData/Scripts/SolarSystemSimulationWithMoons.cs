@@ -184,6 +184,7 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
         ReturnPlanetToOriginalState();
         uiHandler.SetPlanetNameTextTitle("", false);
         selectedPlanet = null;
+        uiHandler.ToggleSwipeIcon(false);
         uiHandler.SetCelestialBodyData(null, selectedFields);
     }
 
@@ -452,6 +453,11 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
 
 // fixes
 // todo fix light range  bs yekbar distance
+// todo add black bacground when planet selected
+// todo shil planet info la fo2 
+// todo add pinch zoom to increase decrease size 
+// todo shil planets 
+// todo swip up guestues
 
 // features
 // todo add toggle for normizaling the planets size 
