@@ -64,7 +64,7 @@ public abstract class SolarSystemUtility
         planetNameTextMeshPro.text = localizationManager.GetLocalizedValue(planet.name, planetNameTextMeshPro, true);
         parentObject.SetActive(false);
     }
-    
+
     public static void CreateInclinationLine(PlanetData planet, GameObject planetInstance, LocalizationManager localizationManager)
     {
         // Create a parent game object for text and y-axis line. This object doesn't rotate.
@@ -93,7 +93,7 @@ public abstract class SolarSystemUtility
             CreateLineRenderer(yAxisGameObject, 0.01f, 0.01f, 2, Vector3.down, Vector3.up, Color.white); // Add color parameter
         }
         parentObject.SetActive(false);
-      
+
     }
 
     public static void CreateOrbitLine(GameObject planet, CelestialBodyData body, Func<CelestialBodyData, float, Vector3> calculatePosition)
@@ -133,9 +133,9 @@ public abstract class SolarSystemUtility
         lightComponent.type = LightType.Point;
         lightComponent.color = Color.white;
         lightComponent.intensity = 1.0f;
-        
+
         string lastAllowedPlanet = allowedPlanets[^1];
-        
+
         if (localPlanetDataDictionary.TryGetValue(lastAllowedPlanet, out PlanetData plutoData))
         {
             // todo fix distance light 
@@ -192,11 +192,11 @@ public abstract class SolarSystemUtility
         return lineRenderer;
     }
 
-    public static void LoadPlanetData()
+    public static void LoadPlanetData(List<string> desiredPlanets)
     {
         TextAsset jsonFile = Resources.Load<TextAsset>("SolarSystemWithMoon/planet_data_with_moon");
         _planetDataList = JsonUtility.FromJson<PlanetDataList>(jsonFile.text);
-        foreach (PlanetData planetData in _planetDataList.planets)
+        foreach (PlanetData planetData in _planetDataList.planets.Where(planetData => desiredPlanets.Contains(planetData.name)))
         {
             planetData.rotationPeriod *= 3600; // convert hours to seconds
             planetData.orbitalPeriod *= 86400; // convert days to seconds
@@ -204,9 +204,10 @@ public abstract class SolarSystemUtility
             planetData.aphelion *= 1E6f; // convert 10^6 km to km
             planetData.distanceFromSun *= 1E6f; // convert 10^6 km to km
             planetData.orbitalEccentricitySquared = Mathf.Pow(planetData.orbitalEccentricity, 2);
-
         }
-        planetDataDictionary = _planetDataList.planets.ToDictionary(p => p.name, p => p);
+        planetDataDictionary = _planetDataList.planets
+                .Where(p => desiredPlanets.Contains(p.name))
+                .ToDictionary(p => p.name, p => p);
     }
 
 
@@ -239,7 +240,7 @@ public abstract class SolarSystemUtility
             Debug.LogError("planet is null");
             return;
         }
-        
+
 
         GameObject parentObject = CreateGameObject($"{planet.name}_ParentDistanceInfo", parentDistanceLinesObject, Vector3.zero, Quaternion.identity);
 
@@ -264,7 +265,7 @@ public abstract class SolarSystemUtility
         planetData.distanceLineRenderer.SetPosition(0, Vector3.zero);
         Vector3 position = planetData.celestialBodyInstance.transform.position;
         planetData.distanceLineRenderer.SetPosition(1, position - planetData.distanceLineRenderer.transform.position);
-        planetData.distanceText.transform.position = position / 2f + new Vector3(0,-0.5f) ; 
+        planetData.distanceText.transform.position = position / 2f + new Vector3(0, -0.5f);
 
     }
 
