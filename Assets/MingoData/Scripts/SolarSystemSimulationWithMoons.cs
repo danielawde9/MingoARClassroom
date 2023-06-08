@@ -303,41 +303,41 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
 
         SolarSystemUtility.LoadPlanetData();
     }
-
-
-    private void InstantiatePlanet(PlanetData planet, Vector3 placedTouchPosition, Quaternion rotationCorrection)
-    {
-        
-        // Only instantiate the planet if its name is in the allowed planets list
-        // if (!allowedPlanets.Contains(planet.name))
-        // {
-        //     return;
-        // }
-        
-        
+    
+    private void InstantiatePlanet(PlanetData planet, Vector3 placedTouchPosition, Quaternion rotationCorrection) 
+    { 
         GameObject planetPrefab = Resources.Load<GameObject>(planet.prefabName);
-        if (planetPrefab == null)
+        if (planetPrefab == null) 
+        { 
+            Debug.LogError($"Prefab not found for {planet.name}"); 
+            return; 
+        } 
+        planet.rotationAxis = Quaternion.Euler(0, 0, planet.obliquityToOrbit) * Vector3.up; 
+        distanceScale = Constants.initialDistanceScale;
+
+        Vector3 newPosition;
+        if (planet.name == "Sun") 
         {
-            Debug.LogError($"Prefab not found for {planet.name}");
-            return;
+            newPosition = Vector3.zero;
+        }
+        else
+        {
+            Vector3 planetPositionRelativeToSun = SolarSystemUtility.CalculatePlanetPosition(planet, 0f, distanceScale);
+            newPosition = placedTouchPosition + planetPositionRelativeToSun;
         }
 
-        planet.rotationAxis = Quaternion.Euler(0, 0, planet.obliquityToOrbit) * Vector3.up;
-        distanceScale = Constants.initialDistanceScale;
-        Vector3 planetPositionRelativeToSun = SolarSystemUtility.CalculatePlanetPosition(planet, 0f, distanceScale);
-        Vector3 newPosition = placedTouchPosition + planetPositionRelativeToSun;
         planet.celestialBodyInstance = Instantiate(planetPrefab, newPosition, rotationCorrection * planetPrefab.transform.rotation * Quaternion.Euler(planet.rotationAxis));
         planet.celestialBodyInstance.name = planet.name;
-        // float newScale = Constants.initialSizeScale * planet.diameter;
 
         float newScale = GetPlanetScale(planet);
-
-
         planet.celestialBodyInstance.transform.localScale = new Vector3(newScale, newScale, newScale);
+        
+        
         SolarSystemUtility.CreateInclinationLine(planet, planet.celestialBodyInstance, localizationManager);
         SolarSystemUtility.CreatePlanetName(planet, planet.celestialBodyInstance, localizationManager);
-    }
 
+        
+    }
 
     private static float GetPlanetScale(CelestialBodyData planet)
     {
@@ -355,7 +355,8 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
         parentDistanceLinesObject = new GameObject("ParentDistanceLines");
         Quaternion rotationCorrection = Quaternion.Euler(0, 0, 0);
 
-        foreach (PlanetData planet in SolarSystemUtility.planetDataDictionary.Values.Where(planet => desiredPlanets.Contains(planet.name)))
+        // .Values.Where(planet => desiredPlanets.Contains(planet.name))
+        foreach (PlanetData planet in SolarSystemUtility.planetDataDictionary.Values)
         {
             InstantiatePlanet(planet, placedTouchPosition, rotationCorrection);
 
@@ -464,9 +465,7 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
 // fixes
 // todo fix light range  bs yekbar distance
 // todo add black bacground when planet selected
-// todo shil planet info la fo2 
 // todo add pinch zoom to increase decrease size 
-// todo shil planets 
 // todo swip up guestues
 
 // features

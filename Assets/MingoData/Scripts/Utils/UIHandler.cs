@@ -144,8 +144,6 @@ public class UIHandler : MonoBehaviour
         darkImageBackgroundPlanetInfo.SetActive(!isActive);
     }
 
-
-
     private void Start()
     {
         
@@ -155,7 +153,6 @@ public class UIHandler : MonoBehaviour
 
         darkImageBackgroundPlanetInfo.GetComponent<Button>().onClick.AddListener(OnPlanetInfoClicked);
         darkImageBackgroundSliderPanel.GetComponent<Button>().onClick.AddListener(ToggleMenuSliderPanel);
-
 
         // Make them inactive at first
         darkImageBackgroundPlanetInfo.SetActive(false);
@@ -170,12 +167,10 @@ public class UIHandler : MonoBehaviour
         ToggleButtonsInit();
 
         InitSliderShadow();
-
         
         TranslationInit();
 
     }
-
 
 
     private void ClickListenerInit()
@@ -219,7 +214,7 @@ public class UIHandler : MonoBehaviour
         // Add listener to the toggle button
         sliderPanelToggleButton.GetComponent<Button>().onClick.AddListener(ToggleMenuSliderPanel);
     }
-
+    
 
     private void ToggleMenuSliderPanel()
     {
@@ -227,7 +222,7 @@ public class UIHandler : MonoBehaviour
 
         startRotation = sliderButtonToggleImage.transform.eulerAngles.z;
         endRotation = isMenuPanelVisible ? startRotation + 180 : startRotation - 180;
-
+        
         if (isMenuPanelVisible)
         {
             darkImageBackgroundSliderPanel.SetActive(true);
@@ -278,7 +273,6 @@ public class UIHandler : MonoBehaviour
         menuDistanceText.text = localizationManager.GetLocalizedValue("1_meter_distance_equals", menuDistanceText, false, (1 / Constants.initialDistanceScale).ToString("N0"));
         menuSizeText.text = localizationManager.GetLocalizedValue("1_meter_size_equals", menuSizeText, false, (1 / Constants.initialSizeScale).ToString("N0"));
         menuSunSizeText.text = localizationManager.GetLocalizedValue("sun_size_text", menuSunSizeText, false, (1 / Constants.initialSunSizeScale).ToString("N0"));
-
 
         pauseButtonTextMeshPro = pauseButton.GetComponentInChildren<TextMeshProUGUI>();
         fastForwardButtonTextMeshPro = fastForwardButton.GetComponentInChildren<TextMeshProUGUI>();
@@ -336,8 +330,6 @@ public class UIHandler : MonoBehaviour
         layoutGroup.reverseArrangement = localizationManager.GetCurrentLanguage() == Constants.Lang_AR;
     }
 
-    
-
     private void SliderInit()
     {
         timeScaleSlider.value = Constants.initialTimeScale;
@@ -383,6 +375,7 @@ public class UIHandler : MonoBehaviour
 
             if (field == null)
                 continue;
+            
             GameObject newDataItem = Instantiate(planetInfoItemPrefab, planetInfoItemListParent);
             AssignFieldName(field, newDataItem);
             AssignFieldValue(field, newDataItem, celestialBodyData);
@@ -625,9 +618,8 @@ public class UIHandler : MonoBehaviour
         // todo 3m t3ml mashkal when i click on info planet
         // todo add shadow 3al ekl shi 
         // todo ba3ed spawned shams 3n user
-        // todo shuf lay shams manna center of solar
         // todo add unit in the info planet
-        
+        // todo sun is not aligned 
         SetMiddleIconsHelperText(localizationManager.GetLocalizedValue("Touch_and_drag_to_move_the_planet_Around", middleIconsHelperText, false));
         swipeIconObject.SetActive(toggleState);
         ToggleMiddleIconHelper(toggleState);

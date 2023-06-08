@@ -15,10 +15,11 @@ public class ToggleController : MonoBehaviour
 
     private void Start()
     {
+        
         // Calculate the on and off positions
         float knobWidth = knobTransform.rect.width;
         float toggleWidth = toggle.GetComponent<RectTransform>().rect.width;
-        float offset = 5f; // Adjust the offset value as per your requirement
+        const float offset = 5f; // Adjust the offset value as per your requirement
 
         // If language is Arabic, swap the positions
         if (localizationManager.GetCurrentLanguage() == Constants.Lang_AR)

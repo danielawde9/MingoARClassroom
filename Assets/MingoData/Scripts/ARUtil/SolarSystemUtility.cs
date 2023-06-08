@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Experimental.GlobalIllumination;
 using static SolarSystemSimulationWithMoons;
 using LightType = UnityEngine.LightType;
 using Random = System.Random;
@@ -25,15 +24,12 @@ public abstract class SolarSystemUtility
         localDirectionalLight.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.Euler(0, 0, 0));
     }
 
-
     public static void InitPlanetProgress(PlanetData planet)
     {
         planet.rotationSpeed = 360f / planet.rotationPeriod;
         planet.orbitProgress = 0f;
         planet.rotationProgress = 0f;
     }
-
-
 
     public static Vector3 CalculatePlanetPosition(PlanetData planet, float angle, float distanceScale)
     {

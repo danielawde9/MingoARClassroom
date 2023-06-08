@@ -1241,7 +1241,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   toggle: {fileID: 321942656}
-  knobTransform: {fileID: 321942652}
+  knobTransform: {fileID: 865328605}
   speed: 5
   localizationManager: {fileID: 1016334707}
   onColorHex: '#4CD137'
@@ -2702,7 +2702,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   toggle: {fileID: 589325438}
-  knobTransform: {fileID: 589325434}
+  knobTransform: {fileID: 617882919}
   speed: 5
   localizationManager: {fileID: 1016334707}
   onColorHex: '#4CD137'
@@ -5728,7 +5728,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   toggle: {fileID: 1175387854}
-  knobTransform: {fileID: 1175387850}
+  knobTransform: {fileID: 419026852}
   speed: 5
   localizationManager: {fileID: 1016334707}
   onColorHex: '#4CD137'
@@ -7108,7 +7108,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   toggle: {fileID: 1499321345}
-  knobTransform: {fileID: 1499321340}
+  knobTransform: {fileID: 1328873386}
   speed: 5
   localizationManager: {fileID: 1016334707}
   onColorHex: '#4CD137'
