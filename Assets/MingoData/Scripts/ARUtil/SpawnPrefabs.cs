@@ -1,40 +1,44 @@
 using System.Collections.Generic;
 using UnityEngine;
-
-public class SpawnPrefabs : MonoBehaviour
+namespace MingoData.Scripts.ARUtil
 {
-    public GameObject prefabToSpawn; // Assign the prefab to spawn in the Inspector
-    public float spawnRadius = 5f; // Radius of the area in which the prefabs will be spawned
-    public float despawnDistance = 5f; // Distance the user must move past the prefab to despawn it
-    public int maxSpawnedPrefabs = 10; // Maximum number of prefabs to be spawned at a time
 
-    private readonly List<GameObject> spawnedPrefabs = new List<GameObject>();
-    private GameObject parentObject; // Parent object for all spawned prefabs
-
-    void Start()
+    public class SpawnPrefabs : MonoBehaviour
     {
-        parentObject = new GameObject("spawned_prefabs");
-    }
+        public GameObject prefabToSpawn; // Assign the prefab to spawn in the Inspector
+        public float spawnRadius = 5f; // Radius of the area in which the prefabs will be spawned
+        public float despawnDistance = 5f; // Distance the user must move past the prefab to despawn it
+        public int maxSpawnedPrefabs = 10; // Maximum number of prefabs to be spawned at a time
 
-    void Update()
-    {
-        if (spawnedPrefabs.Count < maxSpawnedPrefabs)
+        private readonly List<GameObject> spawnedPrefabs = new List<GameObject>();
+        private GameObject parentObject; // Parent object for all spawned prefabs
+
+        void Start()
         {
-            Vector3 spawnDirection = Random.onUnitSphere;
-            Vector3 spawnPosition = transform.position + spawnDirection * spawnRadius;
-            GameObject spawnedPrefab = Instantiate(prefabToSpawn, spawnPosition, Quaternion.identity, parentObject.transform);
-            spawnedPrefabs.Add(spawnedPrefab);
+            parentObject = new GameObject("spawned_prefabs");
         }
 
-        for (int i = spawnedPrefabs.Count - 1; i >= 0; i--)
+        void Update()
         {
-            GameObject prefab = spawnedPrefabs[i];
-            float distanceFromUser = Vector3.Distance(transform.position, prefab.transform.position);
+            if (spawnedPrefabs.Count < maxSpawnedPrefabs)
+            {
+                Vector3 spawnDirection = Random.onUnitSphere;
+                Vector3 spawnPosition = transform.position + spawnDirection * spawnRadius;
+                GameObject spawnedPrefab = Instantiate(prefabToSpawn, spawnPosition, Quaternion.identity, parentObject.transform);
+                spawnedPrefabs.Add(spawnedPrefab);
+            }
 
-            if (!(distanceFromUser > spawnRadius + despawnDistance))
-                continue;
-            spawnedPrefabs.RemoveAt(i);
-            Destroy(prefab);
+            for (int i = spawnedPrefabs.Count - 1; i >= 0; i--)
+            {
+                GameObject prefab = spawnedPrefabs[i];
+                float distanceFromUser = Vector3.Distance(transform.position, prefab.transform.position);
+
+                if (!(distanceFromUser > spawnRadius + despawnDistance))
+                    continue;
+                spawnedPrefabs.RemoveAt(i);
+                Destroy(prefab);
+            }
         }
     }
+
 }

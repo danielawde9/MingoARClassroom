@@ -1,16 +1,20 @@
 ﻿using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class FPSCounter : MonoBehaviour
+namespace MingoData.Scripts.Utils
 {
-    public TextMeshProUGUI fpsText;
-    private float deltaTime;
 
-    private void Update()
+    public class FPSCounter : MonoBehaviour
     {
-        deltaTime += (Time.deltaTime - deltaTime) * 0.1f;
-        float fps = 1.0f / deltaTime;
-        fpsText.text = $"FPS: {Mathf.Round(fps)}";
+        public TextMeshProUGUI fpsText;
+        private float deltaTime;
+
+        private void Update()
+        {
+            deltaTime += (Time.deltaTime - deltaTime) * 0.1f;
+            float fps = 1.0f / deltaTime;
+            fpsText.text = $"FPS: {Mathf.Round(fps)}";
+        }
     }
+
 }

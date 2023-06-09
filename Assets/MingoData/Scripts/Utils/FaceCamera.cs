@@ -1,19 +1,22 @@
 using UnityEngine;
-using TMPro;
-
-public class FaceCamera : MonoBehaviour
+namespace MingoData.Scripts.Utils
 {
-    private Camera mainCamera;
 
-    private void Start()
+    public class FaceCamera : MonoBehaviour
     {
-        mainCamera = Camera.main;
+        private Camera mainCamera;
+
+        private void Start()
+        {
+            mainCamera = Camera.main;
+        }
+
+        private void LateUpdate()
+        {
+            Quaternion rotation = mainCamera.transform.rotation;
+            transform.LookAt(transform.position + rotation * Vector3.forward,
+                rotation * Vector3.up);
+        }
     }
 
-    private void LateUpdate()
-    {
-        Quaternion rotation = mainCamera.transform.rotation;
-        transform.LookAt(transform.position + rotation * Vector3.forward,
-            rotation * Vector3.up);
-    }
 }

@@ -1,32 +1,34 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
-
-
-[Serializable]
-public class CelestialBodyData
+namespace MingoData.Scripts.ARUtil
 {
-    public string name;
-    public float diameter;
-    public float rotationSpeed;
-    public float rotationPeriod;
-    public float lengthOfDay;
-    public float perihelion;
-    public float aphelion;
-    public float orbitalPeriod;
-    public float orbitalVelocity;
-    public float orbitalInclination;
-    public float orbitalEccentricity;
-    public float obliquityToOrbit;
-    public float orbitProgress;
-    public float rotationProgress;
-    public int completedOrbits;
-    public int completedSelfRotations;
-    public float orbitalEccentricitySquared;
-    public string prefabName;
-    public Vector3 rotationAxis;
-    public GameObject celestialBodyInstance;
-    public LineRenderer orbitLineRenderer;
+
+    [Serializable]
+    public class CelestialBodyData
+    {
+        public string name;
+        public float diameter;
+        public float rotationSpeed;
+        public float rotationPeriod;
+        public float lengthOfDay;
+        public float perihelion;
+        public float aphelion;
+        public float orbitalPeriod;
+        public float orbitalVelocity;
+        public float orbitalInclination;
+        public float orbitalEccentricity;
+        public float obliquityToOrbit;
+        public float orbitProgress;
+        public float rotationProgress;
+        public int completedOrbits;
+        public int completedSelfRotations;
+        public float orbitalEccentricitySquared;
+        public string prefabName;
+        public Vector3 rotationAxis;
+        public GameObject celestialBodyInstance;
+        public LineRenderer orbitLineRenderer;
+
+    }
 
 }
 /*
