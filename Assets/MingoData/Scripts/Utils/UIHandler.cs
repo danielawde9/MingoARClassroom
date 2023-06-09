@@ -39,7 +39,7 @@ public class UIHandler : MonoBehaviour
     [Header("Top Menu Bar")]
     public TextMeshProUGUI menuPlanetName;
     public GameObject returnButton;
-    
+
     [Header("Planet Info Center List")]
     public GameObject planetInfoButton;
     public GameObject planetInfoItemPrefab;
@@ -48,7 +48,7 @@ public class UIHandler : MonoBehaviour
     public GameObject planetInfoLayout;
     private GameObject darkImageBackgroundPlanetInfo;
     public Button planetInfoCloseButton;
-    
+
     [Header("Planet Legends List")]
     public TextMeshProUGUI planetLegendsListTitle;
     public GameObject legendItemPrefab;
@@ -106,7 +106,7 @@ public class UIHandler : MonoBehaviour
     private TextMeshProUGUI fastForwardButtonTextMeshPro;
     private TextMeshProUGUI playButtonTextMeshPro;
 
-  
+
 
     private void OnPauseButtonClicked()
     {
@@ -139,7 +139,7 @@ public class UIHandler : MonoBehaviour
         planetInclinationLineToggle.transform.gameObject.SetActive(false);
         planetDistanceFromSunToggle.transform.gameObject.SetActive(false);
     }
-   
+
     private void TogglePlanetInfoPanel()
     {
         bool isPlanetInfoActive = planetInfoLayout.activeSelf;
@@ -161,24 +161,24 @@ public class UIHandler : MonoBehaviour
         ToggleButtonsInit();
 
         InitSliderShadow();
-        
+
         TranslationInit();
 
     }
     private void PlanetInfoInit()
     {
-        
+
         Button planetInfoButtonComponent = planetInfoButton.GetComponent<Button>();
         planetInfoButtonComponent.onClick.AddListener(TogglePlanetInfoPanel);
-        
+
         darkImageBackgroundPlanetInfo = CreateDarkBackground();
         darkImageBackgroundPlanetInfo.GetComponent<Button>().onClick.AddListener(TogglePlanetInfoPanel);
         darkImageBackgroundPlanetInfo.SetActive(false);
         planetInfoCloseButton.onClick.AddListener(TogglePlanetInfoPanel);
-        
+
         HorizontalLayoutGroup layoutGroup = planetInfoListItemParentTitle.transform.parent.GetComponent<HorizontalLayoutGroup>();
         ReverseOrderIfArabic(layoutGroup);
-        
+
     }
 
 
@@ -197,8 +197,8 @@ public class UIHandler : MonoBehaviour
         playButtonComponent.onClick.AddListener(OnPlayButtonClicked);
 
     }
-    
-    
+
+
     private void MenuTransitionInit()
     {
         // Create dark backgrounds
@@ -206,7 +206,7 @@ public class UIHandler : MonoBehaviour
         darkImageBackgroundSliderPanel.GetComponent<Button>().onClick.AddListener(ToggleMenuSliderPanel);
         darkImageBackgroundSliderPanel.SetActive(false);
 
-        
+
         sliderButtonToggleImage = sliderPanelToggleButton.transform.GetChild(0).gameObject;
         sliderPanelRectTransform = menuSliderPanel.GetComponent<RectTransform>();
 
@@ -220,13 +220,13 @@ public class UIHandler : MonoBehaviour
         sliderPanelRectTransform.sizeDelta = sizeDelta;
 
         // Set the target position of the panel
-        targetPosition =  new Vector2(0f, sizeDelta.y/2);
+        targetPosition = new Vector2(0f, sizeDelta.y / 2);
         initialPosition = new Vector2(0f, -halfScreenHeight / 2 + sliderToggleButtonLayoutHeight);
         sliderPanelRectTransform.anchoredPosition = initialPosition;
         // Add listener to the toggle button
         sliderPanelToggleButton.GetComponent<Button>().onClick.AddListener(ToggleMenuSliderPanel);
     }
-    
+
 
     private void ToggleMenuSliderPanel()
     {
@@ -234,7 +234,7 @@ public class UIHandler : MonoBehaviour
 
         startRotation = sliderButtonToggleImage.transform.eulerAngles.z;
         endRotation = isMenuPanelVisible ? startRotation + 180 : startRotation - 180;
-        
+
         if (isMenuPanelVisible)
         {
             darkImageBackgroundSliderPanel.SetActive(true);
@@ -257,7 +257,7 @@ public class UIHandler : MonoBehaviour
         darkBackground.transform.SetParent(FindObjectOfType<Canvas>().transform, false);
 
         Button button = darkBackground.AddComponent<Button>();
-        
+
         // Add an Image component to the GameObject
         Image image = darkBackground.AddComponent<Image>();
 
@@ -387,8 +387,9 @@ public class UIHandler : MonoBehaviour
 
             if (field == null)
                 continue;
-            
+
             GameObject newDataItem = Instantiate(planetInfoItemPrefab, planetInfoItemListParent);
+            newDataItem.name = "CelestialBodyData";
             AssignFieldValue(field, newDataItem, celestialBodyData);
             AssignFieldName(field, newDataItem);
         }
@@ -477,7 +478,7 @@ public class UIHandler : MonoBehaviour
         {
             // Instantiate new legend item
             GameObject newLegendItem = Instantiate(legendItemPrefab, legendParent);
-
+            newLegendItem.name = "legendInfo" + planet.Key;
             // Assign planet name to Text component
             TextMeshProUGUI textComponent = newLegendItem.GetComponentInChildren<TextMeshProUGUI>();
 
@@ -495,13 +496,13 @@ public class UIHandler : MonoBehaviour
             // Assign color to Image component
             Image imageComponent = newLegendItem.GetComponentInChildren<Image>();
             imageComponent.color = planet.Value;
-            
+
             Button button = newLegendItem.GetComponent<Button>();
-            button.onClick.AddListener(() => 
-            { 
-                OnPlanetClicked?.Invoke(planet.Key); 
+            button.onClick.AddListener(() =>
+            {
+                OnPlanetClicked?.Invoke(planet.Key);
             });
-            
+
             HorizontalLayoutGroup layoutGroup = imageComponent.transform.parent.GetComponent<HorizontalLayoutGroup>();
             ReverseOrderIfArabic(layoutGroup);
 
@@ -588,7 +589,7 @@ public class UIHandler : MonoBehaviour
         // otherwise, enable the shadow
         sliderPanelToggleButtonShadow.enabled = !(scrollPosition.y >= 1.0f);
     }
-    
+
     private void InitSliderShadow()
     {
         sliderPanelToggleButtonShadow = sliderPanelToggleButton.GetComponent<Shadow>();
@@ -619,7 +620,7 @@ public class UIHandler : MonoBehaviour
         SetMiddleIconsHelperText(localizationManager.GetLocalizedValue("Tap_on_the_scanned_area_to_place_the_solar_system", middleIconsHelperText, false));
         tapIconObject.SetActive(true);
     }
-    
+
     public void UIShowAfterClick()
     {
         scanRoomIconObject.SetActive(false);

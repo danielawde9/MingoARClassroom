@@ -7,7 +7,7 @@
         },
         {
             "key": "Planets_Info",
-            "english": "Plannet Info",
+            "english": "Planet Info",
             "arabic": "معلومات عن الكوكب"
         },
         {
@@ -17,58 +17,58 @@
         },
         {
             "key": "diameter",
-            "english": "Diameter",
-            "arabic": "قطر"
+            "english": "Diameter (kilometer)",
+            "arabic": "قطر (كيلومتر)"
         },
         {
             "key": "rotationSpeed",
-            "english": "Rotation Speed",
-            "arabic": "سرعة الدوران"
+            "english": "Rotation Speed (degrees per second)",
+            "arabic": "سرعة الدوران (بالدرجات في الثانية)"
         },
         {
             "key": "rotationPeriod",
-            "english": "Rotation Period",
-            "arabic": "فترة الدوران"
+            "english": "Rotation Period (days)",
+            "arabic": "فترة الدوران (أيام)"
         },
         {
             "key": "lengthOfDay",
-            "english": "Length of Day",
-            "arabic": "طول اليوم"
+            "english": "Length of Day (hours)",
+            "arabic": "طول اليوم (ساعات)"
         },
         {
             "key": "perihelion",
-            "english": "Perihelion",
-            "arabic": "الحضيض"
+            "english": "Perihelion (million km)",
+            "arabic": "الحضيض (مليون كم)"
         },
         {
             "key": "aphelion",
-            "english": "Aphelion",
-            "arabic": "الأوج"
+            "english": "Aphelion (million km)",
+            "arabic": "الأوج (مليون كم)"
         },
         {
             "key": "orbitalPeriod",
-            "english": "Orbital Period",
-            "arabic": "الفترة المدارية"
+            "english": "Orbital Period (days)",
+            "arabic": "الفترة المدارية (أيام)"
         },
         {
             "key": "orbitalVelocity",
-            "english": "Orbital Velocity",
-            "arabic": "السرعة المدارية"
+            "english": "Orbital Velocity (km/s)",
+            "arabic": "السرعة المدارية (كيلومتر في الثانية)"
         },
         {
             "key": "orbitalInclination",
-            "english": "Orbital Inclination",
-            "arabic": "ميل المدار"
+            "english": "Orbital Inclination (degrees)",
+            "arabic": "ميل المدار (بالدرجات)"
         },
         {
             "key": "orbitalEccentricity",
-            "english": "Orbital Eccentricity",
-            "arabic": "الشذوذ المداري"
+            "english": "Orbital Eccentricity (degrees)",
+            "arabic": "الشذوذ المداري (بالدرجات)"
         },
         {
             "key": "obliquityToOrbit",
-            "english": "Obliquity to Orbit",
-            "arabic": "الميل إلى المدار"
+            "english": "Obliquity to Orbit (degrees)",
+            "arabic": "الميل إلى المدار (بالدرجات)"
         },
         {
             "key": "prefabName",
@@ -110,9 +110,6 @@
             "english": "Rotation Axis",
             "arabic": "محور الدوران"
         },
-
-
-
         {
             "key": "Years",
             "english": "years",
