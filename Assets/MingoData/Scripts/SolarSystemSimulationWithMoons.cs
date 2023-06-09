@@ -470,6 +470,8 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
 // todo add black bacground when planet selected
 // todo add pinch zoom to increase decrease size 
 // todo swip up guestues
+// todo planet legen click listern to show up the planet 
+// todo add unit in the info planet
 
 // features
 // todo add toggle for normizaling the planets size 

@@ -46,6 +46,7 @@ public class UIHandler : MonoBehaviour
     public TextMeshProUGUI planetInfoListItemParentTitle;
     public GameObject planetInfoLayout;
     private GameObject darkImageBackgroundPlanetInfo;
+    public Button planetInfoCloseButton;
     
     [Header("Planet Legends List")]
     public TextMeshProUGUI planetLegendsListTitle;
@@ -130,34 +131,25 @@ public class UIHandler : MonoBehaviour
 
     private void Awake()
     {
-        // NOTE: bug these are added here due to weird  set initially all the toggles are false then in start set them active 
+        // NOTE: these are added here due to weird error set initially all the toggles are false then in start set them active 
         orbitLineToggle.transform.gameObject.SetActive(false);
         planetNameToggle.transform.gameObject.SetActive(false);
         planetInclinationLineToggle.transform.gameObject.SetActive(false);
         planetDistanceFromSunToggle.transform.gameObject.SetActive(false);
     }
    
-    private void OnPlanetInfoClicked()
+    private void TogglePlanetInfoPanel()
     {
-        bool isActive = planetInfoLayout.activeSelf;
-        planetInfoLayout.SetActive(!isActive);
-        darkImageBackgroundPlanetInfo.SetActive(!isActive);
+        bool isPlanetInfoActive = planetInfoLayout.activeSelf;
+        planetInfoLayout.SetActive(!isPlanetInfoActive);
+        darkImageBackgroundPlanetInfo.SetActive(!isPlanetInfoActive);
+        menuSliderPanel.SetActive(isPlanetInfoActive);
     }
 
     private void Start()
     {
-        
-        // Create dark backgrounds
-        darkImageBackgroundPlanetInfo = CreateDarkBackground();
-        darkImageBackgroundSliderPanel = CreateDarkBackground();
+        PlanetInfoInit();
 
-        darkImageBackgroundPlanetInfo.GetComponent<Button>().onClick.AddListener(OnPlanetInfoClicked);
-        darkImageBackgroundSliderPanel.GetComponent<Button>().onClick.AddListener(ToggleMenuSliderPanel);
-
-        // Make them inactive at first
-        darkImageBackgroundPlanetInfo.SetActive(false);
-        darkImageBackgroundSliderPanel.SetActive(false);
-        
         MenuTransitionInit();
 
         ClickListenerInit();
@@ -170,6 +162,21 @@ public class UIHandler : MonoBehaviour
         
         TranslationInit();
 
+    }
+    private void PlanetInfoInit()
+    {
+        
+        Button planetInfoButtonComponent = planetInfoButton.GetComponent<Button>();
+        planetInfoButtonComponent.onClick.AddListener(TogglePlanetInfoPanel);
+        
+        darkImageBackgroundPlanetInfo = CreateDarkBackground();
+        darkImageBackgroundPlanetInfo.GetComponent<Button>().onClick.AddListener(TogglePlanetInfoPanel);
+        darkImageBackgroundPlanetInfo.SetActive(false);
+        planetInfoCloseButton.onClick.AddListener(TogglePlanetInfoPanel);
+        
+        HorizontalLayoutGroup layoutGroup = planetInfoListItemParentTitle.transform.parent.GetComponent<HorizontalLayoutGroup>();
+        ReverseOrderIfArabic(layoutGroup);
+        
     }
 
 
@@ -187,13 +194,16 @@ public class UIHandler : MonoBehaviour
         Button playButtonComponent = playButton.GetComponent<Button>();
         playButtonComponent.onClick.AddListener(OnPlayButtonClicked);
 
-        Button planetInfoButtonComponent = planetInfoButton.GetComponent<Button>();
-        planetInfoButtonComponent.onClick.AddListener(OnPlanetInfoClicked);
     }
     
     
     private void MenuTransitionInit()
     {
+        // Create dark backgrounds
+        darkImageBackgroundSliderPanel = CreateDarkBackground();
+        darkImageBackgroundSliderPanel.GetComponent<Button>().onClick.AddListener(ToggleMenuSliderPanel);
+        darkImageBackgroundSliderPanel.SetActive(false);
+
         
         sliderButtonToggleImage = sliderPanelToggleButton.transform.GetChild(0).gameObject;
         sliderPanelRectTransform = menuSliderPanel.GetComponent<RectTransform>();
@@ -509,7 +519,6 @@ public class UIHandler : MonoBehaviour
         planetInfoButton.SetActive(showGameObjectHolder);
     }
 
-
     private void SetMiddleIconsHelperText(string text)
     {
         middleIconsHelperText.text = text;
@@ -615,11 +624,6 @@ public class UIHandler : MonoBehaviour
 
     public void ToggleSwipeIcon(bool toggleState)
     {
-        // todo 3m t3ml mashkal when i click on info planet
-        // todo add shadow 3al ekl shi 
-        // todo ba3ed spawned shams 3n user
-        // todo add unit in the info planet
-        // todo sun is not aligned 
         SetMiddleIconsHelperText(localizationManager.GetLocalizedValue("Touch_and_drag_to_move_the_planet_Around", middleIconsHelperText, false));
         swipeIconObject.SetActive(toggleState);
         ToggleMiddleIconHelper(toggleState);
