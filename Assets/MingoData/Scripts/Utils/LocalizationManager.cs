@@ -52,9 +52,6 @@ public class LocalizationManager : MonoBehaviour
     {
         string result = missingTextString;
 
-        // Debug statement
-        Debug.Log("GetLocalizedValue: key = " + key);
-
         if (localizedText.ContainsKey(key))
         {
             switch (currentLanguage)
@@ -80,7 +77,7 @@ public class LocalizationManager : MonoBehaviour
             }
 
             // Debug statement
-            Debug.Log("GetLocalizedValue: result = " + result);
+          //  Debug.Log("GetLocalizedValue: result = " + result);
         }
         else
         {

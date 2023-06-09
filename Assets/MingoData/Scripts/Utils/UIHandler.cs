@@ -1,4 +1,5 @@
-﻿using ArabicSupport;
+﻿using System;
+using ArabicSupport;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
@@ -52,6 +53,7 @@ public class UIHandler : MonoBehaviour
     public TextMeshProUGUI planetLegendsListTitle;
     public GameObject legendItemPrefab;
     public Transform legendParent;
+    public static event Action<string> OnPlanetClicked;
 
     [Header("Solar System Toggle")]
     public TextMeshProUGUI solarSystemToggleTitle;
@@ -387,8 +389,8 @@ public class UIHandler : MonoBehaviour
                 continue;
             
             GameObject newDataItem = Instantiate(planetInfoItemPrefab, planetInfoItemListParent);
-            AssignFieldName(field, newDataItem);
             AssignFieldValue(field, newDataItem, celestialBodyData);
+            AssignFieldName(field, newDataItem);
         }
     }
 
@@ -493,7 +495,13 @@ public class UIHandler : MonoBehaviour
             // Assign color to Image component
             Image imageComponent = newLegendItem.GetComponentInChildren<Image>();
             imageComponent.color = planet.Value;
-
+            
+            Button button = newLegendItem.GetComponent<Button>();
+            button.onClick.AddListener(() => 
+            { 
+                OnPlanetClicked?.Invoke(planet.Key); 
+            });
+            
             HorizontalLayoutGroup layoutGroup = imageComponent.transform.parent.GetComponent<HorizontalLayoutGroup>();
             ReverseOrderIfArabic(layoutGroup);
 

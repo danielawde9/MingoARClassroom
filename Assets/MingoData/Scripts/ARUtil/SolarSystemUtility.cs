@@ -138,7 +138,6 @@ public abstract class SolarSystemUtility
 
         if (localPlanetDataDictionary.TryGetValue(lastAllowedPlanet, out PlanetData plutoData))
         {
-            // todo fix distance light 
             float distanceToPluto = plutoData.distanceFromSun * distanceScale * 10;
             Debug.Log("Distance from Sun to Pluto: " + distanceToPluto);
 

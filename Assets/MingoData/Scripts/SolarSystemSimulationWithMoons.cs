@@ -48,6 +48,7 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
     private const float planetSelectedScale = 0.5f;
     private bool isAfterScanShown = false;
     public LocalizationManager localizationManager;
+    private bool isSwipeIconToggled = false;
 
 
     private readonly List<string> selectedFields = new List<string>()
@@ -150,12 +151,12 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
         }
     }
 
-    protected override void OnPressBegan(Vector3 position) 
+    protected override void OnPressBegan(Vector3 position)
     {
-        if (selectedPlanet != null)
-        {
-            uiHandler.ToggleSwipeIcon(false);
-        }
+        if (selectedPlanet == null || isSwipeIconToggled)
+            return;
+        uiHandler.ToggleSwipeIcon(false);
+        isSwipeIconToggled = true;
     }
 
     
@@ -170,6 +171,7 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
         selectedPlanet = planet;
         uiHandler.SetPlanetNameTextTitle(selectedPlanet.name, true);
         uiHandler.ToggleSwipeIcon(true);
+        isSwipeIconToggled = false;
 
         // Save the original position and scale of the planet
         originalPositions.TryAdd(planet, planet.transform.position);
@@ -195,6 +197,7 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
         uiHandler.SetPlanetNameTextTitle("", false);
         selectedPlanet = null;
         uiHandler.ToggleSwipeIcon(false);
+        isSwipeIconToggled = false;
         uiHandler.SetCelestialBodyData(null, selectedFields);
     }
 
@@ -379,15 +382,26 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
         }
     }
 
+    
+    private void SelectPlanetByName(string planetName)
+    {
+        GameObject planet = GameObject.Find(planetName);
+        if (planet != null)
+        {
+            SelectPlanet(planet);
+        }
+    }
 
     private new void OnEnable()
     {
+        UIHandler.OnPlanetClicked += SelectPlanetByName;
         mPlaneManager.planesChanged += OnPlanesChanged;
         base.OnEnable();
     }
 
     private new void OnDisable()
     {
+        UIHandler.OnPlanetClicked -= SelectPlanetByName;
         mPlaneManager.planesChanged -= OnPlanesChanged;
         base.OnDisable();
     }
@@ -470,7 +484,6 @@ public class SolarSystemSimulationWithMoons : BasePressInputHandler
 // todo add black bacground when planet selected
 // todo add pinch zoom to increase decrease size 
 // todo swip up guestues
-// todo planet legen click listern to show up the planet 
 // todo add unit in the info planet
 
 // features
