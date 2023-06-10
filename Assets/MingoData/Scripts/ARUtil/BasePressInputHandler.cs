@@ -7,7 +7,6 @@ namespace MingoData.Scripts.ARUtil
     {
         private InputAction m_PressAction;
         private InputAction m_DragAction;
-        private InputAction m_PinchAction;
 
         protected virtual void Awake()
         {

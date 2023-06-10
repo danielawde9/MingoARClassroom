@@ -499,6 +499,8 @@ namespace MingoData.Scripts.Utils
                 Image imageComponent = newLegendItem.GetComponentInChildren<Image>();
                 imageComponent.color = planet.Value;
 
+                // todo only click once
+                // todo button 3l text overriding the button hon 
                 Button button = newLegendItem.GetComponent<Button>();
                 button.onClick.AddListener(() =>
                 {

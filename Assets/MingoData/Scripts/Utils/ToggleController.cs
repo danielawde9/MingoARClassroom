@@ -2,7 +2,6 @@ using UnityEngine;
 using UnityEngine.UI;
 namespace MingoData.Scripts.Utils
 {
-
     public class ToggleController : MonoBehaviour
     {
         public Toggle toggle;
