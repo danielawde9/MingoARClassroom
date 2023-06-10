@@ -76,12 +76,13 @@ namespace MingoData.Scripts
 
         private readonly List<string> desiredPlanets = new List<string> {"Sun",  "Venus", "Earth" };
 
-
         protected override void OnSwipeUp()
         {
             base.OnSwipeUp();
-        
-            uiHandler.ToggleMenuSliderPanel();
+            if (selectedPlanet == null && !uiHandler.isMenuPanelVisible) // Only call the function if the panel is not open and a planet is selected
+            {
+                uiHandler.ToggleMenuSliderPanel();
+            }
         }
 
         

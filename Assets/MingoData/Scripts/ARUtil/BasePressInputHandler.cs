@@ -8,6 +8,7 @@ namespace MingoData.Scripts.ARUtil
         private InputAction pressAction;
         private InputAction dragAction;
         private Vector2 startDragPosition;
+        private float previousDistance;
 
         protected virtual void Awake()
         {
@@ -53,18 +54,47 @@ namespace MingoData.Scripts.ARUtil
 
             dragAction.canceled += ctx =>
             {
-                if (ctx.control.device is Pointer device)
+                if (ctx.control.device is not Pointer device)
+                    return;
+                OnDragEnd(device.position.ReadValue());
+                if (IsSwipeUp(startDragPosition, device.position.ReadValue()))
                 {
-                    OnDragEnd(device.position.ReadValue());
-                    if (IsSwipeUp(startDragPosition, device.position.ReadValue()))
-                    {
-                        OnSwipeUp();
-                    }
+                    OnSwipeUp();
                 }
             };
+            //
+            // m_PinchAction = new InputAction("pinch", binding: "<Touchscreen>/touch");
+            // m_PinchAction.performed += ctx =>
+            // {
+            //     Debug.Log("Pinch action triggered");
+            //
+            //     if (ctx.control.device is not Touchscreen device)
+            //         return;
+            //     TouchControl touch0 = device.touches[0];
+            //     TouchControl touch1 = device.touches[1];
+            //     if (!touch0.isInProgress || !touch1.isInProgress) // Only react when two fingers are touching
+            //         return;
+            //     float currentDistance = Vector2.Distance(touch0.position.ReadValue(), touch1.position.ReadValue());
+            //     if (previousDistance > 0)
+            //     {
+            //         if (currentDistance > previousDistance)
+            //         {
+            //             OnPinchOut();
+            //         }
+            //         else if (currentDistance < previousDistance)
+            //         {
+            //             OnPinchIn();
+            //         }
+            //     }
+            //     previousDistance = currentDistance;
+            // };
+            // m_PinchAction.canceled += _ =>
+            // {
+            //     previousDistance = 0;
+            // };
         }
 
-        protected virtual void OnEnable()
+                protected virtual void OnEnable()
         {
             pressAction.Enable();
             dragAction.Enable();
