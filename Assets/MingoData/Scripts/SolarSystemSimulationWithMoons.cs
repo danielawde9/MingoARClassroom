@@ -77,6 +77,14 @@ namespace MingoData.Scripts
         private readonly List<string> desiredPlanets = new List<string> {"Sun",  "Venus", "Earth" };
 
 
+        protected override void OnSwipeUp()
+        {
+            base.OnSwipeUp();
+        
+            uiHandler.ToggleMenuSliderPanel();
+        }
+
+        
         protected override void Awake()
         {
             base.Awake();

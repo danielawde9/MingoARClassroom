@@ -229,7 +229,7 @@ namespace MingoData.Scripts.Utils
         }
 
 
-        private void ToggleMenuSliderPanel()
+        public void ToggleMenuSliderPanel()
         {
             isMenuPanelVisible = !isMenuPanelVisible;
 
