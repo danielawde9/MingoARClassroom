@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using MingoData.Scripts.ARUtil;
+using MingoData.Scripts.MainUtil;
 using MingoData.Scripts.Utils;
 using TMPro;
 using UnityEngine;
@@ -354,8 +354,8 @@ namespace MingoData.Scripts
             planet.celestialBodyInstance.transform.localScale = new Vector3(newScale, newScale, newScale);
         
         
-            SolarSystemUtility.CreateInclinationLine(planet, planet.celestialBodyInstance, localizationManager);
-            SolarSystemUtility.CreatePlanetName(planet, planet.celestialBodyInstance, localizationManager);
+            UtilsFns.CreateInclinationLine(planet, planet.celestialBodyInstance, localizationManager);
+            UtilsFns.CreatePlanetName(planet, planet.celestialBodyInstance, localizationManager);
 
         
         }
@@ -380,15 +380,15 @@ namespace MingoData.Scripts
                 // if (desiredPlanets.Contains(planet.name)) {
                 InstantiatePlanet(planet, placedTouchPosition, rotationCorrection);
                 if (planet.name != "Sun") {
-                    SolarSystemUtility.CreateDistanceLineAndTextFromSun(parentDistanceLinesObject, planet);
+                    UtilsFns.CreateDistanceLineAndTextFromSun(parentDistanceLinesObject, planet);
                     SolarSystemUtility.UpdateDistanceFromSunText(planet, localizationManager);
                 } else {
                     SolarSystemUtility.AssignDirectionalLight(planet.celestialBodyInstance.transform, distanceScale, desiredPlanets);
                 }
-                uiHandler.SetPlanetColorLegend(SolarSystemUtility.GetPlanetColorLegend());
+                uiHandler.SetPlanetColorLegend(UtilsFns.GetPlanetColorLegend());
                 originalPositions[planet.celestialBodyInstance] = planet.celestialBodyInstance.transform.position;
                 SolarSystemUtility.InitPlanetProgress(planet);
-                SolarSystemUtility.CreateOrbitLine(planet.celestialBodyInstance, planet, (body, angle) => SolarSystemUtility.CalculatePlanetPosition((PlanetData)body, angle, distanceScale));
+                UtilsFns.CreateOrbitLine(planet.celestialBodyInstance, planet, (body, angle) => SolarSystemUtility.CalculatePlanetPosition((PlanetData)body, angle, distanceScale));
                 // }
             }
         }
@@ -445,11 +445,11 @@ namespace MingoData.Scripts
 
         private static void UpdateDirectionalLight()
         {
-            if (SolarSystemUtility.directionalLight == null || !SolarSystemUtility.planetDataDictionary.TryGetValue("Sun", out PlanetData sunData)) return;
+            if (UtilsFns.directionalLight == null || !SolarSystemUtility.planetDataDictionary.TryGetValue("Sun", out PlanetData sunData)) return;
             Vector3 sunDirection = -sunData.celestialBodyInstance.transform.position.normalized;
             if (sunDirection != Vector3.zero)
             {
-                SolarSystemUtility.directionalLight.transform.SetPositionAndRotation(sunData.celestialBodyInstance.transform.position, Quaternion.LookRotation(sunDirection));
+                UtilsFns.directionalLight.transform.SetPositionAndRotation(sunData.celestialBodyInstance.transform.position, Quaternion.LookRotation(sunDirection));
             }
         }
 
@@ -496,7 +496,7 @@ namespace MingoData.Scripts
 // todo fix light range  bs yekbar distance
 // todo add black bacground when planet selected
 // todo add pinch zoom to increase decrease size 
-// todo swip up guestues
+// todo add toggle buttons to add planets 
 
 // features
 // todo add toggle for normizaling the planets size 

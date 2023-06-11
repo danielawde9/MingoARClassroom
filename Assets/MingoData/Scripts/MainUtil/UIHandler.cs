@@ -5,14 +5,14 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using ArabicSupport;
-using MingoData.Scripts.ARUtil;
+using MingoData.Scripts.Utils;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
-namespace MingoData.Scripts.Utils
-{
 
+namespace MingoData.Scripts.MainUtil
+{
     public class UIHandler : MonoBehaviour
     {
         [SerializeField]
@@ -67,7 +67,6 @@ namespace MingoData.Scripts.Utils
         public TextMeshProUGUI planetInclinationLineToggleTextMeshPro;
         public TextMeshProUGUI orbitLineToggleTextMeshPro;
 
-
         [Header("Solar System Slider")]
         public TextMeshProUGUI solarSystemSliderTitle;
         public Slider timeScaleSlider;
@@ -78,13 +77,11 @@ namespace MingoData.Scripts.Utils
         public TextMeshProUGUI menuSizeText;
         public TextMeshProUGUI menuSunSizeText;
 
-
         [Header("Middle Icons Text Helper")]
         public TextMeshProUGUI middleIconsHelperText;
         public GameObject scanRoomIconObject;
         public GameObject tapIconObject;
         public GameObject swipeIconObject;
-
         public UnityAction<float> onUpdateTimeScaleSlider;
         public UnityAction<float> onUpdateSizeScaleSlider;
         public UnityAction<float> onUpdateDistanceScaleSlider;
@@ -166,13 +163,14 @@ namespace MingoData.Scripts.Utils
             TranslationInit();
 
         }
+        
         private void PlanetInfoInit()
         {
 
             Button planetInfoButtonComponent = planetInfoButton.GetComponent<Button>();
             planetInfoButtonComponent.onClick.AddListener(TogglePlanetInfoPanel);
 
-            darkImageBackgroundPlanetInfo = CreateDarkBackground();
+            darkImageBackgroundPlanetInfo = UtilsFns.CreateDarkBackground();
             darkImageBackgroundPlanetInfo.GetComponent<Button>().onClick.AddListener(TogglePlanetInfoPanel);
             darkImageBackgroundPlanetInfo.SetActive(false);
             planetInfoCloseButton.onClick.AddListener(TogglePlanetInfoPanel);
@@ -203,7 +201,7 @@ namespace MingoData.Scripts.Utils
         private void MenuTransitionInit()
         {
             // Create dark backgrounds
-            darkImageBackgroundSliderPanel = CreateDarkBackground();
+            darkImageBackgroundSliderPanel = UtilsFns.CreateDarkBackground();
             darkImageBackgroundSliderPanel.GetComponent<Button>().onClick.AddListener(ToggleMenuSliderPanel);
             darkImageBackgroundSliderPanel.SetActive(false);
 
@@ -250,34 +248,6 @@ namespace MingoData.Scripts.Utils
             }
         }
         
-        private static GameObject CreateDarkBackground()
-        {
-            // Create new GameObject
-            GameObject darkBackground = new GameObject("DarkBackground");
-
-            // Add it as a child of the parent canvas
-            darkBackground.transform.SetParent(FindObjectOfType<Canvas>().transform, false);
-
-            Button button = darkBackground.AddComponent<Button>();
-
-            // Add an Image component to the GameObject
-            Image image = darkBackground.AddComponent<Image>();
-
-            // Set the image color to black with 50% opacity
-            image.color = new Color(0, 0, 0, 0.5f);
-
-            // Set the RectTransform to stretch in both directions and cover the whole screen
-            RectTransform rectTransform = darkBackground.GetComponent<RectTransform>();
-            rectTransform.anchorMin = new Vector2(0, 0);
-            rectTransform.anchorMax = new Vector2(1, 1);
-            rectTransform.pivot = new Vector2(0.5f, 0.5f);
-            rectTransform.offsetMin = rectTransform.offsetMax = new Vector2(0, 0);
-            // Set the created game object to a low priority by setting its sibling index to a lower value
-            darkBackground.transform.SetSiblingIndex(0);
-
-
-            return darkBackground;
-        }
 
         private void TranslationInit()
         {
@@ -499,8 +469,6 @@ namespace MingoData.Scripts.Utils
                 Image imageComponent = newLegendItem.GetComponentInChildren<Image>();
                 imageComponent.color = planet.Value;
 
-                // todo only click once
-                // todo button 3l text overriding the button hon 
                 Button button = newLegendItem.GetComponent<Button>();
                 button.onClick.AddListener(() =>
                 {

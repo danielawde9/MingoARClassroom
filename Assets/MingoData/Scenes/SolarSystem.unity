@@ -1540,8 +1540,8 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 664682161}
-  m_RootOrder: 1
+  m_Father: {fileID: 1510672709}
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
@@ -2428,8 +2428,8 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 664682161}
-  m_RootOrder: 1
+  m_Father: {fileID: 1510672709}
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
@@ -3192,127 +3192,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 656676378}
   m_CullTransparentMesh: 1
---- !u!1 &664682160
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 664682161}
-  - component: {fileID: 664682162}
-  - component: {fileID: 664682164}
-  m_Layer: 5
-  m_Name: UIHandler
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &664682161
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 664682160}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 811200856}
-  - {fileID: 384687734}
-  - {fileID: 571017796}
-  - {fileID: 1796466094}
-  - {fileID: 772092436}
-  - {fileID: 885580658}
-  - {fileID: 1914296623}
-  m_Father: {fileID: 1510672709}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &664682162
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 664682160}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0a0ea65cb077e4b7583eb4fb3c0da2f9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  celestialBodyHandler: {fileID: 1016334708}
-  localizationManager: {fileID: 1016334707}
-  menuSliderPanel: {fileID: 772092435}
-  sliderPanelToggleButton: {fileID: 1174029314}
-  sliderPanelScrollRect: {fileID: 1781855274}
-  isMenuPanelVisible: 0
-  menuPlanetName: {fileID: 1618326869}
-  returnButton: {fileID: 384687733}
-  planetInfoButton: {fileID: 571017795}
-  planetInfoItemPrefab: {fileID: 1332000304113803821, guid: 97d8944bc47522d4bb31f0a753b1663d,
-    type: 3}
-  planetInfoItemListParent: {fileID: 1581385942}
-  planetInfoListItemParentTitle: {fileID: 2013859560}
-  planetInfoLayout: {fileID: 1914296622}
-  planetInfoCloseButton: {fileID: 1681072991}
-  planetLegendsListTitle: {fileID: 1532080737}
-  legendItemPrefab: {fileID: 8928009388362277743, guid: 56b4d558652b0e14c91d477d73a5a583,
-    type: 3}
-  legendParent: {fileID: 7622102719811871575}
-  solarSystemToggleTitle: {fileID: 331867777}
-  planetDistanceFromSunToggle: {fileID: 1175387854}
-  planetNameToggle: {fileID: 1499321345}
-  planetInclinationLineToggle: {fileID: 321942656}
-  orbitLineToggle: {fileID: 589325438}
-  planetDistanceFromSunToggleTextMeshPro: {fileID: 1314796814}
-  planetNameToggleTextMeshPro: {fileID: 1007148641}
-  planetInclinationLineToggleTextMeshPro: {fileID: 1702546275}
-  orbitLineToggleTextMeshPro: {fileID: 1777596911}
-  solarSystemSliderTitle: {fileID: 1866458184}
-  timeScaleSlider: {fileID: 1908259661}
-  sizeScaleSlider: {fileID: 278886603}
-  distanceScaleSlider: {fileID: 2109284399}
-  menuTimeText: {fileID: 471438890}
-  menuDistanceText: {fileID: 579038157}
-  menuSizeText: {fileID: 861801127}
-  menuSunSizeText: {fileID: 1048839442}
-  middleIconsHelperText: {fileID: 1821653759}
-  scanRoomIconObject: {fileID: 908815470}
-  tapIconObject: {fileID: 1159554388}
-  swipeIconObject: {fileID: 1122629468}
-  onPlanetNameToggleValueChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  onOrbitLineToggleValueChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  onPlanetInclinationLineToggleValueChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  onDistanceFromSunToggleValueChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  horizontalButtonsTitle: {fileID: 14855138}
-  pauseButton: {fileID: 1511909425}
-  fastForwardButton: {fileID: 518560482}
-  playButton: {fileID: 1921587052}
---- !u!222 &664682164
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 664682160}
-  m_CullTransparentMesh: 1
 --- !u!1001 &690180629
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3842,8 +3721,8 @@ RectTransform:
   m_Children:
   - {fileID: 1781855273}
   - {fileID: 1174029315}
-  m_Father: {fileID: 664682161}
-  m_RootOrder: 3
+  m_Father: {fileID: 1510672709}
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
@@ -3913,13 +3792,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 811200855}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 664682161}
-  m_RootOrder: 0
+  m_Father: {fileID: 1510672709}
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &811200857
 MonoBehaviour:
@@ -4388,8 +4267,8 @@ RectTransform:
   m_Children:
   - {fileID: 1821653758}
   - {fileID: 1149663058}
-  m_Father: {fileID: 664682161}
-  m_RootOrder: 5
+  m_Father: {fileID: 1510672709}
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -5075,7 +4954,7 @@ MonoBehaviour:
   sizeScale: 0
   timeScale: 0
   distanceScale: 0
-  uiHandler: {fileID: 664682162}
+  uiHandler: {fileID: 0}
   localizationManager: {fileID: 1016334707}
 --- !u!114 &1016334709
 MonoBehaviour:
@@ -7416,6 +7295,7 @@ GameObject:
   - component: {fileID: 1510672708}
   - component: {fileID: 1510672707}
   - component: {fileID: 1510672706}
+  - component: {fileID: 1510672710}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -7498,7 +7378,13 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 664682161}
+  - {fileID: 811200856}
+  - {fileID: 384687734}
+  - {fileID: 571017796}
+  - {fileID: 1796466094}
+  - {fileID: 772092436}
+  - {fileID: 885580658}
+  - {fileID: 1914296623}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -7507,6 +7393,74 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1510672710
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1510672705}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a0ea65cb077e4b7583eb4fb3c0da2f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  celestialBodyHandler: {fileID: 1016334708}
+  localizationManager: {fileID: 1016334707}
+  menuSliderPanel: {fileID: 772092435}
+  sliderPanelToggleButton: {fileID: 1174029314}
+  sliderPanelScrollRect: {fileID: 1781855274}
+  isMenuPanelVisible: 0
+  menuPlanetName: {fileID: 1618326869}
+  returnButton: {fileID: 384687733}
+  planetInfoButton: {fileID: 571017795}
+  planetInfoItemPrefab: {fileID: 1332000304113803821, guid: 97d8944bc47522d4bb31f0a753b1663d,
+    type: 3}
+  planetInfoItemListParent: {fileID: 1581385942}
+  planetInfoListItemParentTitle: {fileID: 2013859560}
+  planetInfoLayout: {fileID: 1914296622}
+  planetInfoCloseButton: {fileID: 1681072991}
+  planetLegendsListTitle: {fileID: 1532080737}
+  legendItemPrefab: {fileID: 8928009388362277743, guid: 56b4d558652b0e14c91d477d73a5a583,
+    type: 3}
+  legendParent: {fileID: 7622102719811871575}
+  solarSystemToggleTitle: {fileID: 331867777}
+  planetDistanceFromSunToggle: {fileID: 1175387854}
+  planetNameToggle: {fileID: 1499321345}
+  planetInclinationLineToggle: {fileID: 321942656}
+  orbitLineToggle: {fileID: 589325438}
+  planetDistanceFromSunToggleTextMeshPro: {fileID: 1314796814}
+  planetNameToggleTextMeshPro: {fileID: 1007148641}
+  planetInclinationLineToggleTextMeshPro: {fileID: 1702546275}
+  orbitLineToggleTextMeshPro: {fileID: 1777596911}
+  solarSystemSliderTitle: {fileID: 1866458184}
+  timeScaleSlider: {fileID: 1908259661}
+  sizeScaleSlider: {fileID: 278886603}
+  distanceScaleSlider: {fileID: 2109284399}
+  menuTimeText: {fileID: 471438890}
+  menuDistanceText: {fileID: 579038157}
+  menuSizeText: {fileID: 861801127}
+  menuSunSizeText: {fileID: 1048839442}
+  middleIconsHelperText: {fileID: 1821653759}
+  scanRoomIconObject: {fileID: 908815470}
+  tapIconObject: {fileID: 1159554388}
+  swipeIconObject: {fileID: 1122629468}
+  onPlanetNameToggleValueChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  onOrbitLineToggleValueChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  onPlanetInclinationLineToggleValueChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  onDistanceFromSunToggleValueChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  horizontalButtonsTitle: {fileID: 14855138}
+  pauseButton: {fileID: 1511909425}
+  fastForwardButton: {fileID: 518560482}
+  playButton: {fileID: 1921587052}
 --- !u!1 &1511909425
 GameObject:
   m_ObjectHideFlags: 0
@@ -9370,8 +9324,8 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1618326868}
-  m_Father: {fileID: 664682161}
-  m_RootOrder: 2
+  m_Father: {fileID: 1510672709}
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
@@ -10072,8 +10026,8 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1855374323}
-  m_Father: {fileID: 664682161}
-  m_RootOrder: 3
+  m_Father: {fileID: 1510672709}
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}

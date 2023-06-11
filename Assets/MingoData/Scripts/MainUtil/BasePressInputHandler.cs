@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace MingoData.Scripts.ARUtil
+namespace MingoData.Scripts.MainUtil
 {
     public abstract class BasePressInputHandler : MonoBehaviour
     {
@@ -62,7 +62,7 @@ namespace MingoData.Scripts.ARUtil
                     OnSwipeUp();
                 }
             };
-            //
+
             // m_PinchAction = new InputAction("pinch", binding: "<Touchscreen>/touch");
             // m_PinchAction.performed += ctx =>
             // {

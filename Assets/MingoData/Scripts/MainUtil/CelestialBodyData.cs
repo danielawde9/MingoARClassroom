@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
-namespace MingoData.Scripts.ARUtil
+
+namespace MingoData.Scripts.MainUtil
 {
 
     [Serializable]

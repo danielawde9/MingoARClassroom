@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
-namespace MingoData.Scripts.ARUtil
+
+namespace MingoData.Scripts.Utils
 {
 
     public class SpawnPrefabs : MonoBehaviour
