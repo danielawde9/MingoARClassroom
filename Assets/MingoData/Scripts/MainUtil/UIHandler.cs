@@ -222,7 +222,7 @@ namespace MingoData.Scripts.MainUtil
 
             // Set the height of the sliding panel to be half of the screen's height
             float screenHeight = Screen.height;
-            float halfScreenHeight = screenHeight / 3;
+            float halfScreenHeight = screenHeight / 2;
             float sliderToggleButtonLayoutHeight = sliderPanelToggleButton.transform.gameObject.GetComponent<RectTransform>().rect.height;
 
             Vector2 sizeDelta = sliderPanelRectTransform.sizeDelta;
