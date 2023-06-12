@@ -310,6 +310,8 @@ namespace MingoData.Scripts
 
         private void Start()
         {
+            localizationManager.LoadLocalizedText();
+
             uiHandler.UIShowInitial();
             uiHandler.onUpdateTimeScaleSlider += UpdateTimeScale;
             uiHandler.onUpdateSizeScaleSlider += UpdateSizeScale;

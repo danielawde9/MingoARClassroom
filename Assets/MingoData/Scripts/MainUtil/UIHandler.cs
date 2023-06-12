@@ -20,13 +20,15 @@ namespace MingoData.Scripts.MainUtil
         [SerializeField]
         public LocalizationManager localizationManager;
 
+        
         [Header("Panel Menu")]
         public GameObject menuSliderPanel;
         public GameObject sliderPanelToggleButton;
         public ScrollRect sliderPanelScrollRect;
         private Shadow sliderPanelToggleButtonShadow;
         private GameObject darkImageBackgroundSliderPanel;
-
+        private CanvasScaler canvasScaler;
+        
         [HideInInspector]
         public bool isMenuPanelVisible;
         private GameObject sliderButtonToggleImage;
@@ -148,6 +150,8 @@ namespace MingoData.Scripts.MainUtil
 
         private void Start()
         {
+            TranslationInit();
+
             PlanetInfoInit();
 
             MenuTransitionInit();
@@ -159,8 +163,6 @@ namespace MingoData.Scripts.MainUtil
             ToggleButtonsInit();
 
             InitSliderShadow();
-
-            TranslationInit();
 
         }
         
@@ -200,6 +202,15 @@ namespace MingoData.Scripts.MainUtil
 
         private void MenuTransitionInit()
         {
+            canvasScaler = GetComponent<CanvasScaler>();
+            
+            // If the width is greater, the screen is landscape, otherwise, it's portrait.
+            // Landscape mode. Match width (set matchWidthOrHeight to 0)
+            canvasScaler.matchWidthOrHeight = Screen.width > Screen.height ? 1f :
+                    // Portrait mode. Match height (set matchWidthOrHeight to 1)
+                    0f;
+            
+            
             // Create dark backgrounds
             darkImageBackgroundSliderPanel = UtilsFns.CreateDarkBackground();
             darkImageBackgroundSliderPanel.GetComponent<Button>().onClick.AddListener(ToggleMenuSliderPanel);
@@ -251,7 +262,6 @@ namespace MingoData.Scripts.MainUtil
 
         private void TranslationInit()
         {
-            localizationManager.LoadLocalizedText();
 
             menuTimeText.text = localizationManager.GetLocalizedValue("1_second_real_life_equals", menuTimeText, false, Constants.initialTimeScale.ToString(CultureInfo.CurrentCulture));
             menuDistanceText.text = localizationManager.GetLocalizedValue("1_meter_distance_equals", menuDistanceText, false, (1 / Constants.initialDistanceScale).ToString("N0"));
