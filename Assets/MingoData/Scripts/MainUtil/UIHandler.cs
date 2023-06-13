@@ -9,6 +9,8 @@ using MingoData.Scripts.Utils;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace MingoData.Scripts.MainUtil
@@ -41,7 +43,9 @@ namespace MingoData.Scripts.MainUtil
 
         [Header("Top Menu Bar")]
         public TextMeshProUGUI menuPlanetName;
-        public GameObject returnButton;
+        [FormerlySerializedAs("returnButton")]
+        public GameObject returnPlanetButton;
+        public GameObject returnToMainMenuButton;
 
         [Header("Planet Info Center List")]
         public GameObject planetInfoButton;
@@ -185,7 +189,10 @@ namespace MingoData.Scripts.MainUtil
 
         private void ClickListenerInit()
         {
-            Button returnButtonComponent = returnButton.GetComponent<Button>();
+            Button returnToMainMenuButtonComponent = returnToMainMenuButton.GetComponent<Button>();
+            returnToMainMenuButtonComponent.onClick.AddListener(ReturnToMainMenu);
+            
+            Button returnButtonComponent = returnPlanetButton.GetComponent<Button>();
             returnButtonComponent.onClick.AddListener(OnReturnButtonClick);
 
             Button pauseButtonComponent = pauseButton.GetComponent<Button>();
@@ -197,6 +204,10 @@ namespace MingoData.Scripts.MainUtil
             Button playButtonComponent = playButton.GetComponent<Button>();
             playButtonComponent.onClick.AddListener(OnPlayButtonClicked);
 
+        }
+        private static void ReturnToMainMenu()
+        {
+            SceneManager.LoadScene("MainMenu");
         }
 
 
@@ -500,7 +511,7 @@ namespace MingoData.Scripts.MainUtil
 
             menuPlanetName.text = localizedPlanetName;
 
-            returnButton.SetActive(showGameObjectHolder);
+            returnPlanetButton.SetActive(showGameObjectHolder);
             planetInfoButton.SetActive(showGameObjectHolder);
         }
 
@@ -585,7 +596,7 @@ namespace MingoData.Scripts.MainUtil
             scanRoomIconObject.SetActive(true);
             SetMiddleIconsHelperText(localizationManager.GetLocalizedValue("Move_your_phone_to_start_scanning_the_room", middleIconsHelperText, false));
             tapIconObject.SetActive(false);
-            returnButton.SetActive(false);
+            returnPlanetButton.SetActive(false);
             menuSliderPanel.SetActive(false);
             planetInfoButton.SetActive(false);
         }
@@ -603,7 +614,7 @@ namespace MingoData.Scripts.MainUtil
             scanRoomIconObject.SetActive(false);
             tapIconObject.SetActive(false);
             menuSliderPanel.SetActive(true);
-            returnButton.SetActive(false);
+            returnPlanetButton.SetActive(false);
             planetInfoButton.SetActive(false);
             SetMiddleIconsHelperText(localizationManager.GetLocalizedValue("Click_on_any_planet_or_click_on_the_menu_below_to_display_more_settings", middleIconsHelperText, false));
         }
