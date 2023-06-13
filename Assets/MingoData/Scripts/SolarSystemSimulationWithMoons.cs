@@ -17,6 +17,9 @@ namespace MingoData.Scripts
         {
             public List<MoonData> moons;
             public float distanceFromSun;
+            
+            public string image;
+            
             [NonSerialized] public LineRenderer distanceLineRenderer;
             [NonSerialized] public TextMeshPro distanceText;
         }
@@ -74,7 +77,7 @@ namespace MingoData.Scripts
             "completedSelfRotations"
         };
 
-        private readonly List<string> desiredPlanets = new List<string> {"Sun",  "Venus", "Earth" };
+        // private readonly List<string> desiredPlanets = new List<string> {"Sun",  "Venus", "Earth" };
 
         protected override void OnSwipeUp()
         {
@@ -324,7 +327,7 @@ namespace MingoData.Scripts
 
             uiHandler.SetCelestialBodyData(null, selectedFields);
 
-            SolarSystemUtility.LoadPlanetData(desiredPlanets);
+//            SolarSystemUtility.LoadPlanetData(desiredPlanets);
         }
     
         private void InstantiatePlanet(PlanetData planet, Vector3 placedTouchPosition, Quaternion rotationCorrection) 
@@ -385,7 +388,7 @@ namespace MingoData.Scripts
                     UtilsFns.CreateDistanceLineAndTextFromSun(parentDistanceLinesObject, planet);
                     SolarSystemUtility.UpdateDistanceFromSunText(planet, localizationManager);
                 } else {
-                    SolarSystemUtility.AssignDirectionalLight(planet.celestialBodyInstance.transform, distanceScale, desiredPlanets);
+                    //SolarSystemUtility.AssignDirectionalLight(planet.celestialBodyInstance.transform, distanceScale, desiredPlanets);
                 }
                 uiHandler.SetPlanetColorLegend(UtilsFns.GetPlanetColorLegend());
                 originalPositions[planet.celestialBodyInstance] = planet.celestialBodyInstance.transform.position;
@@ -501,6 +504,7 @@ namespace MingoData.Scripts
 // todo add toggle buttons to add planets 
 // todo check landscape kif bdk tzbta w ipad
 // Todo tafe how buttons wara bs planet info 
+// todo add color 3l text 
 
 // features
 // todo add toggle for normizaling the planets size 
