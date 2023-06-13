@@ -15,6 +15,9 @@ namespace MingoData.Scripts.Utils
         public const float maxDistance = 1f / 5000000f;
         public const string Lang_AR = "Arabic";
         public const string Lang_EN = "English";
+        public const string SelectedPlanets = "SelectedPlanets";
+        public const string SelectedLanguage = "SelectedLanguage";
+        
 
     }
 

@@ -4,7 +4,8 @@ using ArabicSupport;
 using TMPro;
 using UnityEngine;
 
-namespace MingoData.Scripts.Utils {
+namespace MingoData.Scripts.Utils
+{
 
     [System.Serializable]
     public class LocalizationItem
@@ -89,55 +90,33 @@ namespace MingoData.Scripts.Utils {
 
             return result;
         }
-        private (string timeUnitKey, string timeValue) TimeScaleConversion(float timeScale)
-        {
-            return timeScale switch
-            {
-                <= 1 => ("1_second_real_life_equals_seconds", (timeScale).ToString("F2")),
-                < 60 => ("1_second_real_life_equals_minutes", (timeScale).ToString("F2")),
-                < 3600 => ("1_second_real_life_equals_hours", (timeScale / 60).ToString("F2")),
-                < 86400 => ("1_second_real_life_equals_days", (timeScale / 3600).ToString("F2")),
-                < 604800 => ("1_second_real_life_equals_weeks", (timeScale / 86400).ToString("F2")),
-                < 2629800 => ("1_second_real_life_equals_months", (timeScale / 604800).ToString("F2")),
-                _ => ("1_second_real_life_equals_years", (timeScale / 2629800).ToString("F2"))
-            };
-        }
 
-        public string GetLocalizedTimeValue(float timeScale, TextMeshProUGUI textComponent, bool centerText)
+        public string GetLocalizedTimeValue(float timeScale, TextMeshProUGUI textComponent)
         {
             // Get time unit and time text
-            (string timeUnitKey, string timeValue) = TimeScaleConversion(timeScale);
+            (string timeUnitKey, string timeValue) = UtilsFns.TimeScaleConversion(timeScale);
 
             string result = missingTextString;
-
             // Check if there is a localized string for the given time unit
             if (!localizedText.ContainsKey(timeUnitKey))
                 return result;
             switch (currentLanguage)
             {
-                case "english":
+                case Constants.Lang_EN:
                     result = string.Format(localizedText[timeUnitKey].english, timeValue);
-                    if (textComponent != null)
-                    {
-                        textComponent.alignment = centerText ? TextAlignmentOptions.Midline : TextAlignmentOptions.MidlineLeft;
-                    }
+                    textComponent.alignment = TextAlignmentOptions.MidlineLeft;
                     break;
-                case "arabic":
+                case Constants.Lang_AR:
                     result = string.Format(localizedText[timeUnitKey].arabic, timeValue);
                     result = ArabicFixer.Fix(result, true, true);
-                    if (textComponent != null)
-                    {
-                        textComponent.isRightToLeftText = true;
-                        textComponent.alignment = centerText ? TextAlignmentOptions.Midline : TextAlignmentOptions.MidlineRight;
-                    }
+                    textComponent.isRightToLeftText = true;
+                    textComponent.alignment = TextAlignmentOptions.MidlineRight;
                     result = new string(result.ToCharArray().Reverse().ToArray());
                     break;
             }
 
             return result;
         }
-
-
 
         public string GetCurrentLanguage()
         {

@@ -3939,8 +3939,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1105738287}
   m_HandleRect: {fileID: 1105738286}
   m_Direction: 2
-  m_Value: 0
-  m_Size: 1
+  m_Value: 1
+  m_Size: 0.00000016834382
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -7379,8 +7379,8 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 811200856}
-  - {fileID: 384687734}
   - {fileID: 1749276729}
+  - {fileID: 384687734}
   - {fileID: 571017796}
   - {fileID: 1796466094}
   - {fileID: 772092436}
@@ -7414,8 +7414,8 @@ MonoBehaviour:
   initialScanFinished: 0
   isMenuPanelVisible: 0
   menuPlanetName: {fileID: 1618326869}
-  returnPlanetButton: {fileID: 384687733}
-  returnToMainMenuButton: {fileID: 0}
+  returnPlanetButton: {fileID: 1749276728}
+  returnToMainMenuButton: {fileID: 384687733}
   planetInfoButton: {fileID: 571017795}
   planetInfoItemPrefab: {fileID: 1332000304113803821, guid: 97d8944bc47522d4bb31f0a753b1663d,
     type: 3}
@@ -10347,7 +10347,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 0, y: 2900.5}
+  m_AnchoredPosition: {x: 0, y: 867.80096}
   m_SizeDelta: {x: 0, y: 2800}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1981951315

@@ -43,7 +43,6 @@ namespace MingoData.Scripts.MainUtil
 
         [Header("Top Menu Bar")]
         public TextMeshProUGUI menuPlanetName;
-        [FormerlySerializedAs("returnButton")]
         public GameObject returnPlanetButton;
         public GameObject returnToMainMenuButton;
 
@@ -132,6 +131,9 @@ namespace MingoData.Scripts.MainUtil
 
         private void OnReturnButtonClick()
         {
+            PlayerPrefs.SetString(Constants.SelectedPlanets, "");
+            PlayerPrefs.Save();
+            SolarSystemSimulationWithMoons.clearDicionary();
             celestialBodyHandler.ReturnSelectedPlanetToOriginalState();
         }
 
@@ -207,7 +209,7 @@ namespace MingoData.Scripts.MainUtil
         }
         private static void ReturnToMainMenu()
         {
-            SceneManager.LoadScene("MainMenu");
+            UtilsFns.LoadNewScene("MainMenu");
         }
 
 
@@ -512,6 +514,7 @@ namespace MingoData.Scripts.MainUtil
             menuPlanetName.text = localizedPlanetName;
 
             returnPlanetButton.SetActive(showGameObjectHolder);
+            returnToMainMenuButton.SetActive(!showGameObjectHolder);
             planetInfoButton.SetActive(showGameObjectHolder);
         }
 
@@ -537,13 +540,10 @@ namespace MingoData.Scripts.MainUtil
 
         private void UpdateTimeScale(float value)
         {
-            celestialBodyHandler.UpdateTimeScale(value); // Notify SolarSystemSimulationWithMoons
-
-            string timeText = localizationManager.GetLocalizedTimeValue(value, menuTimeText, false);
-
+            celestialBodyHandler.UpdateTimeScale(value); 
+            string timeText = localizationManager.GetLocalizedTimeValue(value, menuTimeText);
             menuTimeText.text = timeText;
         }
-
 
         private IEnumerator TransitionPanel(Vector2 startPosition, Vector2 endPosition)
         {

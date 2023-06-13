@@ -187,7 +187,7 @@ namespace MingoData.Scripts
             uiHandler.SetPlanetNameTextTitle(selectedPlanet.name, true);
             uiHandler.ToggleSwipeIcon(true);
             isSwipeIconToggled = false;
-
+            
             // Save the original position and scale of the planet
             originalPositions.TryAdd(planet, planet.transform.position);
             originalScales.TryAdd(planet, planet.transform.localScale);
@@ -315,9 +315,9 @@ namespace MingoData.Scripts
         private void Start()
         {
             
-            string savedPlanetsString = PlayerPrefs.GetString("SelectedPlanets", "");
+            string savedPlanetsString = PlayerPrefs.GetString(Constants.SelectedPlanets, "");
             loadedPlanets = new List<string>(savedPlanetsString.Split(','));
-            string selectedLang = PlayerPrefs.GetString("SelectedPlanetFromGroup", Constants.Lang_EN);
+            string selectedLang = PlayerPrefs.GetString(Constants.SelectedLanguage, Constants.Lang_EN);
             localizationManager.SetLanguage(selectedLang);
             localizationManager.LoadLocalizedText();
 
@@ -404,6 +404,10 @@ namespace MingoData.Scripts
             }
         }
 
+        public static void clearDicionary()
+        {
+            SolarSystemUtility.planetDataDictionary.Clear();
+        }
     
         private void SelectPlanetByName(string planetName)
         {

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using MingoData.Scripts.Utils;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -17,6 +18,9 @@ namespace MingoData.Scripts
         public ToggleGroup chooseLangToggleGroup;
         private void Start()
         {
+            PlayerPrefs.SetString(Constants.SelectedPlanets, "");
+            PlayerPrefs.Save();
+            
             TextAsset jsonFile = Resources.Load<TextAsset>("SolarSystemWithMoon/planet_data_with_moon");
             SolarSystemSimulationWithMoons.PlanetDataList planetDataList = JsonUtility.FromJson<SolarSystemSimulationWithMoons.PlanetDataList>(jsonFile.text);
             proceedButton.onClick.AddListener(LoadSolarSystemScene);
@@ -59,16 +63,15 @@ namespace MingoData.Scripts
             // Save the name of the selected planet from the toggle group to PlayerPrefs
             if (activeToggle != null)
             {
-                Debug.Log(activeToggle);
-                PlayerPrefs.SetString("SelectedPlanetFromGroup", activeToggle.gameObject.name);
+                PlayerPrefs.SetString(Constants.SelectedLanguage, activeToggle.gameObject.name);
             }
 
             string selectedPlanetsString = string.Join(",", selectedPlanets);
-            PlayerPrefs.SetString("SelectedPlanets", selectedPlanetsString);
+            
+            PlayerPrefs.SetString(Constants.SelectedPlanets, selectedPlanetsString);
             PlayerPrefs.Save();
             
-            SceneManager.LoadScene("SolarSystem");
-
+            UtilsFns.LoadNewScene("SolarSystem");
         }
 
 

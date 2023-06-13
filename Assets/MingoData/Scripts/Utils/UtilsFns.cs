@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using MingoData.Scripts.MainUtil;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Random = System.Random;
 
@@ -42,6 +43,27 @@ namespace MingoData.Scripts.Utils
 
             return darkBackground;
         }
+        
+        public static void LoadNewScene(string sceneName)
+        {
+            SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
+        }
+
+        public static (string timeUnitKey, string timeValue) TimeScaleConversion(float timeScale)
+        {
+            return timeScale switch
+            {
+                <= 1 => ("1_second_real_life_equals_seconds", (timeScale).ToString("F2")),
+                < 60 => ("1_second_real_life_equals_minutes", (timeScale).ToString("F2")),
+                < 3600 => ("1_second_real_life_equals_hours", (timeScale / 60).ToString("F2")),
+                < 86400 => ("1_second_real_life_equals_days", (timeScale / 3600).ToString("F2")),
+                < 604800 => ("1_second_real_life_equals_weeks", (timeScale / 86400).ToString("F2")),
+                < 2629800 => ("1_second_real_life_equals_months", (timeScale / 604800).ToString("F2")),
+                _ => ("1_second_real_life_equals_years", (timeScale / 2629800).ToString("F2"))
+            };
+        }
+
+
 
         public static void CreateDistanceLineAndTextFromSun(GameObject parentDistanceLinesObject, SolarSystemSimulationWithMoons.PlanetData planet)
         {
