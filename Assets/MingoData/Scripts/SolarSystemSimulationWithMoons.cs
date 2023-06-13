@@ -48,8 +48,8 @@ namespace MingoData.Scripts
 
         private bool solarSystemPlaced;
         private GameObject selectedPlanet;
-        private readonly Dictionary<GameObject, Vector3> originalPositions = new Dictionary<GameObject, Vector3>();
-        private readonly Dictionary<GameObject, Vector3> originalScales = new Dictionary<GameObject, Vector3>();
+        private static readonly Dictionary<GameObject, Vector3> OriginalPositions = new Dictionary<GameObject, Vector3>();
+        private static readonly Dictionary<GameObject, Vector3> OriginalScales = new Dictionary<GameObject, Vector3>();
         private GameObject parentDistanceLinesObject;
         private const float planetSelectedScale = 0.5f;
         private bool isAfterScanShown;
@@ -189,8 +189,8 @@ namespace MingoData.Scripts
             isSwipeIconToggled = false;
             
             // Save the original position and scale of the planet
-            originalPositions.TryAdd(planet, planet.transform.position);
-            originalScales.TryAdd(planet, planet.transform.localScale);
+            OriginalPositions.TryAdd(planet, planet.transform.position);
+            OriginalScales.TryAdd(planet, planet.transform.localScale);
 
             uiHandler.SetCelestialBodyData(SolarSystemUtility.planetDataDictionary[planet.name], selectedFields);
 
@@ -219,11 +219,11 @@ namespace MingoData.Scripts
         private void ReturnPlanetToOriginalState()
         {
             // Return the planet to its original position and scale
-            if (originalPositions.TryGetValue(selectedPlanet, out Vector3 position))
+            if (OriginalPositions.TryGetValue(selectedPlanet, out Vector3 position))
             {
                 selectedPlanet.transform.position = position;
             }
-            if (originalScales.TryGetValue(selectedPlanet, out Vector3 scale))
+            if (OriginalScales.TryGetValue(selectedPlanet, out Vector3 scale))
             {
                 selectedPlanet.transform.localScale = scale;
             }
@@ -311,6 +311,12 @@ namespace MingoData.Scripts
             }
         }
 
+        public static void ClearDictionary()
+        {
+            OriginalScales.Clear();
+            OriginalPositions.Clear();
+            SolarSystemUtility.ClearDictionary();
+        }
 
         private void Start()
         {
@@ -364,11 +370,8 @@ namespace MingoData.Scripts
             float newScale = GetPlanetScale(planet);
             planet.celestialBodyInstance.transform.localScale = new Vector3(newScale, newScale, newScale);
         
-        
             UtilsFns.CreateInclinationLine(planet, planet.celestialBodyInstance, localizationManager);
             UtilsFns.CreatePlanetName(planet, planet.celestialBodyInstance, localizationManager);
-
-        
         }
 
         private static float GetPlanetScale(CelestialBodyData planet)
@@ -385,29 +388,26 @@ namespace MingoData.Scripts
         private void SpawnPlanets(Vector3 placedTouchPosition) {
             parentDistanceLinesObject = new GameObject("ParentDistanceLines");
             Quaternion rotationCorrection = Quaternion.Euler(0, 0, 0);
+            
 
             foreach (PlanetData planet in SolarSystemUtility.planetDataDictionary.Values) {
                 // Check if the current planet's name is in the desiredPlanets list
                 // if (desiredPlanets.Contains(planet.name)) {
                 InstantiatePlanet(planet, placedTouchPosition, rotationCorrection);
                 if (planet.name != "Sun") {
-                    UtilsFns.CreateDistanceLineAndTextFromSun(parentDistanceLinesObject, planet);
+                    SolarSystemUtility.CreateDistanceLineAndTextFromSun(parentDistanceLinesObject, planet);
                     SolarSystemUtility.UpdateDistanceFromSunText(planet, localizationManager);
                 } else {
                     SolarSystemUtility.AssignDirectionalLight(planet.celestialBodyInstance.transform, distanceScale, loadedPlanets);
                 }
-                uiHandler.SetPlanetColorLegend(UtilsFns.GetPlanetColorLegend());
-                originalPositions[planet.celestialBodyInstance] = planet.celestialBodyInstance.transform.position;
+                uiHandler.SetPlanetColorLegend(SolarSystemUtility.GetPlanetColorLegend());
+                OriginalPositions[planet.celestialBodyInstance] = planet.celestialBodyInstance.transform.position;
                 SolarSystemUtility.InitPlanetProgress(planet);
                 UtilsFns.CreateOrbitLine(planet.celestialBodyInstance, planet, (body, angle) => SolarSystemUtility.CalculatePlanetPosition((PlanetData)body, angle, distanceScale));
                 // }
             }
         }
-
-        public static void clearDicionary()
-        {
-            SolarSystemUtility.planetDataDictionary.Clear();
-        }
+        
     
         private void SelectPlanetByName(string planetName)
         {

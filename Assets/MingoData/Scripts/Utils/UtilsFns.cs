@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using MingoData.Scripts.MainUtil;
 using TMPro;
 using UnityEngine;
@@ -11,7 +12,6 @@ namespace MingoData.Scripts.Utils
 {
     public class UtilsFns : MonoBehaviour
     {
-        private static readonly Dictionary<string, Color> PlanetColorLegend = new Dictionary<string, Color>();
       
         public static GameObject directionalLight;
 
@@ -46,7 +46,7 @@ namespace MingoData.Scripts.Utils
         
         public static void LoadNewScene(string sceneName)
         {
-            SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
+            SceneManager.LoadScene(sceneName);
         }
 
         public static (string timeUnitKey, string timeValue) TimeScaleConversion(float timeScale)
@@ -63,40 +63,7 @@ namespace MingoData.Scripts.Utils
             };
         }
 
-
-
-        public static void CreateDistanceLineAndTextFromSun(GameObject parentDistanceLinesObject, SolarSystemSimulationWithMoons.PlanetData planet)
-        {
-            if (parentDistanceLinesObject == null)
-            {
-                Debug.LogError("parentDistanceLinesObject is null");
-                return;
-            }
-
-            if (planet == null)
-            {
-                Debug.LogError("planet is null");
-                return;
-            }
-
-            GameObject parentObject = CreateGameObject($"{planet.name}_ParentDistanceInfo", parentDistanceLinesObject, Vector3.zero, Quaternion.identity);
-
-            // Create line renderer and text mesh for displaying distance from the sun
-            GameObject lineObject = CreateGameObject($"{planet.name}_DistanceLine", parentObject, Vector3.zero, Quaternion.identity);
-            Color planetLineColor = CreateRandomPlanetLineColor();
-
-            PlanetColorLegend.Add(planet.name, planetLineColor);
-            planet.distanceLineRenderer = CreateLineRenderer(lineObject, 0.01f, 0.01f, 2, Vector3.zero, planet.celestialBodyInstance.transform.position, planetLineColor);
-
-            GameObject textDistanceTextObject = CreateGameObject($"{planet.name}_DistanceText", parentObject, Vector3.zero, Quaternion.identity);
-            textDistanceTextObject.AddComponent<FaceCamera>();
-
-            planet.distanceText = CreateTextMeshPro(textDistanceTextObject, "", 4.25f, planetLineColor, TextAlignmentOptions.Center, new Vector2(2.0f, 2.0f));
-
-            parentObject.SetActive(false);
-        }
-       
-        private static GameObject CreateGameObject(string name, GameObject parent, Vector3 localPosition, Quaternion localRotation)
+        public static GameObject CreateGameObject(string name, GameObject parent, Vector3 localPosition, Quaternion localRotation)
         {
             GameObject newGameObject = new GameObject(name);
             if (parent != null)
@@ -107,7 +74,7 @@ namespace MingoData.Scripts.Utils
             return newGameObject;
         }
 
-        private static Color CreateRandomPlanetLineColor()
+        public static Color CreateRandomPlanetLineColor()
         {
             // Generate a random line color for each planet
             Random random = new Random();
@@ -117,7 +84,7 @@ namespace MingoData.Scripts.Utils
             return new Color(r, g, b);
         }
 
-        private static TextMeshPro CreateTextMeshPro(GameObject gameObject, string text, float fontSize, Color color, TextAlignmentOptions alignment, Vector2 rectTransformSizeDelta)
+        public static TextMeshPro CreateTextMeshPro(GameObject gameObject, string text, float fontSize, Color color, TextAlignmentOptions alignment, Vector2 rectTransformSizeDelta)
         {
             TextMeshPro textMeshPro = gameObject.AddComponent<TextMeshPro>();
             textMeshPro.text = text;
@@ -129,13 +96,8 @@ namespace MingoData.Scripts.Utils
             return textMeshPro;
 
         }
-        
-        public static Dictionary<string, Color> GetPlanetColorLegend()
-        {
-            return PlanetColorLegend;
-        }
 
-        private static LineRenderer CreateLineRenderer(GameObject gameObject, float startWidth, float endWidth, int positionCount, Vector3 startPosition, Vector3 endPosition, Color color)
+        public static LineRenderer CreateLineRenderer(GameObject gameObject, float startWidth, float endWidth, int positionCount, Vector3 startPosition, Vector3 endPosition, Color color)
         {
             // NOTE: unity editor: Edit->Project Settings-> Graphics Then in the inspector where it says "Always Included Shaders" add "Unlit/Color"
             LineRenderer lineRenderer = gameObject.AddComponent<LineRenderer>();
@@ -237,9 +199,13 @@ namespace MingoData.Scripts.Utils
             lightComponent.color = Color.white;
             lightComponent.intensity = 1.0f;
 
-            string lastAllowedPlanet = allowedPlanets[^1];
+            // List of planets in the correct order
+            List<string> planetOrder = new List<string> { "Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto" };
 
-            if (localPlanetDataDictionary.TryGetValue(lastAllowedPlanet, out SolarSystemSimulationWithMoons.PlanetData lastPlanetData))
+            // Find the last planet from the order which is also in the allowedPlanets list and the localPlanetDataDictionary
+            string lastAllowedPlanet = planetOrder.LastOrDefault(planet => allowedPlanets.Contains(planet) && localPlanetDataDictionary.ContainsKey(planet));
+
+            if (lastAllowedPlanet != null && localPlanetDataDictionary.TryGetValue(lastAllowedPlanet, out SolarSystemSimulationWithMoons.PlanetData lastPlanetData))
             {
                 float distanceToPluto = lastPlanetData.distanceFromSun * distanceScale * 10;
                 Debug.Log("Distance from Sun to " + lastPlanetData.name + ": " + distanceToPluto);
@@ -251,6 +217,7 @@ namespace MingoData.Scripts.Utils
             directionalLight.transform.SetParent(sunTransform);
             directionalLight.transform.localPosition = Vector3.zero;
         }
+
 
     }
 

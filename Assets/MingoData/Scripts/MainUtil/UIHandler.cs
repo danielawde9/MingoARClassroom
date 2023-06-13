@@ -9,8 +9,6 @@ using MingoData.Scripts.Utils;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.SceneManagement;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace MingoData.Scripts.MainUtil
@@ -129,11 +127,8 @@ namespace MingoData.Scripts.MainUtil
             UpdateTimeScale(celestialBodyHandler.timeScale);
         }
 
-        private void OnReturnButtonClick()
+        private void OnReturnPlanetButtonClick()
         {
-            PlayerPrefs.SetString(Constants.SelectedPlanets, "");
-            PlayerPrefs.Save();
-            SolarSystemSimulationWithMoons.clearDicionary();
             celestialBodyHandler.ReturnSelectedPlanetToOriginalState();
         }
 
@@ -195,7 +190,7 @@ namespace MingoData.Scripts.MainUtil
             returnToMainMenuButtonComponent.onClick.AddListener(ReturnToMainMenu);
             
             Button returnButtonComponent = returnPlanetButton.GetComponent<Button>();
-            returnButtonComponent.onClick.AddListener(OnReturnButtonClick);
+            returnButtonComponent.onClick.AddListener(OnReturnPlanetButtonClick);
 
             Button pauseButtonComponent = pauseButton.GetComponent<Button>();
             pauseButtonComponent.onClick.AddListener(OnPauseButtonClicked);
@@ -209,20 +204,19 @@ namespace MingoData.Scripts.MainUtil
         }
         private static void ReturnToMainMenu()
         {
+            PlayerPrefs.SetString(Constants.SelectedPlanets, "");
+            PlayerPrefs.SetString(Constants.SelectedLanguage, "");
+            PlayerPrefs.Save();
+            SolarSystemSimulationWithMoons.ClearDictionary();
             UtilsFns.LoadNewScene("MainMenu");
         }
 
-
         private void MenuTransitionInit()
         {
-           
-            
-            
             // Create dark backgrounds
             darkImageBackgroundSliderPanel = UtilsFns.CreateDarkBackground();
             darkImageBackgroundSliderPanel.GetComponent<Button>().onClick.AddListener(ToggleMenuSliderPanel);
             darkImageBackgroundSliderPanel.SetActive(false);
-
 
             sliderButtonToggleImage = sliderPanelToggleButton.transform.GetChild(0).gameObject;
             sliderPanelRectTransform = menuSliderPanel.GetComponent<RectTransform>();

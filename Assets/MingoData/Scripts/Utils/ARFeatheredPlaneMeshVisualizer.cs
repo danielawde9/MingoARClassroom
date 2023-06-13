@@ -34,12 +34,12 @@ namespace MingoData.Scripts.Utils
             m_Plane = GetComponent<ARPlane>();
         }
 
-        void OnEnable()
+        private void OnEnable()
         {
             m_Plane.boundaryChanged += ARPlane_boundaryUpdated;
         }
 
-        void OnDisable()
+        private void OnDisable()
         {
             m_Plane.boundaryChanged -= ARPlane_boundaryUpdated;
         }
@@ -85,7 +85,7 @@ namespace MingoData.Scripts.Utils
                 uv.x = uvMapping;
 
                 // All the UV mappings will be different. In the shader we need to know the UV value we need to fade out by.
-                // Choose the shortest UV to guarentee we fade out before the border.
+                // Choose the shortest UV to guarantee we fade out before the border.
                 // This means the feathering widths will be slightly different, we again rely on a fairly uniform plane.
                 if (shortestUVMapping > uvMapping) { shortestUVMapping = uvMapping; }
 
