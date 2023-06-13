@@ -25,7 +25,7 @@ namespace MingoData.Scripts.Utils {
         private Dictionary<string, LocalizationItem> localizedText;
         private bool isReady;
         private const string missingTextString = "Localized text not found";
-        private string currentLanguage = Constants.Lang_AR;
+        private string currentLanguage = Constants.Lang_EN;
         //private string currentLanguage = Constants.Lang_EN;
 
         public void LoadLocalizedText()

@@ -28,6 +28,7 @@ namespace MingoData.Scripts.MainUtil
         private Shadow sliderPanelToggleButtonShadow;
         private GameObject darkImageBackgroundSliderPanel;
         private CanvasScaler canvasScaler;
+        public bool initialScanFinished;
         
         [HideInInspector]
         public bool isMenuPanelVisible;
@@ -599,6 +600,7 @@ namespace MingoData.Scripts.MainUtil
         public void UIShowAfterScan()
         {
             scanRoomIconObject.SetActive(false);
+            initialScanFinished = true;
             SetMiddleIconsHelperText(localizationManager.GetLocalizedValue("Tap_on_the_scanned_area_to_place_the_solar_system", middleIconsHelperText, false));
             tapIconObject.SetActive(true);
         }

@@ -76,14 +76,16 @@ namespace MingoData.Scripts
             "completedOrbits",
             "completedSelfRotations"
         };
+        private List<string> loadedPlanets;
 
         // private readonly List<string> desiredPlanets = new List<string> {"Sun",  "Venus", "Earth" };
 
         protected override void OnSwipeUp()
         {
             base.OnSwipeUp();
-            if (selectedPlanet == null && !uiHandler.isMenuPanelVisible) // Only call the function if the panel is not open and a planet is selected
+            if (selectedPlanet == null && !uiHandler.isMenuPanelVisible && uiHandler.initialScanFinished) // Only call the function if the panel is not open and a planet is selected
             {
+                Debug.LogError("3k3k");
                 uiHandler.ToggleMenuSliderPanel();
             }
         }
@@ -313,6 +315,11 @@ namespace MingoData.Scripts
 
         private void Start()
         {
+            
+            string savedPlanetsString = PlayerPrefs.GetString("SelectedPlanets", "");
+            loadedPlanets = new List<string>(savedPlanetsString.Split(','));
+            string selectedLang = PlayerPrefs.GetString("SelectedPlanetFromGroup", Constants.Lang_EN);
+            localizationManager.SetLanguage(selectedLang);
             localizationManager.LoadLocalizedText();
 
             uiHandler.UIShowInitial();
@@ -327,7 +334,7 @@ namespace MingoData.Scripts
 
             uiHandler.SetCelestialBodyData(null, selectedFields);
 
-//            SolarSystemUtility.LoadPlanetData(desiredPlanets);
+            SolarSystemUtility.LoadPlanetData(loadedPlanets);
         }
     
         private void InstantiatePlanet(PlanetData planet, Vector3 placedTouchPosition, Quaternion rotationCorrection) 
@@ -388,7 +395,7 @@ namespace MingoData.Scripts
                     UtilsFns.CreateDistanceLineAndTextFromSun(parentDistanceLinesObject, planet);
                     SolarSystemUtility.UpdateDistanceFromSunText(planet, localizationManager);
                 } else {
-                    //SolarSystemUtility.AssignDirectionalLight(planet.celestialBodyInstance.transform, distanceScale, desiredPlanets);
+                    SolarSystemUtility.AssignDirectionalLight(planet.celestialBodyInstance.transform, distanceScale, loadedPlanets);
                 }
                 uiHandler.SetPlanetColorLegend(UtilsFns.GetPlanetColorLegend());
                 originalPositions[planet.celestialBodyInstance] = planet.celestialBodyInstance.transform.position;
@@ -505,6 +512,7 @@ namespace MingoData.Scripts
 // todo check landscape kif bdk tzbta w ipad
 // Todo tafe how buttons wara bs planet info 
 // todo add color 3l text 
+// todo add swipe up icon
 
 // features
 // todo add toggle for normizaling the planets size 

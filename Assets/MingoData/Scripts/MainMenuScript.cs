@@ -1,6 +1,8 @@
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace MingoData.Scripts
@@ -10,12 +12,16 @@ namespace MingoData.Scripts
         public GameObject planetsRowItemPrefab;
         public Transform planetsRowItemListParent;
         private readonly List<string> selectedPlanets = new List<string>();
+        public Button proceedButton;
 
+        public ToggleGroup chooseLangToggleGroup;
         private void Start()
         {
             TextAsset jsonFile = Resources.Load<TextAsset>("SolarSystemWithMoon/planet_data_with_moon");
             SolarSystemSimulationWithMoons.PlanetDataList planetDataList = JsonUtility.FromJson<SolarSystemSimulationWithMoons.PlanetDataList>(jsonFile.text);
-
+            proceedButton.onClick.AddListener(LoadSolarSystemScene);
+            proceedButton.interactable = false;
+            
             foreach (Transform child in planetsRowItemListParent)
             {
                 Destroy(child.gameObject);
@@ -47,8 +53,25 @@ namespace MingoData.Scripts
                 }
             }
         }
+        private void LoadSolarSystemScene()
+        {
+            Toggle activeToggle = chooseLangToggleGroup.ActiveToggles().FirstOrDefault();
+            // Save the name of the selected planet from the toggle group to PlayerPrefs
+            if (activeToggle != null)
+            {
+                Debug.Log(activeToggle);
+                PlayerPrefs.SetString("SelectedPlanetFromGroup", activeToggle.gameObject.name);
+            }
 
-        
+            string selectedPlanetsString = string.Join(",", selectedPlanets);
+            PlayerPrefs.SetString("SelectedPlanets", selectedPlanetsString);
+            PlayerPrefs.Save();
+            
+            SceneManager.LoadScene("SolarSystem");
+
+        }
+
+
         private void TogglePlanet(Toggle toggle, string planetName)
         {
             if (toggle.isOn)
@@ -60,8 +83,11 @@ namespace MingoData.Scripts
             {
                 selectedPlanets.Remove(planetName);
             }
+            proceedButton.interactable = selectedPlanets.Count > 0;
 
             Debug.Log("Currently selected planets: " + string.Join(", ", selectedPlanets));
         }
+        
+        
     }
 }

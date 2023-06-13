@@ -13,8 +13,8 @@ namespace MingoData.Scripts.Utils
         public const float maxSize = 1f / 10000f;
         public const float minSize = 1f / 1000000f;
         public const float maxDistance = 1f / 5000000f;
-        public const string Lang_AR = "arabic";
-        public const string Lang_EN = "english";
+        public const string Lang_AR = "Arabic";
+        public const string Lang_EN = "English";
 
     }
 
