@@ -500,6 +500,7 @@ namespace MingoData.Scripts
 // todo add pinch zoom to increase decrease size 
 // todo add toggle buttons to add planets 
 // todo check landscape kif bdk tzbta w ipad
+// Todo tafe how buttons wara bs planet info 
 
 // features
 // todo add toggle for normizaling the planets size 
