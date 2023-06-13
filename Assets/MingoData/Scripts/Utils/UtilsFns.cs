@@ -199,6 +199,7 @@ namespace MingoData.Scripts.Utils
             lightComponent.color = Color.white;
             lightComponent.intensity = 1.0f;
 
+            // todo later on 
             // List of planets in the correct order
             List<string> planetOrder = new List<string> { "Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto" };
 

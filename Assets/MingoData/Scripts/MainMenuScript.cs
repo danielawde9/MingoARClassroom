@@ -43,7 +43,6 @@ namespace MingoData.Scripts
                         break;
 
                     int currentIndex = i + planetIndex;  
-
                     
                     Image planetImage = child.Find("PlanetImage").GetComponent<Image>();
                     TextMeshProUGUI planetName = child.Find("PlanetName").GetComponent<TextMeshProUGUI>();
