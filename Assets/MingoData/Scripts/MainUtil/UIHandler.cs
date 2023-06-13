@@ -27,7 +27,6 @@ namespace MingoData.Scripts.MainUtil
         public ScrollRect sliderPanelScrollRect;
         private Shadow sliderPanelToggleButtonShadow;
         private GameObject darkImageBackgroundSliderPanel;
-        private CanvasScaler canvasScaler;
         public bool initialScanFinished;
         
         [HideInInspector]
@@ -203,13 +202,7 @@ namespace MingoData.Scripts.MainUtil
 
         private void MenuTransitionInit()
         {
-            canvasScaler = GetComponent<CanvasScaler>();
-            
-            // If the width is greater, the screen is landscape, otherwise, it's portrait.
-            // Landscape mode. Match width (set matchWidthOrHeight to 0)
-            canvasScaler.matchWidthOrHeight = Screen.width > Screen.height ? 1f :
-                    // Portrait mode. Match height (set matchWidthOrHeight to 1)
-                    0f;
+           
             
             
             // Create dark backgrounds

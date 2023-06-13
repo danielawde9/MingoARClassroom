@@ -85,7 +85,6 @@ namespace MingoData.Scripts
             base.OnSwipeUp();
             if (selectedPlanet == null && !uiHandler.isMenuPanelVisible && uiHandler.initialScanFinished) // Only call the function if the panel is not open and a planet is selected
             {
-                Debug.LogError("3k3k");
                 uiHandler.ToggleMenuSliderPanel();
             }
         }
@@ -508,17 +507,17 @@ namespace MingoData.Scripts
 // todo fix light range  bs yekbar distance
 // todo add black bacground when planet selected
 // todo add pinch zoom to increase decrease size 
-// todo add toggle buttons to add planets 
-// todo check landscape kif bdk tzbta w ipad
-// Todo tafe how buttons wara bs planet info 
 // todo add color 3l text 
 // todo add swipe up icon
+// todo Msh icon monotone
 
 // features
+// todo add size prespective
 // todo add toggle for normizaling the planets size 
 // todo add songs and click sound
 // todo add seasons 
 // todo add pov planets
+// todo document your code
 // todo add solar eclipse
 // todo day night texture
 // todo add the cockpit

@@ -14,7 +14,7 @@ namespace MingoData.Scripts.MainUtil
 
         public static void AssignDirectionalLight(Transform planetInstance, float distanceScale, List<string> desiredPlanets)
         {
-            UtilsFns.CreateDirectionalLight(planetInstance, distanceScale, SolarSystemUtility.planetDataDictionary, desiredPlanets);
+            UtilsFns.CreateDirectionalLight(planetInstance, distanceScale, planetDataDictionary, desiredPlanets);
             GameObject localDirectionalLight = GameObject.Find("Directional Light");
             if (localDirectionalLight == null)
                 return;
