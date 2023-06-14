@@ -1,13 +1,20 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using MingoData.Scripts.Utils;
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
+using UnityEngine.Android;
 using UnityEngine.UI;
+
+#if UNITY_ANDROID
+using UnityEngine.Android;
+#endif
+
 
 namespace MingoData.Scripts
 {
+
     public class MainMenuScript : MonoBehaviour
     {
         public GameObject planetsRowItemPrefab;
@@ -20,18 +27,18 @@ namespace MingoData.Scripts
         {
             PlayerPrefs.SetString(Constants.SelectedPlanets, "");
             PlayerPrefs.Save();
-            
+
             TextAsset jsonFile = Resources.Load<TextAsset>("SolarSystemWithMoon/planet_data_with_moon");
             SolarSystemSimulationWithMoons.PlanetDataList planetDataList = JsonUtility.FromJson<SolarSystemSimulationWithMoons.PlanetDataList>(jsonFile.text);
             proceedButton.onClick.AddListener(LoadSolarSystemScene);
             proceedButton.interactable = false;
-            
+
             foreach (Transform child in planetsRowItemListParent)
             {
                 Destroy(child.gameObject);
             }
-            
-            for (int i = 0; i < planetDataList.planets.Count; i+=2)
+
+            for (int i = 0; i < planetDataList.planets.Count; i += 2)
             {
                 GameObject planetRow = Instantiate(planetsRowItemPrefab, planetsRowItemListParent);
                 planetRow.name = "PlanetRow";
@@ -39,11 +46,11 @@ namespace MingoData.Scripts
                 int planetIndex = 0;
                 foreach (Transform child in planetRow.transform)
                 {
-                    if(i + planetIndex >= planetDataList.planets.Count)
+                    if (i + planetIndex >= planetDataList.planets.Count)
                         break;
 
-                    int currentIndex = i + planetIndex;  
-                    
+                    int currentIndex = i + planetIndex;
+
                     Image planetImage = child.Find("PlanetImage").GetComponent<Image>();
                     TextMeshProUGUI planetName = child.Find("PlanetName").GetComponent<TextMeshProUGUI>();
                     Toggle planetToggle = child.GetComponent<Toggle>();
@@ -56,6 +63,9 @@ namespace MingoData.Scripts
                 }
             }
         }
+
+
+
         private void LoadSolarSystemScene()
         {
             Toggle activeToggle = chooseLangToggleGroup.ActiveToggles().FirstOrDefault();
@@ -66,10 +76,10 @@ namespace MingoData.Scripts
             }
 
             string selectedPlanetsString = string.Join(",", selectedPlanets);
-            
+
             PlayerPrefs.SetString(Constants.SelectedPlanets, selectedPlanetsString);
             PlayerPrefs.Save();
-            
+
             UtilsFns.LoadNewScene("SolarSystem");
         }
 
@@ -78,7 +88,7 @@ namespace MingoData.Scripts
         {
             if (toggle.isOn)
             {
-                if(!selectedPlanets.Contains(planetName)) 
+                if (!selectedPlanets.Contains(planetName))
                     selectedPlanets.Add(planetName);
             }
             else
@@ -89,7 +99,8 @@ namespace MingoData.Scripts
 
             Debug.Log("Currently selected planets: " + string.Join(", ", selectedPlanets));
         }
-        
-        
+
+
     }
+
 }

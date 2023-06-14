@@ -56,7 +56,6 @@ namespace MingoData.Scripts
         public LocalizationManager localizationManager;
         private bool isSwipeIconToggled;
 
-
         private readonly List<string> selectedFields = new List<string>()
         {
             "name", 
@@ -89,12 +88,13 @@ namespace MingoData.Scripts
             }
         }
 
-        
         protected override void Awake()
         {
             base.Awake();
             mRaycastManager = GetComponent<ARRaycastManager>();
             mainCamera = Camera.main;
+            DontDestroyOnLoad(mainCamera);
+
         }
 
         protected override void OnDrag(Vector2 delta)
@@ -149,6 +149,7 @@ namespace MingoData.Scripts
             if (!Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity))
                 return;
             GameObject hitObject = hit.collider.gameObject;
+            // NOTE: make sure to add CelestialBody tag 
             if (!hitObject.CompareTag($"CelestialBody"))
                 return;
             if (selectedPlanet != null)
@@ -318,9 +319,9 @@ namespace MingoData.Scripts
             SolarSystemUtility.ClearDictionary();
         }
 
+
         private void Start()
         {
-            
             string savedPlanetsString = PlayerPrefs.GetString(Constants.SelectedPlanets, "");
             loadedPlanets = new List<string>(savedPlanetsString.Split(','));
             string selectedLang = PlayerPrefs.GetString(Constants.SelectedLanguage, Constants.LangEn);
@@ -508,10 +509,10 @@ namespace MingoData.Scripts
 }
 
 // fixes
+// todo check camera permission
 // todo fix light range  bs yekbar distance
-// todo add black bacground when planet selected
+// todo add black background when planet selected
 // todo add pinch zoom to increase decrease size 
-// todo add color 3l text 
 // todo add swipe up icon
 // todo Msh icon monotone
 
