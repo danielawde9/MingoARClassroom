@@ -103,9 +103,6 @@ namespace MingoData.Scripts.MainUtil
         public GameObject pauseButton;
         public GameObject fastForwardButton;
         public GameObject playButton;
-        private TextMeshProUGUI pauseButtonTextMeshPro;
-        private TextMeshProUGUI fastForwardButtonTextMeshPro;
-        private TextMeshProUGUI playButtonTextMeshPro;
 
 
 
@@ -183,7 +180,6 @@ namespace MingoData.Scripts.MainUtil
 
         }
 
-
         private void ClickListenerInit()
         {
             Button returnToMainMenuButtonComponent = returnToMainMenuButton.GetComponent<Button>();
@@ -227,13 +223,24 @@ namespace MingoData.Scripts.MainUtil
             float sliderToggleButtonLayoutHeight = sliderPanelToggleButton.transform.gameObject.GetComponent<RectTransform>().rect.height;
 
             Vector2 sizeDelta = sliderPanelRectTransform.sizeDelta;
-            sizeDelta = new Vector2(sizeDelta.x, halfScreenHeight);
+    
+            // Set the height
+            sizeDelta.y = halfScreenHeight;
+
+            // If the screen's width is more than 1080 pixels, set the width to be 80% of the screen's width
+            float screenWidth = Screen.width;
+            if (screenWidth > 1080)
+            {
+                sizeDelta.x = screenWidth * 0.8f;
+            }
+
             sliderPanelRectTransform.sizeDelta = sizeDelta;
 
             // Set the target position of the panel
             targetPosition = new Vector2(0f, sizeDelta.y / 2);
             initialPosition = new Vector2(0f, -halfScreenHeight / 2 + sliderToggleButtonLayoutHeight);
             sliderPanelRectTransform.anchoredPosition = initialPosition;
+
             // Add listener to the toggle button
             sliderPanelToggleButton.GetComponent<Button>().onClick.AddListener(ToggleMenuSliderPanel);
         }
@@ -264,28 +271,21 @@ namespace MingoData.Scripts.MainUtil
         private void TranslationInit()
         {
 
-            menuTimeText.text = localizationManager.GetLocalizedValue("1_second_real_life_equals", menuTimeText, false, Constants.initialTimeScale.ToString(CultureInfo.CurrentCulture));
-            menuDistanceText.text = localizationManager.GetLocalizedValue("1_meter_distance_equals", menuDistanceText, false, (1 / Constants.initialDistanceScale).ToString("N0"));
-            menuSizeText.text = localizationManager.GetLocalizedValue("1_meter_size_equals", menuSizeText, false, (1 / Constants.initialSizeScale).ToString("N0"));
-            menuSunSizeText.text = localizationManager.GetLocalizedValue("sun_size_text", menuSunSizeText, false, (1 / Constants.initialSunSizeScale).ToString("N0"));
+            menuTimeText.text = localizationManager.GetLocalizedValue("1_second_real_life_equals", menuTimeText, false, Constants.ColorGreen, Constants.InitialTimeScale.ToString(CultureInfo.CurrentCulture));
+            menuDistanceText.text = localizationManager.GetLocalizedValue("1_meter_distance_equals", menuDistanceText, false,Constants.ColorGreen,(1 / Constants.InitialDistanceScale).ToString("N0"));
+            menuSizeText.text = localizationManager.GetLocalizedValue("1_meter_size_equals", menuSizeText, false, Constants.ColorGreen,(1 / Constants.InitialSizeScale).ToString("N0"));
+            menuSunSizeText.text = localizationManager.GetLocalizedValue("sun_size_text", menuSunSizeText, false, Constants.ColorGreen,(1 / Constants.InitialSunSizeScale).ToString("N0"));
 
-            pauseButtonTextMeshPro = pauseButton.GetComponentInChildren<TextMeshProUGUI>();
-            fastForwardButtonTextMeshPro = fastForwardButton.GetComponentInChildren<TextMeshProUGUI>();
-            playButtonTextMeshPro = playButton.GetComponentInChildren<TextMeshProUGUI>();
+             horizontalButtonsTitle.text = localizationManager.GetLocalizedValue("Playback_Time_Settings", horizontalButtonsTitle, false, Constants.ColorWhite);
+            solarSystemSliderTitle.text = localizationManager.GetLocalizedValue("Planet_Settings", solarSystemSliderTitle, false, Constants.ColorWhite);
+            solarSystemToggleTitle.text = localizationManager.GetLocalizedValue("Orbital_Settings", solarSystemToggleTitle, false, Constants.ColorWhite);
+            planetLegendsListTitle.text = localizationManager.GetLocalizedValue("Planets_legend", planetLegendsListTitle, false, Constants.ColorWhite);
+            planetInfoListItemParentTitle.text = localizationManager.GetLocalizedValue("Planets_Info", planetInfoListItemParentTitle, false, Constants.ColorWhite);
 
-            pauseButtonTextMeshPro.text = localizationManager.GetLocalizedValue("Pause", pauseButtonTextMeshPro, true);
-            fastForwardButtonTextMeshPro.text = localizationManager.GetLocalizedValue("Fast_Forward", fastForwardButtonTextMeshPro, true);
-            playButtonTextMeshPro.text = localizationManager.GetLocalizedValue("Play", playButtonTextMeshPro, true);
-            horizontalButtonsTitle.text = localizationManager.GetLocalizedValue("Playback_Time_Settings", horizontalButtonsTitle, false);
-            solarSystemSliderTitle.text = localizationManager.GetLocalizedValue("Planet_Settings", solarSystemSliderTitle, false);
-            solarSystemToggleTitle.text = localizationManager.GetLocalizedValue("Orbital_Settings", solarSystemToggleTitle, false);
-            planetLegendsListTitle.text = localizationManager.GetLocalizedValue("Planets_legend", planetLegendsListTitle, false);
-            planetInfoListItemParentTitle.text = localizationManager.GetLocalizedValue("Planets_Info", planetInfoListItemParentTitle, false);
-
-            planetDistanceFromSunToggleTextMeshPro.text = localizationManager.GetLocalizedValue("Display_Distance_From_Sun", planetDistanceFromSunToggleTextMeshPro, false);
-            planetNameToggleTextMeshPro.text = localizationManager.GetLocalizedValue("Display_Planet_Name", planetNameToggleTextMeshPro, false);
-            planetInclinationLineToggleTextMeshPro.text = localizationManager.GetLocalizedValue("Display_Inclination_Line", planetInclinationLineToggleTextMeshPro, false);
-            orbitLineToggleTextMeshPro.text = localizationManager.GetLocalizedValue("Display_Planet_Orbit", orbitLineToggleTextMeshPro, false);
+            planetDistanceFromSunToggleTextMeshPro.text = localizationManager.GetLocalizedValue("Display_Distance_From_Sun", planetDistanceFromSunToggleTextMeshPro, false, Constants.ColorWhite);
+            planetNameToggleTextMeshPro.text = localizationManager.GetLocalizedValue("Display_Planet_Name", planetNameToggleTextMeshPro, false, Constants.ColorWhite);
+            planetInclinationLineToggleTextMeshPro.text = localizationManager.GetLocalizedValue("Display_Inclination_Line", planetInclinationLineToggleTextMeshPro, false, Constants.ColorWhite);
+            orbitLineToggleTextMeshPro.text = localizationManager.GetLocalizedValue("Display_Planet_Orbit", orbitLineToggleTextMeshPro, false, Constants.ColorWhite);
         }
 
         private void ToggleButtonsInit()
@@ -307,37 +307,37 @@ namespace MingoData.Scripts.MainUtil
 
 
             HorizontalLayoutGroup planetDistanceFromSunToggleLayoutGroup = planetDistanceFromSunToggle.transform.parent.GetComponent<HorizontalLayoutGroup>();
-            planetDistanceFromSunToggleLayoutGroup.reverseArrangement = (localizationManager.GetCurrentLanguage() == Constants.Lang_AR);
+            planetDistanceFromSunToggleLayoutGroup.reverseArrangement = (localizationManager.GetCurrentLanguage() == Constants.LangAR);
 
             HorizontalLayoutGroup planetNameToggleLayoutGroup = planetNameToggle.transform.parent.GetComponent<HorizontalLayoutGroup>();
-            planetNameToggleLayoutGroup.reverseArrangement = (localizationManager.GetCurrentLanguage() == Constants.Lang_AR);
+            planetNameToggleLayoutGroup.reverseArrangement = (localizationManager.GetCurrentLanguage() == Constants.LangAR);
 
             HorizontalLayoutGroup planetInclinationLineToggleLayoutGroup = planetInclinationLineToggle.transform.parent.GetComponent<HorizontalLayoutGroup>();
-            planetInclinationLineToggleLayoutGroup.reverseArrangement = (localizationManager.GetCurrentLanguage() == Constants.Lang_AR);
+            planetInclinationLineToggleLayoutGroup.reverseArrangement = (localizationManager.GetCurrentLanguage() == Constants.LangAR);
 
             HorizontalLayoutGroup orbitLineToggleLayoutGroup = orbitLineToggle.transform.parent.GetComponent<HorizontalLayoutGroup>();
-            orbitLineToggleLayoutGroup.reverseArrangement = (localizationManager.GetCurrentLanguage() == Constants.Lang_AR);
+            orbitLineToggleLayoutGroup.reverseArrangement = (localizationManager.GetCurrentLanguage() == Constants.LangAR);
 
         }
 
         private void ReverseOrderIfArabic(HorizontalOrVerticalLayoutGroup layoutGroup)
         {
-            layoutGroup.reverseArrangement = localizationManager.GetCurrentLanguage() == Constants.Lang_AR;
+            layoutGroup.reverseArrangement = localizationManager.GetCurrentLanguage() == Constants.LangAR;
         }
 
         private void SliderInit()
         {
-            timeScaleSlider.value = Constants.initialTimeScale;
-            sizeScaleSlider.value = Constants.initialSizeScale;
-            distanceScaleSlider.value = Constants.initialDistanceScale;
+            timeScaleSlider.value = Constants.InitialTimeScale;
+            sizeScaleSlider.value = Constants.InitialSizeScale;
+            distanceScaleSlider.value = Constants.InitialDistanceScale;
 
-            timeScaleSlider.minValue = Constants.initialTimeScale;
-            sizeScaleSlider.minValue = Constants.minSize;
-            distanceScaleSlider.minValue = Constants.minDistance;
+            timeScaleSlider.minValue = Constants.InitialTimeScale;
+            sizeScaleSlider.minValue = Constants.MinSize;
+            distanceScaleSlider.minValue = Constants.MinDistance;
 
-            timeScaleSlider.maxValue = Constants.maxTime;
-            sizeScaleSlider.maxValue = Constants.maxSize;
-            distanceScaleSlider.maxValue = Constants.maxDistance;
+            timeScaleSlider.maxValue = Constants.MaxTime;
+            sizeScaleSlider.maxValue = Constants.MaxSize;
+            distanceScaleSlider.maxValue = Constants.MaxDistance;
 
             onUpdateTimeScaleSlider = UpdateTimeScale;
             onUpdateSizeScaleSlider = UpdateSizeScale;
@@ -382,7 +382,7 @@ namespace MingoData.Scripts.MainUtil
         {
             GameObject newDataItem = Instantiate(planetInfoItemPrefab, planetInfoItemListParent);
             TextMeshProUGUI textComponent = newDataItem.GetComponentsInChildren<TextMeshProUGUI>()[0];
-            textComponent.text = localizationManager.GetLocalizedValue("no_planet_selected", textComponent, false);
+            textComponent.text = localizationManager.GetLocalizedValue("no_planet_selected", textComponent, false, Constants.ColorWhite);
             TextMeshProUGUI valueComponent = newDataItem.GetComponentsInChildren<TextMeshProUGUI>()[1];
             valueComponent.text = "";
         }
@@ -390,7 +390,7 @@ namespace MingoData.Scripts.MainUtil
         private void AssignFieldName(MemberInfo field, GameObject newDataItem)
         {
             TextMeshProUGUI textComponent = newDataItem.GetComponentsInChildren<TextMeshProUGUI>()[0];
-            textComponent.text = localizationManager.GetLocalizedValue(field.Name, textComponent, false);
+            textComponent.text = localizationManager.GetLocalizedValue(field.Name, textComponent, false, Constants.ColorWhite);
             HorizontalLayoutGroup layoutGroup = textComponent.transform.parent.GetComponent<HorizontalLayoutGroup>();
             ReverseOrderIfArabic(layoutGroup);
         }
@@ -401,7 +401,7 @@ namespace MingoData.Scripts.MainUtil
             object fieldValue = field.GetValue(celestialBodyData);
             if (fieldValue != null)
             {
-                if (localizationManager.GetCurrentLanguage() == Constants.Lang_AR)
+                if (localizationManager.GetCurrentLanguage() == Constants.LangAR)
                 {
                     AssignArabicFieldValue(fieldValue, valueComponent);
                 }
@@ -412,7 +412,7 @@ namespace MingoData.Scripts.MainUtil
             }
             else
             {
-                valueComponent.text = localizationManager.GetLocalizedValue("null", valueComponent, false);
+                valueComponent.text = localizationManager.GetLocalizedValue("null", valueComponent, false, Constants.ColorWhite);
             }
         }
 
@@ -426,7 +426,7 @@ namespace MingoData.Scripts.MainUtil
             }
             else
             {
-                valueComponent.text = localizationManager.GetLocalizedValue(fieldValue.ToString(), valueComponent, false);
+                valueComponent.text = localizationManager.GetLocalizedValue(fieldValue.ToString(), valueComponent, false, Constants.ColorWhite);
             }
             valueComponent.isRightToLeftText = true;
             valueComponent.alignment = TextAlignmentOptions.MidlineLeft;
@@ -442,7 +442,7 @@ namespace MingoData.Scripts.MainUtil
             }
             else
             {
-                valueComponent.text = localizationManager.GetLocalizedValue(fieldValue.ToString(), valueComponent, false);
+                valueComponent.text = localizationManager.GetLocalizedValue(fieldValue.ToString(), valueComponent, false, Constants.ColorWhite);
             }
             valueComponent.isRightToLeftText = false;
             valueComponent.alignment = TextAlignmentOptions.MidlineRight;
@@ -466,7 +466,7 @@ namespace MingoData.Scripts.MainUtil
                 TextMeshProUGUI textComponent = newLegendItem.GetComponentInChildren<TextMeshProUGUI>();
 
                 // Use localizationManager to get the localized planet name
-                string localizedPlanetName = localizationManager.GetLocalizedValue(planet.Key, textComponent, false);
+                string localizedPlanetName = localizationManager.GetLocalizedValue(planet.Key, textComponent, false, Constants.ColorWhite);
 
                 // If the localized name is not found, fall back to the English name
                 if (string.IsNullOrEmpty(localizedPlanetName))
@@ -497,7 +497,7 @@ namespace MingoData.Scripts.MainUtil
             menuPlanetName.transform.parent.gameObject.SetActive(showGameObjectHolder);
 
             // Use localizationManager to get the localized planet name
-            string localizedPlanetName = localizationManager.GetLocalizedValue(text, menuPlanetName, false);
+            string localizedPlanetName = localizationManager.GetLocalizedValue(text, menuPlanetName, false, Constants.ColorWhite);
 
             // If the localized name is not found, fall back to the English name
             if (string.IsNullOrEmpty(localizedPlanetName))
@@ -521,7 +521,7 @@ namespace MingoData.Scripts.MainUtil
         {
             celestialBodyHandler.UpdateSizeScale(value); // Notify SolarSystemSimulationWithMoons
             float realLifeSize = 1f / value;
-            menuSizeText.text = localizationManager.GetLocalizedValue("1_meter_size_equals", menuSizeText, false, realLifeSize.ToString("N0"));
+            menuSizeText.text = localizationManager.GetLocalizedValue("1_meter_size_equals", menuSizeText, false, Constants.ColorGreen, realLifeSize.ToString("N0"));
         }
 
         private void UpdateDistanceScale(float value)
@@ -529,13 +529,13 @@ namespace MingoData.Scripts.MainUtil
             celestialBodyHandler.UpdateDistanceScale(value); // Notify SolarSystemSimulationWithMoons
 
             float realLifeDistance = 1f / value;
-            menuDistanceText.text = localizationManager.GetLocalizedValue("1_meter_distance_equals", menuDistanceText, false, realLifeDistance.ToString("N0"));
+            menuDistanceText.text = localizationManager.GetLocalizedValue("1_meter_distance_equals", menuDistanceText, false, Constants.ColorGreen, realLifeDistance.ToString("N0"));
         }
 
         private void UpdateTimeScale(float value)
         {
             celestialBodyHandler.UpdateTimeScale(value); 
-            string timeText = localizationManager.GetLocalizedTimeValue(value, menuTimeText);
+            string timeText = localizationManager.GetLocalizedTimeValue(value, menuTimeText, Constants.ColorGreen);
             menuTimeText.text = timeText;
         }
 
@@ -588,7 +588,7 @@ namespace MingoData.Scripts.MainUtil
             planetInfoLayout.SetActive(false);
             ToggleMiddleIconHelper(true);
             scanRoomIconObject.SetActive(true);
-            SetMiddleIconsHelperText(localizationManager.GetLocalizedValue("Move_your_phone_to_start_scanning_the_room", middleIconsHelperText, false));
+            SetMiddleIconsHelperText(localizationManager.GetLocalizedValue("Move_your_phone_to_start_scanning_the_room", middleIconsHelperText, false, Constants.ColorWhite));
             tapIconObject.SetActive(false);
             returnPlanetButton.SetActive(false);
             menuSliderPanel.SetActive(false);
@@ -599,7 +599,7 @@ namespace MingoData.Scripts.MainUtil
         {
             scanRoomIconObject.SetActive(false);
             initialScanFinished = true;
-            SetMiddleIconsHelperText(localizationManager.GetLocalizedValue("Tap_on_the_scanned_area_to_place_the_solar_system", middleIconsHelperText, false));
+            SetMiddleIconsHelperText(localizationManager.GetLocalizedValue("Tap_on_the_scanned_area_to_place_the_solar_system", middleIconsHelperText, false, Constants.ColorWhite));
             tapIconObject.SetActive(true);
         }
 
@@ -610,12 +610,12 @@ namespace MingoData.Scripts.MainUtil
             menuSliderPanel.SetActive(true);
             returnPlanetButton.SetActive(false);
             planetInfoButton.SetActive(false);
-            SetMiddleIconsHelperText(localizationManager.GetLocalizedValue("Click_on_any_planet_or_click_on_the_menu_below_to_display_more_settings", middleIconsHelperText, false));
+            SetMiddleIconsHelperText(localizationManager.GetLocalizedValue("Click_on_any_planet_or_click_on_the_menu_below_to_display_more_settings", middleIconsHelperText, false, Constants.ColorWhite));
         }
 
         public void ToggleSwipeIcon(bool toggleState)
         {
-            SetMiddleIconsHelperText(localizationManager.GetLocalizedValue("Touch_and_drag_to_move_the_planet_Around", middleIconsHelperText, false));
+            SetMiddleIconsHelperText(localizationManager.GetLocalizedValue("Touch_and_drag_to_move_the_planet_Around", middleIconsHelperText, false, Constants.ColorWhite));
             swipeIconObject.SetActive(toggleState);
             ToggleMiddleIconHelper(toggleState);
         }

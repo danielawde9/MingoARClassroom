@@ -126,7 +126,7 @@ namespace MingoData.Scripts.MainUtil
         {
             float distanceInKm = planetData.celestialBodyInstance.transform.position.magnitude * Mathf.Pow(10, 6);
             string formattedDistance = distanceInKm.ToString("N0");
-            planetData.distanceText.text = localizationManager.GetLocalizedValue("Distance_In_KM", planetData.distanceText, false, formattedDistance);
+            planetData.distanceText.text = localizationManager.GetLocalizedValue("Distance_In_KM", planetData.distanceText, false, Constants.ColorGreen, formattedDistance);
         }
 
         public static void UpdateOrbitLine(CelestialBodyData body, Func<CelestialBodyData, float, Vector3> calculatePosition)

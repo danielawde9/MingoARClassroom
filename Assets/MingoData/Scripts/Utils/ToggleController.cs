@@ -11,8 +11,6 @@ namespace MingoData.Scripts.Utils
 
         private Vector2 onPosition;
         private Vector2 offPosition;
-        public string onColorHex = "#4CD137"; 
-        public string offColorHex = "#2F3640";
 
         private void Start()
         {
@@ -23,7 +21,7 @@ namespace MingoData.Scripts.Utils
             const float offset = 5f; // Adjust the offset value as per your requirement
 
             // If language is Arabic, swap the positions
-            if (localizationManager.GetCurrentLanguage() == Constants.Lang_AR)
+            if (localizationManager.GetCurrentLanguage() == Constants.LangAR)
             {
                 onPosition = new Vector2((-toggleWidth / 2 + knobWidth / 2) + offset, 0);
                 offPosition = new Vector2((toggleWidth / 2 - knobWidth / 2) - offset, 0);
@@ -48,24 +46,9 @@ namespace MingoData.Scripts.Utils
         private void OnToggleValueChanged(bool isOn)
         {
             // Change the color of the background based on the new value
-            toggle.GetComponent<Image>().color = isOn ? HexToColor(onColorHex) : HexToColor(offColorHex);
+            toggle.GetComponent<Image>().color = isOn ? Constants.ColorGreen : Constants.ColorDarkGrey;
         }
-        private static Color HexToColor(string hex)
-        {
-            hex = hex.Replace("0x", "");
-            hex = hex.Replace("#", "");
-            byte a = 255;
-            byte r = byte.Parse(hex.Substring(0, 2), System.Globalization.NumberStyles.HexNumber);
-            byte g = byte.Parse(hex.Substring(2, 2), System.Globalization.NumberStyles.HexNumber);
-            byte b = byte.Parse(hex.Substring(4, 2), System.Globalization.NumberStyles.HexNumber);
-
-            // Only use alpha if the string has enough characters
-            if (hex.Length == 8)
-            {
-                a = byte.Parse(hex.Substring(6, 2), System.Globalization.NumberStyles.HexNumber);
-            }
-            return new Color32(r, g, b, a);
-        }
+        
 
     }
 

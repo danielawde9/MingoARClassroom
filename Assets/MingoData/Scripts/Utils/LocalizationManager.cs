@@ -26,7 +26,7 @@ namespace MingoData.Scripts.Utils
         private Dictionary<string, LocalizationItem> localizedText;
         private bool isReady;
         private const string missingTextString = "Localized text not found";
-        private string currentLanguage = Constants.Lang_EN;
+        private string currentLanguage = Constants.LangEn;
         //private string currentLanguage = Constants.Lang_EN;
 
         public void LoadLocalizedText()
@@ -51,15 +51,24 @@ namespace MingoData.Scripts.Utils
                 Debug.LogError("Localization file not assigned!");
             }
         }
-        public string GetLocalizedValue(string key, TMP_Text textComponent, bool centerText, params object[] formatArgs)
+        public string GetLocalizedValue(string key, TMP_Text textComponent, bool centerText, Color valueColor, params object[] formatArgs)
         {
             string result = missingTextString;
 
+            // Convert the valueColor to hex
+            string hexValueColor = ColorUtility.ToHtmlStringRGB(valueColor);
+
             if (localizedText.ContainsKey(key))
             {
+                // Add color to formatArgs
+                for (int i = 0; i < formatArgs.Length; i++)
+                {
+                    formatArgs[i] = $"<color=#{hexValueColor}>{formatArgs[i]}</color>";
+                }
+
                 switch (currentLanguage)
                 {
-                    case Constants.Lang_EN:
+                    case Constants.LangEn:
                         result = string.Format(localizedText[key].english, formatArgs);
                         if (textComponent != null)
                         {
@@ -67,7 +76,7 @@ namespace MingoData.Scripts.Utils
                             textComponent.alignment = centerText ? TextAlignmentOptions.Midline : TextAlignmentOptions.MidlineLeft;
                         }
                         break;
-                    case Constants.Lang_AR:
+                    case Constants.LangAR:
                         result = string.Format(localizedText[key].arabic, formatArgs);
                         result = ArabicFixer.Fix(result, true, true);
                         if (textComponent != null)
@@ -78,35 +87,45 @@ namespace MingoData.Scripts.Utils
                         result = new string(result.ToCharArray().Reverse().ToArray());
                         break;
                 }
-
-                // Debug statement
-                //  Debug.Log("GetLocalizedValue: result = " + result);
             }
             else
             {
-                // Debug statement
                 Debug.Log("GetLocalizedValue: key not found in localizedText");
+            }
+
+            // If there are no formatArgs, colorize the entire string
+            if (formatArgs.Length == 0)
+            {
+                result = $"<color=#{ColorUtility.ToHtmlStringRGB(Constants.ColorWhite)}>{result}</color>";
             }
 
             return result;
         }
 
-        public string GetLocalizedTimeValue(float timeScale, TextMeshProUGUI textComponent)
+        public string GetLocalizedTimeValue(float timeScale, TextMeshProUGUI textComponent, Color valueColor)
         {
             // Get time unit and time text
             (string timeUnitKey, string timeValue) = UtilsFns.TimeScaleConversion(timeScale);
 
+            // Convert the valueColor to hex
+            string hexValueColor = ColorUtility.ToHtmlStringRGB(valueColor);
+
+            // Add color to timeValue
+            timeValue = $"<color=#{hexValueColor}>{timeValue}</color>";
+
             string result = missingTextString;
+
             // Check if there is a localized string for the given time unit
             if (!localizedText.ContainsKey(timeUnitKey))
                 return result;
+
             switch (currentLanguage)
             {
-                case Constants.Lang_EN:
+                case Constants.LangEn:
                     result = string.Format(localizedText[timeUnitKey].english, timeValue);
                     textComponent.alignment = TextAlignmentOptions.MidlineLeft;
                     break;
-                case Constants.Lang_AR:
+                case Constants.LangAR:
                     result = string.Format(localizedText[timeUnitKey].arabic, timeValue);
                     result = ArabicFixer.Fix(result, true, true);
                     textComponent.isRightToLeftText = true;
@@ -127,10 +146,7 @@ namespace MingoData.Scripts.Utils
         {
             currentLanguage = language;
         }
-        public bool GetIsReady()
-        {
-            return isReady;
-        }
+        
     }
 
 }

@@ -147,7 +147,7 @@
         },
         {
             "key": "1_second_real_life_equals",
-            "english": "1 second in the simulated real solar system equals 1 second in real life",
+            "english": "1 second in the simulated real solar system equals {0} second in real life",
             "arabic": "ثانية واحدة في محاكاة النظام الشمسي الحقيقي تساوي 1 ثواني في الحياة الواقعية"
         },
         {

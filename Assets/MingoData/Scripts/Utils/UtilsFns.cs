@@ -97,7 +97,26 @@ namespace MingoData.Scripts.Utils
 
         }
 
-        public static LineRenderer CreateLineRenderer(GameObject gameObject, float startWidth, float endWidth, int positionCount, Vector3 startPosition, Vector3 endPosition, Color color)
+                
+        public static Color32 CreateHexToColor(string hex)
+        {
+            hex = hex.Replace("0x", "");
+            hex = hex.Replace("#", "");
+            byte a = 255;
+            byte r = byte.Parse(hex.Substring(0, 2), System.Globalization.NumberStyles.HexNumber);
+            byte g = byte.Parse(hex.Substring(2, 2), System.Globalization.NumberStyles.HexNumber);
+            byte b = byte.Parse(hex.Substring(4, 2), System.Globalization.NumberStyles.HexNumber);
+
+            // Only use alpha if the string has enough characters
+            if (hex.Length == 8)
+            {
+                a = byte.Parse(hex.Substring(6, 2), System.Globalization.NumberStyles.HexNumber);
+            }
+            return new Color32(r, g, b, a);
+        }
+
+        
+        public static LineRenderer CreateLineRenderer(GameObject gameObject, float startWidth, float endWidth, int positionCount, Vector3 startPosition, Vector3 endPosition, UnityEngine.Color color)
         {
             // NOTE: unity editor: Edit->Project Settings-> Graphics Then in the inspector where it says "Always Included Shaders" add "Unlit/Color"
             LineRenderer lineRenderer = gameObject.AddComponent<LineRenderer>();
@@ -132,7 +151,7 @@ namespace MingoData.Scripts.Utils
 
             GameObject inclinationTextObject = CreateGameObject(planet.name + "_InclinationLineText", parentObject, Vector3.up * 1.1f, Quaternion.identity);
             TextMeshPro inclinationText = CreateTextMeshPro(inclinationTextObject, null, 4.25f, Color.white, TextAlignmentOptions.Center, new Vector2(1.5f, 1.5f));
-            inclinationText.text = localizationManager.GetLocalizedValue("Degrees", inclinationText, true, planet.obliquityToOrbit.ToString("F2"));
+            inclinationText.text = localizationManager.GetLocalizedValue("Degrees", inclinationText, true, Constants.ColorGreen, planet.obliquityToOrbit.ToString("F2"));
 
             inclinationTextObject.SetActive(false);
 
@@ -156,7 +175,7 @@ namespace MingoData.Scripts.Utils
 
             GameObject planetTextObject = CreateGameObject($"{planet.name}_PlanetName", parentObject, Vector3.down * 1.1f, Quaternion.identity);
             TextMeshPro planetNameTextMeshPro = CreateTextMeshPro(planetTextObject, null, 4.25f, Color.white, TextAlignmentOptions.Center, new Vector2(2f, 2f));
-            planetNameTextMeshPro.text = localizationManager.GetLocalizedValue(planet.name, planetNameTextMeshPro, true);
+            planetNameTextMeshPro.text = localizationManager.GetLocalizedValue(planet.name, planetNameTextMeshPro, true, Constants.ColorWhite );
             parentObject.SetActive(false);
         }
 
