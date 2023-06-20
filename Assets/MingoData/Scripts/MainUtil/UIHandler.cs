@@ -13,6 +13,7 @@ using UnityEngine.UI;
 
 namespace MingoData.Scripts.MainUtil
 {
+
     public class UIHandler : MonoBehaviour
     {
         [SerializeField]
@@ -20,7 +21,7 @@ namespace MingoData.Scripts.MainUtil
         [SerializeField]
         public LocalizationManager localizationManager;
 
-        
+
         [Header("Panel Menu")]
         public GameObject menuSliderPanel;
         public GameObject sliderPanelToggleButton;
@@ -88,6 +89,7 @@ namespace MingoData.Scripts.MainUtil
         public UnityAction<float> onUpdateTimeScaleSlider;
         public UnityAction<float> onUpdateSizeScaleSlider;
         public UnityAction<float> onUpdateDistanceScaleSlider;
+        private GameObject initialUIDarkBackground;
         [HideInInspector]
         public UnityEvent<bool> onPlanetNameToggleValueChanged;
         [HideInInspector]
@@ -131,20 +133,13 @@ namespace MingoData.Scripts.MainUtil
 
         private void Awake()
         {
-            // NOTE: these are added here due to weird error set initially all the toggles are false then in start set them active 
+            // Bug Note: these are added here due to weird error set initially all the toggles are false then in start set them active 
             orbitLineToggle.transform.gameObject.SetActive(false);
             planetNameToggle.transform.gameObject.SetActive(false);
             planetInclinationLineToggle.transform.gameObject.SetActive(false);
             planetDistanceFromSunToggle.transform.gameObject.SetActive(false);
         }
 
-        private void TogglePlanetInfoPanel()
-        {
-            bool isPlanetInfoActive = planetInfoLayout.activeSelf;
-            planetInfoLayout.SetActive(!isPlanetInfoActive);
-            darkImageBackgroundPlanetInfo.SetActive(!isPlanetInfoActive);
-            menuSliderPanel.SetActive(isPlanetInfoActive);
-        }
 
         private void Start()
         {
@@ -163,14 +158,14 @@ namespace MingoData.Scripts.MainUtil
             InitSliderShadow();
 
         }
-        
+
         private void PlanetInfoInit()
         {
 
             Button planetInfoButtonComponent = planetInfoButton.GetComponent<Button>();
             planetInfoButtonComponent.onClick.AddListener(TogglePlanetInfoPanel);
 
-            darkImageBackgroundPlanetInfo = UtilsFns.CreateDarkBackground();
+            darkImageBackgroundPlanetInfo = UtilsFns.CreateDarkBackground("PlanetInfo");
             darkImageBackgroundPlanetInfo.GetComponent<Button>().onClick.AddListener(TogglePlanetInfoPanel);
             darkImageBackgroundPlanetInfo.SetActive(false);
             planetInfoCloseButton.onClick.AddListener(TogglePlanetInfoPanel);
@@ -184,7 +179,7 @@ namespace MingoData.Scripts.MainUtil
         {
             Button returnToMainMenuButtonComponent = returnToMainMenuButton.GetComponent<Button>();
             returnToMainMenuButtonComponent.onClick.AddListener(ReturnToMainMenu);
-            
+
             Button returnButtonComponent = returnPlanetButton.GetComponent<Button>();
             returnButtonComponent.onClick.AddListener(OnReturnPlanetButtonClick);
 
@@ -210,13 +205,13 @@ namespace MingoData.Scripts.MainUtil
         private void MenuTransitionInit()
         {
             // Create dark backgrounds
-            darkImageBackgroundSliderPanel = UtilsFns.CreateDarkBackground();
+            darkImageBackgroundSliderPanel = UtilsFns.CreateDarkBackground("SliderPanel");
             darkImageBackgroundSliderPanel.GetComponent<Button>().onClick.AddListener(ToggleMenuSliderPanel);
             darkImageBackgroundSliderPanel.SetActive(false);
 
             sliderButtonToggleImage = sliderPanelToggleButton.transform.GetChild(0).gameObject;
             sliderPanelRectTransform = menuSliderPanel.GetComponent<RectTransform>();
-             sliderButtonToggleRectTransform = sliderPanelToggleButton.GetComponent<RectTransform>();
+            sliderButtonToggleRectTransform = sliderPanelToggleButton.GetComponent<RectTransform>();
 
             // Set the height of the sliding panel to be half of the screen's height
             float screenHeight = Screen.height;
@@ -224,12 +219,13 @@ namespace MingoData.Scripts.MainUtil
             float sliderToggleButtonLayoutHeight = sliderPanelToggleButton.transform.gameObject.GetComponent<RectTransform>().rect.height;
 
             Vector2 sizeDelta = sliderPanelRectTransform.sizeDelta;
-    
+
             // Set the height
             sizeDelta.y = halfScreenHeight;
 
             // If the screen's width is more than 1080 pixels, set the width to be 80% of the screen's width
             float screenWidth = Screen.width;
+
             if (screenWidth > 1080)
             {
                 sizeDelta.x = screenWidth * 0.8f;
@@ -255,7 +251,7 @@ namespace MingoData.Scripts.MainUtil
 
             startRotation = sliderButtonToggleImage.transform.eulerAngles.z;
             endRotation = isMenuPanelVisible ? startRotation + 180 : startRotation - 180;
-            
+
 
             if (isMenuPanelVisible)
             {
@@ -268,7 +264,7 @@ namespace MingoData.Scripts.MainUtil
                     middleIconsHelperText.transform.parent.gameObject.SetActive(false);
             }
             else
-            {                
+            {
                 SetToggleButtonSize(sliderButtonToggleRectTransform, 250);
 
                 darkImageBackgroundSliderPanel.SetActive(false);
@@ -278,21 +274,20 @@ namespace MingoData.Scripts.MainUtil
         private static void SetToggleButtonSize(RectTransform rectTransform, float size)
         {
             Vector2 sizeDelta = rectTransform.sizeDelta;
-            sizeDelta = new Vector2(sizeDelta.x, size); 
+            sizeDelta = new Vector2(sizeDelta.x, size);
             rectTransform.sizeDelta = sizeDelta;
-            rectTransform.anchoredPosition = new Vector2(rectTransform.anchoredPosition.x, -sizeDelta.y / 2); 
+            rectTransform.anchoredPosition = new Vector2(rectTransform.anchoredPosition.x, -sizeDelta.y / 2);
         }
-
 
         private void TranslationInit()
         {
 
             menuTimeText.text = localizationManager.GetLocalizedValue("1_second_real_life_equals", menuTimeText, false, Constants.ColorGreen, Constants.InitialTimeScale.ToString(CultureInfo.CurrentCulture));
-            menuDistanceText.text = localizationManager.GetLocalizedValue("1_meter_distance_equals", menuDistanceText, false,Constants.ColorGreen,(1 / Constants.InitialDistanceScale).ToString("N0"));
-            menuSizeText.text = localizationManager.GetLocalizedValue("1_meter_size_equals", menuSizeText, false, Constants.ColorGreen,(1 / Constants.InitialSizeScale).ToString("N0"));
-            menuSunSizeText.text = localizationManager.GetLocalizedValue("sun_size_text", menuSunSizeText, false, Constants.ColorGreen,(1 / Constants.InitialSunSizeScale).ToString("N0"));
+            menuDistanceText.text = localizationManager.GetLocalizedValue("1_meter_distance_equals", menuDistanceText, false, Constants.ColorGreen, (1 / Constants.InitialDistanceScale).ToString("N0"));
+            menuSizeText.text = localizationManager.GetLocalizedValue("1_meter_size_equals", menuSizeText, false, Constants.ColorGreen, (1 / Constants.InitialSizeScale).ToString("N0"));
+            menuSunSizeText.text = localizationManager.GetLocalizedValue("sun_size_text", menuSunSizeText, false, Constants.ColorGreen, (1 / Constants.InitialSunSizeScale).ToString("N0"));
 
-             horizontalButtonsTitle.text = localizationManager.GetLocalizedValue("Playback_Time_Settings", horizontalButtonsTitle, false, Constants.ColorWhite);
+            horizontalButtonsTitle.text = localizationManager.GetLocalizedValue("Playback_Time_Settings", horizontalButtonsTitle, false, Constants.ColorWhite);
             solarSystemSliderTitle.text = localizationManager.GetLocalizedValue("Planet_Settings", solarSystemSliderTitle, false, Constants.ColorWhite);
             solarSystemToggleTitle.text = localizationManager.GetLocalizedValue("Orbital_Settings", solarSystemToggleTitle, false, Constants.ColorWhite);
             planetLegendsListTitle.text = localizationManager.GetLocalizedValue("Planets_legend", planetLegendsListTitle, false, Constants.ColorWhite);
@@ -464,7 +459,6 @@ namespace MingoData.Scripts.MainUtil
             valueComponent.alignment = TextAlignmentOptions.MidlineRight;
         }
 
-
         public void SetPlanetColorLegend(Dictionary<string, Color> planetColorLegend)
         {
             // Remove all previous legend items
@@ -528,11 +522,6 @@ namespace MingoData.Scripts.MainUtil
             planetInfoButton.SetActive(showGameObjectHolder);
         }
 
-        private void SetMiddleIconsHelperText(string text)
-        {
-            middleIconsHelperText.text = text;
-        }
-
         private void UpdateSizeScale(float value)
         {
             celestialBodyHandler.UpdateSizeScale(value); // Notify SolarSystemSimulationWithMoons
@@ -550,7 +539,7 @@ namespace MingoData.Scripts.MainUtil
 
         private void UpdateTimeScale(float value)
         {
-            celestialBodyHandler.UpdateTimeScale(value); 
+            celestialBodyHandler.UpdateTimeScale(value);
             string timeText = localizationManager.GetLocalizedTimeValue(value, menuTimeText, Constants.ColorGreen);
             menuTimeText.text = timeText;
         }
@@ -598,9 +587,17 @@ namespace MingoData.Scripts.MainUtil
             sliderPanelScrollRect.onValueChanged.AddListener(OnUserScroll);
         }
 
+        private void TogglePlanetInfoPanel()
+        {
+            bool isPlanetInfoActive = planetInfoLayout.activeSelf;
+            planetInfoLayout.SetActive(!isPlanetInfoActive);
+            darkImageBackgroundPlanetInfo.SetActive(!isPlanetInfoActive);
+            menuSliderPanel.SetActive(isPlanetInfoActive);
+        }
 
         public void UIShowInitial()
         {
+            initialUIDarkBackground = UtilsFns.CreateDarkBackground("InitialUI");
             planetInfoLayout.SetActive(false);
             ToggleMiddleIconHelper(true);
             scanRoomIconObject.SetActive(true);
@@ -621,6 +618,7 @@ namespace MingoData.Scripts.MainUtil
 
         public void UIShowAfterClick()
         {
+            initialUIDarkBackground.SetActive(false);
             scanRoomIconObject.SetActive(false);
             tapIconObject.SetActive(false);
             menuSliderPanel.SetActive(true);
@@ -639,6 +637,11 @@ namespace MingoData.Scripts.MainUtil
         private void ToggleMiddleIconHelper(bool toggleState)
         {
             middleIconsHelperText.transform.parent.gameObject.SetActive(toggleState);
+        }
+
+        private void SetMiddleIconsHelperText(string text)
+        {
+            middleIconsHelperText.text = text;
         }
     }
 

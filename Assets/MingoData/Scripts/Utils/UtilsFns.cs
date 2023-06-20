@@ -15,10 +15,10 @@ namespace MingoData.Scripts.Utils
       
         public static GameObject directionalLight;
 
-        public static GameObject CreateDarkBackground()
+        public static GameObject CreateDarkBackground(string objectName)
         {
             // Create new GameObject
-            GameObject darkBackground = new GameObject("DarkBackground");
+            GameObject darkBackground = new GameObject("DarkBackground_"+objectName);
 
             // Add it as a child of the parent canvas
             darkBackground.transform.SetParent(FindObjectOfType<Canvas>().transform, false);
