@@ -54,7 +54,7 @@ namespace MingoData.Scripts
                     planetImage.sprite = Resources.Load<Sprite>("SolarSystemWithMoon/PlanetImages/" + planetDataList.planets[currentIndex].name);
                     planetName.text = planetDataList.planets[currentIndex].name;
                     
-                    if (planetDataList.planets[currentIndex].name == "Sun") 
+                    if (planetDataList.planets[currentIndex].name == Constants.PlanetSun) 
                     {
                         planetToggle.isOn = true;
                         TogglePlanet(toggleImage, planetToggle, planetDataList.planets[currentIndex].name); 

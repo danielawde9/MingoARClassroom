@@ -39,7 +39,7 @@ namespace MingoData.Scripts.Utils
         public const string LangEn = "English";
         public const string SelectedPlanets = "SelectedPlanets";
         public const string SelectedLanguage = "SelectedLanguage";
-        
+        public const string PlanetSun = "Sun";
         public static readonly Color ColorBlue = UtilsFns.CreateHexToColor("#00a8ff").ToUnityColor();
         public static readonly Color ColorViolet = UtilsFns.CreateHexToColor("#9c88ff").ToUnityColor();
         public static readonly Color ColorYellow = UtilsFns.CreateHexToColor("#fbc531").ToUnityColor();

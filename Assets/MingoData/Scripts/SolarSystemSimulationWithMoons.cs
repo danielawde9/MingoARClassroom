@@ -4,9 +4,11 @@ using System.Collections.Generic;
 using MingoData.Scripts.MainUtil;
 using MingoData.Scripts.Utils;
 using TMPro;
+using Unity.VectorGraphics;
 using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
+
 namespace MingoData.Scripts
 {
 
@@ -17,8 +19,10 @@ namespace MingoData.Scripts
         {
             public List<MoonData> moons;
             public float distanceFromSun;
-            
-            public string image;
+
+            public GameObject arrow;
+            public RectTransform arrowRectTransform; // Add this line
+            public SVGImage arrowImage;
             
             [NonSerialized] public LineRenderer distanceLineRenderer;
             [NonSerialized] public TextMeshPro distanceText;
@@ -44,22 +48,30 @@ namespace MingoData.Scripts
         public float sizeScale;
         public float timeScale;
         public float distanceScale;
-        public UIHandler uiHandler;
+        private const float planetSelectedScale = 0.5f;
 
-        private bool solarSystemPlaced;
+        public UIHandler uiHandler;
+        public LocalizationManager localizationManager;
+        public Canvas canvas;
+        
         private GameObject selectedPlanet;
+        private GameObject parentDistanceLinesObject;
+        public GameObject arrowPrefab;
+
+        private bool isAfterScanShown;        
+        private bool isSwipeIconToggled;
+        private bool isCoroutineRunning;
+        private bool solarSystemPlaced;
+        private bool isArrowActive = true;
+
         private static readonly Dictionary<GameObject, Vector3> OriginalPositions = new Dictionary<GameObject, Vector3>();
         private static readonly Dictionary<GameObject, Vector3> OriginalScales = new Dictionary<GameObject, Vector3>();
-        private GameObject parentDistanceLinesObject;
-        private const float planetSelectedScale = 0.5f;
-        private bool isAfterScanShown;
-        public LocalizationManager localizationManager;
-        private bool isSwipeIconToggled;
 
+        private List<string> loadedPlanets;
         private readonly List<string> selectedFields = new List<string>()
         {
-            "name", 
-            "diameter", 
+            "name",
+            "diameter",
             "rotationSpeed",
             "rotationPeriod",
             "lengthOfDay",
@@ -75,10 +87,7 @@ namespace MingoData.Scripts
             "completedOrbits",
             "completedSelfRotations"
         };
-        private List<string> loadedPlanets;
-
-        // private readonly List<string> desiredPlanets = new List<string> {"Sun",  "Venus", "Earth" };
-
+        
         protected override void OnSwipeUp()
         {
             base.OnSwipeUp();
@@ -174,8 +183,7 @@ namespace MingoData.Scripts
             uiHandler.ToggleSwipeIcon(false);
             isSwipeIconToggled = true;
         }
-
-    
+        
         private void SelectPlanet(GameObject planet)
         {
             // If another planet is already selected, return it to its original position and scale first
@@ -253,7 +261,7 @@ namespace MingoData.Scripts
             foreach (PlanetData body in SolarSystemUtility.planetDataDictionary.Values)
             {
                 SolarSystemUtility.UpdateOrbitLine(body, (celestialBodyData, angle) => SolarSystemUtility.CalculatePlanetPosition((PlanetData)celestialBodyData, angle, distanceScale));
-                if (body.name != "Sun")
+                if (body.name != Constants.PlanetSun)
                 {
                     SolarSystemUtility.UpdateDistanceFromSunText(body, localizationManager);
                 }
@@ -262,7 +270,7 @@ namespace MingoData.Scripts
 
         private static void UpdateCelestialBodyScale(CelestialBodyData body, float newSizeScaleFactor)
         {
-            if (body.name == "Sun")
+            if (body.name == Constants.PlanetSun)
                 return;
             float scale = body.diameter * newSizeScaleFactor;
             body.celestialBodyInstance.transform.localScale = new Vector3(scale, scale, scale);
@@ -311,6 +319,15 @@ namespace MingoData.Scripts
                 child.gameObject.SetActive(isOn);
             }
         }
+        
+        public void UpdateToggleArrow() // Call this method to toggle the arrow
+        {
+            isArrowActive = !isArrowActive;
+            foreach (PlanetData planet in SolarSystemUtility.planetDataDictionary.Values) // Loop through all your planets
+            {
+                planet.arrowRectTransform.gameObject.SetActive(isArrowActive);
+            }
+        }
 
         public static void ClearDictionary()
         {
@@ -342,20 +359,22 @@ namespace MingoData.Scripts
 
             SolarSystemUtility.LoadPlanetData(loadedPlanets);
         }
-    
-        private void InstantiatePlanet(PlanetData planet, Vector3 placedTouchPosition, Quaternion rotationCorrection) 
-        { 
+
+        private void InstantiatePlanet(PlanetData planet, Vector3 placedTouchPosition, Quaternion rotationCorrection)
+        {
             GameObject planetPrefab = Resources.Load<GameObject>(planet.prefabName);
-            if (planetPrefab == null) 
-            { 
-                Debug.LogError($"Prefab not found for {planet.name}"); 
-                return; 
-            } 
-            planet.rotationAxis = Quaternion.Euler(0, 0, planet.obliquityToOrbit) * Vector3.up; 
+            
+            if (planetPrefab == null)
+            {
+                Debug.LogError($"Prefab not found for {planet.name}");
+                return;
+            }
+            
+            planet.rotationAxis = Quaternion.Euler(0, 0, planet.obliquityToOrbit) * Vector3.up;
             distanceScale = Constants.InitialDistanceScale;
 
             Vector3 newPosition;
-            if (planet.name == "Sun") 
+            if (planet.name == Constants.PlanetSun)
             {
                 newPosition = Vector3.zero;
             }
@@ -365,12 +384,19 @@ namespace MingoData.Scripts
                 newPosition = placedTouchPosition + planetPositionRelativeToSun;
             }
 
+            // Instantiate the arrow
+            planet.arrow = Instantiate(arrowPrefab, canvas.transform, false);
+            planet.arrowRectTransform = planet.arrow.GetComponent<RectTransform>(); // Add this line
+            planet.arrow.SetActive(false);
+            planet.arrow.name = planet.name + "_Arrow";
+            planet.arrowImage = planet.arrow.GetComponent<SVGImage>();
+
             planet.celestialBodyInstance = Instantiate(planetPrefab, newPosition, rotationCorrection * planetPrefab.transform.rotation * Quaternion.Euler(planet.rotationAxis));
             planet.celestialBodyInstance.name = planet.name;
 
             float newScale = GetPlanetScale(planet);
             planet.celestialBodyInstance.transform.localScale = new Vector3(newScale, newScale, newScale);
-        
+
             UtilsFns.CreateInclinationLine(planet, planet.celestialBodyInstance, localizationManager);
             UtilsFns.CreatePlanetName(planet, planet.celestialBodyInstance, localizationManager);
         }
@@ -378,38 +404,38 @@ namespace MingoData.Scripts
         private static float GetPlanetScale(CelestialBodyData planet)
         {
             // Adjust the scale for the Sun
-            if (planet.name == "Sun")
+            if (planet.name == Constants.PlanetSun)
             {
                 // Set scale specific for the Sun
                 return Constants.InitialSunSizeScale * planet.diameter; // For example, scale it down to 10% of its original size
             }
             return Constants.InitialSizeScale * planet.diameter;
         }
-    
-        private void SpawnPlanets(Vector3 placedTouchPosition) {
+
+        private void SpawnPlanets(Vector3 placedTouchPosition)
+        {
             parentDistanceLinesObject = new GameObject("ParentDistanceLines");
             Quaternion rotationCorrection = Quaternion.Euler(0, 0, 0);
-            
 
-            foreach (PlanetData planet in SolarSystemUtility.planetDataDictionary.Values) {
-                // Check if the current planet's name is in the desiredPlanets list
-                // if (desiredPlanets.Contains(planet.name)) {
+            foreach (PlanetData planet in SolarSystemUtility.planetDataDictionary.Values)
+            {
                 InstantiatePlanet(planet, placedTouchPosition, rotationCorrection);
-                if (planet.name != "Sun") {
+                if (planet.name != Constants.PlanetSun)
+                {
                     SolarSystemUtility.CreateDistanceLineAndTextFromSun(parentDistanceLinesObject, planet);
                     SolarSystemUtility.UpdateDistanceFromSunText(planet, localizationManager);
-                } else {
+                }
+                else
+                {
                     SolarSystemUtility.AssignDirectionalLight(planet.celestialBodyInstance.transform, distanceScale, loadedPlanets);
                 }
                 uiHandler.SetPlanetColorLegend(SolarSystemUtility.GetPlanetColorLegend());
                 OriginalPositions[planet.celestialBodyInstance] = planet.celestialBodyInstance.transform.position;
                 SolarSystemUtility.InitPlanetProgress(planet);
                 UtilsFns.CreateOrbitLine(planet.celestialBodyInstance, planet, (body, angle) => SolarSystemUtility.CalculatePlanetPosition((PlanetData)body, angle, distanceScale));
-                // }
             }
         }
-        
-    
+
         private void SelectPlanetByName(string planetName)
         {
             GameObject planet = GameObject.Find(planetName);
@@ -421,6 +447,8 @@ namespace MingoData.Scripts
 
         private new void OnEnable()
         {
+         isCoroutineRunning = true;
+
             UIHandler.OnPlanetClicked += SelectPlanetByName;
             mPlaneManager.planesChanged += OnPlanesChanged;
             base.OnEnable();
@@ -428,6 +456,8 @@ namespace MingoData.Scripts
 
         private new void OnDisable()
         {
+         isCoroutineRunning = false;
+
             UIHandler.OnPlanetClicked -= SelectPlanetByName;
             mPlaneManager.planesChanged -= OnPlanesChanged;
             base.OnDisable();
@@ -441,15 +471,90 @@ namespace MingoData.Scripts
             isAfterScanShown = true;
         }
 
+        private bool IsObjectVisibleFromCamera(GameObject obj)
+        {
+            Vector3 viewportPosition = mainCamera.WorldToViewportPoint(obj.transform.position);
+            return viewportPosition is { z: > 0, x: > 0 and < 1, y: > 0 and < 1 };
+        }
+
+        private void UpdateArrowPosition(PlanetData planet)
+        {
+            if (!isArrowActive) // If the arrow is not active, do not update the arrow's position and return
+                return;
+
+
+            Vector3 position = planet.celestialBodyInstance.transform.position;
+            Vector3 viewportPosition = mainCamera.WorldToViewportPoint(position);
+    
+            if(viewportPosition.z < 0) // Planet is behind the camera
+            {
+                viewportPosition.x = 1 - viewportPosition.x; // Reflect the position
+                viewportPosition.y = 1 - viewportPosition.y; // Reflect the position
+                viewportPosition.z = 0; // Ensure the position is not behind the camera
+            }
+    
+            viewportPosition.x = Mathf.Clamp(viewportPosition.x, 0.1f, 0.9f);
+            viewportPosition.y = Mathf.Clamp(viewportPosition.y, 0.1f, 0.9f);
+            Vector3 screenPosition = mainCamera.ViewportToScreenPoint(viewportPosition);
+    
+            planet.arrowRectTransform.position = screenPosition;
+    
+            Vector3 direction = screenPosition - planet.arrowRectTransform.position;
+            direction.z = 0;
+    
+            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90f;
+            planet.arrowRectTransform.rotation = Quaternion.Euler(0f, 0f, angle);
+    
+            if (!SolarSystemUtility.GetPlanetColorLegend().TryGetValue(planet.name, out Color arrowColor))
+                return;
+    
+            planet.arrowImage.color = arrowColor;
+        }
 
         private void Update()
         {
-        
+
             if (!solarSystemPlaced) return;
 
-            MoveSelectedPlanet();
-            UpdateDirectionalLight();
+            StartCoroutine(UpdateOffScreenArrowsCoroutine());
+
+            StartCoroutine(UpdateSelectedPlanetAndLightCoroutine());
+
             StartCoroutine(UpdatePlanets());
+        }
+
+
+        
+        private IEnumerator UpdateSelectedPlanetAndLightCoroutine()
+        {
+            while (isCoroutineRunning)  // Keep this loop running as long as the script is enabled
+            {
+                MoveSelectedPlanet();
+                UpdateDirectionalLight();
+
+                yield return new WaitForSeconds(1);  // Wait for 1 second before running the loop again
+            }
+        }
+
+        private IEnumerator UpdateOffScreenArrowsCoroutine()
+        {
+            while (isCoroutineRunning)  // Keep this loop running as long as the script is enabled
+            {
+                foreach (PlanetData planet in SolarSystemUtility.planetDataDictionary.Values)
+                {
+                    if (IsObjectVisibleFromCamera(planet.celestialBodyInstance))
+                    {
+                        planet.arrow.SetActive(false);
+                    }
+                    else
+                    {
+                        planet.arrow.SetActive(true);
+                        UpdateArrowPosition(planet);
+                    }
+                }
+        
+                yield return new WaitForSeconds(1);  // Wait for 1 second before running the loop again
+            }
         }
 
         private void MoveSelectedPlanet()
@@ -461,14 +566,13 @@ namespace MingoData.Scripts
 
         private static void UpdateDirectionalLight()
         {
-            if (UtilsFns.directionalLight == null || !SolarSystemUtility.planetDataDictionary.TryGetValue("Sun", out PlanetData sunData)) return;
+            if (!SolarSystemUtility.planetDataDictionary.TryGetValue(Constants.PlanetSun, out PlanetData sunData)) return;
             Vector3 sunDirection = -sunData.celestialBodyInstance.transform.position.normalized;
             if (sunDirection != Vector3.zero)
             {
                 UtilsFns.directionalLight.transform.SetPositionAndRotation(sunData.celestialBodyInstance.transform.position, Quaternion.LookRotation(sunDirection));
             }
         }
-
 
         private IEnumerator UpdatePlanets()
         {
@@ -483,7 +587,7 @@ namespace MingoData.Scripts
                 float orbitDelta = deltaTime / planetData.orbitalPeriod * 360f;
                 planetData.celestialBodyInstance.transform.Rotate(planetData.rotationAxis, rotationDelta, Space.World);
 
-                if (planetData.name != "Sun")
+                if (planetData.name != Constants.PlanetSun)
                 {
                     planetData.orbitProgress += orbitDelta;
                     planetData.celestialBodyInstance.transform.position = SolarSystemUtility.CalculatePlanetPosition(planetData, planetData.orbitProgress, distanceScale);
@@ -516,6 +620,7 @@ namespace MingoData.Scripts
 // todo add swipe up icon
 // todo Msh icon monotone
 // todo add layout legend divider 
+// todo fix color legneds colors
 
 // features
 // todo add size prespective

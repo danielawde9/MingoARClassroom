@@ -24,7 +24,6 @@ namespace MingoData.Scripts.Utils
         public TextAsset localizationFile; // Reference to the JSON file
 
         private Dictionary<string, LocalizationItem> localizedText;
-        private bool isReady;
         private const string missingTextString = "Localized text not found";
         private string currentLanguage = Constants.LangEn;
         //private string currentLanguage = Constants.Lang_EN;
@@ -44,7 +43,6 @@ namespace MingoData.Scripts.Utils
                 }
 
                 Debug.Log("Data loaded, dictionary contains: " + localizedText.Count + " entries");
-                isReady = true;
             }
             else
             {
