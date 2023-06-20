@@ -368,7 +368,7 @@ MonoBehaviour:
   m_Interactable: 1
   m_TargetGraphic: {fileID: 9203209537739107065}
   toggleTransition: 1
-  graphic: {fileID: 9203209537739107065}
+  graphic: {fileID: 0}
   m_Group: {fileID: 0}
   onValueChanged:
     m_PersistentCalls:
@@ -402,7 +402,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 21c6fe04b47574a458905e88b7776535, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 7e5ec719846384626b526157e27ef92b, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -539,6 +539,7 @@ GameObject:
   m_Component:
   - component: {fileID: 124629883600869989}
   - component: {fileID: 5129293665687127467}
+  - component: {fileID: 7002690606475491451}
   m_Layer: 5
   m_Name: PlanetRow
   m_TagString: Untagged
@@ -594,6 +595,14 @@ MonoBehaviour:
   m_ChildScaleWidth: 1
   m_ChildScaleHeight: 1
   m_ReverseArrangement: 0
+--- !u!222 &7002690606475491451
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7360879119757544590}
+  m_CullTransparentMesh: 1
 --- !u!1 &7409726678070201947
 GameObject:
   m_ObjectHideFlags: 0
@@ -706,7 +715,7 @@ MonoBehaviour:
   m_Interactable: 1
   m_TargetGraphic: {fileID: 3711560745409955278}
   toggleTransition: 1
-  graphic: {fileID: 3711560745409955278}
+  graphic: {fileID: 0}
   m_Group: {fileID: 0}
   onValueChanged:
     m_PersistentCalls:
@@ -740,7 +749,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 21c6fe04b47574a458905e88b7776535, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 7e5ec719846384626b526157e27ef92b, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

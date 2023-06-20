@@ -1,15 +1,9 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using MingoData.Scripts.Utils;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Android;
 using UnityEngine.UI;
-
-#if UNITY_ANDROID
-using UnityEngine.Android;
-#endif
 
 
 namespace MingoData.Scripts
@@ -21,7 +15,8 @@ namespace MingoData.Scripts
         public Transform planetsRowItemListParent;
         private readonly List<string> selectedPlanets = new List<string>();
         public Button proceedButton;
-
+        public Sprite checkedImage;
+        public Sprite unCheckedImage;
         public ToggleGroup chooseLangToggleGroup;
         private void Start()
         {
@@ -54,17 +49,23 @@ namespace MingoData.Scripts
                     Image planetImage = child.Find("PlanetImage").GetComponent<Image>();
                     TextMeshProUGUI planetName = child.Find("PlanetName").GetComponent<TextMeshProUGUI>();
                     Toggle planetToggle = child.GetComponent<Toggle>();
-
+                    Image toggleImage = child.GetComponent<Image>();
+                    
                     planetImage.sprite = Resources.Load<Sprite>("SolarSystemWithMoon/PlanetImages/" + planetDataList.planets[currentIndex].name);
                     planetName.text = planetDataList.planets[currentIndex].name;
-                    planetToggle.onValueChanged.AddListener(delegate { TogglePlanet(planetToggle, planetDataList.planets[currentIndex].name); });
-
+                    
+                    if (planetDataList.planets[currentIndex].name == "Sun") 
+                    {
+                        planetToggle.isOn = true;
+                        TogglePlanet(toggleImage, planetToggle, planetDataList.planets[currentIndex].name); 
+                    }
+                    
+                    planetToggle.onValueChanged.AddListener(delegate { TogglePlanet(toggleImage,planetToggle, planetDataList.planets[currentIndex].name); });
+                    
                     planetIndex++;
                 }
             }
         }
-
-
 
         private void LoadSolarSystemScene()
         {
@@ -84,16 +85,20 @@ namespace MingoData.Scripts
         }
 
 
-        private void TogglePlanet(Toggle toggle, string planetName)
+        private void TogglePlanet(Image toggleImage, Toggle toggle, string planetName)
         {
+            
             if (toggle.isOn)
             {
                 if (!selectedPlanets.Contains(planetName))
                     selectedPlanets.Add(planetName);
+                toggleImage.sprite = checkedImage;
             }
             else
             {
                 selectedPlanets.Remove(planetName);
+                toggleImage.sprite = unCheckedImage;
+
             }
             proceedButton.interactable = selectedPlanets.Count > 0;
 
