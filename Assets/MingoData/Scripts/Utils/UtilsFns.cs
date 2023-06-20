@@ -94,7 +94,6 @@ namespace MingoData.Scripts.Utils
             textMeshPro.font = Resources.Load<TMP_FontAsset>("Fonts/IBMPlexSansArabic"); // Set the font to IBMPlexSansArabic inside the "Fonts" folder
             gameObject.GetComponent<RectTransform>().sizeDelta = rectTransformSizeDelta;
             return textMeshPro;
-
         }
 
                 

@@ -28,7 +28,7 @@ namespace MingoData.Scripts.MainUtil
         private Shadow sliderPanelToggleButtonShadow;
         private GameObject darkImageBackgroundSliderPanel;
         public bool initialScanFinished;
-        
+        private RectTransform sliderButtonToggleRectTransform;
         [HideInInspector]
         public bool isMenuPanelVisible;
         private GameObject sliderButtonToggleImage;
@@ -216,6 +216,7 @@ namespace MingoData.Scripts.MainUtil
 
             sliderButtonToggleImage = sliderPanelToggleButton.transform.GetChild(0).gameObject;
             sliderPanelRectTransform = menuSliderPanel.GetComponent<RectTransform>();
+             sliderButtonToggleRectTransform = sliderPanelToggleButton.GetComponent<RectTransform>();
 
             // Set the height of the sliding panel to be half of the screen's height
             float screenHeight = Screen.height;
@@ -243,6 +244,8 @@ namespace MingoData.Scripts.MainUtil
 
             // Add listener to the toggle button
             sliderPanelToggleButton.GetComponent<Button>().onClick.AddListener(ToggleMenuSliderPanel);
+
+            SetToggleButtonSize(sliderButtonToggleRectTransform, 250);
         }
 
 
@@ -252,21 +255,34 @@ namespace MingoData.Scripts.MainUtil
 
             startRotation = sliderButtonToggleImage.transform.eulerAngles.z;
             endRotation = isMenuPanelVisible ? startRotation + 180 : startRotation - 180;
+            
 
             if (isMenuPanelVisible)
             {
+                SetToggleButtonSize(sliderButtonToggleRectTransform, 100);
+
+
                 darkImageBackgroundSliderPanel.SetActive(true);
                 StartCoroutine(TransitionPanel(initialPosition, targetPosition));
                 if (middleIconsHelperText.transform.parent.gameObject.activeInHierarchy)
                     middleIconsHelperText.transform.parent.gameObject.SetActive(false);
             }
             else
-            {
+            {                
+                SetToggleButtonSize(sliderButtonToggleRectTransform, 250);
+
                 darkImageBackgroundSliderPanel.SetActive(false);
                 StartCoroutine(TransitionPanel(targetPosition, initialPosition));
             }
         }
-        
+        private static void SetToggleButtonSize(RectTransform rectTransform, float size)
+        {
+            Vector2 sizeDelta = rectTransform.sizeDelta;
+            sizeDelta = new Vector2(sizeDelta.x, size); 
+            rectTransform.sizeDelta = sizeDelta;
+            rectTransform.anchoredPosition = new Vector2(rectTransform.anchoredPosition.x, -sizeDelta.y / 2); 
+        }
+
 
         private void TranslationInit()
         {

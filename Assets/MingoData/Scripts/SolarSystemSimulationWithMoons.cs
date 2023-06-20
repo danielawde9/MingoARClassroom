@@ -505,20 +505,17 @@ namespace MingoData.Scripts
             }
         }
     }
-
 }
 
 // fixes
-// todo color in arabic ghalat, 
-// todo color legend height ghalat
-// todo height lal top menu kmn ghlt 
-
+// todo add tutorial 
 // todo check camera permission
-// todo fix light range  bs yekbar distance
+// todo fix light range bs yekbar distance
 // todo add black background when planet selected
 // todo add pinch zoom to increase decrease size 
 // todo add swipe up icon
 // todo Msh icon monotone
+// todo add layout legend divider 
 
 // features
 // todo add size prespective

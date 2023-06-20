@@ -60,15 +60,14 @@ namespace MingoData.Scripts.Utils
 
             if (localizedText.ContainsKey(key))
             {
-                // Add color to formatArgs
-                for (int i = 0; i < formatArgs.Length; i++)
-                {
-                    formatArgs[i] = $"<color=#{hexValueColor}>{formatArgs[i]}</color>";
-                }
-
                 switch (currentLanguage)
                 {
                     case Constants.LangEn:
+                        // Add color to formatArgs
+                        for (int i = 0; i < formatArgs.Length; i++)
+                        {
+                            formatArgs[i] = $"<color=#{hexValueColor}>{formatArgs[i]}</color>";
+                        }
                         result = string.Format(localizedText[key].english, formatArgs);
                         if (textComponent != null)
                         {
@@ -78,6 +77,7 @@ namespace MingoData.Scripts.Utils
                         break;
                     case Constants.LangAR:
                         result = string.Format(localizedText[key].arabic, formatArgs);
+                        // BUG NOTE: arabic coloring is not supported yet 
                         result = ArabicFixer.Fix(result, true, true);
                         if (textComponent != null)
                         {
@@ -111,7 +111,6 @@ namespace MingoData.Scripts.Utils
             string hexValueColor = ColorUtility.ToHtmlStringRGB(valueColor);
 
             // Add color to timeValue
-            timeValue = $"<color=#{hexValueColor}>{timeValue}</color>";
 
             string result = missingTextString;
 
@@ -122,10 +121,12 @@ namespace MingoData.Scripts.Utils
             switch (currentLanguage)
             {
                 case Constants.LangEn:
+                    timeValue = $"<color=#{hexValueColor}>{timeValue}</color>";
                     result = string.Format(localizedText[timeUnitKey].english, timeValue);
                     textComponent.alignment = TextAlignmentOptions.MidlineLeft;
                     break;
                 case Constants.LangAR:
+                    // BUG NOTE: arabic coloring is not supported yet 
                     result = string.Format(localizedText[timeUnitKey].arabic, timeValue);
                     result = ArabicFixer.Fix(result, true, true);
                     textComponent.isRightToLeftText = true;
