@@ -23,7 +23,7 @@ namespace MingoData.Scripts
             public GameObject arrow;
             public RectTransform arrowRectTransform; // Add this line
             public SVGImage arrowImage;
-            
+
             [NonSerialized] public LineRenderer distanceLineRenderer;
             [NonSerialized] public TextMeshPro distanceText;
         }
@@ -45,6 +45,10 @@ namespace MingoData.Scripts
         private ARRaycastManager mRaycastManager;
         private Camera mainCamera;
 
+        private Coroutine movePlanetCoroutine; // The reference to the coroutine
+        private bool isPlanetSelected;
+
+
         public float sizeScale;
         public float timeScale;
         public float distanceScale;
@@ -53,12 +57,12 @@ namespace MingoData.Scripts
         public UIHandler uiHandler;
         public LocalizationManager localizationManager;
         public Canvas canvas;
-        
+
         private GameObject selectedPlanet;
         private GameObject parentDistanceLinesObject;
         public GameObject arrowPrefab;
 
-        private bool isAfterScanShown;        
+        private bool isAfterScanShown;
         private bool isSwipeIconToggled;
         private bool isCoroutineRunning;
         private bool solarSystemPlaced;
@@ -87,11 +91,12 @@ namespace MingoData.Scripts
             "completedOrbits",
             "completedSelfRotations"
         };
-        
+
         protected override void OnSwipeUp()
         {
             base.OnSwipeUp();
-            if (selectedPlanet == null && !uiHandler.isMenuPanelVisible && uiHandler.initialScanFinished) // Only call the function if the panel is not open and a planet is selected
+            // Only call the function if the panel is not open and a planet is selected
+            if (selectedPlanet == null && !uiHandler.isMenuPanelVisible && uiHandler.initialScanFinished)
             {
                 uiHandler.ToggleMenuSliderPanel();
             }
@@ -103,7 +108,6 @@ namespace MingoData.Scripts
             mRaycastManager = GetComponent<ARRaycastManager>();
             mainCamera = Camera.main;
             DontDestroyOnLoad(mainCamera);
-
         }
 
         protected override void OnDrag(Vector2 delta)
@@ -130,7 +134,6 @@ namespace MingoData.Scripts
                     if (mRaycastManager.Raycast(touchPosition, sHits, TrackableType.PlaneWithinPolygon))
                     {
                         Pose hitPose = sHits[0].pose;
-
                         Vector3 placementPosition = hitPose.position;
                         SpawnPlanets(placementPosition);
                         uiHandler.UIShowAfterClick();
@@ -145,7 +148,6 @@ namespace MingoData.Scripts
                     break;
                 }
                 case true when !uiHandler.isMenuPanelVisible:
-                    // Detect the planet touch if no swipe gesture is detected
                     DetectPlanetTouch(touchPosition);
                     break;
             }
@@ -183,60 +185,95 @@ namespace MingoData.Scripts
             uiHandler.ToggleSwipeIcon(false);
             isSwipeIconToggled = true;
         }
-        
+
         private void SelectPlanet(GameObject planet)
         {
             // If another planet is already selected, return it to its original position and scale first
             if (selectedPlanet != null && selectedPlanet != planet)
             {
-                ReturnPlanetToOriginalState();
+                ReturnPlanetToOriginalState(selectedPlanet);
             }
 
             selectedPlanet = planet;
+            isPlanetSelected = true; // set the flag
+
+            isSwipeIconToggled = false;
+
+
             uiHandler.SetPlanetNameTextTitle(selectedPlanet.name, true);
             uiHandler.ToggleSwipeIcon(true);
-            isSwipeIconToggled = false;
-            
+            uiHandler.SetCelestialBodyData(SolarSystemUtility.planetDataDictionary[planet.name], selectedFields);
+
+
             // Save the original position and scale of the planet
             OriginalPositions.TryAdd(planet, planet.transform.position);
             OriginalScales.TryAdd(planet, planet.transform.localScale);
 
-            uiHandler.SetCelestialBodyData(SolarSystemUtility.planetDataDictionary[planet.name], selectedFields);
-
             // Move the selected planet in front of the user by one unit and scale it to 1,1,1
-            if (Camera.main != null)
+            if (mainCamera != null)
             {
-                Transform transform1 = Camera.main.transform;
+                Transform transform1 = mainCamera.transform;
                 Vector3 newPosition = transform1.position + transform1.forward;
                 selectedPlanet.transform.position = newPosition;
             }
+
             selectedPlanet.transform.localScale = new Vector3(planetSelectedScale, planetSelectedScale, planetSelectedScale);
+
+            if (movePlanetCoroutine != null)
+            {
+                StopCoroutine(movePlanetCoroutine);
+            }
+
+            movePlanetCoroutine = StartCoroutine(MoveSelectedPlanetCoroutine());
+        }
+
+        private IEnumerator MoveSelectedPlanetCoroutine()
+        {
+            while (isPlanetSelected)
+            {
+                Transform transform1 = mainCamera.transform;
+                selectedPlanet.transform.position = Vector3.Lerp(selectedPlanet.transform.position, transform1.position + transform1.forward * 1f, Time.deltaTime);
+                yield return null;
+            }
         }
 
         public void ReturnSelectedPlanetToOriginalState()
         {
             if (selectedPlanet == null)
                 return;
-            ReturnPlanetToOriginalState();
-            uiHandler.SetPlanetNameTextTitle("", false);
+            
+            GameObject tempPlanet = selectedPlanet;
+
             selectedPlanet = null;
-            uiHandler.ToggleSwipeIcon(false);
+            isPlanetSelected = false; 
             isSwipeIconToggled = false;
+
+            ReturnPlanetToOriginalState(tempPlanet);
+
+            uiHandler.ToggleSwipeIcon(false);
             uiHandler.SetCelestialBodyData(null, selectedFields);
         }
 
-        private void ReturnPlanetToOriginalState()
+        private void ReturnPlanetToOriginalState(GameObject planet)
         {
-            // Return the planet to its original position and scale
-            if (OriginalPositions.TryGetValue(selectedPlanet, out Vector3 position))
+            // Stop the coroutine
+            if (movePlanetCoroutine != null)
             {
-                selectedPlanet.transform.position = position;
+                StopCoroutine(movePlanetCoroutine);
+                movePlanetCoroutine = null;
             }
-            if (OriginalScales.TryGetValue(selectedPlanet, out Vector3 scale))
+            // Return the planet to its original position and scale
+            if (OriginalPositions.TryGetValue(planet, out Vector3 position))
             {
-                selectedPlanet.transform.localScale = scale;
+                planet.transform.position = position;
+            }
+            if (OriginalScales.TryGetValue(planet, out Vector3 scale))
+            {
+                planet.transform.localScale = scale;
             }
         }
+        
+        
 
         public void UpdateTimeScale(float value)
         {
@@ -319,13 +356,13 @@ namespace MingoData.Scripts
                 child.gameObject.SetActive(isOn);
             }
         }
-        
-        public void UpdateToggleArrow() // Call this method to toggle the arrow
+
+        private void UpdateToggleArrow(bool isOn)
         {
-            isArrowActive = !isArrowActive;
-            foreach (PlanetData planet in SolarSystemUtility.planetDataDictionary.Values) // Loop through all your planets
+            isArrowActive = isOn;
+            foreach (PlanetData planet in SolarSystemUtility.planetDataDictionary.Values)
             {
-                planet.arrowRectTransform.gameObject.SetActive(isArrowActive);
+                planet.arrow.SetActive(isOn);
             }
         }
 
@@ -354,6 +391,7 @@ namespace MingoData.Scripts
             uiHandler.onPlanetInclinationLineToggleValueChanged.AddListener(UpdateInclinationLineVisibility);
             uiHandler.onOrbitLineToggleValueChanged.AddListener(UpdateOrbitLineVisibility);
             uiHandler.onDistanceFromSunToggleValueChanged.AddListener(UpdateDistanceFromSunVisibility);
+            uiHandler.onPlanetShowArrowsToggleValueChanged.AddListener(UpdateToggleArrow);
 
             uiHandler.SetCelestialBodyData(null, selectedFields);
 
@@ -363,13 +401,13 @@ namespace MingoData.Scripts
         private void InstantiatePlanet(PlanetData planet, Vector3 placedTouchPosition, Quaternion rotationCorrection)
         {
             GameObject planetPrefab = Resources.Load<GameObject>(planet.prefabName);
-            
+
             if (planetPrefab == null)
             {
                 Debug.LogError($"Prefab not found for {planet.name}");
                 return;
             }
-            
+
             planet.rotationAxis = Quaternion.Euler(0, 0, planet.obliquityToOrbit) * Vector3.up;
             distanceScale = Constants.InitialDistanceScale;
 
@@ -390,6 +428,7 @@ namespace MingoData.Scripts
             planet.arrow.SetActive(false);
             planet.arrow.name = planet.name + "_Arrow";
             planet.arrowImage = planet.arrow.GetComponent<SVGImage>();
+            planet.arrow.transform.SetSiblingIndex(0);
 
             planet.celestialBodyInstance = Instantiate(planetPrefab, newPosition, rotationCorrection * planetPrefab.transform.rotation * Quaternion.Euler(planet.rotationAxis));
             planet.celestialBodyInstance.name = planet.name;
@@ -447,8 +486,7 @@ namespace MingoData.Scripts
 
         private new void OnEnable()
         {
-         isCoroutineRunning = true;
-
+            isCoroutineRunning = true;
             UIHandler.OnPlanetClicked += SelectPlanetByName;
             mPlaneManager.planesChanged += OnPlanesChanged;
             base.OnEnable();
@@ -456,8 +494,7 @@ namespace MingoData.Scripts
 
         private new void OnDisable()
         {
-         isCoroutineRunning = false;
-
+            isCoroutineRunning = false;
             UIHandler.OnPlanetClicked -= SelectPlanetByName;
             mPlaneManager.planesChanged -= OnPlanesChanged;
             base.OnDisable();
@@ -479,66 +516,47 @@ namespace MingoData.Scripts
 
         private void UpdateArrowPosition(PlanetData planet)
         {
-            if (!isArrowActive) // If the arrow is not active, do not update the arrow's position and return
-                return;
-
 
             Vector3 position = planet.celestialBodyInstance.transform.position;
             Vector3 viewportPosition = mainCamera.WorldToViewportPoint(position);
-    
-            if(viewportPosition.z < 0) // Planet is behind the camera
+
+            if (viewportPosition.z < 0) // Planet is behind the camera
             {
                 viewportPosition.x = 1 - viewportPosition.x; // Reflect the position
                 viewportPosition.y = 1 - viewportPosition.y; // Reflect the position
                 viewportPosition.z = 0; // Ensure the position is not behind the camera
             }
-    
+
             viewportPosition.x = Mathf.Clamp(viewportPosition.x, 0.1f, 0.9f);
             viewportPosition.y = Mathf.Clamp(viewportPosition.y, 0.1f, 0.9f);
             Vector3 screenPosition = mainCamera.ViewportToScreenPoint(viewportPosition);
-    
+
             planet.arrowRectTransform.position = screenPosition;
-    
+
             Vector3 direction = screenPosition - planet.arrowRectTransform.position;
             direction.z = 0;
-    
+
             float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90f;
             planet.arrowRectTransform.rotation = Quaternion.Euler(0f, 0f, angle);
-    
+
             if (!SolarSystemUtility.GetPlanetColorLegend().TryGetValue(planet.name, out Color arrowColor))
                 return;
-    
+
             planet.arrowImage.color = arrowColor;
         }
 
         private void Update()
         {
-
             if (!solarSystemPlaced) return;
 
             StartCoroutine(UpdateOffScreenArrowsCoroutine());
-
-            StartCoroutine(UpdateSelectedPlanetAndLightCoroutine());
-
-            StartCoroutine(UpdatePlanets());
-        }
-
-
-        
-        private IEnumerator UpdateSelectedPlanetAndLightCoroutine()
-        {
-            while (isCoroutineRunning)  // Keep this loop running as long as the script is enabled
-            {
-                MoveSelectedPlanet();
-                UpdateDirectionalLight();
-
-                yield return new WaitForSeconds(1);  // Wait for 1 second before running the loop again
-            }
+            StartCoroutine(UpdateDirectionalLightCoroutine());
+            StartCoroutine(UpdatePlanetsCoroutine());
         }
 
         private IEnumerator UpdateOffScreenArrowsCoroutine()
         {
-            while (isCoroutineRunning)  // Keep this loop running as long as the script is enabled
+            while (isArrowActive) // Keep this loop running as long as the script is enabled
             {
                 foreach (PlanetData planet in SolarSystemUtility.planetDataDictionary.Values)
                 {
@@ -552,63 +570,63 @@ namespace MingoData.Scripts
                         UpdateArrowPosition(planet);
                     }
                 }
-        
-                yield return new WaitForSeconds(1);  // Wait for 1 second before running the loop again
+
+                yield return new WaitForSeconds(1); // Wait for 1 second before running the loop again
             }
         }
 
-        private void MoveSelectedPlanet()
+        private IEnumerator UpdateDirectionalLightCoroutine()
         {
-            if (selectedPlanet == null) return;
-            Transform transform1 = mainCamera.transform;
-            selectedPlanet.transform.position = Vector3.Lerp(selectedPlanet.transform.position, transform1.position + transform1.forward * 1f, Time.deltaTime);
-        }
-
-        private static void UpdateDirectionalLight()
-        {
-            if (!SolarSystemUtility.planetDataDictionary.TryGetValue(Constants.PlanetSun, out PlanetData sunData)) return;
-            Vector3 sunDirection = -sunData.celestialBodyInstance.transform.position.normalized;
-            if (sunDirection != Vector3.zero)
+            while (isCoroutineRunning)
             {
-                UtilsFns.directionalLight.transform.SetPositionAndRotation(sunData.celestialBodyInstance.transform.position, Quaternion.LookRotation(sunDirection));
-            }
-        }
-
-        private IEnumerator UpdatePlanets()
-        {
-            float deltaTime = Time.deltaTime * timeScale;
-
-            foreach (PlanetData planetData in SolarSystemUtility.planetDataDictionary.Values)
-            {
-                // Skip the selected planet for orbital motion calculation
-                if (planetData.celestialBodyInstance == selectedPlanet) continue;
-
-                float rotationDelta = -deltaTime / planetData.rotationPeriod * 360f;
-                float orbitDelta = deltaTime / planetData.orbitalPeriod * 360f;
-                planetData.celestialBodyInstance.transform.Rotate(planetData.rotationAxis, rotationDelta, Space.World);
-
-                if (planetData.name != Constants.PlanetSun)
+                if (!SolarSystemUtility.planetDataDictionary.TryGetValue(Constants.PlanetSun, out PlanetData sunData)) yield break;
+                Vector3 sunDirection = -sunData.celestialBodyInstance.transform.position.normalized;
+                if (sunDirection != Vector3.zero)
                 {
-                    planetData.orbitProgress += orbitDelta;
-                    planetData.celestialBodyInstance.transform.position = SolarSystemUtility.CalculatePlanetPosition(planetData, planetData.orbitProgress, distanceScale);
-                    SolarSystemUtility.UpdateDistanceFromSunLine(planetData);
+                    UtilsFns.directionalLight.transform.SetPositionAndRotation(sunData.celestialBodyInstance.transform.position, Quaternion.LookRotation(sunDirection));
                 }
+                yield return new WaitForSeconds(1); // Wait for 1 second before running the loop again
+            }
+        }
 
-                planetData.rotationProgress += Mathf.Abs(rotationDelta);
+        private IEnumerator UpdatePlanetsCoroutine()
+        {
+            while (isCoroutineRunning)
+            {
+                float deltaTime = Time.deltaTime * timeScale;
 
-                int completedSelfRotations = Mathf.FloorToInt(planetData.rotationProgress / 360f);
-                int completedOrbits = Mathf.FloorToInt(planetData.orbitProgress / 360f);
-
-                if (completedSelfRotations != planetData.completedSelfRotations || completedOrbits != planetData.completedOrbits)
+                foreach (PlanetData planetData in SolarSystemUtility.planetDataDictionary.Values)
                 {
+                    // Skip the selected planet for orbital motion calculation
+                    if (planetData.celestialBodyInstance == selectedPlanet) continue;
+
+                    float rotationDelta = -deltaTime / planetData.rotationPeriod * 360f;
+                    float orbitDelta = deltaTime / planetData.orbitalPeriod * 360f;
+                    planetData.celestialBodyInstance.transform.Rotate(planetData.rotationAxis, rotationDelta, Space.World);
+
+                    if (planetData.name != Constants.PlanetSun)
+                    {
+                        planetData.orbitProgress += orbitDelta;
+                        planetData.celestialBodyInstance.transform.position = SolarSystemUtility.CalculatePlanetPosition(planetData, planetData.orbitProgress, distanceScale);
+                        SolarSystemUtility.UpdateDistanceFromSunLine(planetData);
+                    }
+
+                    planetData.rotationProgress += Mathf.Abs(rotationDelta);
+
+                    int completedSelfRotations = Mathf.FloorToInt(planetData.rotationProgress / 360f);
+                    int completedOrbits = Mathf.FloorToInt(planetData.orbitProgress / 360f);
+
+                    if (completedSelfRotations == planetData.completedSelfRotations && completedOrbits == planetData.completedOrbits)
+                        continue;
                     planetData.completedSelfRotations = completedSelfRotations;
                     planetData.completedOrbits = completedOrbits;
                 }
 
-                yield return null;
+                yield return new WaitForSeconds(0.2f); // Wait for 1 second before running the loop again
             }
         }
     }
+
 }
 
 // fixes
