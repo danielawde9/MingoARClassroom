@@ -43,9 +43,10 @@ namespace MingoData.Scripts.MainUtil
 
             // Create line renderer and text mesh for displaying distance from the sun
             GameObject lineObject = UtilsFns.CreateGameObject($"{planet.name}_DistanceLine", parentObject, Vector3.zero, Quaternion.identity);
-            Color planetLineColor = UtilsFns.CreateRandomPlanetLineColor();
-
+            
+            Color planetLineColor = UtilsFns.GetPlanetColor(planet.name);
             PlanetColorLegend.Add(planet.name, planetLineColor);
+            
             planet.distanceLineRenderer =  UtilsFns.CreateLineRenderer(lineObject, 0.01f, 0.01f, 2, Vector3.zero, planet.celestialBodyInstance.transform.position, planetLineColor);
 
             GameObject textDistanceTextObject =  UtilsFns.CreateGameObject($"{planet.name}_DistanceText", parentObject, Vector3.zero, Quaternion.identity);

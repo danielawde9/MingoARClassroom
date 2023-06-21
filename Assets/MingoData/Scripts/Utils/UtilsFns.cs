@@ -6,7 +6,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using Random = System.Random;
 
 namespace MingoData.Scripts.Utils
 {
@@ -26,7 +25,7 @@ namespace MingoData.Scripts.Utils
             // Add an Image component to the GameObject
             Image image = darkBackground.AddComponent<Image>();
 
-            Button button = darkBackground.AddComponent<Button>();
+            darkBackground.AddComponent<Button>();
             
             // Set the image color to black with 50% opacity
             image.color = new Color(0, 0, 0, 0.5f);
@@ -74,15 +73,25 @@ namespace MingoData.Scripts.Utils
             return newGameObject;
         }
 
-        public static Color CreateRandomPlanetLineColor()
+        private static readonly Dictionary<string, Color> PlanetColorMap = new Dictionary<string, Color>
         {
-            // Generate a random line color for each planet
-            Random random = new Random();
-            float r = (float)random.NextDouble();
-            float g = (float)random.NextDouble();
-            float b = (float)random.NextDouble();
-            return new Color(r, g, b);
+            {"Mercury", new Color(0.5f, 0.5f, 0.5f)}, // Gray
+            {"Venus", new Color(0.956f, 0.643f, 0.376f)}, // Yellowish-brown
+            {"Earth", new Color(0.118f, 0.565f, 1.0f)}, // Blue
+            {"Mars", new Color(0.8f, 0.4f, 0.2f)}, // Reddish-brown
+            {"Jupiter", new Color(0.682f, 0.667f, 0.584f)}, // Brown
+            {"Saturn", new Color(0.882f, 0.882f, 0.690f)}, // Pale gold
+            {"Uranus", new Color(0.667f, 0.855f, 0.882f)}, // Pale blue
+            {"Neptune", new Color(0.118f, 0.565f, 1.0f)} // Blue
+        };
+
+        public static Color GetPlanetColor(string planetName)
+        {
+            // Return a default color in case the planet name is not found
+            return PlanetColorMap.TryGetValue(planetName, out Color color) ? color : Color.white;
+            
         }
+
 
         public static TextMeshPro CreateTextMeshPro(GameObject gameObject, string text, float fontSize, Color color, TextAlignmentOptions alignment, Vector2 rectTransformSizeDelta)
         {
@@ -102,7 +111,7 @@ namespace MingoData.Scripts.Utils
             hex = hex.Replace("0x", "");
             hex = hex.Replace("#", "");
             byte a = 255;
-            byte r = byte.Parse(hex.Substring(0, 2), System.Globalization.NumberStyles.HexNumber);
+            byte r = byte.Parse(hex[..2], System.Globalization.NumberStyles.HexNumber);
             byte g = byte.Parse(hex.Substring(2, 2), System.Globalization.NumberStyles.HexNumber);
             byte b = byte.Parse(hex.Substring(4, 2), System.Globalization.NumberStyles.HexNumber);
 
@@ -115,7 +124,7 @@ namespace MingoData.Scripts.Utils
         }
 
         
-        public static LineRenderer CreateLineRenderer(GameObject gameObject, float startWidth, float endWidth, int positionCount, Vector3 startPosition, Vector3 endPosition, UnityEngine.Color color)
+        public static LineRenderer CreateLineRenderer(GameObject gameObject, float startWidth, float endWidth, int positionCount, Vector3 startPosition, Vector3 endPosition, Color color)
         {
             // NOTE: unity editor: Edit->Project Settings-> Graphics Then in the inspector where it says "Always Included Shaders" add "Unlit/Color"
             LineRenderer lineRenderer = gameObject.AddComponent<LineRenderer>();
@@ -217,7 +226,7 @@ namespace MingoData.Scripts.Utils
             lightComponent.color = Color.white;
             lightComponent.intensity = 1.0f;
 
-            // todo later on 
+            // todo later on fix it
             // List of planets in the correct order
             List<string> planetOrder = new List<string> { "Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto" };
 

@@ -23,6 +23,7 @@ namespace MingoData.Scripts
             public GameObject arrow;
             public RectTransform arrowRectTransform; // Add this line
             public SVGImage arrowImage;
+            public Color arrowColor;
 
             [NonSerialized] public LineRenderer distanceLineRenderer;
             [NonSerialized] public TextMeshPro distanceText;
@@ -429,6 +430,10 @@ namespace MingoData.Scripts
             planet.arrow.name = planet.name + "_Arrow";
             planet.arrowImage = planet.arrow.GetComponent<SVGImage>();
             planet.arrow.transform.SetSiblingIndex(0);
+            if (SolarSystemUtility.GetPlanetColorLegend().TryGetValue(planet.name, out Color arrowColor))
+            {
+                planet.arrowColor = arrowColor;
+            }
 
             planet.celestialBodyInstance = Instantiate(planetPrefab, newPosition, rotationCorrection * planetPrefab.transform.rotation * Quaternion.Euler(planet.rotationAxis));
             planet.celestialBodyInstance.name = planet.name;
@@ -539,10 +544,8 @@ namespace MingoData.Scripts
             float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90f;
             planet.arrowRectTransform.rotation = Quaternion.Euler(0f, 0f, angle);
 
-            if (!SolarSystemUtility.GetPlanetColorLegend().TryGetValue(planet.name, out Color arrowColor))
-                return;
-
-            planet.arrowImage.color = arrowColor;
+            planet.arrowImage.color = planet.arrowColor;
+            
         }
 
         private void Update()
