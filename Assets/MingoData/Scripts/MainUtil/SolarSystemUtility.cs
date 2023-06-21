@@ -8,21 +8,15 @@ using static MingoData.Scripts.SolarSystemSimulationWithMoons;
 
 namespace MingoData.Scripts.MainUtil
 {
+
     public abstract class SolarSystemUtility
     {
         private static PlanetDataList _planetDataList;
         public static Dictionary<string, PlanetData> planetDataDictionary;
-        private static readonly Dictionary<string, Color> PlanetColorLegend = new Dictionary<string, Color>();
 
         public static void ClearDictionary()
         {
-            PlanetColorLegend.Clear();
             planetDataDictionary.Clear();
-        }
-                
-        public static Dictionary<string, Color> GetPlanetColorLegend()
-        {
-            return PlanetColorLegend;
         }
         
         public static void CreateDistanceLineAndTextFromSun(GameObject parentDistanceLinesObject, PlanetData planet)
@@ -43,21 +37,20 @@ namespace MingoData.Scripts.MainUtil
 
             // Create line renderer and text mesh for displaying distance from the sun
             GameObject lineObject = UtilsFns.CreateGameObject($"{planet.name}_DistanceLine", parentObject, Vector3.zero, Quaternion.identity);
-            
-            Color planetLineColor = UtilsFns.GetPlanetColor(planet.name);
-            PlanetColorLegend.Add(planet.name, planetLineColor);
-            
-            planet.distanceLineRenderer =  UtilsFns.CreateLineRenderer(lineObject, 0.01f, 0.01f, 2, Vector3.zero, planet.celestialBodyInstance.transform.position, planetLineColor);
 
-            GameObject textDistanceTextObject =  UtilsFns.CreateGameObject($"{planet.name}_DistanceText", parentObject, Vector3.zero, Quaternion.identity);
+            Color planetLineColor = UtilsFns.CreateHexToColor(planet.colorHex).ToUnityColor();
+
+            planet.distanceLineRenderer = UtilsFns.CreateLineRenderer(lineObject, 0.01f, 0.01f, 2, Vector3.zero, planet.celestialBodyInstance.transform.position, planetLineColor);
+
+            GameObject textDistanceTextObject = UtilsFns.CreateGameObject($"{planet.name}_DistanceText", parentObject, Vector3.zero, Quaternion.identity);
             textDistanceTextObject.AddComponent<FaceCamera>();
 
-            planet.distanceText =  UtilsFns.CreateTextMeshPro(textDistanceTextObject, "", 4.25f, planetLineColor, TextAlignmentOptions.Center, new Vector2(2.0f, 2.0f));
+            planet.distanceText = UtilsFns.CreateTextMeshPro(textDistanceTextObject, "", 4.25f, planetLineColor, TextAlignmentOptions.Center, new Vector2(2.0f, 2.0f));
 
             parentObject.SetActive(false);
         }
 
-        
+
         public static void AssignDirectionalLight(Transform planetInstance, float distanceScale, List<string> desiredPlanets)
         {
             UtilsFns.CreateDirectionalLight(planetInstance, distanceScale, planetDataDictionary, desiredPlanets);
@@ -68,24 +61,28 @@ namespace MingoData.Scripts.MainUtil
             localDirectionalLight.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.Euler(0, 0, 0));
         }
 
-        
-            public static void LoadPlanetData(List<string> desiredPlanets)
+
+        public static void LoadPlanetData(List<string> desiredPlanets)
+        {
+            TextAsset jsonFile = Resources.Load<TextAsset>("SolarSystemWithMoon/planet_data_with_moon");
+            _planetDataList = JsonUtility.FromJson<PlanetDataList>(jsonFile.text);
+            foreach (PlanetData planetData in _planetDataList.planets.Where(planetData => desiredPlanets.Contains(planetData.name)))
             {
-                TextAsset jsonFile = Resources.Load<TextAsset>("SolarSystemWithMoon/planet_data_with_moon");
-                _planetDataList = JsonUtility.FromJson<PlanetDataList>(jsonFile.text);
-                foreach (PlanetData planetData in _planetDataList.planets.Where(planetData => desiredPlanets.Contains(planetData.name)))
-                {
-                    planetData.rotationPeriod *= 3600; // convert hours to seconds
-                    planetData.orbitalPeriod *= 86400; // convert days to seconds
-                    planetData.perihelion *= 1E6f; // convert 10^6 km to km
-                    planetData.aphelion *= 1E6f; // convert 10^6 km to km
-                    planetData.distanceFromSun *= 1E6f; // convert 10^6 km to km
-                    planetData.orbitalEccentricitySquared = Mathf.Pow(planetData.orbitalEccentricity, 2);
-                }
-                planetDataDictionary = _planetDataList.planets
-                        .Where(p => desiredPlanets.Contains(p.name))
-                        .ToDictionary(p => p.name, p => p);
+                planetData.rotationPeriod *= 3600; // convert hours to seconds
+                planetData.orbitalPeriod *= 86400; // convert days to seconds
+                planetData.perihelion *= 1E6f; // convert 10^6 km to km
+                planetData.aphelion *= 1E6f; // convert 10^6 km to km
+                planetData.distanceFromSun *= 1E6f; // convert 10^6 km to km
+                planetData.orbitalEccentricitySquared = Mathf.Pow(planetData.orbitalEccentricity, 2);
+
+                Color planetLineColor = UtilsFns.CreateHexToColor(planetData.colorHex).ToUnityColor();
+
             }
+            planetDataDictionary = _planetDataList.planets
+                    .Where(p => desiredPlanets.Contains(p.name))
+                    .ToDictionary(p => p.name, p => p);
+
+        }
 
 
         public static void InitPlanetProgress(PlanetData planet)
@@ -95,6 +92,7 @@ namespace MingoData.Scripts.MainUtil
             planet.rotationProgress = 0f;
         }
 
+        
         public static Vector3 CalculatePlanetPosition(PlanetData planet, float angle, float distanceScale)
         {
             float radians = angle * Mathf.Deg2Rad;
@@ -120,7 +118,6 @@ namespace MingoData.Scripts.MainUtil
             Vector3 position = planetData.celestialBodyInstance.transform.position;
             planetData.distanceLineRenderer.SetPosition(1, position - planetData.distanceLineRenderer.transform.position);
             planetData.distanceText.transform.position = position / 2f + new Vector3(0, -0.5f);
-
         }
 
         public static void UpdateDistanceFromSunText(PlanetData planetData, LocalizationManager localizationManager)
@@ -143,4 +140,5 @@ namespace MingoData.Scripts.MainUtil
             }
         }
     }
+
 }

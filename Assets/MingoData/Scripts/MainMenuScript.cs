@@ -20,6 +20,8 @@ namespace MingoData.Scripts
         public ToggleGroup chooseLangToggleGroup;
         private void Start()
         {
+            Application.targetFrameRate = 60;
+
             PlayerPrefs.SetString(Constants.SelectedPlanets, "");
             PlayerPrefs.Save();
 

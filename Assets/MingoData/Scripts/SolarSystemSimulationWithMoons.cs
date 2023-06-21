@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using MingoData.Scripts.MainUtil;
 using MingoData.Scripts.Utils;
 using TMPro;
-using Unity.VectorGraphics;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
 
@@ -22,8 +22,9 @@ namespace MingoData.Scripts
 
             public GameObject arrow;
             public RectTransform arrowRectTransform; // Add this line
-            public SVGImage arrowImage;
+            public Image arrowImage;
             public Color arrowColor;
+            public string colorHex;
 
             [NonSerialized] public LineRenderer distanceLineRenderer;
             [NonSerialized] public TextMeshPro distanceText;
@@ -48,8 +49,7 @@ namespace MingoData.Scripts
 
         private Coroutine movePlanetCoroutine; // The reference to the coroutine
         private bool isPlanetSelected;
-
-
+        
         public float sizeScale;
         public float timeScale;
         public float distanceScale;
@@ -238,6 +238,7 @@ namespace MingoData.Scripts
             }
         }
 
+        // todo hay kmn 
         public void ReturnSelectedPlanetToOriginalState()
         {
             if (selectedPlanet == null)
@@ -248,9 +249,11 @@ namespace MingoData.Scripts
             selectedPlanet = null;
             isPlanetSelected = false; 
             isSwipeIconToggled = false;
-
+        
             ReturnPlanetToOriginalState(tempPlanet);
 
+            // todo hay 
+            uiHandler.SetPlanetNameTextTitle("", false);
             uiHandler.ToggleSwipeIcon(false);
             uiHandler.SetCelestialBodyData(null, selectedFields);
         }
@@ -273,8 +276,6 @@ namespace MingoData.Scripts
                 planet.transform.localScale = scale;
             }
         }
-        
-        
 
         public void UpdateTimeScale(float value)
         {
@@ -425,15 +426,15 @@ namespace MingoData.Scripts
 
             // Instantiate the arrow
             planet.arrow = Instantiate(arrowPrefab, canvas.transform, false);
-            planet.arrowRectTransform = planet.arrow.GetComponent<RectTransform>(); // Add this line
+            planet.arrowRectTransform = planet.arrow.GetComponent<RectTransform>();
             planet.arrow.SetActive(false);
             planet.arrow.name = planet.name + "_Arrow";
-            planet.arrowImage = planet.arrow.GetComponent<SVGImage>();
+            planet.arrowImage = planet.arrow.transform.Find("PlanetImage").GetComponent<Image>();
+            Sprite planetSprite = Resources.Load<Sprite>("SolarSystemWithMoon/PlanetImages/" + planet.name);
+            planet.arrowImage.sprite = planetSprite;
+            planet.arrow.GetComponent<Button>().onClick.AddListener(()=>SelectPlanetByName(planet.name, false));
             planet.arrow.transform.SetSiblingIndex(0);
-            if (SolarSystemUtility.GetPlanetColorLegend().TryGetValue(planet.name, out Color arrowColor))
-            {
-                planet.arrowColor = arrowColor;
-            }
+            
 
             planet.celestialBodyInstance = Instantiate(planetPrefab, newPosition, rotationCorrection * planetPrefab.transform.rotation * Quaternion.Euler(planet.rotationAxis));
             planet.celestialBodyInstance.name = planet.name;
@@ -473,19 +474,22 @@ namespace MingoData.Scripts
                 {
                     SolarSystemUtility.AssignDirectionalLight(planet.celestialBodyInstance.transform, distanceScale, loadedPlanets);
                 }
-                uiHandler.SetPlanetColorLegend(SolarSystemUtility.GetPlanetColorLegend());
+                uiHandler.SetPlanetColorLegend(SolarSystemUtility.planetDataDictionary);
                 OriginalPositions[planet.celestialBodyInstance] = planet.celestialBodyInstance.transform.position;
                 SolarSystemUtility.InitPlanetProgress(planet);
                 UtilsFns.CreateOrbitLine(planet.celestialBodyInstance, planet, (body, angle) => SolarSystemUtility.CalculatePlanetPosition((PlanetData)body, angle, distanceScale));
             }
         }
 
-        private void SelectPlanetByName(string planetName)
+        private void SelectPlanetByName(string planetName, bool toggleMenuOn)
         {
             GameObject planet = GameObject.Find(planetName);
-            if (planet != null)
-            {
-                SelectPlanet(planet);
+            if (planet == null)
+                return;
+            SelectPlanet(planet);
+            if (toggleMenuOn)
+            {            
+                uiHandler.ToggleMenuSliderPanel();
             }
         }
 
@@ -537,14 +541,6 @@ namespace MingoData.Scripts
             Vector3 screenPosition = mainCamera.ViewportToScreenPoint(viewportPosition);
 
             planet.arrowRectTransform.position = screenPosition;
-
-            Vector3 direction = screenPosition - planet.arrowRectTransform.position;
-            direction.z = 0;
-
-            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90f;
-            planet.arrowRectTransform.rotation = Quaternion.Euler(0f, 0f, angle);
-
-            planet.arrowImage.color = planet.arrowColor;
             
         }
 
@@ -611,6 +607,7 @@ namespace MingoData.Scripts
                     {
                         planetData.orbitProgress += orbitDelta;
                         planetData.celestialBodyInstance.transform.position = SolarSystemUtility.CalculatePlanetPosition(planetData, planetData.orbitProgress, distanceScale);
+                        // todo hayda ekhid ktir cpu 
                         SolarSystemUtility.UpdateDistanceFromSunLine(planetData);
                     }
 
@@ -625,25 +622,25 @@ namespace MingoData.Scripts
                     planetData.completedOrbits = completedOrbits;
                 }
 
-                yield return new WaitForSeconds(0.2f); // Wait for 1 second before running the loop again
+                yield return new WaitForSeconds(1f); // Wait for 1 second before running the loop again
             }
         }
     }
-
 }
 
 // fixes
-// todo add tutorial 
+// todo fix ui 
 // todo check camera permission
 // todo fix light range bs yekbar distance
 // todo add black background when planet selected
-// todo add pinch zoom to increase decrease size 
 // todo add swipe up icon
 // todo Msh icon monotone
-// todo add layout legend divider 
-// todo fix color legneds colors
+// todo swipe icon not working 
 
 // features
+// todo add layout legend divider 
+// todo add tutorial 
+// todo add pinch zoom to increase decrease size 
 // todo add size prespective
 // todo add toggle for normizaling the planets size 
 // todo add songs and click sound

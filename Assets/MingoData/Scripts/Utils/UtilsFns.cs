@@ -73,26 +73,6 @@ namespace MingoData.Scripts.Utils
             return newGameObject;
         }
 
-        private static readonly Dictionary<string, Color> PlanetColorMap = new Dictionary<string, Color>
-        {
-            {"Mercury", new Color(0.5f, 0.5f, 0.5f)}, // Gray
-            {"Venus", new Color(0.956f, 0.643f, 0.376f)}, // Yellowish-brown
-            {"Earth", new Color(0.118f, 0.565f, 1.0f)}, // Blue
-            {"Mars", new Color(0.8f, 0.4f, 0.2f)}, // Reddish-brown
-            {"Jupiter", new Color(0.682f, 0.667f, 0.584f)}, // Brown
-            {"Saturn", new Color(0.882f, 0.882f, 0.690f)}, // Pale gold
-            {"Uranus", new Color(0.667f, 0.855f, 0.882f)}, // Pale blue
-            {"Neptune", new Color(0.118f, 0.565f, 1.0f)} // Blue
-        };
-
-        public static Color GetPlanetColor(string planetName)
-        {
-            // Return a default color in case the planet name is not found
-            return PlanetColorMap.TryGetValue(planetName, out Color color) ? color : Color.white;
-            
-        }
-
-
         public static TextMeshPro CreateTextMeshPro(GameObject gameObject, string text, float fontSize, Color color, TextAlignmentOptions alignment, Vector2 rectTransformSizeDelta)
         {
             TextMeshPro textMeshPro = gameObject.AddComponent<TextMeshPro>();

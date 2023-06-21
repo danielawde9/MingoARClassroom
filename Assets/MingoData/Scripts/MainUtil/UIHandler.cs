@@ -10,6 +10,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using TextMeshProUGUI = TMPro.TextMeshProUGUI;
 
 namespace MingoData.Scripts.MainUtil
 {
@@ -58,7 +59,7 @@ namespace MingoData.Scripts.MainUtil
         public TextMeshProUGUI planetLegendsListTitle;
         public GameObject legendItemPrefab;
         public Transform legendParent;
-        public static event Action<string> OnPlanetClicked;
+        public static event Action<string, bool> OnPlanetClicked;
 
         [Header("Solar System Toggle")]
         public TextMeshProUGUI solarSystemToggleTitle;
@@ -256,12 +257,9 @@ namespace MingoData.Scripts.MainUtil
             startRotation = sliderButtonToggleImage.transform.eulerAngles.z;
             endRotation = isMenuPanelVisible ? startRotation + 180 : startRotation - 180;
 
-
             if (isMenuPanelVisible)
             {
                 SetToggleButtonSize(sliderButtonToggleRectTransform, 100);
-
-
                 darkImageBackgroundSliderPanel.SetActive(true);
                 StartCoroutine(TransitionPanel(initialPosition, targetPosition));
                 if (middleIconsHelperText.transform.parent.gameObject.activeInHierarchy)
@@ -270,11 +268,11 @@ namespace MingoData.Scripts.MainUtil
             else
             {
                 SetToggleButtonSize(sliderButtonToggleRectTransform, 250);
-
                 darkImageBackgroundSliderPanel.SetActive(false);
                 StartCoroutine(TransitionPanel(targetPosition, initialPosition));
             }
         }
+        
         private static void SetToggleButtonSize(RectTransform rectTransform, float size)
         {
             Vector2 sizeDelta = rectTransform.sizeDelta;
@@ -482,7 +480,7 @@ namespace MingoData.Scripts.MainUtil
             valueComponent.alignment = TextAlignmentOptions.MidlineRight;
         }
 
-        public void SetPlanetColorLegend(Dictionary<string, Color> planetColorLegend)
+        public void SetPlanetColorLegend(Dictionary<string, SolarSystemSimulationWithMoons.PlanetData> planetColorLegend)
         {
             // Remove all previous legend items
             foreach (Transform child in legendParent)
@@ -490,33 +488,34 @@ namespace MingoData.Scripts.MainUtil
                 Destroy(child.gameObject);
             }
 
-            foreach (KeyValuePair<string, Color> planet in planetColorLegend)
+            foreach (SolarSystemSimulationWithMoons.PlanetData planet in SolarSystemUtility.planetDataDictionary.Values)
             {
                 // Instantiate new legend item
                 GameObject newLegendItem = Instantiate(legendItemPrefab, legendParent);
-                newLegendItem.name = "legendInfo" + planet.Key;
+                newLegendItem.name = "legendInfo" + planet.name;
                 // Assign planet name to Text component
                 TextMeshProUGUI textComponent = newLegendItem.GetComponentInChildren<TextMeshProUGUI>();
 
                 // Use localizationManager to get the localized planet name
-                string localizedPlanetName = localizationManager.GetLocalizedValue(planet.Key, textComponent, false, Constants.ColorWhite);
+                string localizedPlanetName = localizationManager.GetLocalizedValue(planet.name, textComponent, false, Constants.ColorWhite);
 
                 // If the localized name is not found, fall back to the English name
                 if (string.IsNullOrEmpty(localizedPlanetName))
                 {
-                    localizedPlanetName = planet.Key;
+                    localizedPlanetName = planet.name;
                 }
 
                 textComponent.text = localizedPlanetName;
 
                 // Assign color to Image component
                 Image imageComponent = newLegendItem.GetComponentInChildren<Image>();
-                imageComponent.color = planet.Value;
+                Color planetLineColor = UtilsFns.CreateHexToColor(planet.colorHex).ToUnityColor();
+                imageComponent.color = planetLineColor;
 
                 Button button = newLegendItem.GetComponent<Button>();
                 button.onClick.AddListener(() =>
                 {
-                    OnPlanetClicked?.Invoke(planet.Key);
+                    OnPlanetClicked?.Invoke(planet.name, true);
                 });
 
                 HorizontalLayoutGroup layoutGroup = imageComponent.transform.parent.GetComponent<HorizontalLayoutGroup>();
@@ -547,7 +546,7 @@ namespace MingoData.Scripts.MainUtil
 
         private void UpdateSizeScale(float value)
         {
-            celestialBodyHandler.UpdateSizeScale(value); // Notify SolarSystemSimulationWithMoons
+            celestialBodyHandler.UpdateSizeScale(value); 
             float realLifeSize = 1f / value;
             menuSizeText.text = localizationManager.GetLocalizedValue("1_meter_size_equals", menuSizeText, false, Constants.ColorGreen, realLifeSize.ToString("N0"));
         }
@@ -567,6 +566,7 @@ namespace MingoData.Scripts.MainUtil
             menuTimeText.text = timeText;
         }
 
+        // todo hay
         private IEnumerator TransitionPanel(Vector2 startPosition, Vector2 endPosition)
         {
             float elapsedTime = 0f;
@@ -633,6 +633,7 @@ namespace MingoData.Scripts.MainUtil
 
         public void UIShowAfterScan()
         {
+            initialUIDarkBackground.SetActive(false);
             scanRoomIconObject.SetActive(false);
             initialScanFinished = true;
             SetMiddleIconsHelperText(localizationManager.GetLocalizedValue("Tap_on_the_scanned_area_to_place_the_solar_system", middleIconsHelperText, false, Constants.ColorWhite));
@@ -641,7 +642,6 @@ namespace MingoData.Scripts.MainUtil
 
         public void UIShowAfterClick()
         {
-            initialUIDarkBackground.SetActive(false);
             scanRoomIconObject.SetActive(false);
             tapIconObject.SetActive(false);
             menuSliderPanel.SetActive(true);

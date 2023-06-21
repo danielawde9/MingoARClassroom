@@ -3,6 +3,7 @@ using UnityEngine.InputSystem;
 
 namespace MingoData.Scripts.MainUtil
 {
+
     public abstract class BasePressInputHandler : MonoBehaviour
     {
         private InputAction pressAction;
@@ -94,7 +95,7 @@ namespace MingoData.Scripts.MainUtil
             // };
         }
 
-                protected virtual void OnEnable()
+        protected virtual void OnEnable()
         {
             pressAction.Enable();
             dragAction.Enable();
@@ -124,4 +125,5 @@ namespace MingoData.Scripts.MainUtil
         protected virtual void OnPressBegan(Vector3 position) { }
         protected virtual void OnPressCancel() { }
     }
+
 }

@@ -30,11 +30,15 @@ namespace MingoData.Scripts.Utils
         public const float InitialSunSizeScale = 1f / 1000000f;
         //public const float initialSizeScale = 1f / 1000000f;
         public const float InitialTimeScale = 1f;
-        public const float MinDistance = 1f / 100000000f;
-        public const float MaxTime = 2000000f;
+        
+        public const float MaxTime = 200000f;
+        
         public const float MaxSize = 1f / 10000f;
         public const float MinSize = 1f / 1000000f;
+        
         public const float MaxDistance = 1f / 5000000f;
+        public const float MinDistance = 1f / 100000000f;
+
         public const string LangAR = "Arabic";
         public const string LangEn = "English";
         public const string SelectedPlanets = "SelectedPlanets";

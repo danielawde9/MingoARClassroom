@@ -19,7 +19,7 @@ namespace MingoData.Scripts.Utils
             parentObject = new GameObject("spawned_prefabs");
         }
 
-        void Update()
+        private void Update()
         {
             if (spawnedPrefabs.Count < maxSpawnedPrefabs)
             {
