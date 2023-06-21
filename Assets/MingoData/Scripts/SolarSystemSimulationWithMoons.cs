@@ -199,15 +199,12 @@ namespace MingoData.Scripts
             }
 
             selectedPlanet = planet;
-            isPlanetSelected = true; // set the flag
-
+            isPlanetSelected = true; 
             isSwipeIconToggled = false;
-
 
             uiHandler.SetPlanetNameTextTitle(selectedPlanet.name, true);
             uiHandler.ToggleSwipeIcon(true);
             uiHandler.SetCelestialBodyData(SolarSystemUtility.planetDataDictionary[planet.name], selectedFields);
-
 
             // Save the original position and scale of the planet
             OriginalPositions.TryAdd(planet, planet.transform.position);

@@ -52,18 +52,18 @@ namespace MingoData.Scripts
                     TextMeshProUGUI planetName = child.Find("PlanetName").GetComponent<TextMeshProUGUI>();
                     Toggle planetToggle = child.GetComponent<Toggle>();
                     Image toggleImage = child.GetComponent<Image>();
-                    
+
                     planetImage.sprite = Resources.Load<Sprite>("SolarSystemWithMoon/PlanetImages/" + planetDataList.planets[currentIndex].name);
                     planetName.text = planetDataList.planets[currentIndex].name;
-                    
-                    if (planetDataList.planets[currentIndex].name == Constants.PlanetSun) 
+
+                    if (planetDataList.planets[currentIndex].name == Constants.PlanetSun)
                     {
                         planetToggle.isOn = true;
-                        TogglePlanet(toggleImage, planetToggle, planetDataList.planets[currentIndex].name); 
+                        TogglePlanet(toggleImage, planetToggle, planetDataList.planets[currentIndex].name);
                     }
-                    
-                    planetToggle.onValueChanged.AddListener(delegate { TogglePlanet(toggleImage,planetToggle, planetDataList.planets[currentIndex].name); });
-                    
+
+                    planetToggle.onValueChanged.AddListener(delegate { TogglePlanet(toggleImage, planetToggle, planetDataList.planets[currentIndex].name); });
+
                     planetIndex++;
                 }
             }
@@ -89,7 +89,7 @@ namespace MingoData.Scripts
 
         private void TogglePlanet(Image toggleImage, Toggle toggle, string planetName)
         {
-            
+
             if (toggle.isOn)
             {
                 if (!selectedPlanets.Contains(planetName))
