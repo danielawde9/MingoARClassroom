@@ -31,11 +31,11 @@ Mingo is a powerful and innovative AR application built for Unity, leveraging th
 
 ## Contribution
 
-We love contributions! Please read our [Contribution Guide](CONTRIBUTING.md) to learn about the process.
+We love contributions! Please read our [Contribution Guide](Contributing.md) to learn about the process.
 
 ## License
 
-This project is licensed under the terms of the MIT license. See [LICENSE](LICENSE.md) for additional details.
+This project is licensed under the terms of the MIT license. See [LICENSE](License.md) for additional details.
 
 ## Acknowledgments
 
