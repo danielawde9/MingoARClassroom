@@ -38,7 +38,7 @@ namespace MingoData.Scripts.MainUtil
             // Create line renderer and text mesh for displaying distance from the sun
             GameObject lineObject = UtilsFns.CreateGameObject($"{planet.name}_DistanceLine", parentObject, Vector3.zero, Quaternion.identity);
 
-            Color planetLineColor = UtilsFns.CreateHexToColor(planet.colorHex).ToUnityColor();
+            Color planetLineColor = UtilsFns.CreateHexToColor(planet.planetColor).ToUnityColor();
 
             planet.distanceLineRenderer = UtilsFns.CreateLineRenderer(lineObject, 0.01f, 0.01f, 2, Vector3.zero, planet.celestialBodyInstance.transform.position, planetLineColor);
 
@@ -74,8 +74,6 @@ namespace MingoData.Scripts.MainUtil
                 planetData.aphelion *= 1E6f; // convert 10^6 km to km
                 planetData.distanceFromSun *= 1E6f; // convert 10^6 km to km
                 planetData.orbitalEccentricitySquared = Mathf.Pow(planetData.orbitalEccentricity, 2);
-
-                Color planetLineColor = UtilsFns.CreateHexToColor(planetData.colorHex).ToUnityColor();
 
             }
             planetDataDictionary = _planetDataList.planets
@@ -129,7 +127,7 @@ namespace MingoData.Scripts.MainUtil
             viewportPosition.y = Mathf.Clamp(viewportPosition.y, 0.1f, 0.9f);
             Vector3 screenPosition = mainCamera.ViewportToScreenPoint(viewportPosition);
 
-            planet.arrowRectTransform.position = screenPosition;
+            planet.planetGuidanceRectTransform.position = screenPosition;
             
         }
         

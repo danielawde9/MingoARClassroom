@@ -267,7 +267,12 @@
             "arabic": "عرض المسافة من الشمس"
         },
         {
-            "key": "Planet_Show_arrows",
+            "key": "",
+            "english": "",
+            "arabic": ""
+        },
+        {
+            "key": "Planet_Show_Guidance",
             "english": "Display Guidance Arrows",
             "arabic": "عرض سهم التوجيه"
         },

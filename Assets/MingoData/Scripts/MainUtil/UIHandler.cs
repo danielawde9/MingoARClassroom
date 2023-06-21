@@ -64,12 +64,12 @@ namespace MingoData.Scripts.MainUtil
         [Header("Solar System Toggle")]
         public TextMeshProUGUI solarSystemToggleTitle;
         public Toggle planetDistanceFromSunToggle;
-        public Toggle planetShowArrowsToggle;
+        public Toggle planetShowGuidanceToggle;
         public Toggle planetNameToggle;
         public Toggle planetInclinationLineToggle;
         public Toggle orbitLineToggle;
         public TextMeshProUGUI planetDistanceFromSunToggleTextMeshPro;
-        public TextMeshProUGUI planetShowArrowsToggleTextMeshPro;
+        public TextMeshProUGUI planetShowGuidanceToggleTextMeshPro;
         public TextMeshProUGUI planetNameToggleTextMeshPro;
         public TextMeshProUGUI planetInclinationLineToggleTextMeshPro;
         public TextMeshProUGUI orbitLineToggleTextMeshPro;
@@ -102,7 +102,7 @@ namespace MingoData.Scripts.MainUtil
         [HideInInspector]
         public UnityEvent<bool> onDistanceFromSunToggleValueChanged;
         [HideInInspector]
-        public UnityEvent<bool> onPlanetShowArrowsToggleValueChanged;
+        public UnityEvent<bool> onPlanetShowGuidanceToggleValueChanged;
 
         [Header("Horizontal Buttons")]
         public TextMeshProUGUI horizontalButtonsTitle;
@@ -142,7 +142,7 @@ namespace MingoData.Scripts.MainUtil
             planetNameToggle.transform.gameObject.SetActive(false);
             planetInclinationLineToggle.transform.gameObject.SetActive(false);
             planetDistanceFromSunToggle.transform.gameObject.SetActive(false);
-            planetShowArrowsToggle.transform.gameObject.SetActive(false);
+            planetShowGuidanceToggle.transform.gameObject.SetActive(false);
         }
 
 
@@ -305,7 +305,7 @@ namespace MingoData.Scripts.MainUtil
 
             planetDistanceFromSunToggleTextMeshPro.text = localizationManager.GetLocalizedValue("Display_Distance_From_Sun", planetDistanceFromSunToggleTextMeshPro, false, Constants.ColorWhite);
             
-            planetShowArrowsToggleTextMeshPro.text = localizationManager.GetLocalizedValue("Planet_Show_arrows", planetShowArrowsToggleTextMeshPro, false, Constants.ColorWhite);
+            planetShowGuidanceToggleTextMeshPro.text = localizationManager.GetLocalizedValue("Planet_Show_Guidance", planetShowGuidanceToggleTextMeshPro, false, Constants.ColorWhite);
             
             planetNameToggleTextMeshPro.text = localizationManager.GetLocalizedValue("Display_Planet_Name", planetNameToggleTextMeshPro, false, Constants.ColorWhite);
             
@@ -320,9 +320,9 @@ namespace MingoData.Scripts.MainUtil
             planetNameToggle.isOn = false;
             planetInclinationLineToggle.isOn = false;
             planetDistanceFromSunToggle.isOn = false;
-            planetShowArrowsToggle.isOn = true;
+            planetShowGuidanceToggle.isOn = true;
             
-            planetShowArrowsToggle.onValueChanged.AddListener((isOn) => { onPlanetShowArrowsToggleValueChanged?.Invoke(isOn); });
+            planetShowGuidanceToggle.onValueChanged.AddListener((isOn) => { onPlanetShowGuidanceToggleValueChanged?.Invoke(isOn); });
 
             planetDistanceFromSunToggle.onValueChanged.AddListener((isOn) => { onDistanceFromSunToggleValueChanged?.Invoke(isOn); });
             orbitLineToggle.onValueChanged.AddListener((isOn) => { onOrbitLineToggleValueChanged?.Invoke(isOn); });
@@ -333,14 +333,14 @@ namespace MingoData.Scripts.MainUtil
             planetNameToggle.transform.gameObject.SetActive(true);
             planetInclinationLineToggle.transform.gameObject.SetActive(true);
             planetDistanceFromSunToggle.transform.gameObject.SetActive(true);
-            planetShowArrowsToggle.transform.gameObject.SetActive(true);
+            planetShowGuidanceToggle.transform.gameObject.SetActive(true);
 
 
             HorizontalLayoutGroup planetDistanceFromSunToggleLayoutGroup = planetDistanceFromSunToggle.transform.parent.GetComponent<HorizontalLayoutGroup>();
             planetDistanceFromSunToggleLayoutGroup.reverseArrangement = (localizationManager.GetCurrentLanguage() == Constants.LangAR);
             
-            HorizontalLayoutGroup planetShowArrowsToggleLayoutGroup = planetShowArrowsToggle.transform.parent.GetComponent<HorizontalLayoutGroup>();
-            planetShowArrowsToggleLayoutGroup.reverseArrangement = (localizationManager.GetCurrentLanguage() == Constants.LangAR);
+            HorizontalLayoutGroup planetShowGuidanceToggleLayoutGroup = planetShowGuidanceToggle.transform.parent.GetComponent<HorizontalLayoutGroup>();
+            planetShowGuidanceToggleLayoutGroup.reverseArrangement = (localizationManager.GetCurrentLanguage() == Constants.LangAR);
 
             HorizontalLayoutGroup planetNameToggleLayoutGroup = planetNameToggle.transform.parent.GetComponent<HorizontalLayoutGroup>();
             planetNameToggleLayoutGroup.reverseArrangement = (localizationManager.GetCurrentLanguage() == Constants.LangAR);
@@ -510,7 +510,7 @@ namespace MingoData.Scripts.MainUtil
 
                 // Assign color to Image component
                 Image imageComponent = newLegendItem.GetComponentInChildren<Image>();
-                Color planetLineColor = UtilsFns.CreateHexToColor(planet.colorHex).ToUnityColor();
+                Color planetLineColor = UtilsFns.CreateHexToColor(planet.planetColor).ToUnityColor();
                 imageComponent.color = planetLineColor;
 
                 Button button = newLegendItem.GetComponent<Button>();
@@ -584,6 +584,7 @@ namespace MingoData.Scripts.MainUtil
                 elapsedTime += Time.deltaTime;
                 yield return null;
             }
+
 
             sliderPanelRectTransform.anchoredPosition = endPosition;
 

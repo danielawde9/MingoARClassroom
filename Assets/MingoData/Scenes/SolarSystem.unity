@@ -594,7 +594,7 @@ GameObject:
   - component: {fileID: 213575786}
   - component: {fileID: 213575785}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: FPS Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -615,10 +615,10 @@ RectTransform:
   m_Father: {fileID: 1510672709}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 836.3}
-  m_SizeDelta: {x: 597.1, y: 101.9}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: -404.8}
+  m_SizeDelta: {x: 0, y: 101.900024}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &213575785
 MonoBehaviour:
@@ -687,7 +687,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
+  m_HorizontalAlignment: 2
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -982,11 +982,11 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 402298340}
   - {fileID: 1371985238}
-  - {fileID: 76012887}
   - {fileID: 174560848}
   - {fileID: 921379635}
-  - {fileID: 402298340}
+  - {fileID: 76012887}
   m_Father: {fileID: 219965594}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1374,16 +1374,16 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1749276729}
   - {fileID: 384687734}
+  - {fileID: 1749276729}
   - {fileID: 571017796}
   - {fileID: 1796466094}
   m_Father: {fileID: 1510672709}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 1018.31775}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 0, y: -150}
   m_SizeDelta: {x: 905, y: 170.01001}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &319203921
@@ -4332,7 +4332,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1105738286}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.9913235
+  m_Size: 0.99972874
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -5349,7 +5349,7 @@ MonoBehaviour:
   uiHandler: {fileID: 1510672710}
   localizationManager: {fileID: 1016334707}
   canvas: {fileID: 1510672708}
-  arrowPrefab: {fileID: 830552981031802402, guid: aa962eadaec1e4eed9437b0b3bc36bbe,
+  planetGuidancePrefab: {fileID: 830552981031802402, guid: aa962eadaec1e4eed9437b0b3bc36bbe,
     type: 3}
 --- !u!114 &1016334709
 MonoBehaviour:
@@ -6179,10 +6179,10 @@ RectTransform:
   m_Father: {fileID: 1371985238}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 744.1404, y: -40}
-  m_SizeDelta: {x: 151.71927, y: 80}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1175387851
 MonoBehaviour:
@@ -6319,7 +6319,7 @@ GameObject:
   - component: {fileID: 1191102295}
   - component: {fileID: 1191102293}
   m_Layer: 5
-  m_Name: PlanetShowArrowLayoutText
+  m_Name: PlanetShowGuidanceLayoutText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6478,7 +6478,7 @@ GameObject:
   - component: {fileID: 1211891568}
   - component: {fileID: 1211891567}
   m_Layer: 5
-  m_Name: DisplayPlanetArrowToggle
+  m_Name: DisplayPlanetGuidanceToggle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6917,10 +6917,10 @@ RectTransform:
   m_Father: {fileID: 1371985238}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 334.14038, y: -40}
-  m_SizeDelta: {x: 668.28076, y: 75.21}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 75.21}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1314796814
 MonoBehaviour:
@@ -7491,7 +7491,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1371985238
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7509,10 +7509,10 @@ RectTransform:
   m_Father: {fileID: 270618097}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 450, y: -80}
-  m_SizeDelta: {x: 820, y: 80}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1371985239
 MonoBehaviour:
@@ -8127,12 +8127,12 @@ MonoBehaviour:
   legendParent: {fileID: 7622102719811871575}
   solarSystemToggleTitle: {fileID: 331867777}
   planetDistanceFromSunToggle: {fileID: 1175387854}
-  planetShowArrowsToggle: {fileID: 1211891571}
+  planetShowGuidanceToggle: {fileID: 1211891571}
   planetNameToggle: {fileID: 1499321345}
   planetInclinationLineToggle: {fileID: 321942656}
   orbitLineToggle: {fileID: 589325438}
   planetDistanceFromSunToggleTextMeshPro: {fileID: 1314796814}
-  planetShowArrowsToggleTextMeshPro: {fileID: 1191102295}
+  planetShowGuidanceToggleTextMeshPro: {fileID: 1191102295}
   planetNameToggleTextMeshPro: {fileID: 1007148641}
   planetInclinationLineToggleTextMeshPro: {fileID: 1702546275}
   orbitLineToggleTextMeshPro: {fileID: 1777596911}
@@ -8160,7 +8160,7 @@ MonoBehaviour:
   onDistanceFromSunToggleValueChanged:
     m_PersistentCalls:
       m_Calls: []
-  onPlanetShowArrowsToggleValueChanged:
+  onPlanetShowGuidanceToggleValueChanged:
     m_PersistentCalls:
       m_Calls: []
   horizontalButtonsTitle: {fileID: 14855138}
@@ -11004,7 +11004,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 0, y: 3919.6436}
+  m_AnchoredPosition: {x: 0, y: 3919.9912}
   m_SizeDelta: {x: -13, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1981951315
