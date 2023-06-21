@@ -259,6 +259,7 @@ namespace MingoData.Scripts.MainUtil
 
             if (isMenuPanelVisible)
             {
+                sliderPanelScrollRect.verticalNormalizedPosition = 1f;
                 SetToggleButtonSize(sliderButtonToggleRectTransform, 100);
                 darkImageBackgroundSliderPanel.SetActive(true);
                 StartCoroutine(TransitionPanel(initialPosition, targetPosition));
@@ -566,7 +567,7 @@ namespace MingoData.Scripts.MainUtil
             menuTimeText.text = timeText;
         }
 
-        // todo hay
+        // ReSharper disable Unity.PerformanceAnalysis
         private IEnumerator TransitionPanel(Vector2 startPosition, Vector2 endPosition)
         {
             float elapsedTime = 0f;

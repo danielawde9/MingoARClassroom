@@ -112,6 +112,27 @@ namespace MingoData.Scripts.MainUtil
             return new Vector3(x * distanceScale, y * distanceScale, z * distanceScale);
         }
 
+        public static void UpdatePlanetGuidancePosition(PlanetData planet, Camera mainCamera)
+        {
+
+            Vector3 position = planet.celestialBodyInstance.transform.position;
+            Vector3 viewportPosition = mainCamera.WorldToViewportPoint(position);
+
+            if (viewportPosition.z < 0) // Planet is behind the camera
+            {
+                viewportPosition.x = 1 - viewportPosition.x; // Reflect the position
+                viewportPosition.y = 1 - viewportPosition.y; // Reflect the position
+                viewportPosition.z = 0; // Ensure the position is not behind the camera
+            }
+
+            viewportPosition.x = Mathf.Clamp(viewportPosition.x, 0.1f, 0.9f);
+            viewportPosition.y = Mathf.Clamp(viewportPosition.y, 0.1f, 0.9f);
+            Vector3 screenPosition = mainCamera.ViewportToScreenPoint(viewportPosition);
+
+            planet.arrowRectTransform.position = screenPosition;
+            
+        }
+        
         public static void UpdateDistanceFromSunLine(PlanetData planetData)
         {
             planetData.distanceLineRenderer.SetPosition(0, Vector3.zero);

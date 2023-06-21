@@ -516,33 +516,7 @@ namespace MingoData.Scripts
             uiHandler.UIShowAfterScan();
             isAfterScanShown = true;
         }
-
-        private bool IsObjectVisibleFromCamera(GameObject obj)
-        {
-            Vector3 viewportPosition = mainCamera.WorldToViewportPoint(obj.transform.position);
-            return viewportPosition is { z: > 0, x: > 0 and < 1, y: > 0 and < 1 };
-        }
-
-        private void UpdateArrowPosition(PlanetData planet)
-        {
-
-            Vector3 position = planet.celestialBodyInstance.transform.position;
-            Vector3 viewportPosition = mainCamera.WorldToViewportPoint(position);
-
-            if (viewportPosition.z < 0) // Planet is behind the camera
-            {
-                viewportPosition.x = 1 - viewportPosition.x; // Reflect the position
-                viewportPosition.y = 1 - viewportPosition.y; // Reflect the position
-                viewportPosition.z = 0; // Ensure the position is not behind the camera
-            }
-
-            viewportPosition.x = Mathf.Clamp(viewportPosition.x, 0.1f, 0.9f);
-            viewportPosition.y = Mathf.Clamp(viewportPosition.y, 0.1f, 0.9f);
-            Vector3 screenPosition = mainCamera.ViewportToScreenPoint(viewportPosition);
-
-            planet.arrowRectTransform.position = screenPosition;
-            
-        }
+        
 
         private void Update()
         {
@@ -553,6 +527,12 @@ namespace MingoData.Scripts
             StartCoroutine(UpdatePlanetsCoroutine());
         }
 
+        private bool IsObjectVisibleFromCamera(GameObject obj)
+        {
+            Vector3 viewportPosition = mainCamera.WorldToViewportPoint(obj.transform.position);
+            return viewportPosition is { z: > 0, x: > 0 and < 1, y: > 0 and < 1 };
+        }
+        
         private IEnumerator UpdateOffScreenArrowsCoroutine()
         {
             while (isArrowActive) // Keep this loop running as long as the script is enabled
@@ -566,10 +546,9 @@ namespace MingoData.Scripts
                     else
                     {
                         planet.arrow.SetActive(true);
-                        UpdateArrowPosition(planet);
+                        SolarSystemUtility.UpdatePlanetGuidancePosition(planet, mainCamera);
                     }
                 }
-
                 yield return new WaitForSeconds(1); // Wait for 1 second before running the loop again
             }
         }
@@ -608,7 +587,7 @@ namespace MingoData.Scripts
                         planetData.orbitProgress += orbitDelta;
                         planetData.celestialBodyInstance.transform.position = SolarSystemUtility.CalculatePlanetPosition(planetData, planetData.orbitProgress, distanceScale);
                         // todo hayda ekhid ktir cpu 
-                        SolarSystemUtility.UpdateDistanceFromSunLine(planetData);
+                        //SolarSystemUtility.UpdateDistanceFromSunLine(planetData);
                     }
 
                     planetData.rotationProgress += Mathf.Abs(rotationDelta);
