@@ -7,7 +7,8 @@ namespace MingoData.Scripts.Utils
         public Toggle toggle;
         public RectTransform knobTransform;
         public float speed = 5f;
-        public LocalizationManager localizationManager;
+        [SerializeField]
+        private LocalizationManager localizationManager;
 
         private Vector2 onPosition;
         private Vector2 offPosition;

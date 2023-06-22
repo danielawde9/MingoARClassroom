@@ -18,9 +18,9 @@ namespace MingoData.Scripts.MainUtil
     public class UIHandler : MonoBehaviour
     {
         [SerializeField]
-        public SolarSystemSimulationWithMoons celestialBodyHandler;
+        private SolarSystemSimulationWithMoons celestialBodyHandler;
         [SerializeField]
-        public LocalizationManager localizationManager;
+        private LocalizationManager localizationManager;
 
 
         [Header("Panel Menu")]
@@ -73,6 +73,16 @@ namespace MingoData.Scripts.MainUtil
         public TextMeshProUGUI planetNameToggleTextMeshPro;
         public TextMeshProUGUI planetInclinationLineToggleTextMeshPro;
         public TextMeshProUGUI orbitLineToggleTextMeshPro;
+        [HideInInspector]
+        public UnityEvent<bool> onPlanetNameToggleValueChanged;
+        [HideInInspector]
+        public UnityEvent<bool> onOrbitLineToggleValueChanged;
+        [HideInInspector]
+        public UnityEvent<bool> onPlanetInclinationLineToggleValueChanged;
+        [HideInInspector]
+        public UnityEvent<bool> onDistanceFromSunToggleValueChanged;
+        [HideInInspector]
+        public UnityEvent<bool> onPlanetShowGuidanceToggleValueChanged;
 
         [Header("Solar System Slider")]
         public TextMeshProUGUI solarSystemSliderTitle;
@@ -93,24 +103,12 @@ namespace MingoData.Scripts.MainUtil
         public UnityAction<float> onUpdateSizeScaleSlider;
         public UnityAction<float> onUpdateDistanceScaleSlider;
         private GameObject initialUIDarkBackground;
-        [HideInInspector]
-        public UnityEvent<bool> onPlanetNameToggleValueChanged;
-        [HideInInspector]
-        public UnityEvent<bool> onOrbitLineToggleValueChanged;
-        [HideInInspector]
-        public UnityEvent<bool> onPlanetInclinationLineToggleValueChanged;
-        [HideInInspector]
-        public UnityEvent<bool> onDistanceFromSunToggleValueChanged;
-        [HideInInspector]
-        public UnityEvent<bool> onPlanetShowGuidanceToggleValueChanged;
-
+        
         [Header("Horizontal Buttons")]
         public TextMeshProUGUI horizontalButtonsTitle;
         public GameObject pauseButton;
         public GameObject fastForwardButton;
         public GameObject playButton;
-
-
 
         private void OnPauseButtonClicked()
         {
@@ -144,7 +142,6 @@ namespace MingoData.Scripts.MainUtil
             planetDistanceFromSunToggle.transform.gameObject.SetActive(false);
             planetShowGuidanceToggle.transform.gameObject.SetActive(false);
         }
-
 
         private void Start()
         {
@@ -323,7 +320,6 @@ namespace MingoData.Scripts.MainUtil
             planetShowGuidanceToggle.isOn = true;
             
             planetShowGuidanceToggle.onValueChanged.AddListener((isOn) => { onPlanetShowGuidanceToggleValueChanged?.Invoke(isOn); });
-
             planetDistanceFromSunToggle.onValueChanged.AddListener((isOn) => { onDistanceFromSunToggleValueChanged?.Invoke(isOn); });
             orbitLineToggle.onValueChanged.AddListener((isOn) => { onOrbitLineToggleValueChanged?.Invoke(isOn); });
             planetNameToggle.onValueChanged.AddListener((isOn) => { onPlanetNameToggleValueChanged?.Invoke(isOn); });
@@ -334,7 +330,6 @@ namespace MingoData.Scripts.MainUtil
             planetInclinationLineToggle.transform.gameObject.SetActive(true);
             planetDistanceFromSunToggle.transform.gameObject.SetActive(true);
             planetShowGuidanceToggle.transform.gameObject.SetActive(true);
-
 
             HorizontalLayoutGroup planetDistanceFromSunToggleLayoutGroup = planetDistanceFromSunToggle.transform.parent.GetComponent<HorizontalLayoutGroup>();
             planetDistanceFromSunToggleLayoutGroup.reverseArrangement = (localizationManager.GetCurrentLanguage() == Constants.LangAR);
@@ -350,7 +345,6 @@ namespace MingoData.Scripts.MainUtil
 
             HorizontalLayoutGroup orbitLineToggleLayoutGroup = orbitLineToggle.transform.parent.GetComponent<HorizontalLayoutGroup>();
             orbitLineToggleLayoutGroup.reverseArrangement = (localizationManager.GetCurrentLanguage() == Constants.LangAR);
-
         }
 
         private void ReverseOrderIfArabic(HorizontalOrVerticalLayoutGroup layoutGroup)
@@ -481,7 +475,7 @@ namespace MingoData.Scripts.MainUtil
             valueComponent.alignment = TextAlignmentOptions.MidlineRight;
         }
 
-        public void SetPlanetColorLegend(Dictionary<string, SolarSystemSimulationWithMoons.PlanetData> planetColorLegend)
+        public void SetPlanetColorLegend(Dictionary<string, PlanetData> planetColorLegend)
         {
             // Remove all previous legend items
             foreach (Transform child in legendParent)
@@ -489,34 +483,34 @@ namespace MingoData.Scripts.MainUtil
                 Destroy(child.gameObject);
             }
 
-            foreach (SolarSystemSimulationWithMoons.PlanetData planet in SolarSystemUtility.planetDataDictionary.Values)
+            foreach (PlanetData planetData in planetColorLegend.Values)
             {
                 // Instantiate new legend item
                 GameObject newLegendItem = Instantiate(legendItemPrefab, legendParent);
-                newLegendItem.name = "legendInfo" + planet.name;
+                newLegendItem.name = "legendInfo" + planetData.name;
                 // Assign planet name to Text component
                 TextMeshProUGUI textComponent = newLegendItem.GetComponentInChildren<TextMeshProUGUI>();
 
                 // Use localizationManager to get the localized planet name
-                string localizedPlanetName = localizationManager.GetLocalizedValue(planet.name, textComponent, false, Constants.ColorWhite);
+                string localizedPlanetName = localizationManager.GetLocalizedValue(planetData.name, textComponent, false, Constants.ColorWhite);
 
                 // If the localized name is not found, fall back to the English name
                 if (string.IsNullOrEmpty(localizedPlanetName))
                 {
-                    localizedPlanetName = planet.name;
+                    localizedPlanetName = planetData.name;
                 }
 
                 textComponent.text = localizedPlanetName;
 
                 // Assign color to Image component
                 Image imageComponent = newLegendItem.GetComponentInChildren<Image>();
-                Color planetLineColor = UtilsFns.CreateHexToColor(planet.planetColor).ToUnityColor();
+                Color planetLineColor = UtilsFns.CreateHexToColor(planetData.planetColor).ToUnityColor();
                 imageComponent.color = planetLineColor;
 
                 Button button = newLegendItem.GetComponent<Button>();
                 button.onClick.AddListener(() =>
                 {
-                    OnPlanetClicked?.Invoke(planet.name, true);
+                    OnPlanetClicked?.Invoke(planetData.name, true);
                 });
 
                 HorizontalLayoutGroup layoutGroup = imageComponent.transform.parent.GetComponent<HorizontalLayoutGroup>();
@@ -644,6 +638,7 @@ namespace MingoData.Scripts.MainUtil
 
         public void UIShowAfterClick()
         {
+            
             scanRoomIconObject.SetActive(false);
             tapIconObject.SetActive(false);
             menuSliderPanel.SetActive(true);

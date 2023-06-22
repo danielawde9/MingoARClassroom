@@ -122,7 +122,7 @@ namespace MingoData.Scripts.Utils
             return lineRenderer;
         }
 
-        public static void CreateInclinationLine(SolarSystemSimulationWithMoons.PlanetData planet, GameObject planetInstance, LocalizationManager localizationManager)
+        public static void CreateInclinationLine(PlanetData planet, GameObject planetInstance, LocalizationManager localizationManager)
         {
             // Create a parent game object for text and y-axis line. This object doesn't rotate.
             GameObject parentObject = new GameObject(planet.name + "_InclinationLinesParent");
@@ -153,7 +153,7 @@ namespace MingoData.Scripts.Utils
 
         }
 
-        public static void CreatePlanetName(SolarSystemSimulationWithMoons.PlanetData planet, GameObject planetInstance, LocalizationManager localizationManager)
+        public static void CreatePlanetName(PlanetData planet, GameObject planetInstance, LocalizationManager localizationManager)
         {
             GameObject parentObject = new GameObject(planet.name + "_PlanetNameParent");
             parentObject.transform.SetParent(planetInstance.transform, false);
@@ -195,7 +195,7 @@ namespace MingoData.Scripts.Utils
 
         }
         
-        public static void CreateDirectionalLight(Transform sunTransform, float distanceScale, IReadOnlyDictionary<string, SolarSystemSimulationWithMoons.PlanetData> localPlanetDataDictionary, List<string> allowedPlanets)
+        public static void CreateDirectionalLight(Transform sunTransform, float distanceScale, IReadOnlyDictionary<string, PlanetData> localPlanetDataDictionary, List<string> allowedPlanets)
         {
             directionalLight = new GameObject("Directional Light");
             if (!directionalLight.TryGetComponent(out Light lightComponent))
@@ -213,7 +213,7 @@ namespace MingoData.Scripts.Utils
             // Find the last planet from the order which is also in the allowedPlanets list and the localPlanetDataDictionary
             string lastAllowedPlanet = planetOrder.LastOrDefault(planet => allowedPlanets.Contains(planet) && localPlanetDataDictionary.ContainsKey(planet));
 
-            if (lastAllowedPlanet != null && localPlanetDataDictionary.TryGetValue(lastAllowedPlanet, out SolarSystemSimulationWithMoons.PlanetData lastPlanetData))
+            if (lastAllowedPlanet != null && localPlanetDataDictionary.TryGetValue(lastAllowedPlanet, out PlanetData lastPlanetData))
             {
                 float distanceToPluto = lastPlanetData.distanceFromSun * distanceScale * 10;
                 Debug.Log("Distance from Sun to " + lastPlanetData.name + ": " + distanceToPluto);

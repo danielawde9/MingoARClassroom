@@ -1,5 +1,8 @@
 using System;
+using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace MingoData.Scripts.MainUtil
 {
@@ -29,6 +32,33 @@ namespace MingoData.Scripts.MainUtil
         public GameObject celestialBodyInstance;
         public LineRenderer orbitLineRenderer;
 
+    }
+    
+    [Serializable]
+    public class PlanetData : CelestialBodyData
+    {
+        public List<MoonData> moons;
+        public float distanceFromSun;
+
+        public GameObject planetGuidance;
+        public RectTransform planetGuidanceRectTransform;
+        public Image planetGuidanceImage;
+        public string planetColor;
+
+        [NonSerialized] public LineRenderer distanceLineRenderer;
+        [NonSerialized] public TextMeshPro distanceText;
+    }
+
+    [Serializable]
+    public class MoonData : CelestialBodyData
+    {
+        public float distanceFromPlanet;
+    }
+
+    [Serializable]
+    public class PlanetDataList
+    {
+        public List<PlanetData> planets;
     }
 
 }

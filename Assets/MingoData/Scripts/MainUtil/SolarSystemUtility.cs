@@ -4,7 +4,6 @@ using System.Linq;
 using MingoData.Scripts.Utils;
 using TMPro;
 using UnityEngine;
-using static MingoData.Scripts.SolarSystemSimulationWithMoons;
 
 namespace MingoData.Scripts.MainUtil
 {

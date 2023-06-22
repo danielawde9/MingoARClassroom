@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using MingoData.Scripts.MainUtil;
 using MingoData.Scripts.Utils;
 using TMPro;
 using UnityEngine;
@@ -26,7 +27,7 @@ namespace MingoData.Scripts
             PlayerPrefs.Save();
 
             TextAsset jsonFile = Resources.Load<TextAsset>("SolarSystemWithMoon/planet_data_with_moon");
-            SolarSystemSimulationWithMoons.PlanetDataList planetDataList = JsonUtility.FromJson<SolarSystemSimulationWithMoons.PlanetDataList>(jsonFile.text);
+            PlanetDataList planetDataList = JsonUtility.FromJson<PlanetDataList>(jsonFile.text);
             proceedButton.onClick.AddListener(LoadSolarSystemScene);
             proceedButton.interactable = false;
 
