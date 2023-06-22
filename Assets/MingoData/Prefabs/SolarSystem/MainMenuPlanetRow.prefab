@@ -541,7 +541,7 @@ GameObject:
   - component: {fileID: 5129293665687127467}
   - component: {fileID: 7002690606475491451}
   m_Layer: 5
-  m_Name: PlanetRow
+  m_Name: MainMenuPlanetRow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

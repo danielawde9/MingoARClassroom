@@ -7,13 +7,18 @@ namespace MingoData.Scripts.Utils
 
     public class ArcMotion : MonoBehaviour
     {
-        public SVGImage imageObject; // The UI Image object
+        private SVGImage imageSvg; // The UI Image object
         public float speed = 1f;  // Speed of the movement
         public float angle = 22.5f; // Angle of rotation
 
         public float moveX = 0.01f; // X movement per step
         public float moveY = 0.01f; // Y movement per step
 
+        public void SetSvgImage(Sprite image)
+        {
+            imageSvg.sprite = image;
+        }
+        
         private void Start()
         {
             StartCoroutine(MoveImageInArc());
@@ -26,8 +31,8 @@ namespace MingoData.Scripts.Utils
                 // Rotate and move to the left
                 for (float i = 0; i < angle; i++)
                 {
-                    imageObject.rectTransform.Rotate(Vector3.forward, speed);
-                    imageObject.rectTransform.localPosition += new Vector3(-moveX, moveY, 0);
+                    imageSvg.rectTransform.Rotate(Vector3.forward, speed);
+                    imageSvg.rectTransform.localPosition += new Vector3(-moveX, moveY, 0);
                     yield return new WaitForSeconds(0.01f);
                 }
 
@@ -37,8 +42,8 @@ namespace MingoData.Scripts.Utils
                 // Rotate and move to the right
                 for (float i = 0; i < 2 * angle; i++)
                 {
-                    imageObject.rectTransform.Rotate(Vector3.forward, -speed);
-                    imageObject.rectTransform.localPosition += new Vector3(moveX, -moveY, 0);
+                    imageSvg.rectTransform.Rotate(Vector3.forward, -speed);
+                    imageSvg.rectTransform.localPosition += new Vector3(moveX, -moveY, 0);
                     yield return new WaitForSeconds(0.01f);
                 }
 
@@ -48,8 +53,8 @@ namespace MingoData.Scripts.Utils
                 // Rotate and move back to the left
                 for (float i = 0; i < angle; i++)
                 {
-                    imageObject.rectTransform.Rotate(Vector3.forward, speed);
-                    imageObject.rectTransform.localPosition += new Vector3(-moveX, moveY, 0);
+                    imageSvg.rectTransform.Rotate(Vector3.forward, speed);
+                    imageSvg.rectTransform.localPosition += new Vector3(-moveX, moveY, 0);
                     yield return new WaitForSeconds(0.01f);
                 }
 

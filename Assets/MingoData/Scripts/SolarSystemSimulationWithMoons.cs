@@ -74,7 +74,7 @@ namespace MingoData.Scripts
         {
             base.OnSwipeUp();
             // Only call the function if the panel is not open and a planet is selected
-            if (selectedPlanet == null && !uiHandler.isMenuPanelVisible && uiHandler.initialScanFinished)
+            if (!isPlanetSelected && !uiHandler.isMenuPanelVisible && uiHandler.initialScanFinished)
             {
                 uiHandler.ToggleMenuSliderPanel();
             }
@@ -90,7 +90,7 @@ namespace MingoData.Scripts
 
         protected override void OnDrag(Vector2 delta)
         {
-            if (selectedPlanet == null || uiHandler.isMenuPanelVisible)
+            if (!isPlanetSelected || uiHandler.isMenuPanelVisible)
                 return;
 
             const float rotationSpeed = 0.1f; // Adjust this value to change the rotation speed
@@ -567,19 +567,22 @@ namespace MingoData.Scripts
 // todo planets too big
 // todo fix translation
 // todo check camera permission
-// todo fix light range bs yekbar distance
+// todo fix light range on distance
 // todo add black background when planet selected
 // todo swipe icon not working 
+// todo fix solar dust 
+// todo add audio 
 
 // features
 // todo add swipe up icon
 // todo add layout legend divider 
 // todo add tutorial 
 // todo add pinch zoom to increase decrease size 
-// todo add size prespective
-// todo add toggle for normizaling the planets size 
+// todo add size perspective
+// todo add toggle for normalizing the planets size 
 // todo add songs and click sound
 // todo add seasons 
+// todo add solar dust toggle
 // todo add pov planets
 // todo document your code
 // todo add solar eclipse
@@ -590,9 +593,9 @@ namespace MingoData.Scripts
 // todo add login screen mtl ios planet background 
 // todo add smooth transition for selecting planets
 // TODO add SATURN RINGS 
-// todo add point of intresets on planets
+// todo add point of interests on planets
 // todo add history of the solar system 
-// todo add show inner structers
+// todo add show inner structures
 
 
 

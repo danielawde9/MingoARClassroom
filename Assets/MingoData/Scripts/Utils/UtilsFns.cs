@@ -39,7 +39,6 @@ namespace MingoData.Scripts.Utils
             // Set the created game object to a low priority by setting its sibling index to a lower value
             darkBackground.transform.SetSiblingIndex(0);
 
-
             return darkBackground;
         }
         
