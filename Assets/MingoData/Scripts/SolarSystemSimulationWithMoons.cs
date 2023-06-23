@@ -48,7 +48,7 @@ namespace MingoData.Scripts
         private static readonly Dictionary<GameObject, Vector3> OriginalScales = new Dictionary<GameObject, Vector3>();
 
         private List<string> loadedPlanets;
-        private readonly List<string> selectedFields = new List<string>()
+        private readonly List<string> selectedFields = new List<string>
         {
             "name",
             "diameter",
@@ -74,7 +74,7 @@ namespace MingoData.Scripts
         {
             base.OnSwipeUp();
             // Only call the function if the panel is not open and a planet is selected
-            if (!isPlanetSelected && !uiHandler.isMenuPanelVisible && uiHandler.initialScanFinished)
+            if (!isPlanetSelected && !uiHandler.shouldRayCastBeEnabled && uiHandler.initialScanFinished)
             {
                 uiHandler.ToggleMenuSliderPanel();
             }
@@ -90,7 +90,7 @@ namespace MingoData.Scripts
 
         protected override void OnDrag(Vector2 delta)
         {
-            if (!isPlanetSelected || uiHandler.isMenuPanelVisible)
+            if (!isPlanetSelected || uiHandler.shouldRayCastBeEnabled)
                 return;
 
             const float rotationSpeed = 0.1f; // Adjust this value to change the rotation speed
@@ -126,7 +126,7 @@ namespace MingoData.Scripts
                     }
                     break;
                 }
-                case true when !uiHandler.isMenuPanelVisible:
+                case true when !uiHandler.shouldRayCastBeEnabled:
                     DetectPlanetTouch(touchPosition);
                     break;
             }
@@ -169,7 +169,8 @@ namespace MingoData.Scripts
             isPlanetSelected = true;
 
             uiHandler.SetPlanetNameTextTitle(selectedPlanet.name, true);
-            uiHandler.ToggleSwipeIcon(true);
+            // todo make it at first time only
+            uiHandler.ToggleSwipeIcon();
             uiHandler.SetCelestialBodyData(SolarSystemUtility.planetDataDictionary[planet.name], selectedFields);
 
             // Save the original position and scale of the planet
@@ -223,7 +224,6 @@ namespace MingoData.Scripts
                 selectedPlanet.transform.localScale = scale;
             }
             uiHandler.SetPlanetNameTextTitle("", false);
-            uiHandler.ToggleSwipeIcon(false);
             uiHandler.SetCelestialBodyData(null, selectedFields);
             
             isPlanetSelected = false;

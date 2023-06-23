@@ -241,6 +241,11 @@
             "arabic": "أساطير الكواكب"
         },
         {
+            "key": "Instructions",
+            "english": "Instructions",
+            "arabic": "تعليمات"
+        },
+        {
             "key": "Move_your_phone_to_start_scanning_the_room",
             "english": "Move your phone to start scanning the room",
             "arabic": "حرك هاتفك لبدء فحص الغرفة"

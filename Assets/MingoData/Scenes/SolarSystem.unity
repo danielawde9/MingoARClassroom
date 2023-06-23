@@ -2840,9 +2840,9 @@ RectTransform:
   m_Father: {fileID: 313899655}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 1}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -62.49996, y: -85.005295}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 62.49996, y: -85.005295}
   m_SizeDelta: {x: 125, y: 125}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &571017797
@@ -4263,7 +4263,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1105738286}
   m_Direction: 2
   m_Value: 1
-  m_Size: 1
+  m_Size: 0.9998193
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -7595,7 +7595,7 @@ MonoBehaviour:
   sliderPanelToggleButton: {fileID: 1174029314}
   sliderPanelScrollRect: {fileID: 1781855274}
   initialScanFinished: 0
-  isMenuPanelVisible: 0
+  shouldRayCastBeEnabled: 0
   menuPlanetName: {fileID: 1618326869}
   returnPlanetButton: {fileID: 1749276728}
   returnToMainMenuButton: {fileID: 384687733}
@@ -7652,8 +7652,11 @@ MonoBehaviour:
     type: 3}
   scanRoomIcon: {fileID: 3286163911610860551, guid: 49c8768e7095d564ab89c3a620effafc,
     type: 3}
-  tapIcon: {fileID: 0}
-  swipeIcon: {fileID: 0}
+  tapIcon: {fileID: 3286163911610860551, guid: 5c9efc0a6556d9244851784028c33af6, type: 3}
+  swipeIcon: {fileID: 3286163911610860551, guid: b9828f14d6de92d4fbcca422d1bb3596,
+    type: 3}
+  swipeIconRotated: {fileID: 3286163911610860551, guid: 39a74c6fc841f4cdca45e9bf5bc428b6,
+    type: 3}
 --- !u!1 &1511909425
 GameObject:
   m_ObjectHideFlags: 0
@@ -9041,9 +9044,9 @@ RectTransform:
   m_Father: {fileID: 313899655}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 62.499985, y: -85.005295}
+  m_AnchorMin: {x: 1, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: -62.49996, y: -85.005295}
   m_SizeDelta: {x: 125, y: 125}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1749276730
@@ -10355,7 +10358,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 0, y: 3919.9998}
+  m_AnchoredPosition: {x: 0, y: 3919.999}
   m_SizeDelta: {x: -13, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1981951315

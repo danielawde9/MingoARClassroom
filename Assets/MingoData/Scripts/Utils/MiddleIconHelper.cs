@@ -12,7 +12,7 @@ namespace MingoData.Scripts.Utils
         public readonly TextMeshProUGUI middleIconsTopHelperTitleText;
         public readonly Button middleIconsTopHelperCloseButton;
         public readonly TextMeshProUGUI middleIconsTextHelper;
-        public Sprite bottomIconsImage;
+        public SVGImage bottomIconsImage;
 
         public MiddleIconHelper(GameObject gameObject)
         {
@@ -20,9 +20,8 @@ namespace MingoData.Scripts.Utils
             middleIconsTopHelper = gameObject.transform.Find("MiddleIconsTopHelper").gameObject;
             middleIconsTopHelperTitleText = gameObject.transform.Find("MiddleIconsTopHelper/MiddleIconsTopHelperTitleText").GetComponent<TextMeshProUGUI>();
             middleIconsTopHelperCloseButton = gameObject.transform.Find("MiddleIconsTopHelper/MiddleIconsTopHelperCloseButton").GetComponent<Button>();
-            middleIconsTextHelper = gameObject.transform.Find("MiddleIconsTextHelper").GetComponent<TextMeshProUGUI>();
-            GameObject middleIconsBottomHelper = gameObject.transform.Find("MiddleIconsBottomHelper/IconImage").gameObject;
-            bottomIconsImage = middleIconsBottomHelper.GetComponent<Sprite>();
+            middleIconsTextHelper = gameObject.transform.Find("MiddleIconsMiddleHelper/MiddleIconsTextHelper").GetComponent<TextMeshProUGUI>();
+            bottomIconsImage = gameObject.transform.Find("MiddleIconsBottomHelper/IconImage").GetComponent<SVGImage>();
         }
         
         public void Destroy()
