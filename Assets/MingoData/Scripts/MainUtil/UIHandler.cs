@@ -114,7 +114,8 @@ namespace MingoData.Scripts.MainUtil
         private MiddleIconHelper uiHelperAfterScan;
         private static MiddleIconHelper _uiHelperShowAfterClick;
         private static MiddleIconHelper _uiHelperSwipeToggle;
-
+        private UnityAction uiHelperShowAfterClickFunction;
+        private UnityAction uiHelperSwipeToggleFunction;
 
         private void OnPauseButtonClicked()
         {
@@ -138,8 +139,6 @@ namespace MingoData.Scripts.MainUtil
         {
             celestialBodyHandler.ReturnSelectedPlanetToOriginalState();
         }
-        private UnityAction uiHelperShowAfterClickFunction;
-        private UnityAction uiHelperSwipeToggleFunction;
 
         private void Awake()
         {
@@ -150,21 +149,9 @@ namespace MingoData.Scripts.MainUtil
             planetDistanceFromSunToggle.transform.gameObject.SetActive(false);
             planetShowGuidanceToggle.transform.gameObject.SetActive(false);
 
-            // todo hay 
-            uiHelperShowAfterClickFunction = () =>
-            {
-                _darkImageBackgroundInitialUI.SetActive(false);
-                _uiHelperShowAfterClick.Destroy();
-                shouldRayCastBeEnabled = false;
-            };
-
-
-            uiHelperSwipeToggleFunction = () =>
-            {
-                _darkImageBackgroundInitialUI.SetActive(false);
-                _uiHelperSwipeToggle.Destroy();
-                shouldRayCastBeEnabled = false;
-            };
+           
+            uiHelperShowAfterClickFunction = CreateUiHelperFunction(_uiHelperShowAfterClick);
+            uiHelperSwipeToggleFunction = CreateUiHelperFunction(_uiHelperSwipeToggle);
 
 
         }
@@ -619,6 +606,8 @@ namespace MingoData.Scripts.MainUtil
             sliderButtonToggleImage.transform.eulerAngles = new Vector3(0, 0, endRotation);
 
         }
+        
+        
 
         // This method will be called whenever the ScrollView's position changes
         private void OnUserScroll(Vector2 scrollPosition)
@@ -645,6 +634,16 @@ namespace MingoData.Scripts.MainUtil
             planetInfoLayout.SetActive(!isPlanetInfoActive);
             darkImageBackgroundPlanetInfo.SetActive(!isPlanetInfoActive);
             menuSliderPanel.SetActive(isPlanetInfoActive);
+        }
+        
+        private UnityAction CreateUiHelperFunction(MiddleIconHelper uiHelper)
+        {
+            return () =>
+            {
+                _darkImageBackgroundInitialUI.SetActive(false);
+                uiHelper.Destroy();
+                shouldRayCastBeEnabled = false;
+            };
         }
 
         private MiddleIconHelper SpawnMiddleIconHelper(string middleIconsTopHelperTitleKey, string middleIconsTextHelperKey, Sprite bottomIconsImage, UnityAction closeButtonFunctionAction,
