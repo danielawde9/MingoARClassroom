@@ -75,7 +75,7 @@ namespace MingoData.Scripts.Utils
                         break;
                     case Constants.LangAR:
                         result = string.Format(localizedText[key].arabic, formatArgs);
-                        // BUG NOTE: arabic coloring is not supported yet 
+                        //  NOTE: arabic coloring is not supported yet
                         result = ArabicFixer.Fix(result, true, true);
                         if (textComponent != null)
                         {
@@ -124,7 +124,7 @@ namespace MingoData.Scripts.Utils
                     textComponent.alignment = TextAlignmentOptions.MidlineLeft;
                     break;
                 case Constants.LangAR:
-                    // BUG NOTE: arabic coloring is not supported yet 
+                    // NOTE: arabic coloring is not supported yet 
                     result = string.Format(localizedText[timeUnitKey].arabic, timeValue);
                     result = ArabicFixer.Fix(result, true, true);
                     textComponent.isRightToLeftText = true;

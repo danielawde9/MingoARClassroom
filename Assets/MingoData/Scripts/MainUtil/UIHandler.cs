@@ -31,7 +31,7 @@ namespace MingoData.Scripts.MainUtil
         private GameObject darkImageBackgroundSliderPanel;
         public bool initialScanFinished;
         private RectTransform sliderButtonToggleRectTransform;
-        public bool shouldRayCastBeEnabled;
+        public bool isUIOverlayEnabled;
         private GameObject sliderButtonToggleImage;
         private RectTransform sliderPanelRectTransform;
         private const float sliderPanelTransitionDuration = 0.2f;
@@ -42,9 +42,11 @@ namespace MingoData.Scripts.MainUtil
 
         [Header("Top Menu Bar")]
         public TextMeshProUGUI menuPlanetName;
-        public GameObject returnPlanetButton;
+        public GameObject closePlanetButton;
         public GameObject returnToMainMenuButton;
-
+        public GameObject topMenuPlanetLayout;
+        public GameObject topMenuLayout;
+        
         [Header("Planet Info Center List")]
         public GameObject planetInfoButton;
         public GameObject planetInfoItemPrefab;
@@ -112,10 +114,9 @@ namespace MingoData.Scripts.MainUtil
         private static GameObject _darkImageBackgroundInitialUI;
         private MiddleIconHelper uiHelperInit;
         private MiddleIconHelper uiHelperAfterScan;
-        private static MiddleIconHelper _uiHelperShowAfterClick;
-        private static MiddleIconHelper _uiHelperSwipeToggle;
         private UnityAction uiHelperShowAfterClickFunction;
         private UnityAction uiHelperSwipeToggleFunction;
+        private readonly Dictionary<GameObject, int> siblingIndexes = new Dictionary<GameObject, int>();
 
         private void OnPauseButtonClicked()
         {
@@ -148,17 +149,13 @@ namespace MingoData.Scripts.MainUtil
             planetInclinationLineToggle.transform.gameObject.SetActive(false);
             planetDistanceFromSunToggle.transform.gameObject.SetActive(false);
             planetShowGuidanceToggle.transform.gameObject.SetActive(false);
-
-           
-            uiHelperShowAfterClickFunction = CreateUiHelperFunction(_uiHelperShowAfterClick);
-            uiHelperSwipeToggleFunction = CreateUiHelperFunction(_uiHelperSwipeToggle);
-
-
         }
 
         private void Start()
         {
             TranslationInit();
+
+            TopMenuInit();
 
             PlanetInfoInit();
 
@@ -173,7 +170,6 @@ namespace MingoData.Scripts.MainUtil
             SliderShadowInit();
 
         }
-
 
         private void PlanetInfoInit()
         {
@@ -197,7 +193,7 @@ namespace MingoData.Scripts.MainUtil
             Button returnToMainMenuButtonComponent = returnToMainMenuButton.GetComponent<Button>();
             returnToMainMenuButtonComponent.onClick.AddListener(ReturnToMainMenu);
 
-            Button returnButtonComponent = returnPlanetButton.GetComponent<Button>();
+            Button returnButtonComponent = closePlanetButton.GetComponent<Button>();
             returnButtonComponent.onClick.AddListener(OnReturnPlanetButtonClick);
 
             Button pauseButtonComponent = pauseButton.GetComponent<Button>();
@@ -210,6 +206,7 @@ namespace MingoData.Scripts.MainUtil
             playButtonComponent.onClick.AddListener(OnPlayButtonClicked);
 
         }
+
         private static void ReturnToMainMenu()
         {
             PlayerPrefs.SetString(Constants.SelectedPlanets, "");
@@ -260,28 +257,25 @@ namespace MingoData.Scripts.MainUtil
 
             SetToggleButtonSize(sliderButtonToggleRectTransform, 250);
         }
-
+        private void TopMenuInit()
+        {
+            ReverseOrderIfArabic(topMenuPlanetLayout.GetComponent<HorizontalLayoutGroup>());
+            StoreSiblingIndexes();
+        }
 
         public void ToggleMenuSliderPanel()
         {
-            // todo hay 
-            shouldRayCastBeEnabled = !shouldRayCastBeEnabled;
+            isUIOverlayEnabled = !isUIOverlayEnabled;
 
             startRotation = sliderButtonToggleImage.transform.eulerAngles.z;
-            endRotation = shouldRayCastBeEnabled ? startRotation + 180 : startRotation - 180;
+            endRotation = isUIOverlayEnabled ? startRotation + 180 : startRotation - 180;
 
-            if (shouldRayCastBeEnabled)
+            if (isUIOverlayEnabled)
             {
                 sliderPanelScrollRect.verticalNormalizedPosition = 1f;
                 SetToggleButtonSize(sliderButtonToggleRectTransform, 100);
                 darkImageBackgroundSliderPanel.SetActive(true);
                 StartCoroutine(TransitionPanel(initialPosition, targetPosition));
-                menuSliderPanel.transform.SetSiblingIndex(100);
-                // if (middleIconHelperGameObject.activeInHierarchy)
-                // todo change layout top if arabic,
-                // todo sibling index lal top menu kmn
-                // todo if i click on menu w fi planet waraha byetl3 planet
-                // ToggleMiddleIconHelper(false);
             }
             else
             {
@@ -352,19 +346,20 @@ namespace MingoData.Scripts.MainUtil
             planetShowGuidanceToggle.transform.gameObject.SetActive(true);
 
             HorizontalLayoutGroup planetDistanceFromSunToggleLayoutGroup = planetDistanceFromSunToggle.transform.parent.GetComponent<HorizontalLayoutGroup>();
-            planetDistanceFromSunToggleLayoutGroup.reverseArrangement = (localizationManager.GetCurrentLanguage() == Constants.LangAR);
-
+            ReverseOrderIfArabic(planetDistanceFromSunToggleLayoutGroup);
+            
             HorizontalLayoutGroup planetShowGuidanceToggleLayoutGroup = planetShowGuidanceToggle.transform.parent.GetComponent<HorizontalLayoutGroup>();
-            planetShowGuidanceToggleLayoutGroup.reverseArrangement = (localizationManager.GetCurrentLanguage() == Constants.LangAR);
-
+            ReverseOrderIfArabic(planetShowGuidanceToggleLayoutGroup);
+            
             HorizontalLayoutGroup planetNameToggleLayoutGroup = planetNameToggle.transform.parent.GetComponent<HorizontalLayoutGroup>();
-            planetNameToggleLayoutGroup.reverseArrangement = (localizationManager.GetCurrentLanguage() == Constants.LangAR);
-
+            ReverseOrderIfArabic(planetNameToggleLayoutGroup);
+            
             HorizontalLayoutGroup planetInclinationLineToggleLayoutGroup = planetInclinationLineToggle.transform.parent.GetComponent<HorizontalLayoutGroup>();
-            planetInclinationLineToggleLayoutGroup.reverseArrangement = (localizationManager.GetCurrentLanguage() == Constants.LangAR);
-
+            ReverseOrderIfArabic(planetInclinationLineToggleLayoutGroup);
+            
             HorizontalLayoutGroup orbitLineToggleLayoutGroup = orbitLineToggle.transform.parent.GetComponent<HorizontalLayoutGroup>();
-            orbitLineToggleLayoutGroup.reverseArrangement = (localizationManager.GetCurrentLanguage() == Constants.LangAR);
+            ReverseOrderIfArabic(orbitLineToggleLayoutGroup);
+            
         }
 
         private void ReverseOrderIfArabic(HorizontalOrVerticalLayoutGroup layoutGroup)
@@ -533,15 +528,15 @@ namespace MingoData.Scripts.MainUtil
                     OnPlanetClicked?.Invoke(planetData.name, true);
                 });
 
-                HorizontalLayoutGroup layoutGroup = imageComponent.transform.parent.GetComponent<HorizontalLayoutGroup>();
-                ReverseOrderIfArabic(layoutGroup);
+              //  HorizontalLayoutGroup layoutGroup = planetInfoLayout.GetComponent<HorizontalLayoutGroup>();
+
+              //  ReverseOrderIfArabic(layoutGroup);
 
             }
         }
 
         public void SetPlanetNameTextTitle(string text, bool showGameObjectHolder)
         {
-            menuPlanetName.transform.parent.gameObject.SetActive(showGameObjectHolder);
 
             // Use localizationManager to get the localized planet name
             string localizedPlanetName = localizationManager.GetLocalizedValue(text, menuPlanetName, false, Constants.ColorWhite);
@@ -553,8 +548,9 @@ namespace MingoData.Scripts.MainUtil
             }
 
             menuPlanetName.text = localizedPlanetName;
-
-            returnPlanetButton.SetActive(showGameObjectHolder);
+            
+            topMenuPlanetLayout.SetActive(showGameObjectHolder);
+            closePlanetButton.SetActive(showGameObjectHolder);
             returnToMainMenuButton.SetActive(!showGameObjectHolder);
             planetInfoButton.SetActive(showGameObjectHolder);
         }
@@ -568,7 +564,7 @@ namespace MingoData.Scripts.MainUtil
 
         private void UpdateDistanceScale(float value)
         {
-            celestialBodyHandler.UpdateDistanceScale(value); // Notify SolarSystemSimulationWithMoons
+            celestialBodyHandler.UpdateDistanceScale(value); 
 
             float realLifeDistance = 1f / value;
             menuDistanceText.text = localizationManager.GetLocalizedValue("1_meter_distance_equals", menuDistanceText, false, Constants.ColorGreen, realLifeDistance.ToString("N0"));
@@ -599,15 +595,13 @@ namespace MingoData.Scripts.MainUtil
                 yield return null;
             }
 
-
             sliderPanelRectTransform.anchoredPosition = endPosition;
 
             // Ensure the rotation finishes exactly at the end rotation
             sliderButtonToggleImage.transform.eulerAngles = new Vector3(0, 0, endRotation);
 
         }
-        
-        
+
 
         // This method will be called whenever the ScrollView's position changes
         private void OnUserScroll(Vector2 scrollPosition)
@@ -635,19 +629,19 @@ namespace MingoData.Scripts.MainUtil
             darkImageBackgroundPlanetInfo.SetActive(!isPlanetInfoActive);
             menuSliderPanel.SetActive(isPlanetInfoActive);
         }
-        
+
         private UnityAction CreateUiHelperFunction(MiddleIconHelper uiHelper)
         {
             return () =>
             {
                 _darkImageBackgroundInitialUI.SetActive(false);
                 uiHelper.Destroy();
-                shouldRayCastBeEnabled = false;
+                ResetSiblingIndexes();
+                isUIOverlayEnabled = false;
             };
         }
 
-        private MiddleIconHelper SpawnMiddleIconHelper(string middleIconsTopHelperTitleKey, string middleIconsTextHelperKey, Sprite bottomIconsImage, UnityAction closeButtonFunctionAction,
-            bool isMiddleIconsTopHelper)
+        private MiddleIconHelper SpawnMiddleIconHelper(string middleIconsTopHelperTitleKey, string middleIconsTextHelperKey, Sprite bottomIconsImage, bool isMiddleIconsTopHelper)
         {
             // Instantiate the prefab
             GameObject instance = Instantiate(middleIconHelperPrefab, transform);
@@ -665,20 +659,20 @@ namespace MingoData.Scripts.MainUtil
 
             helper.bottomIconsImage.sprite = bottomIconsImage;
 
-            // Clear the previous listeners
-            helper.middleIconsTopHelperCloseButton.onClick.RemoveAllListeners();
-
-            // Add the new listener
-            helper.middleIconsTopHelperCloseButton.onClick.AddListener(closeButtonFunctionAction);
-
             // Set the activity of the top helper
             helper.middleIconsTopHelper.SetActive(isMiddleIconsTopHelper);
 
             if (isMiddleIconsTopHelper)
             {
-                returnPlanetButton.transform.parent.transform.SetSiblingIndex(0);
-                menuSliderPanel.transform.SetSiblingIndex(0);
-                shouldRayCastBeEnabled = true;
+                helper.middleIconsTopHelperCloseButton.onClick.RemoveAllListeners();
+
+                UnityAction uiHelperFunction = CreateUiHelperFunction(helper);
+
+                helper.middleIconsTopHelperCloseButton.onClick.AddListener(uiHelperFunction);
+
+                SetSiblingIndexes();
+                
+                isUIOverlayEnabled = true;
             }
 
             HorizontalLayoutGroup layoutGroup = helper.middleIconsTopHelper.GetComponent<HorizontalLayoutGroup>();
@@ -689,7 +683,6 @@ namespace MingoData.Scripts.MainUtil
             return helper;
         }
 
-
         public void UIShowInitial()
         {
 
@@ -697,15 +690,12 @@ namespace MingoData.Scripts.MainUtil
                 "",
                 "Move_your_phone_to_start_scanning_the_room",
                 scanRoomIcon,
-                null,
                 false);
 
             _darkImageBackgroundInitialUI = UtilsFns.CreateDarkBackground("InitialUI");
-
-            planetInfoLayout.SetActive(false);
-            returnPlanetButton.SetActive(false);
+            
+            topMenuPlanetLayout.SetActive(false);
             menuSliderPanel.SetActive(false);
-            planetInfoButton.SetActive(false);
         }
 
         public void UIShowAfterScan()
@@ -716,7 +706,6 @@ namespace MingoData.Scripts.MainUtil
                 "",
                 "Tap_on_the_scanned_area_to_place_the_solar_system",
                 tapIcon,
-                null,
                 false);
 
             initialScanFinished = true;
@@ -728,34 +717,46 @@ namespace MingoData.Scripts.MainUtil
 
             uiHelperAfterScan.Destroy();
 
-            _uiHelperShowAfterClick = SpawnMiddleIconHelper(
+            SpawnMiddleIconHelper(
                 "Instructions",
                 "Click_on_any_planet_or_click_on_the_menu_below_to_display_more_settings",
                 swipeIconRotated,
-                uiHelperShowAfterClickFunction,
                 true);
 
             menuSliderPanel.SetActive(true);
-            returnPlanetButton.SetActive(false);
+            closePlanetButton.SetActive(false);
             planetInfoButton.SetActive(false);
         }
-
 
         public void ToggleSwipeIcon()
         {
             _darkImageBackgroundInitialUI.SetActive(true);
 
-            _uiHelperSwipeToggle = SpawnMiddleIconHelper(
+            SpawnMiddleIconHelper(
                 "Instructions",
                 "Touch_and_drag_to_move_the_planet_Around",
                 swipeIcon,
-                uiHelperSwipeToggleFunction,
                 true);
 
         }
 
-
-
+        private void StoreSiblingIndexes()
+        {
+            // siblingIndexes[closePlanetButton] = closePlanetButton.transform.GetSiblingIndex();
+            siblingIndexes[menuSliderPanel] = menuSliderPanel.transform.GetSiblingIndex();
+            siblingIndexes[topMenuLayout] = topMenuLayout.transform.GetSiblingIndex();
+        }
+        private void SetSiblingIndexes()
+        {
+            // closePlanetButton.transform.SetSiblingIndex(0);
+            menuSliderPanel.transform.SetSiblingIndex(0);
+            topMenuLayout.transform.SetSiblingIndex(0);
+        }
+        private void ResetSiblingIndexes()
+        {
+            // closePlanetButton.transform.SetSiblingIndex(siblingIndexes[closePlanetButton]);
+            menuSliderPanel.transform.SetSiblingIndex(siblingIndexes[menuSliderPanel]);
+            topMenuLayout.transform.SetSiblingIndex(siblingIndexes[topMenuLayout]);
+        }
     }
-
 }

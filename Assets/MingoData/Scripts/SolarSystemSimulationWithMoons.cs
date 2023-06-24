@@ -74,7 +74,7 @@ namespace MingoData.Scripts
         {
             base.OnSwipeUp();
             // Only call the function if the panel is not open and a planet is selected
-            if (!isPlanetSelected && !uiHandler.shouldRayCastBeEnabled && uiHandler.initialScanFinished)
+            if (!isPlanetSelected && !uiHandler.isUIOverlayEnabled && uiHandler.initialScanFinished)
             {
                 uiHandler.ToggleMenuSliderPanel();
             }
@@ -90,7 +90,7 @@ namespace MingoData.Scripts
 
         protected override void OnDrag(Vector2 delta)
         {
-            if (!isPlanetSelected || uiHandler.shouldRayCastBeEnabled)
+            if (!isPlanetSelected || uiHandler.isUIOverlayEnabled)
                 return;
 
             const float rotationSpeed = 0.1f; // Adjust this value to change the rotation speed
@@ -126,7 +126,7 @@ namespace MingoData.Scripts
                     }
                     break;
                 }
-                case true when !uiHandler.shouldRayCastBeEnabled:
+                case true when !uiHandler.isUIOverlayEnabled:
                     DetectPlanetTouch(touchPosition);
                     break;
             }
@@ -169,7 +169,7 @@ namespace MingoData.Scripts
             isPlanetSelected = true;
 
             uiHandler.SetPlanetNameTextTitle(selectedPlanet.name, true);
-            // todo make it at first time only
+            
             uiHandler.ToggleSwipeIcon();
             uiHandler.SetCelestialBodyData(SolarSystemUtility.planetDataDictionary[planet.name], selectedFields);
 
@@ -334,9 +334,11 @@ namespace MingoData.Scripts
         private void Start()
         {
             canvas = uiHandler.GetComponent<Canvas>();
+         
             string savedPlanetsString = PlayerPrefs.GetString(Constants.SelectedPlanets, "");
-            loadedPlanets = new List<string>(savedPlanetsString.Split(','));
             string selectedLang = PlayerPrefs.GetString(Constants.SelectedLanguage, Constants.LangEn);
+
+            loadedPlanets = new List<string>(savedPlanetsString.Split(','));
             localizationManager.SetLanguage(selectedLang);
             localizationManager.LoadLocalizedText();
 

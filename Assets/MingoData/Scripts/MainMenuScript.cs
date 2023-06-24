@@ -104,11 +104,6 @@ namespace MingoData.Scripts
 
             }
             proceedButton.interactable = selectedPlanets.Count > 0;
-
-            Debug.Log("Currently selected planets: " + string.Join(", ", selectedPlanets));
         }
-
-
     }
-
 }
