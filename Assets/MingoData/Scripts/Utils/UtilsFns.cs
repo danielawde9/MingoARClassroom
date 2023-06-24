@@ -46,6 +46,15 @@ namespace MingoData.Scripts.Utils
         {
             SceneManager.LoadScene(sceneName);
         }
+        
+        public static void BringToFront(GameObject uiElement)
+        {
+            Canvas parentCanvas = uiElement.GetComponentInParent<Canvas>();
+            if (parentCanvas != null)
+            {
+                uiElement.transform.SetSiblingIndex(parentCanvas.transform.childCount - 1);
+            }
+        }
 
         public static (string timeUnitKey, string timeValue) TimeScaleConversion(float timeScale)
         {
@@ -205,27 +214,20 @@ namespace MingoData.Scripts.Utils
             lightComponent.color = Color.white;
             lightComponent.intensity = 1.0f;
 
-            // todo later on fix it
-            // List of planets in the correct order
-            List<string> planetOrder = new List<string> { "Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto" };
-
-            // Find the last planet from the order which is also in the allowedPlanets list and the localPlanetDataDictionary
-            string lastAllowedPlanet = planetOrder.LastOrDefault(planet => allowedPlanets.Contains(planet) && localPlanetDataDictionary.ContainsKey(planet));
+            // Find the last planet from the localPlanetDataDictionary order
+            string lastAllowedPlanet = localPlanetDataDictionary.Keys.Reverse().FirstOrDefault(allowedPlanets.Contains);
 
             if (lastAllowedPlanet != null && localPlanetDataDictionary.TryGetValue(lastAllowedPlanet, out PlanetData lastPlanetData))
             {
-                float distanceToPluto = lastPlanetData.distanceFromSun * distanceScale * 10;
-                Debug.Log("Distance from Sun to " + lastPlanetData.name + ": " + distanceToPluto);
+                float distanceToLastPlanet = lastPlanetData.distanceFromSun * distanceScale * 10;
+                Debug.Log("Distance from Sun to " + lastPlanetData.name + ": " + distanceToLastPlanet);
 
                 // Adjust the range of the directional light
-                lightComponent.range = distanceToPluto;
+                lightComponent.range = distanceToLastPlanet;
             }
 
             directionalLight.transform.SetParent(sunTransform);
             directionalLight.transform.localPosition = Vector3.zero;
         }
-
-
     }
-
 }

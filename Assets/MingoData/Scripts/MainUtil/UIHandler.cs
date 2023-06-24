@@ -22,7 +22,6 @@ namespace MingoData.Scripts.MainUtil
         [SerializeField]
         private LocalizationManager localizationManager;
 
-
         [Header("Panel Menu")]
         public GameObject menuSliderPanel;
         public GameObject sliderPanelToggleButton;
@@ -74,17 +73,12 @@ namespace MingoData.Scripts.MainUtil
         public TextMeshProUGUI planetNameToggleTextMeshPro;
         public TextMeshProUGUI planetInclinationLineToggleTextMeshPro;
         public TextMeshProUGUI orbitLineToggleTextMeshPro;
-        // todo later
-        [HideInInspector]
-        public UnityEvent<bool> onPlanetNameToggleValueChanged;
-        [HideInInspector]
-        public UnityEvent<bool> onOrbitLineToggleValueChanged;
-        [HideInInspector]
-        public UnityEvent<bool> onPlanetInclinationLineToggleValueChanged;
-        [HideInInspector]
-        public UnityEvent<bool> onDistanceFromSunToggleValueChanged;
-        [HideInInspector]
-        public UnityEvent<bool> onPlanetShowGuidanceToggleValueChanged;
+        public UnityAction<bool> onPlanetNameToggleValueChanged;
+        public UnityAction<bool> onOrbitLineToggleValueChanged;
+        public UnityAction<bool> onPlanetInclinationLineToggleValueChanged;
+        public UnityAction<bool> onDistanceFromSunToggleValueChanged;
+        public UnityAction<bool> onPlanetShowGuidanceToggleValueChanged;
+
 
         [Header("Solar System Slider")]
         public TextMeshProUGUI solarSystemSliderTitle;
@@ -126,13 +120,13 @@ namespace MingoData.Scripts.MainUtil
 
         private void OnFastForwardButtonClicked()
         {
-            celestialBodyHandler.timeScale *= 2; // double the speed
+            celestialBodyHandler.timeScale *= 2; 
             UpdateTimeScale(celestialBodyHandler.timeScale);
         }
 
         private void OnPlayButtonClicked()
         {
-            celestialBodyHandler.timeScale = 1; // reset to real-time
+            celestialBodyHandler.timeScale = 1; 
             UpdateTimeScale(celestialBodyHandler.timeScale);
         }
 
@@ -143,7 +137,7 @@ namespace MingoData.Scripts.MainUtil
 
         private void Awake()
         {
-            // Bug Note: these are added here due to weird error set initially all the toggles are false then in start set them active 
+            // Note: these are added here due to weird error set initially all the toggles are false then in start set them active 
             orbitLineToggle.transform.gameObject.SetActive(false);
             planetNameToggle.transform.gameObject.SetActive(false);
             planetInclinationLineToggle.transform.gameObject.SetActive(false);
@@ -333,11 +327,12 @@ namespace MingoData.Scripts.MainUtil
             planetDistanceFromSunToggle.isOn = false;
             planetShowGuidanceToggle.isOn = true;
 
-            planetShowGuidanceToggle.onValueChanged.AddListener((isOn) => { onPlanetShowGuidanceToggleValueChanged?.Invoke(isOn); });
-            planetDistanceFromSunToggle.onValueChanged.AddListener((isOn) => { onDistanceFromSunToggleValueChanged?.Invoke(isOn); });
-            orbitLineToggle.onValueChanged.AddListener((isOn) => { onOrbitLineToggleValueChanged?.Invoke(isOn); });
-            planetNameToggle.onValueChanged.AddListener((isOn) => { onPlanetNameToggleValueChanged?.Invoke(isOn); });
-            planetInclinationLineToggle.onValueChanged.AddListener((isOn) => { onPlanetInclinationLineToggleValueChanged?.Invoke(isOn); });
+            planetShowGuidanceToggle.onValueChanged.AddListener(onPlanetShowGuidanceToggleValueChanged);
+            planetDistanceFromSunToggle.onValueChanged.AddListener(onDistanceFromSunToggleValueChanged);
+            orbitLineToggle.onValueChanged.AddListener(onOrbitLineToggleValueChanged);
+            planetNameToggle.onValueChanged.AddListener(onPlanetNameToggleValueChanged);
+            planetInclinationLineToggle.onValueChanged.AddListener(onPlanetInclinationLineToggleValueChanged);
+
 
             orbitLineToggle.transform.gameObject.SetActive(true);
             planetNameToggle.transform.gameObject.SetActive(true);
@@ -528,10 +523,6 @@ namespace MingoData.Scripts.MainUtil
                     OnPlanetClicked?.Invoke(planetData.name, true);
                 });
 
-              //  HorizontalLayoutGroup layoutGroup = planetInfoLayout.GetComponent<HorizontalLayoutGroup>();
-
-              //  ReverseOrderIfArabic(layoutGroup);
-
             }
         }
 
@@ -694,6 +685,7 @@ namespace MingoData.Scripts.MainUtil
 
             _darkImageBackgroundInitialUI = UtilsFns.CreateDarkBackground("InitialUI");
             
+            planetInfoLayout.SetActive(false);
             topMenuPlanetLayout.SetActive(false);
             menuSliderPanel.SetActive(false);
         }
@@ -731,32 +723,30 @@ namespace MingoData.Scripts.MainUtil
         public void ToggleSwipeIcon()
         {
             _darkImageBackgroundInitialUI.SetActive(true);
-
             SpawnMiddleIconHelper(
                 "Instructions",
                 "Touch_and_drag_to_move_the_planet_Around",
                 swipeIcon,
                 true);
-
         }
 
         private void StoreSiblingIndexes()
         {
-            // siblingIndexes[closePlanetButton] = closePlanetButton.transform.GetSiblingIndex();
             siblingIndexes[menuSliderPanel] = menuSliderPanel.transform.GetSiblingIndex();
             siblingIndexes[topMenuLayout] = topMenuLayout.transform.GetSiblingIndex();
         }
+        
         private void SetSiblingIndexes()
         {
-            // closePlanetButton.transform.SetSiblingIndex(0);
             menuSliderPanel.transform.SetSiblingIndex(0);
             topMenuLayout.transform.SetSiblingIndex(0);
         }
+        
         private void ResetSiblingIndexes()
         {
-            // closePlanetButton.transform.SetSiblingIndex(siblingIndexes[closePlanetButton]);
             menuSliderPanel.transform.SetSiblingIndex(siblingIndexes[menuSliderPanel]);
             topMenuLayout.transform.SetSiblingIndex(siblingIndexes[topMenuLayout]);
+            UtilsFns.BringToFront(menuSliderPanel);
         }
     }
 }

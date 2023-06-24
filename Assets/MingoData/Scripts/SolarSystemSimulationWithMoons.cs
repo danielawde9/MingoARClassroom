@@ -347,11 +347,12 @@ namespace MingoData.Scripts
             uiHandler.onUpdateSizeScaleSlider += UpdateSizeScale;
             uiHandler.onUpdateDistanceScaleSlider += UpdateDistanceScale;
 
-            uiHandler.onPlanetNameToggleValueChanged.AddListener(UpdatePlanetNameVisibility);
-            uiHandler.onPlanetInclinationLineToggleValueChanged.AddListener(UpdateInclinationLineVisibility);
-            uiHandler.onOrbitLineToggleValueChanged.AddListener(UpdateOrbitLineVisibility);
-            uiHandler.onDistanceFromSunToggleValueChanged.AddListener(UpdateDistanceFromSunVisibility);
-            uiHandler.onPlanetShowGuidanceToggleValueChanged.AddListener(UpdateTogglePlanetGuidanceVisibility);
+            uiHandler.onPlanetNameToggleValueChanged = UpdatePlanetNameVisibility;
+            uiHandler.onOrbitLineToggleValueChanged = UpdateOrbitLineVisibility;
+            uiHandler.onPlanetInclinationLineToggleValueChanged = UpdateInclinationLineVisibility;
+            uiHandler.onDistanceFromSunToggleValueChanged = UpdateDistanceFromSunVisibility;
+            uiHandler.onPlanetShowGuidanceToggleValueChanged = UpdateTogglePlanetGuidanceVisibility;
+            
 
             uiHandler.SetCelestialBodyData(null, selectedFields);
 

@@ -985,8 +985,8 @@ RectTransform:
   - {fileID: 1371985238}
   - {fileID: 76012887}
   - {fileID: 402298340}
-  - {fileID: 174560848}
   - {fileID: 921379635}
+  - {fileID: 174560848}
   m_Father: {fileID: 219965594}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4261,7 +4261,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1105738286}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.86569774
+  m_Size: 0
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -7670,7 +7670,7 @@ MonoBehaviour:
     type: 3}
   planetInfoItemListParent: {fileID: 1581385942}
   planetInfoListItemParentTitle: {fileID: 2013859560}
-  planetInfoLayout: {fileID: 649544858}
+  planetInfoLayout: {fileID: 1914296622}
   planetInfoCloseButton: {fileID: 1681072991}
   planetLegendsListTitle: {fileID: 1532080737}
   legendItemPrefab: {fileID: 8928009388362277743, guid: 56b4d558652b0e14c91d477d73a5a583,
@@ -7687,21 +7687,6 @@ MonoBehaviour:
   planetNameToggleTextMeshPro: {fileID: 1007148641}
   planetInclinationLineToggleTextMeshPro: {fileID: 1702546275}
   orbitLineToggleTextMeshPro: {fileID: 1777596911}
-  onPlanetNameToggleValueChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  onOrbitLineToggleValueChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  onPlanetInclinationLineToggleValueChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  onDistanceFromSunToggleValueChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  onPlanetShowGuidanceToggleValueChanged:
-    m_PersistentCalls:
-      m_Calls: []
   solarSystemSliderTitle: {fileID: 1866458184}
   timeScaleSlider: {fileID: 1908259661}
   sizeScaleSlider: {fileID: 278886603}
@@ -9824,10 +9809,10 @@ RectTransform:
   m_Father: {fileID: 1914296623}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 500, y: -919.61786}
+  m_SizeDelta: {x: 1000, y: 1839.2357}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1855374324
 MonoBehaviour:

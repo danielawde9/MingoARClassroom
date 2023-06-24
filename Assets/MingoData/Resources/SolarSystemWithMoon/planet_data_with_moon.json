@@ -1,6 +1,24 @@
   {
     "planets": [
       {
+        "name": "Sun",
+        "diameter": 1392000,
+        "rotationPeriod": 24.47,
+        "lengthOfDay": 24.47,
+        "distanceFromSun": 0,
+        "perihelion": 0,
+        "aphelion": 0,
+        "orbitalPeriod": 0,
+        "orbitalVelocity": 0,
+        "orbitalInclination": 0,
+        "orbitalEccentricity": 0,
+        "obliquityToOrbit": 7.25,
+        "prefabName": "SolarSystemWithMoon/Sun",
+        "planetColor": "#FDCF13",
+        "moons": [],
+        "rings": []
+      },
+      {
         "name": "Mercury",
         "diameter": 4879,
         "rotationPeriod": 1407.6,
@@ -358,24 +376,6 @@
             "prefabName": "SolarSystemWithMoon/Charon"
           }
         ],
-        "rings": []
-      },
-      {
-        "name": "Sun",
-        "diameter": 1392000,
-        "rotationPeriod": 24.47,
-        "lengthOfDay": 24.47,
-        "distanceFromSun": 0,
-        "perihelion": 0,
-        "aphelion": 0,
-        "orbitalPeriod": 0,
-        "orbitalVelocity": 0,
-        "orbitalInclination": 0,
-        "orbitalEccentricity": 0,
-        "obliquityToOrbit": 7.25,
-        "prefabName": "SolarSystemWithMoon/Sun",
-        "planetColor": "#FDCF13",
-        "moons": [],
         "rings": []
       }
     ]
