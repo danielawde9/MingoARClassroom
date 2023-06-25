@@ -117,6 +117,7 @@ namespace MingoData.Scripts
                         SpawnPlanets(placementPosition);
                         uiHandler.UIShowAfterClick();
                         isSolarSystemPlaced = true;
+                        
                         mPlaneManager.enabled = false;
                     }
                     else
