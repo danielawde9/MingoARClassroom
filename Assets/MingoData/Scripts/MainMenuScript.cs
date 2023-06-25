@@ -19,6 +19,8 @@ namespace MingoData.Scripts
         public Sprite checkedImage;
         public Sprite unCheckedImage;
         public ToggleGroup chooseLangToggleGroup;
+        public AudioSource clickAudioSource;
+
         private void Start()
         {
             Application.targetFrameRate = 60;
@@ -72,6 +74,7 @@ namespace MingoData.Scripts
 
         private void LoadSolarSystemScene()
         {
+            PlayClickSound();
             Toggle activeToggle = chooseLangToggleGroup.ActiveToggles().FirstOrDefault();
             // Save the name of the selected planet from the toggle group to PlayerPrefs
             if (activeToggle != null)
@@ -87,10 +90,15 @@ namespace MingoData.Scripts
             UtilsFns.LoadNewScene("SolarSystem");
         }
 
+        public void PlayClickSound()
+        {
+            clickAudioSource.Play();
+        }
 
         private void TogglePlanet(Image toggleImage, Toggle toggle, string planetName)
         {
-
+            PlayClickSound();
+            
             if (toggle.isOn)
             {
                 if (!selectedPlanets.Contains(planetName))

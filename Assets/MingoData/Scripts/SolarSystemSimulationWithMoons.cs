@@ -41,6 +41,7 @@ namespace MingoData.Scripts
         private bool isSolarSystemPlaced;
         private bool isPlanetGuidanceActive = true;
         private bool isPlanetSelected;
+        private bool isDistanceFromSunVisible;
 
         private const float planetSelectedScale = 0.5f;
 
@@ -68,7 +69,6 @@ namespace MingoData.Scripts
             "completedSelfRotations"
         };
         
-        private bool isDistanceFromSunVisible;
 
         protected override void OnSwipeUp()
         {
@@ -371,6 +371,7 @@ namespace MingoData.Scripts
         
         private void SpawnPlanets(Vector3 placedTouchPosition)
         {
+            uiHandler.PlayClickSound();
             parentDistanceLinesObject = new GameObject("ParentDistanceLines");
             Quaternion rotationCorrection = Quaternion.Euler(0, 0, 0);
 
@@ -588,6 +589,8 @@ namespace MingoData.Scripts
 // todo add animation for middle helper 
 
 // features
+// todo add toggle for sound  
+// todo populate language from the translation json 
 // todo add swipe up icon
 // todo add layout legend divider 
 // todo add tutorial 

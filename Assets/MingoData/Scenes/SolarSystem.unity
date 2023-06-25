@@ -8141,9 +8141,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   celestialBodyHandler: {fileID: 1016334708}
   localizationManager: {fileID: 1016334707}
-  audioSource: {fileID: 1510672711}
-  clickSound: {fileID: 8300000, guid: a8dffbba4cdab435991a89773b25ac69, type: 3}
-  slidingSound: {fileID: 8300000, guid: 39fff71d01b484eeb9271c55043c4ab4, type: 3}
+  clickAudioSource: {fileID: 1510672711}
+  sineWaveGenerator: {fileID: 0}
   menuSliderPanel: {fileID: 772092435}
   sliderPanelToggleButton: {fileID: 1174029314}
   sliderPanelScrollRect: {fileID: 1781855274}
@@ -10994,7 +10993,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 0, y: 2920}
+  m_AnchoredPosition: {x: 0, y: 2920.0005}
   m_SizeDelta: {x: -13, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1981951315

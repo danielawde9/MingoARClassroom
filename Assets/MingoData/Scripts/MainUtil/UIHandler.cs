@@ -21,9 +21,7 @@ namespace MingoData.Scripts.MainUtil
         private SolarSystemSimulationWithMoons celestialBodyHandler;
         [SerializeField]
         private LocalizationManager localizationManager;
-        public AudioSource audioSource;
-        public AudioClip clickSound;
-        public AudioClip slidingSound;
+        public AudioSource clickAudioSource;
 
         [Header("Panel Menu")]
         public GameObject menuSliderPanel;
@@ -136,7 +134,6 @@ namespace MingoData.Scripts.MainUtil
             celestialBodyHandler.timeScale = 1;
             UpdateTimeScale(celestialBodyHandler.timeScale);
             PlayClickSound();
-
         }
 
         private void OnPlanetInfoPanelToggleOnOffClicked()
@@ -164,12 +161,7 @@ namespace MingoData.Scripts.MainUtil
         }
         public void PlayClickSound()
         {
-            audioSource.PlayOneShot(clickSound);
-        }
-        
-        public void PlaySliderSound(float value)
-        {
-            audioSource.PlayOneShot(slidingSound);
+            clickAudioSource.Play();
         }
 
         private void Awake()
@@ -414,7 +406,6 @@ namespace MingoData.Scripts.MainUtil
             timeScaleSlider.onValueChanged.AddListener(onUpdateTimeScaleSlider);
             sizeScaleSlider.onValueChanged.AddListener(onUpdateSizeScaleSlider);
             distanceScaleSlider.onValueChanged.AddListener(onUpdateDistanceScaleSlider);
-
         }
 
         public void SetCelestialBodyData(CelestialBodyData celestialBodyData, List<string> selectedFields)
@@ -596,6 +587,7 @@ namespace MingoData.Scripts.MainUtil
 
         private void UpdateTimeScale(float value)
         {
+            
             celestialBodyHandler.UpdateTimeScale(value);
             string timeText = localizationManager.GetLocalizedTimeValue(value, menuTimeText, Constants.ColorGreen);
             menuTimeText.text = timeText;
@@ -776,5 +768,4 @@ namespace MingoData.Scripts.MainUtil
             UtilsFns.BringToFront(menuSliderPanel);
         }
     }
-
 }
