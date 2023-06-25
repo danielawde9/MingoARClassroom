@@ -393,8 +393,6 @@ namespace MingoData.Scripts
                 UtilsFns.CreateOrbitLine(planet.celestialBodyInstance, planet, (body, angle) => SolarSystemUtility.CalculatePlanetPosition((PlanetData)body, angle, distanceScale));
             }
         }
-
-
         private void InstantiatePlanet(PlanetData planet, Vector3 placedTouchPosition, Quaternion rotationCorrection)
         {
             GameObject planetPrefab = Resources.Load<GameObject>(planet.prefabName);
@@ -451,7 +449,6 @@ namespace MingoData.Scripts
             }
             return Constants.InitialSizeScale * planet.diameter;
         }
-
 
         private void SelectPlanetByName(string planetName, bool toggleMenuOn)
         {
@@ -583,10 +580,10 @@ namespace MingoData.Scripts
 // todo check camera permission
 // todo fix light range on distance
 // todo add black background when planet selected
-// todo swipe icon not working 
 // todo fix solar dust 
-// todo add audio 
+// todo add audio toggle
 // todo add animation for middle helper 
+// todo if i press the the bottom menu and planet behind it it select the planet 
 
 // features
 // todo add toggle for sound  
@@ -613,8 +610,6 @@ namespace MingoData.Scripts
 // todo add point of interests on planets
 // todo add history of the solar system 
 // todo add show inner structures
-
-
 
 
 // in update function 
