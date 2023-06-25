@@ -167,7 +167,8 @@ namespace MingoData.Scripts
 
             selectedPlanet = planet;
             isPlanetSelected = true;
-
+            
+            uiHandler.PlayClickSound();
             uiHandler.SetPlanetNameTextTitle(selectedPlanet.name, true);
             
             uiHandler.ToggleSwipeIcon();
@@ -260,7 +261,7 @@ namespace MingoData.Scripts
             }
         }
 
-        private static void UpdateCelestialBodyScale(CelestialBodyData body, float newSizeScaleFactor)
+        private  void UpdateCelestialBodyScale(CelestialBodyData body, float newSizeScaleFactor)
         {
             if (body.name == Constants.PlanetSun)
                 return;
@@ -268,8 +269,10 @@ namespace MingoData.Scripts
             body.celestialBodyInstance.transform.localScale = new Vector3(scale, scale, scale);
         }
 
-        private static void UpdatePlanetNameVisibility(bool isOn)
+        private void UpdatePlanetNameVisibilityToggle(bool isOn)
         {
+            uiHandler.PlayClickSound();
+
             foreach (PlanetData planet in SolarSystemUtility.planetDataDictionary.Values)
             {
                 GameObject planetInstance = planet.celestialBodyInstance;
@@ -278,8 +281,10 @@ namespace MingoData.Scripts
             }
         }
 
-        private static void UpdateInclinationLineVisibility(bool isOn)
+        private void UpdateInclinationLineVisibilityToggle(bool isOn)
         {
+            uiHandler.PlayClickSound();
+
             foreach (PlanetData planet in SolarSystemUtility.planetDataDictionary.Values)
             {
                 GameObject planetInstance = planet.celestialBodyInstance;
@@ -295,8 +300,10 @@ namespace MingoData.Scripts
             }
         }
 
-        private static void UpdateOrbitLineVisibility(bool isOn)
+        private void UpdateOrbitLineVisibilityToggle(bool isOn)
         {
+            uiHandler.PlayClickSound();
+
             foreach (PlanetData planet in SolarSystemUtility.planetDataDictionary.Values)
             {
                 GameObject planetInstance = planet.celestialBodyInstance;
@@ -305,8 +312,10 @@ namespace MingoData.Scripts
             }
         }
         
-        private void UpdateDistanceFromSunVisibility(bool isOn)
+        private void UpdateDistanceFromSunVisibilityToggle(bool isOn)
         {
+            uiHandler.PlayClickSound();
+
             isDistanceFromSunVisible = isOn;
             foreach (Transform child in parentDistanceLinesObject.transform)
             {
@@ -314,8 +323,9 @@ namespace MingoData.Scripts
             }
         }
 
-        private void UpdateTogglePlanetGuidanceVisibility(bool isOn)
+        private void UpdateTogglePlanetGuidanceVisibilityToggle(bool isOn)
         {
+            uiHandler.PlayClickSound();
             isPlanetGuidanceActive = isOn;
             foreach (PlanetData planet in SolarSystemUtility.planetDataDictionary.Values)
             {
@@ -347,11 +357,11 @@ namespace MingoData.Scripts
             uiHandler.onUpdateSizeScaleSlider += UpdateSizeScale;
             uiHandler.onUpdateDistanceScaleSlider += UpdateDistanceScale;
 
-            uiHandler.onPlanetNameToggleValueChanged = UpdatePlanetNameVisibility;
-            uiHandler.onOrbitLineToggleValueChanged = UpdateOrbitLineVisibility;
-            uiHandler.onPlanetInclinationLineToggleValueChanged = UpdateInclinationLineVisibility;
-            uiHandler.onDistanceFromSunToggleValueChanged = UpdateDistanceFromSunVisibility;
-            uiHandler.onPlanetShowGuidanceToggleValueChanged = UpdateTogglePlanetGuidanceVisibility;
+            uiHandler.onPlanetNameToggleValueChanged = UpdatePlanetNameVisibilityToggle;
+            uiHandler.onOrbitLineToggleValueChanged = UpdateOrbitLineVisibilityToggle;
+            uiHandler.onPlanetInclinationLineToggleValueChanged = UpdateInclinationLineVisibilityToggle;
+            uiHandler.onDistanceFromSunToggleValueChanged = UpdateDistanceFromSunVisibilityToggle;
+            uiHandler.onPlanetShowGuidanceToggleValueChanged = UpdateTogglePlanetGuidanceVisibilityToggle;
             
 
             uiHandler.SetCelestialBodyData(null, selectedFields);
@@ -575,6 +585,7 @@ namespace MingoData.Scripts
 // todo swipe icon not working 
 // todo fix solar dust 
 // todo add audio 
+// todo add animation for middle helper 
 
 // features
 // todo add swipe up icon

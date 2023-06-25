@@ -21,6 +21,9 @@ namespace MingoData.Scripts.MainUtil
         private SolarSystemSimulationWithMoons celestialBodyHandler;
         [SerializeField]
         private LocalizationManager localizationManager;
+        public AudioSource audioSource;
+        public AudioClip clickSound;
+        public AudioClip slidingSound;
 
         [Header("Panel Menu")]
         public GameObject menuSliderPanel;
@@ -45,7 +48,7 @@ namespace MingoData.Scripts.MainUtil
         public GameObject returnToMainMenuButton;
         public GameObject topMenuPlanetLayout;
         public GameObject topMenuLayout;
-        
+
         [Header("Planet Info Center List")]
         public GameObject planetInfoButton;
         public GameObject planetInfoItemPrefab;
@@ -116,23 +119,57 @@ namespace MingoData.Scripts.MainUtil
         {
             celestialBodyHandler.timeScale = 0;
             UpdateTimeScale(celestialBodyHandler.timeScale);
+            PlayClickSound();
+
         }
 
         private void OnFastForwardButtonClicked()
         {
-            celestialBodyHandler.timeScale *= 2; 
+            celestialBodyHandler.timeScale *= 2;
             UpdateTimeScale(celestialBodyHandler.timeScale);
+            PlayClickSound();
+
         }
 
         private void OnPlayButtonClicked()
         {
-            celestialBodyHandler.timeScale = 1; 
+            celestialBodyHandler.timeScale = 1;
             UpdateTimeScale(celestialBodyHandler.timeScale);
+            PlayClickSound();
+
         }
 
-        private void OnReturnPlanetButtonClick()
+        private void OnPlanetInfoPanelToggleOnOffClicked()
+        {
+            PlayClickSound();
+            bool isPlanetInfoActive = planetInfoLayout.activeSelf;
+            planetInfoLayout.SetActive(!isPlanetInfoActive);
+            darkImageBackgroundPlanetInfo.SetActive(!isPlanetInfoActive);
+            menuSliderPanel.SetActive(isPlanetInfoActive);
+        }
+
+        private void OnReturnPlanetButtonClicked()
         {
             celestialBodyHandler.ReturnSelectedPlanetToOriginalState();
+            PlayClickSound();
+        }
+        private void OnReturnToMainMenuButtonClicked()
+        {
+            PlayClickSound();
+            PlayerPrefs.SetString(Constants.SelectedPlanets, "");
+            PlayerPrefs.SetString(Constants.SelectedLanguage, "");
+            PlayerPrefs.Save();
+            SolarSystemSimulationWithMoons.ClearDictionary();
+            UtilsFns.LoadNewScene("MainMenu");
+        }
+        public void PlayClickSound()
+        {
+            audioSource.PlayOneShot(clickSound);
+        }
+        
+        public void PlaySliderSound(float value)
+        {
+            audioSource.PlayOneShot(slidingSound);
         }
 
         private void Awake()
@@ -169,13 +206,13 @@ namespace MingoData.Scripts.MainUtil
         {
 
             Button planetInfoButtonComponent = planetInfoButton.GetComponent<Button>();
-            planetInfoButtonComponent.onClick.AddListener(TogglePlanetInfoPanel);
+            planetInfoButtonComponent.onClick.AddListener(OnPlanetInfoPanelToggleOnOffClicked);
 
             darkImageBackgroundPlanetInfo = UtilsFns.CreateDarkBackground("PlanetInfo");
-            darkImageBackgroundPlanetInfo.GetComponent<Button>().onClick.AddListener(TogglePlanetInfoPanel);
+            darkImageBackgroundPlanetInfo.GetComponent<Button>().onClick.AddListener(OnPlanetInfoPanelToggleOnOffClicked);
             darkImageBackgroundPlanetInfo.SetActive(false);
 
-            planetInfoCloseButton.onClick.AddListener(TogglePlanetInfoPanel);
+            planetInfoCloseButton.onClick.AddListener(OnPlanetInfoPanelToggleOnOffClicked);
 
             HorizontalLayoutGroup layoutGroup = planetInfoListItemParentTitle.transform.parent.GetComponent<HorizontalLayoutGroup>();
             ReverseOrderIfArabic(layoutGroup);
@@ -185,10 +222,10 @@ namespace MingoData.Scripts.MainUtil
         private void ClickListenerInit()
         {
             Button returnToMainMenuButtonComponent = returnToMainMenuButton.GetComponent<Button>();
-            returnToMainMenuButtonComponent.onClick.AddListener(ReturnToMainMenu);
+            returnToMainMenuButtonComponent.onClick.AddListener(OnReturnToMainMenuButtonClicked);
 
             Button returnButtonComponent = closePlanetButton.GetComponent<Button>();
-            returnButtonComponent.onClick.AddListener(OnReturnPlanetButtonClick);
+            returnButtonComponent.onClick.AddListener(OnReturnPlanetButtonClicked);
 
             Button pauseButtonComponent = pauseButton.GetComponent<Button>();
             pauseButtonComponent.onClick.AddListener(OnPauseButtonClicked);
@@ -201,14 +238,7 @@ namespace MingoData.Scripts.MainUtil
 
         }
 
-        private static void ReturnToMainMenu()
-        {
-            PlayerPrefs.SetString(Constants.SelectedPlanets, "");
-            PlayerPrefs.SetString(Constants.SelectedLanguage, "");
-            PlayerPrefs.Save();
-            SolarSystemSimulationWithMoons.ClearDictionary();
-            UtilsFns.LoadNewScene("MainMenu");
-        }
+
 
         private void MenuTransitionInit()
         {
@@ -259,6 +289,7 @@ namespace MingoData.Scripts.MainUtil
 
         public void ToggleMenuSliderPanel()
         {
+            PlayClickSound();
             isUIOverlayEnabled = !isUIOverlayEnabled;
 
             startRotation = sliderButtonToggleImage.transform.eulerAngles.z;
@@ -333,7 +364,6 @@ namespace MingoData.Scripts.MainUtil
             planetNameToggle.onValueChanged.AddListener(onPlanetNameToggleValueChanged);
             planetInclinationLineToggle.onValueChanged.AddListener(onPlanetInclinationLineToggleValueChanged);
 
-
             orbitLineToggle.transform.gameObject.SetActive(true);
             planetNameToggle.transform.gameObject.SetActive(true);
             planetInclinationLineToggle.transform.gameObject.SetActive(true);
@@ -342,19 +372,20 @@ namespace MingoData.Scripts.MainUtil
 
             HorizontalLayoutGroup planetDistanceFromSunToggleLayoutGroup = planetDistanceFromSunToggle.transform.parent.GetComponent<HorizontalLayoutGroup>();
             ReverseOrderIfArabic(planetDistanceFromSunToggleLayoutGroup);
-            
+
             HorizontalLayoutGroup planetShowGuidanceToggleLayoutGroup = planetShowGuidanceToggle.transform.parent.GetComponent<HorizontalLayoutGroup>();
             ReverseOrderIfArabic(planetShowGuidanceToggleLayoutGroup);
-            
+
             HorizontalLayoutGroup planetNameToggleLayoutGroup = planetNameToggle.transform.parent.GetComponent<HorizontalLayoutGroup>();
             ReverseOrderIfArabic(planetNameToggleLayoutGroup);
-            
+
             HorizontalLayoutGroup planetInclinationLineToggleLayoutGroup = planetInclinationLineToggle.transform.parent.GetComponent<HorizontalLayoutGroup>();
             ReverseOrderIfArabic(planetInclinationLineToggleLayoutGroup);
-            
+
             HorizontalLayoutGroup orbitLineToggleLayoutGroup = orbitLineToggle.transform.parent.GetComponent<HorizontalLayoutGroup>();
             ReverseOrderIfArabic(orbitLineToggleLayoutGroup);
-            
+
+
         }
 
         private void ReverseOrderIfArabic(HorizontalOrVerticalLayoutGroup layoutGroup)
@@ -520,6 +551,8 @@ namespace MingoData.Scripts.MainUtil
                 Button button = newLegendItem.GetComponent<Button>();
                 button.onClick.AddListener(() =>
                 {
+
+                    PlayClickSound();
                     OnPlanetClicked?.Invoke(planetData.name, true);
                 });
 
@@ -539,7 +572,7 @@ namespace MingoData.Scripts.MainUtil
             }
 
             menuPlanetName.text = localizedPlanetName;
-            
+
             topMenuPlanetLayout.SetActive(showGameObjectHolder);
             closePlanetButton.SetActive(showGameObjectHolder);
             returnToMainMenuButton.SetActive(!showGameObjectHolder);
@@ -555,7 +588,7 @@ namespace MingoData.Scripts.MainUtil
 
         private void UpdateDistanceScale(float value)
         {
-            celestialBodyHandler.UpdateDistanceScale(value); 
+            celestialBodyHandler.UpdateDistanceScale(value);
 
             float realLifeDistance = 1f / value;
             menuDistanceText.text = localizationManager.GetLocalizedValue("1_meter_distance_equals", menuDistanceText, false, Constants.ColorGreen, realLifeDistance.ToString("N0"));
@@ -613,18 +646,12 @@ namespace MingoData.Scripts.MainUtil
             sliderPanelScrollRect.onValueChanged.AddListener(OnUserScroll);
         }
 
-        private void TogglePlanetInfoPanel()
-        {
-            bool isPlanetInfoActive = planetInfoLayout.activeSelf;
-            planetInfoLayout.SetActive(!isPlanetInfoActive);
-            darkImageBackgroundPlanetInfo.SetActive(!isPlanetInfoActive);
-            menuSliderPanel.SetActive(isPlanetInfoActive);
-        }
 
         private UnityAction CreateUiHelperFunction(MiddleIconHelper uiHelper)
         {
             return () =>
             {
+                PlayClickSound();
                 _darkImageBackgroundInitialUI.SetActive(false);
                 uiHelper.Destroy();
                 ResetSiblingIndexes();
@@ -662,7 +689,7 @@ namespace MingoData.Scripts.MainUtil
                 helper.middleIconsTopHelperCloseButton.onClick.AddListener(uiHelperFunction);
 
                 SetSiblingIndexes();
-                
+
                 isUIOverlayEnabled = true;
             }
 
@@ -684,7 +711,7 @@ namespace MingoData.Scripts.MainUtil
                 false);
 
             _darkImageBackgroundInitialUI = UtilsFns.CreateDarkBackground("InitialUI");
-            
+
             planetInfoLayout.SetActive(false);
             topMenuPlanetLayout.SetActive(false);
             menuSliderPanel.SetActive(false);
@@ -735,13 +762,13 @@ namespace MingoData.Scripts.MainUtil
             siblingIndexes[menuSliderPanel] = menuSliderPanel.transform.GetSiblingIndex();
             siblingIndexes[topMenuLayout] = topMenuLayout.transform.GetSiblingIndex();
         }
-        
+
         private void SetSiblingIndexes()
         {
             menuSliderPanel.transform.SetSiblingIndex(0);
             topMenuLayout.transform.SetSiblingIndex(0);
         }
-        
+
         private void ResetSiblingIndexes()
         {
             menuSliderPanel.transform.SetSiblingIndex(siblingIndexes[menuSliderPanel]);
@@ -749,4 +776,5 @@ namespace MingoData.Scripts.MainUtil
             UtilsFns.BringToFront(menuSliderPanel);
         }
     }
+
 }
