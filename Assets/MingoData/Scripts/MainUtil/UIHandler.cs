@@ -154,7 +154,7 @@ namespace MingoData.Scripts.MainUtil
             PlayerPrefs.SetString(Constants.SelectedPlanets, "");
             PlayerPrefs.SetString(Constants.SelectedLanguage, "");
             PlayerPrefs.Save();
-            SolarSystemSimulationWithMoons.ClearDictionary();
+            SolarSystemUtility.ClearDictionary();
             UtilsFns.LoadNewScene("MainMenu");
         }
         

@@ -6,7 +6,6 @@ using MingoData.Scripts.Utils;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.XR.ARFoundation;
-using Random = UnityEngine.Random;
 
 namespace MingoData.Scripts
 {
@@ -44,11 +43,9 @@ namespace MingoData.Scripts
         private bool isDistanceFromSunVisible;
 
         private const float planetSelectedScale = 0.5f;
-
-        private static readonly Dictionary<GameObject, Vector3> OriginalPositions = new Dictionary<GameObject, Vector3>();
-        private static readonly Dictionary<GameObject, Vector3> OriginalScales = new Dictionary<GameObject, Vector3>();
-
+        
         private List<string> loadedPlanets;
+        
         private readonly List<string> selectedFields = new List<string>
         {
             "name",
@@ -68,7 +65,6 @@ namespace MingoData.Scripts
             "completedOrbits",
             "completedSelfRotations"
         };
-
 
         protected override void OnSwipeUp()
         {
@@ -150,8 +146,8 @@ namespace MingoData.Scripts
             uiHandler.SetCelestialBodyData(SolarSystemUtility.planetDataDictionary[planet.name], selectedFields);
 
             // Save the original position and scale of the planet
-            OriginalPositions.TryAdd(planet, planet.transform.position);
-            OriginalScales.TryAdd(planet, planet.transform.localScale);
+            SolarSystemUtility.OriginalPositions.TryAdd(planet, planet.transform.position);
+            SolarSystemUtility.OriginalScales.TryAdd(planet, planet.transform.localScale);
 
             // Move the selected planet in front of the user by one unit and scale it to 1,1,1
             if (mainCamera != null)
@@ -171,7 +167,6 @@ namespace MingoData.Scripts
             movePlanetCoroutine = StartCoroutine(MoveSelectedPlanetWithUserCoroutine(selectedPlanet));
         }
 
-
         public void ReturnSelectedPlanetToOriginalState()
         {
 
@@ -182,11 +177,11 @@ namespace MingoData.Scripts
                 movePlanetCoroutine = null;
             }
             // Return the planet to its original position and scale
-            if (OriginalPositions.TryGetValue(selectedPlanet, out Vector3 position))
+            if (SolarSystemUtility.OriginalPositions.TryGetValue(selectedPlanet, out Vector3 position))
             {
                 selectedPlanet.transform.position = position;
             }
-            if (OriginalScales.TryGetValue(selectedPlanet, out Vector3 scale))
+            if (SolarSystemUtility.OriginalScales.TryGetValue(selectedPlanet, out Vector3 scale))
             {
                 selectedPlanet.transform.localScale = scale;
             }
@@ -231,8 +226,9 @@ namespace MingoData.Scripts
         {
             if (body.name == Constants.PlanetSun)
                 return;
-            float scale = body.diameter * newSizeScaleFactor;
-            body.celestialBodyInstance.transform.localScale = new Vector3(scale, scale, scale);
+            // float scale = body.diameter * newSizeScaleFactor;
+            sizeScale = body.diameter * newSizeScaleFactor;
+            body.celestialBodyInstance.transform.localScale = new Vector3(sizeScale, sizeScale, sizeScale);
         }
 
         private void UpdatePlanetNameVisibilityToggle(bool isOn)
@@ -299,14 +295,6 @@ namespace MingoData.Scripts
             }
         }
 
-        public static void ClearDictionary()
-        {
-            OriginalScales.Clear();
-            OriginalPositions.Clear();
-            SolarSystemUtility.ClearDictionary();
-        }
-
-
         private void Start()
         {
             canvas = uiHandler.GetComponent<Canvas>();
@@ -334,7 +322,6 @@ namespace MingoData.Scripts
             SolarSystemUtility.LoadPlanetData(loadedPlanets);
         }
 
-        // This function spawns planets at random positions around the sun
         private void SpawnPlanets()
         {
             uiHandler.PlayClickSound();
@@ -360,7 +347,7 @@ namespace MingoData.Scripts
                 }
 
                 uiHandler.SetPlanetColorLegend(SolarSystemUtility.planetDataDictionary);
-                OriginalPositions[planet.celestialBodyInstance] = planet.celestialBodyInstance.transform.position;
+                SolarSystemUtility.OriginalPositions[planet.celestialBodyInstance] = planet.celestialBodyInstance.transform.position;
                 SolarSystemUtility.InitPlanetProgress(planet);
                 UtilsFns.CreateOrbitLine(planet.celestialBodyInstance, planet, (body, angle) => SolarSystemUtility.CalculatePlanetPosition((PlanetData)body, angle, distanceScale));
             }
@@ -392,7 +379,7 @@ namespace MingoData.Scripts
             
             planet.celestialBodyInstance.name = planet.name;
 
-            float planetScale = GetPlanetScale(planet);
+            float planetScale = UtilsFns.GetPlanetScale(planet);
             planet.celestialBodyInstance.transform.localScale = new Vector3(planetScale, planetScale, planetScale);
 
             UtilsFns.CreateInclinationLine(planet, planet.celestialBodyInstance, localizationManager);
@@ -413,17 +400,6 @@ namespace MingoData.Scripts
             planet.planetGuidance.GetComponent<Button>().onClick.AddListener(() => SelectPlanetByName(planet.name, false));
             planet.planetGuidance.transform.SetSiblingIndex(0);
             planet.planetGuidance.GetComponent<Image>().color = UtilsFns.CreateHexToColor(planet.planetColor).ToUnityColor();
-        }
-
-        private static float GetPlanetScale(CelestialBodyData planet)
-        {
-            // Adjust the scale for the Sun
-            if (planet.name == Constants.PlanetSun)
-            {
-                // Set scale specific for the Sun
-                return Constants.InitialSunSizeScale * planet.diameter;
-            }
-            return Constants.InitialSizeScale * planet.diameter;
         }
 
         private void SelectPlanetByName(string planetName, bool toggleMenuOn)
@@ -562,7 +538,6 @@ namespace MingoData.Scripts
             }
         }
     }
-
 }
 
 // fixes

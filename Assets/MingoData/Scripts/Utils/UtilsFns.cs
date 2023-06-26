@@ -211,6 +211,17 @@ namespace MingoData.Scripts.Utils
 
         }
 
+        public static float GetPlanetScale(CelestialBodyData planet)
+        {
+            // Adjust the scale for the Sun
+            if (planet.name == Constants.PlanetSun)
+            {
+                // Set scale specific for the Sun
+                return Constants.InitialSunSizeScale * planet.diameter;
+            }
+            return Constants.InitialSizeScale * planet.diameter;
+        }
+
         public static void CreatePlanetName(PlanetData planet, GameObject planetInstance, LocalizationManager localizationManager)
         {
             GameObject parentObject = new GameObject(planet.name + "_PlanetNameParent");
