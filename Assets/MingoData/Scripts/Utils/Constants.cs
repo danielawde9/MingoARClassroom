@@ -26,8 +26,8 @@ namespace MingoData.Scripts.Utils
     public static class Constants
     {
         public const float InitialDistanceScale = 1f / 100000000f;
-        public const float InitialSizeScale = 1f / 10000000f;
-        public const float InitialSunSizeScale = 1f / 10000000f;
+        public const float InitialSizeScale = 1f / 50000f;
+        public const float InitialSunSizeScale = 1f / 5000000f;
         public const float InitialTimeScale = 10000f;
         
         public const bool AnimateTrue = true;

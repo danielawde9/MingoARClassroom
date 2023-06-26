@@ -1,11 +1,12 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Net.Mime;
 using MingoData.Scripts.MainUtil;
 using MingoData.Scripts.Utils;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.XR.ARFoundation;
+using Random = UnityEngine.Random;
 
 namespace MingoData.Scripts
 {
@@ -328,88 +329,90 @@ namespace MingoData.Scripts
             uiHandler.onDistanceFromSunToggleValueChanged = UpdateDistanceFromSunVisibilityToggle;
             uiHandler.onPlanetShowGuidanceToggleValueChanged = UpdateTogglePlanetGuidanceVisibilityToggle;
 
-
             uiHandler.SetCelestialBodyData(null, selectedFields);
 
             SolarSystemUtility.LoadPlanetData(loadedPlanets);
         }
 
-        private void SpawnPlanets(Vector3 placedTouchPosition)
+        // This function spawns planets at random positions around the sun
+        private void SpawnPlanets()
         {
             uiHandler.PlayClickSound();
-            parentDistanceLinesObject = new GameObject("ParentDistanceLines");
-            Quaternion rotationCorrection = Quaternion.Euler(0, 0, 0);
-            // Get the user's position and facing direction from the main camera
-            Transform transform1 = mainCamera.transform;
-            Vector3 userPosition = transform1.position;
-            Vector3 userDirection = transform1.forward;
+            GameObject distanceLinesObject = new GameObject("ParentDistanceLines");
 
-            // Calculate the spawn position 1 meter in front of the user
-            Vector3 spawnPosition = userPosition + userDirection * 50.0f; 
+            // Simplified rotationCorrection to identity since Euler(0,0,0) equals to Quaternion.identity
+            Quaternion rotationCorrection = Quaternion.identity;
+
+            Transform mainCameraTransform = mainCamera.transform;
+            Vector3 spawnPosition = mainCameraTransform.position + mainCameraTransform.forward;
 
             foreach (PlanetData planet in SolarSystemUtility.planetDataDictionary.Values)
             {
                 InstantiatePlanet(planet, spawnPosition, rotationCorrection);
                 if (planet.name != Constants.PlanetSun)
                 {
-                    SolarSystemUtility.CreateDistanceLineAndTextFromSun(parentDistanceLinesObject, planet);
+                    SolarSystemUtility.CreateDistanceLineAndTextFromSun(distanceLinesObject, planet);
                     SolarSystemUtility.UpdateDistanceFromSunText(planet, localizationManager);
                 }
                 else
                 {
                     SolarSystemUtility.AssignDirectionalLight(planet.celestialBodyInstance.transform, distanceScale, loadedPlanets);
                 }
+
                 uiHandler.SetPlanetColorLegend(SolarSystemUtility.planetDataDictionary);
                 OriginalPositions[planet.celestialBodyInstance] = planet.celestialBodyInstance.transform.position;
                 SolarSystemUtility.InitPlanetProgress(planet);
                 UtilsFns.CreateOrbitLine(planet.celestialBodyInstance, planet, (body, angle) => SolarSystemUtility.CalculatePlanetPosition((PlanetData)body, angle, distanceScale));
             }
         }
-        
-        private void InstantiatePlanet(PlanetData planet, Vector3 placedTouchPosition, Quaternion rotationCorrection)
-        {
-            GameObject planetPrefab = Resources.Load<GameObject>(planet.prefabName);
 
-            if (planetPrefab == null)
+        private void InstantiatePlanet(PlanetData planet, Vector3 spawnPosition, Quaternion rotationCorrection)
+        {
+            GameObject planetPrefab;
+
+            try
             {
-                Debug.LogError($"Prefab not found for {planet.name}");
+                planetPrefab = Resources.Load<GameObject>(planet.prefabName);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"Failed to load prefab for {planet.name}: {e.Message}");
                 return;
             }
 
             planet.rotationAxis = Quaternion.Euler(0, 0, planet.obliquityToOrbit) * Vector3.up;
+            
             distanceScale = Constants.InitialDistanceScale;
 
-            Vector3 newPosition;
-            if (planet.name == Constants.PlanetSun)
-            {
-                newPosition = Vector3.zero;
-            }
-            else
-            {
-                Vector3 planetPositionRelativeToSun = SolarSystemUtility.CalculatePlanetPosition(planet, 0f, distanceScale);
-                newPosition = placedTouchPosition + planetPositionRelativeToSun;
-            }
+            Vector3 planetPosition = planet.name == Constants.PlanetSun ? Vector3.zero : spawnPosition + SolarSystemUtility.CalculatePlanetPosition(planet, 0f, distanceScale);
 
-            // Instantiate the planetGuidance
+            CreatePlanetGuidance(planet);
+
+            planet.celestialBodyInstance = Instantiate(planetPrefab, planetPosition, rotationCorrection * planetPrefab.transform.rotation * Quaternion.Euler(planet.rotationAxis));
+            
+            planet.celestialBodyInstance.name = planet.name;
+
+            float planetScale = GetPlanetScale(planet);
+            planet.celestialBodyInstance.transform.localScale = new Vector3(planetScale, planetScale, planetScale);
+
+            UtilsFns.CreateInclinationLine(planet, planet.celestialBodyInstance, localizationManager);
+            UtilsFns.CreatePlanetName(planet, planet.celestialBodyInstance, localizationManager);
+        }
+
+        private void CreatePlanetGuidance(PlanetData planet)
+        {
             planet.planetGuidance = Instantiate(planetGuidancePrefab, canvas.transform, false);
             planet.planetGuidanceRectTransform = planet.planetGuidance.GetComponent<RectTransform>();
             planet.planetGuidance.SetActive(false);
             planet.planetGuidance.name = planet.name + "_Guidance";
             planet.planetGuidanceImage = planet.planetGuidance.transform.Find("PlanetImage").GetComponent<Image>();
+
             Sprite planetSprite = Resources.Load<Sprite>("SolarSystemWithMoon/PlanetImages/" + planet.name);
             planet.planetGuidanceImage.sprite = planetSprite;
+
             planet.planetGuidance.GetComponent<Button>().onClick.AddListener(() => SelectPlanetByName(planet.name, false));
             planet.planetGuidance.transform.SetSiblingIndex(0);
             planet.planetGuidance.GetComponent<Image>().color = UtilsFns.CreateHexToColor(planet.planetColor).ToUnityColor();
-
-            planet.celestialBodyInstance = Instantiate(planetPrefab, newPosition, rotationCorrection * planetPrefab.transform.rotation * Quaternion.Euler(planet.rotationAxis));
-            planet.celestialBodyInstance.name = planet.name;
-
-            float newScale = GetPlanetScale(planet);
-            planet.celestialBodyInstance.transform.localScale = new Vector3(newScale, newScale, newScale);
-
-            UtilsFns.CreateInclinationLine(planet, planet.celestialBodyInstance, localizationManager);
-            UtilsFns.CreatePlanetName(planet, planet.celestialBodyInstance, localizationManager);
         }
 
         private static float GetPlanetScale(CelestialBodyData planet)
@@ -456,7 +459,7 @@ namespace MingoData.Scripts
             if (mPlaneManager.trackables.count < 1)
                 return;
 
-            SpawnPlanets(Vector3.zero);
+            SpawnPlanets();
 
             uiHandler.UIShowAfterPlanetPlacement();
             isSolarSystemPlaced = true;
@@ -548,7 +551,7 @@ namespace MingoData.Scripts
             }
             yield return null;
         }
-        
+
         private IEnumerator MoveSelectedPlanetWithUserCoroutine(GameObject planet)
         {
             while (isPlanetSelected)
@@ -559,6 +562,7 @@ namespace MingoData.Scripts
             }
         }
     }
+
 }
 
 // fixes
@@ -570,7 +574,7 @@ namespace MingoData.Scripts
 // todo add black background when planet selected
 // todo fix solar dust , also add something like movement 
 // todo initial timing kmn msh zero 
-// todo random placemnt of the planets
+// todo random placement of the planets
 // todo fix text lal initial scan 
 // todo add audio toggle
 

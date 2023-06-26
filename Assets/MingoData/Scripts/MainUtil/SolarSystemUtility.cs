@@ -44,11 +44,10 @@ namespace MingoData.Scripts.MainUtil
             GameObject textDistanceTextObject = UtilsFns.CreateGameObject($"{planet.name}_DistanceText", parentObject, Vector3.zero, Quaternion.identity);
             textDistanceTextObject.AddComponent<FaceCamera>();
 
-            planet.distanceText = UtilsFns.CreateTextMeshPro(textDistanceTextObject, "", 4.25f, planetLineColor, TextAlignmentOptions.Center, new Vector2(2.0f, 2.0f));
+            planet.distanceText = UtilsFns.CreateTextMeshPro(textDistanceTextObject, "", 1f, planetLineColor, TextAlignmentOptions.Center, new Vector2(2.0f, 2.0f));
 
             parentObject.SetActive(false);
         }
-
 
         public static void AssignDirectionalLight(Transform planetInstance, float distanceScale, List<string> desiredPlanets)
         {
@@ -59,7 +58,6 @@ namespace MingoData.Scripts.MainUtil
             localDirectionalLight.transform.SetParent(planetInstance);
             localDirectionalLight.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.Euler(0, 0, 0));
         }
-
 
         public static void LoadPlanetData(List<string> desiredPlanets)
         {
@@ -133,14 +131,14 @@ namespace MingoData.Scripts.MainUtil
             planetData.distanceLineRenderer.SetPosition(0, Vector3.zero);
             Vector3 position = planetData.celestialBodyInstance.transform.position;
             planetData.distanceLineRenderer.SetPosition(1, position - planetData.distanceLineRenderer.transform.position);
-            planetData.distanceText.transform.position = position / 2f + new Vector3(0, -0.5f);
+            planetData.distanceText.transform.position = position / 2f + new Vector3(0, 0f);
         }
 
         public static void UpdateDistanceFromSunText(PlanetData planetData, LocalizationManager localizationManager)
         {
             float distanceInKm = planetData.celestialBodyInstance.transform.position.magnitude * Mathf.Pow(10, 6);
             string formattedDistance = distanceInKm.ToString("N0");
-            planetData.distanceText.text = localizationManager.GetLocalizedValue("Distance_In_KM", planetData.distanceText, false, Constants.ColorGreen, formattedDistance);
+            planetData.distanceText.text = localizationManager.GetLocalizedValue("Distance_In_KM", planetData.distanceText, true, Constants.ColorGreen, formattedDistance);
         }
 
         public static void UpdateOrbitLine(CelestialBodyData body, Func<CelestialBodyData, float, Vector3> calculatePosition)

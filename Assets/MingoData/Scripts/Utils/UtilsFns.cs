@@ -191,7 +191,7 @@ namespace MingoData.Scripts.Utils
             parentObject.AddComponent<FaceCamera>();
 
             GameObject inclinationLine = CreateGameObject(planet.name + "_InclinationLine", planetInstance, Vector3.zero, Quaternion.Euler(planet.obliquityToOrbit, 0f, 0f));
-            CreateLineRenderer(inclinationLine, 0.01f, 0.01f, 2, Vector3.down, Vector3.up, Color.yellow); // Add color parameter
+            CreateLineRenderer(inclinationLine, 0.01f, 0.01f, 2, Vector3.down, Vector3.up, Constants.ColorYellow); 
 
             inclinationLine.SetActive(false);
 
