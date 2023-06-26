@@ -5,7 +5,6 @@ using MingoData.Scripts.Utils;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.XR.ARFoundation;
-using UnityEngine.XR.ARSubsystems;
 
 namespace MingoData.Scripts
 {
@@ -20,7 +19,7 @@ namespace MingoData.Scripts
         private LocalizationManager localizationManager;
         [SerializeField]
         private GameObject planetGuidancePrefab;
-        
+
         [HideInInspector]
         public float sizeScale;
         [HideInInspector]
@@ -28,10 +27,9 @@ namespace MingoData.Scripts
         [HideInInspector]
         public float distanceScale;
 
-        private ARRaycastManager mRaycastManager;
         private Camera mainCamera;
         private Canvas canvas;
-        private Coroutine movePlanetCoroutine; 
+        private Coroutine movePlanetCoroutine;
 
         private GameObject parentDistanceLinesObject;
         private GameObject selectedPlanet;
@@ -68,13 +66,13 @@ namespace MingoData.Scripts
             "completedOrbits",
             "completedSelfRotations"
         };
-        
+
 
         protected override void OnSwipeUp()
         {
             base.OnSwipeUp();
             // Only call the function if the panel is not open and a planet is selected
-            if (!isPlanetSelected && !uiHandler.isUIOverlayEnabled && uiHandler.initialScanFinished)
+            if (!isPlanetSelected && !uiHandler.isUIOverlayEnabled && isSolarSystemPlaced)
             {
                 uiHandler.ToggleMenuSliderPanel();
             }
@@ -83,9 +81,7 @@ namespace MingoData.Scripts
         protected override void Awake()
         {
             base.Awake();
-            mRaycastManager = GetComponent<ARRaycastManager>();
             mainCamera = Camera.main;
-            DontDestroyOnLoad(mainCamera);
         }
 
         protected override void OnDrag(Vector2 delta)
@@ -103,34 +99,12 @@ namespace MingoData.Scripts
 
         protected override void OnPress(Vector3 touchPosition)
         {
-            switch (isSolarSystemPlaced)
+            if (isSolarSystemPlaced && !uiHandler.isUIOverlayEnabled)
             {
-                case false:
-                {
-                    List<ARRaycastHit> sHits = new List<ARRaycastHit>();
-
-                    // to detect if the user clicked on the scanned area
-                    if (mRaycastManager.Raycast(touchPosition, sHits, TrackableType.PlaneWithinPolygon))
-                    {
-                        Pose hitPose = sHits[0].pose;
-                        Vector3 placementPosition = hitPose.position;
-                        SpawnPlanets(placementPosition);
-                        uiHandler.UIShowAfterClick();
-                        isSolarSystemPlaced = true;
-                        mPlaneManager.enabled = false;
-                    }
-                    else
-                    {
-                        isSolarSystemPlaced = false;
-                        mPlaneManager.enabled = true;
-                    }
-                    break;
-                }
-                case true when !uiHandler.isUIOverlayEnabled:
-                    DetectPlanetTouch(touchPosition);
-                    break;
+                DetectPlanetTouch(touchPosition);
             }
         }
+
 
         private void DetectPlanetTouch(Vector2 touchPosition)
         {
@@ -167,10 +141,10 @@ namespace MingoData.Scripts
 
             selectedPlanet = planet;
             isPlanetSelected = true;
-            
+
             uiHandler.PlayClickSound();
             uiHandler.SetPlanetNameTextTitle(selectedPlanet.name, true);
-            
+
             uiHandler.ToggleSwipeIcon();
             uiHandler.SetCelestialBodyData(SolarSystemUtility.planetDataDictionary[planet.name], selectedFields);
 
@@ -226,7 +200,7 @@ namespace MingoData.Scripts
             }
             uiHandler.SetPlanetNameTextTitle("", false);
             uiHandler.SetCelestialBodyData(null, selectedFields);
-            
+
             isPlanetSelected = false;
             selectedPlanet = null;
 
@@ -261,7 +235,7 @@ namespace MingoData.Scripts
             }
         }
 
-        private  void UpdateCelestialBodyScale(CelestialBodyData body, float newSizeScaleFactor)
+        private void UpdateCelestialBodyScale(CelestialBodyData body, float newSizeScaleFactor)
         {
             if (body.name == Constants.PlanetSun)
                 return;
@@ -311,7 +285,7 @@ namespace MingoData.Scripts
                 orbitLine.SetActive(isOn);
             }
         }
-        
+
         private void UpdateDistanceFromSunVisibilityToggle(bool isOn)
         {
             uiHandler.PlayClickSound();
@@ -344,7 +318,7 @@ namespace MingoData.Scripts
         private void Start()
         {
             canvas = uiHandler.GetComponent<Canvas>();
-         
+
             string savedPlanetsString = PlayerPrefs.GetString(Constants.SelectedPlanets, "");
             string selectedLang = PlayerPrefs.GetString(Constants.SelectedLanguage, Constants.LangEn);
 
@@ -362,13 +336,13 @@ namespace MingoData.Scripts
             uiHandler.onPlanetInclinationLineToggleValueChanged = UpdateInclinationLineVisibilityToggle;
             uiHandler.onDistanceFromSunToggleValueChanged = UpdateDistanceFromSunVisibilityToggle;
             uiHandler.onPlanetShowGuidanceToggleValueChanged = UpdateTogglePlanetGuidanceVisibilityToggle;
-            
+
 
             uiHandler.SetCelestialBodyData(null, selectedFields);
 
             SolarSystemUtility.LoadPlanetData(loadedPlanets);
         }
-        
+
         private void SpawnPlanets(Vector3 placedTouchPosition)
         {
             uiHandler.PlayClickSound();
@@ -480,10 +454,15 @@ namespace MingoData.Scripts
 
         private void OnPlanesChanged(ARPlanesChangedEventArgs args)
         {
-            if (isAfterScanShown || mPlaneManager.trackables.count < 1)
+            if (mPlaneManager.trackables.count < 1)
                 return;
-            uiHandler.UIShowAfterScan();
-            isAfterScanShown = true;
+
+            SpawnPlanets(Vector3.zero);
+
+            uiHandler.UIShowAfterPlanetPlacement();
+            isSolarSystemPlaced = true;
+            mPlaneManager.enabled = false;
+
         }
 
         private void Update()
@@ -571,6 +550,7 @@ namespace MingoData.Scripts
             yield return null;
         }
     }
+
 }
 
 // fixes
@@ -583,7 +563,6 @@ namespace MingoData.Scripts
 // todo fix solar dust 
 // todo add audio toggle
 // todo add animation for middle helper 
-// todo if i press the the bottom menu and planet behind it it select the planet 
 
 // features
 // todo add toggle for sound  

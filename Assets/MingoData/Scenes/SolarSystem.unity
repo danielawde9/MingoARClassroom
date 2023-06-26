@@ -4454,7 +4454,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1105738287}
   m_HandleRect: {fileID: 1105738286}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -8146,7 +8146,6 @@ MonoBehaviour:
   menuSliderPanel: {fileID: 772092435}
   sliderPanelToggleButton: {fileID: 1174029314}
   sliderPanelScrollRect: {fileID: 1781855274}
-  initialScanFinished: 0
   isUIOverlayEnabled: 0
   menuPlanetName: {fileID: 1618326869}
   closePlanetButton: {fileID: 1749276728}
@@ -8191,10 +8190,9 @@ MonoBehaviour:
     type: 3}
   scanRoomIcon: {fileID: 3286163911610860551, guid: 49c8768e7095d564ab89c3a620effafc,
     type: 3}
-  tapIcon: {fileID: 3286163911610860551, guid: 5c9efc0a6556d9244851784028c33af6, type: 3}
-  swipeIcon: {fileID: 3286163911610860551, guid: b9828f14d6de92d4fbcca422d1bb3596,
+  swipeLeftRightIcon: {fileID: 3286163911610860551, guid: b9828f14d6de92d4fbcca422d1bb3596,
     type: 3}
-  swipeIconRotated: {fileID: 3286163911610860551, guid: 39a74c6fc841f4cdca45e9bf5bc428b6,
+  swipeUpDownIcon: {fileID: 3286163911610860551, guid: 39a74c6fc841f4cdca45e9bf5bc428b6,
     type: 3}
 --- !u!82 &1510672711
 AudioSource:
@@ -11089,7 +11087,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 0, y: 2920.0002}
+  m_AnchoredPosition: {x: 0, y: 2920}
   m_SizeDelta: {x: -13, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1981951315

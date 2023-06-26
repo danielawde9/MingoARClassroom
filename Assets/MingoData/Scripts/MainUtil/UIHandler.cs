@@ -29,7 +29,6 @@ namespace MingoData.Scripts.MainUtil
         public ScrollRect sliderPanelScrollRect;
         private Shadow sliderPanelToggleButtonShadow;
         private GameObject darkImageBackgroundSliderPanel;
-        public bool initialScanFinished;
         private RectTransform sliderButtonToggleRectTransform;
         public bool isUIOverlayEnabled;
         private GameObject sliderButtonToggleImage;
@@ -103,12 +102,10 @@ namespace MingoData.Scripts.MainUtil
         [Header("Middle Icons Text Helper")]
         public GameObject middleIconHelperPrefab;
         public Sprite scanRoomIcon;
-        public Sprite tapIcon;
-        public Sprite swipeIcon;
-        public Sprite swipeIconRotated;
+        public Sprite swipeLeftRightIcon;
+        public Sprite swipeUpDownIcon;
         private static GameObject _darkImageBackgroundInitialUI;
         private MiddleIconHelper uiHelperInit;
-        private MiddleIconHelper uiHelperAfterScan;
         private UnityAction uiHelperShowAfterClickFunction;
         private UnityAction uiHelperSwipeToggleFunction;
         private readonly Dictionary<GameObject, int> siblingIndexes = new Dictionary<GameObject, int>();
@@ -542,10 +539,11 @@ namespace MingoData.Scripts.MainUtil
                 Button button = newLegendItem.GetComponent<Button>();
                 button.onClick.AddListener(() =>
                 {
-
                     PlayClickSound();
                     OnPlanetClicked?.Invoke(planetData.name, true);
                 });
+
+                ReverseOrderIfArabic(legendItemPrefab.GetComponent<HorizontalLayoutGroup>());
 
             }
         }
@@ -587,7 +585,7 @@ namespace MingoData.Scripts.MainUtil
 
         private void UpdateTimeScale(float value)
         {
-            
+
             celestialBodyHandler.UpdateTimeScale(value);
             string timeText = localizationManager.GetLocalizedTimeValue(value, menuTimeText, Constants.ColorGreen);
             menuTimeText.text = timeText;
@@ -709,29 +707,16 @@ namespace MingoData.Scripts.MainUtil
             menuSliderPanel.SetActive(false);
         }
 
-        public void UIShowAfterScan()
+        public void UIShowAfterPlanetPlacement()
         {
             uiHelperInit.Destroy();
 
-            uiHelperAfterScan = SpawnMiddleIconHelper(
-                "",
-                "Tap_on_the_scanned_area_to_place_the_solar_system",
-                tapIcon,
-                false);
-
-            initialScanFinished = true;
-        }
-
-        public void UIShowAfterClick()
-        {
             _darkImageBackgroundInitialUI.SetActive(true);
-
-            uiHelperAfterScan.Destroy();
 
             SpawnMiddleIconHelper(
                 "Instructions",
                 "Click_on_any_planet_or_click_on_the_menu_below_to_display_more_settings",
-                swipeIconRotated,
+                swipeUpDownIcon,
                 true);
 
             menuSliderPanel.SetActive(true);
@@ -745,7 +730,7 @@ namespace MingoData.Scripts.MainUtil
             SpawnMiddleIconHelper(
                 "Instructions",
                 "Touch_and_drag_to_move_the_planet_Around",
-                swipeIcon,
+                swipeLeftRightIcon,
                 true);
         }
 
@@ -768,4 +753,5 @@ namespace MingoData.Scripts.MainUtil
             UtilsFns.BringToFront(menuSliderPanel);
         }
     }
+
 }
