@@ -226,9 +226,9 @@ namespace MingoData.Scripts
         {
             if (body.name == Constants.PlanetSun)
                 return;
-            // float scale = body.diameter * newSizeScaleFactor;
-            sizeScale = body.diameter * newSizeScaleFactor;
-            body.celestialBodyInstance.transform.localScale = new Vector3(sizeScale, sizeScale, sizeScale);
+            float scale = body.diameter * newSizeScaleFactor;
+            // sizeScale = body.diameter * newSizeScaleFactor;
+            body.celestialBodyInstance.transform.localScale = new Vector3(scale, scale, scale);
         }
 
         private void UpdatePlanetNameVisibilityToggle(bool isOn)
@@ -325,22 +325,27 @@ namespace MingoData.Scripts
         private void SpawnPlanets()
         {
             uiHandler.PlayClickSound();
-            GameObject distanceLinesObject = new GameObject("ParentDistanceLines");
+            
+            parentDistanceLinesObject = new GameObject("ParentDistanceLines");
 
             // Simplified rotationCorrection to identity since Euler(0,0,0) equals to Quaternion.identity
             Quaternion rotationCorrection = Quaternion.identity;
 
             Transform mainCameraTransform = mainCamera.transform;
+            
             Vector3 spawnPosition = mainCameraTransform.position + mainCameraTransform.forward;
 
             foreach (PlanetData planet in SolarSystemUtility.planetDataDictionary.Values)
             {
                 InstantiatePlanet(planet, spawnPosition, rotationCorrection);
+                
                 if (planet.name != Constants.PlanetSun)
                 {
-                    SolarSystemUtility.CreateDistanceLineAndTextFromSun(distanceLinesObject, planet);
+                    SolarSystemUtility.CreateDistanceLineAndTextFromSun(parentDistanceLinesObject, planet);
+                    
                     SolarSystemUtility.UpdateDistanceFromSunText(planet, localizationManager);
                 }
+                
                 else
                 {
                     SolarSystemUtility.AssignDirectionalLight(planet.celestialBodyInstance.transform, distanceScale, loadedPlanets);
@@ -541,8 +546,6 @@ namespace MingoData.Scripts
 }
 
 // fixes
-// todo planets too spread out 
-// todo planets too big
 // todo fix translation
 // todo check camera permission
 // todo fix light range on distance
@@ -552,6 +555,8 @@ namespace MingoData.Scripts
 // todo random placement of the planets
 // todo fix text lal initial scan 
 // todo add audio toggle
+// todo naming
+// todo texture 
 
 // features
 // todo add toggle for sound  
