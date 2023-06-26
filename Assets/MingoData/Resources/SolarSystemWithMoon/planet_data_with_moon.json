@@ -14,7 +14,7 @@
         "orbitalEccentricity": 0,
         "obliquityToOrbit": 7.25,
         "prefabName": "SolarSystemWithMoon/Sun",
-        "planetColor": "#FDCF13",
+        "planetColor": "#feb884",
         "moons": [],
         "rings": []
       },
@@ -32,7 +32,7 @@
         "orbitalEccentricity": 0.206,
         "obliquityToOrbit": 0.034,
         "prefabName": "SolarSystemWithMoon/Mercury",
-        "planetColor": "#808080",
+        "planetColor": "#e3dafb",
         "moons": [],
         "rings": []
       },
@@ -50,7 +50,7 @@
         "orbitalEccentricity": 0.007,
         "obliquityToOrbit": 177.4,
         "prefabName": "SolarSystemWithMoon/Venus",
-        "planetColor": "#F4A43C",
+        "planetColor": "#fec484",
         "moons": [],
         "rings": []
       },
@@ -68,7 +68,7 @@
         "orbitalEccentricity": 0.017,
         "obliquityToOrbit": 23.4,
         "prefabName": "SolarSystemWithMoon/Earth",
-        "planetColor": "#1E91FF",
+        "planetColor": "#9ceade",
         "moons": [],
         "rings": [],
         "pointsOfInterest": [
@@ -100,7 +100,7 @@
         "orbitalEccentricity": 0.094,
         "obliquityToOrbit": 25.2,
         "prefabName": "SolarSystemWithMoon/Mars",
-        "planetColor": "#CC6633",
+        "planetColor": "#fdb9c2",
         "moons": [
           {
             "name": "Phobos",
@@ -137,7 +137,7 @@
         "orbitalEccentricity": 0.049,
         "obliquityToOrbit": 3.1,
         "prefabName": "SolarSystemWithMoon/Jupiter",
-        "planetColor": "#AEAA95",
+        "planetColor": "#fbcda1",
         "moons": [
           {
             "name": "Io",
@@ -192,7 +192,7 @@
         "orbitalEccentricity": 0.052,
         "obliquityToOrbit": 26.7,
         "prefabName": "SolarSystemWithMoon/Saturn",
-        "planetColor": "#E1E16F",
+        "planetColor": "#e4f0d4",
         "moons": [
           {
             "name": "Titan",
@@ -263,7 +263,7 @@
         "orbitalEccentricity": 0.047,
         "obliquityToOrbit": 97.8,
         "prefabName": "SolarSystemWithMoon/Uranus",
-        "planetColor": "#AACDDF",
+        "planetColor": "#dccef8",
         "moons": [
           {
             "name": "Titania",
@@ -327,7 +327,7 @@
         "orbitalEccentricity": 0.01,
         "obliquityToOrbit": 28.3,
         "prefabName": "SolarSystemWithMoon/Neptune",
-        "planetColor": "#1E91FF",
+        "planetColor": "#7cd2fa",
         "moons": [
           {
             "name": "Triton",
@@ -364,7 +364,7 @@
         "orbitalEccentricity": 0.2488,
         "obliquityToOrbit": 122.53,
         "prefabName": "SolarSystemWithMoon/Pluto",
-        "planetColor": "#6D7B8D",
+        "planetColor": "#fbd2a8",
         "moons": [
           {
             "name": "Charon",

@@ -14,7 +14,7 @@ namespace MingoData.Scripts.Utils
         private readonly List<GameObject> spawnedPrefabs = new List<GameObject>();
         private GameObject parentObject; // Parent object for all spawned prefabs
 
-        void Start()
+        private void Start()
         {
             parentObject = new GameObject("spawned_prefabs");
         }

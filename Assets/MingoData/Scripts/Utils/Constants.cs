@@ -2,38 +2,40 @@ using UnityEngine;
 
 namespace MingoData.Scripts.Utils
 {
-    public struct Color32
+    public readonly struct Color32
     {
-        public byte R;
-        public byte G;
-        public byte B;
-        public byte A;
+        private readonly byte r;
+        private readonly byte g;
+        private readonly byte b;
+        private readonly byte a;
 
         public Color32(byte r, byte g, byte b, byte a = 255)
         {
-            R = r;
-            G = g;
-            B = b;
-            A = a;
+            this.r = r;
+            this.g = g;
+            this.b = b;
+            this.a = a;
         }
         
         public Color ToUnityColor()
         {
-            return new Color(R / 255f, G / 255f, B / 255f, A / 255f);
+            return new Color(r / 255f, g / 255f, b / 255f, a / 255f);
         }
     }
 
     public static class Constants
     {
-        public const float InitialDistanceScale = 1f / 10000000f;
-        public const float InitialSizeScale = 1f / 10000f;
-        public const float InitialSunSizeScale = 1f / 1000000f;
-        //public const float initialSizeScale = 1f / 1000000f;
-        public const float InitialTimeScale = 1f;
+        public const float InitialDistanceScale = 1f / 100000000f;
+        public const float InitialSizeScale = 1f / 10000000f;
+        public const float InitialSunSizeScale = 1f / 10000000f;
+        public const float InitialTimeScale = 10000f;
         
+        public const bool AnimateTrue = true;
+
+        public const float MinTime = 1f;
         public const float MaxTime = 200000f;
         
-        public const float MaxSize = 1f / 10000f;
+        public const float MaxSize = 1f / 40000f;
         public const float MinSize = 1f / 1000000f;
         
         public const float MaxDistance = 1f / 5000000f;

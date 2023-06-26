@@ -81,7 +81,6 @@ namespace MingoData.Scripts.MainUtil
 
         }
 
-
         public static void InitPlanetProgress(PlanetData planet)
         {
             planet.rotationSpeed = 360f / planet.rotationPeriod;
@@ -89,7 +88,6 @@ namespace MingoData.Scripts.MainUtil
             planet.rotationProgress = 0f;
         }
 
-        
         public static Vector3 CalculatePlanetPosition(PlanetData planet, float angle, float distanceScale)
         {
             float radians = angle * Mathf.Deg2Rad;

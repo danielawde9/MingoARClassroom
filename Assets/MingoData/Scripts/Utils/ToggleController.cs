@@ -49,9 +49,6 @@ namespace MingoData.Scripts.Utils
             // Change the color of the background based on the new value
             toggle.GetComponent<Image>().color = isOn ? Constants.ColorGreen : Constants.ColorDarkGrey;
         }
-        
-
     }
-
 }
 

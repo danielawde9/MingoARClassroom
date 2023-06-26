@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using MingoData.Scripts.MainUtil;
@@ -11,8 +12,59 @@ namespace MingoData.Scripts.Utils
 {
     public class UtilsFns : MonoBehaviour
     {
-      
         public static GameObject directionalLight;
+
+        public enum AnimationDirection
+        {
+            LeftRight,
+            UpDown
+        }
+        
+        public static IEnumerator AnimateIcon(Transform iconRectTransform, float duration, AnimationDirection direction)
+        {
+            // Store the initial position
+            Vector3 initialPosition = iconRectTransform.localPosition;
+
+            // Calculate the target position
+            Vector3 targetPosition;
+            if (direction == AnimationDirection.LeftRight)
+            {
+                // For example, move 50 units to the right
+                targetPosition = initialPosition + new Vector3(50f, 0f, 0f);
+            }
+            else // AnimationDirection.UpDown
+            {
+                // For example, move 50 units upwards
+                targetPosition = initialPosition + new Vector3(0f, 50f, 0f);
+            }
+
+            while (Constants.AnimateTrue)
+            {
+                float timeElapsed = 0f;
+
+                while (timeElapsed < duration)
+                {
+                    if (iconRectTransform == null)
+                    {
+                        // The icon has been destroyed, so stop the coroutine
+                        yield break;
+                    }
+
+                    timeElapsed += Time.deltaTime;
+
+                    // Use Lerp to smoothly transition between the initial and target position
+                    iconRectTransform.localPosition = Vector3.Lerp(initialPosition, targetPosition, timeElapsed / duration);
+
+                    yield return null;  // Wait until the next frame
+                }
+
+                // Ensure the final position is the target position
+                iconRectTransform.localPosition = targetPosition;
+
+                // Swap the initial and target positions for the next loop iteration
+                (initialPosition, targetPosition) = (targetPosition, initialPosition);
+            }
+        }
 
         public static GameObject CreateDarkBackground(string objectName)
         {
@@ -93,7 +145,6 @@ namespace MingoData.Scripts.Utils
             return textMeshPro;
         }
 
-                
         public static Color32 CreateHexToColor(string hex)
         {
             hex = hex.Replace("0x", "");
@@ -111,7 +162,6 @@ namespace MingoData.Scripts.Utils
             return new Color32(r, g, b, a);
         }
 
-        
         public static LineRenderer CreateLineRenderer(GameObject gameObject, float startWidth, float endWidth, int positionCount, Vector3 startPosition, Vector3 endPosition, Color color)
         {
             // NOTE: unity editor: Edit->Project Settings-> Graphics Then in the inspector where it says "Always Included Shaders" add "Unlit/Color"
@@ -182,7 +232,7 @@ namespace MingoData.Scripts.Utils
 
             lineRenderer.material = new Material(Shader.Find("Unlit/Color"))
             {
-                color = Color.white // Set the material color directly
+                color = CreateHexToColor(body.planetColor).ToUnityColor()
             };
 
             //lineRenderer.widthMultiplier = body.diameter * sizeScale * diameterScaleFactor;

@@ -19,6 +19,7 @@ namespace MingoData.Scripts.MainUtil
         public float aphelion;
         public float orbitalPeriod;
         public float orbitalVelocity;
+        public string planetColor;
         public float orbitalInclination;
         public float orbitalEccentricity;
         public float obliquityToOrbit;
@@ -43,7 +44,6 @@ namespace MingoData.Scripts.MainUtil
         public GameObject planetGuidance;
         public RectTransform planetGuidanceRectTransform;
         public Image planetGuidanceImage;
-        public string planetColor;
 
         [NonSerialized] public LineRenderer distanceLineRenderer;
         [NonSerialized] public TextMeshPro distanceText;

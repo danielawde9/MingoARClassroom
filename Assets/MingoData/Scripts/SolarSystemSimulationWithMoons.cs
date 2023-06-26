@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Net.Mime;
 using MingoData.Scripts.MainUtil;
 using MingoData.Scripts.Utils;
 using UnityEngine;
@@ -105,7 +106,6 @@ namespace MingoData.Scripts
             }
         }
 
-
         private void DetectPlanetTouch(Vector2 touchPosition)
         {
             Ray ray = mainCamera.ScreenPointToRay(touchPosition);
@@ -170,15 +170,6 @@ namespace MingoData.Scripts
             movePlanetCoroutine = StartCoroutine(MoveSelectedPlanetWithUserCoroutine(selectedPlanet));
         }
 
-        private IEnumerator MoveSelectedPlanetWithUserCoroutine(GameObject planet)
-        {
-            while (isPlanetSelected)
-            {
-                Transform transform1 = mainCamera.transform;
-                planet.transform.position = Vector3.Lerp(planet.transform.position, transform1.position + transform1.forward * 1f, Time.deltaTime);
-                yield return null;
-            }
-        }
 
         public void ReturnSelectedPlanetToOriginalState()
         {
@@ -348,10 +339,17 @@ namespace MingoData.Scripts
             uiHandler.PlayClickSound();
             parentDistanceLinesObject = new GameObject("ParentDistanceLines");
             Quaternion rotationCorrection = Quaternion.Euler(0, 0, 0);
+            // Get the user's position and facing direction from the main camera
+            Transform transform1 = mainCamera.transform;
+            Vector3 userPosition = transform1.position;
+            Vector3 userDirection = transform1.forward;
+
+            // Calculate the spawn position 1 meter in front of the user
+            Vector3 spawnPosition = userPosition + userDirection * 50.0f; 
 
             foreach (PlanetData planet in SolarSystemUtility.planetDataDictionary.Values)
             {
-                InstantiatePlanet(planet, placedTouchPosition, rotationCorrection);
+                InstantiatePlanet(planet, spawnPosition, rotationCorrection);
                 if (planet.name != Constants.PlanetSun)
                 {
                     SolarSystemUtility.CreateDistanceLineAndTextFromSun(parentDistanceLinesObject, planet);
@@ -367,6 +365,7 @@ namespace MingoData.Scripts
                 UtilsFns.CreateOrbitLine(planet.celestialBodyInstance, planet, (body, angle) => SolarSystemUtility.CalculatePlanetPosition((PlanetData)body, angle, distanceScale));
             }
         }
+        
         private void InstantiatePlanet(PlanetData planet, Vector3 placedTouchPosition, Quaternion rotationCorrection)
         {
             GameObject planetPrefab = Resources.Load<GameObject>(planet.prefabName);
@@ -401,7 +400,7 @@ namespace MingoData.Scripts
             planet.planetGuidanceImage.sprite = planetSprite;
             planet.planetGuidance.GetComponent<Button>().onClick.AddListener(() => SelectPlanetByName(planet.name, false));
             planet.planetGuidance.transform.SetSiblingIndex(0);
-
+            planet.planetGuidance.GetComponent<Image>().color = UtilsFns.CreateHexToColor(planet.planetColor).ToUnityColor();
 
             planet.celestialBodyInstance = Instantiate(planetPrefab, newPosition, rotationCorrection * planetPrefab.transform.rotation * Quaternion.Euler(planet.rotationAxis));
             planet.celestialBodyInstance.name = planet.name;
@@ -549,8 +548,17 @@ namespace MingoData.Scripts
             }
             yield return null;
         }
+        
+        private IEnumerator MoveSelectedPlanetWithUserCoroutine(GameObject planet)
+        {
+            while (isPlanetSelected)
+            {
+                Transform transform1 = mainCamera.transform;
+                planet.transform.position = Vector3.Lerp(planet.transform.position, transform1.position + transform1.forward * 1f, Time.deltaTime);
+                yield return null;
+            }
+        }
     }
-
 }
 
 // fixes
@@ -560,9 +568,11 @@ namespace MingoData.Scripts
 // todo check camera permission
 // todo fix light range on distance
 // todo add black background when planet selected
-// todo fix solar dust 
+// todo fix solar dust , also add something like movement 
+// todo initial timing kmn msh zero 
+// todo random placemnt of the planets
+// todo fix text lal initial scan 
 // todo add audio toggle
-// todo add animation for middle helper 
 
 // features
 // todo add toggle for sound  

@@ -14,7 +14,6 @@ using TextMeshProUGUI = TMPro.TextMeshProUGUI;
 
 namespace MingoData.Scripts.MainUtil
 {
-
     public class UIHandler : MonoBehaviour
     {
         [SerializeField]
@@ -22,6 +21,7 @@ namespace MingoData.Scripts.MainUtil
         [SerializeField]
         private LocalizationManager localizationManager;
         public AudioSource clickAudioSource;
+        private static Coroutine _animationCoroutine;
 
         [Header("Panel Menu")]
         public GameObject menuSliderPanel;
@@ -147,6 +147,7 @@ namespace MingoData.Scripts.MainUtil
             celestialBodyHandler.ReturnSelectedPlanetToOriginalState();
             PlayClickSound();
         }
+        
         private void OnReturnToMainMenuButtonClicked()
         {
             PlayClickSound();
@@ -156,6 +157,7 @@ namespace MingoData.Scripts.MainUtil
             SolarSystemSimulationWithMoons.ClearDictionary();
             UtilsFns.LoadNewScene("MainMenu");
         }
+        
         public void PlayClickSound()
         {
             clickAudioSource.Play();
@@ -227,8 +229,6 @@ namespace MingoData.Scripts.MainUtil
 
         }
 
-
-
         private void MenuTransitionInit()
         {
             // Create dark backgrounds
@@ -270,6 +270,7 @@ namespace MingoData.Scripts.MainUtil
 
             SetToggleButtonSize(sliderButtonToggleRectTransform, 250);
         }
+        
         private void TopMenuInit()
         {
             ReverseOrderIfArabic(topMenuPlanetLayout.GetComponent<HorizontalLayoutGroup>());
@@ -373,8 +374,6 @@ namespace MingoData.Scripts.MainUtil
 
             HorizontalLayoutGroup orbitLineToggleLayoutGroup = orbitLineToggle.transform.parent.GetComponent<HorizontalLayoutGroup>();
             ReverseOrderIfArabic(orbitLineToggleLayoutGroup);
-
-
         }
 
         private void ReverseOrderIfArabic(HorizontalOrVerticalLayoutGroup layoutGroup)
@@ -388,7 +387,7 @@ namespace MingoData.Scripts.MainUtil
             sizeScaleSlider.value = Constants.InitialSizeScale;
             distanceScaleSlider.value = Constants.InitialDistanceScale;
 
-            timeScaleSlider.minValue = Constants.InitialTimeScale;
+            timeScaleSlider.minValue = Constants.MinTime;
             sizeScaleSlider.minValue = Constants.MinSize;
             distanceScaleSlider.minValue = Constants.MinDistance;
 
@@ -616,7 +615,6 @@ namespace MingoData.Scripts.MainUtil
 
         }
 
-
         // This method will be called whenever the ScrollView's position changes
         private void OnUserScroll(Vector2 scrollPosition)
         {
@@ -636,7 +634,6 @@ namespace MingoData.Scripts.MainUtil
             sliderPanelScrollRect.onValueChanged.AddListener(OnUserScroll);
         }
 
-
         private UnityAction CreateUiHelperFunction(MiddleIconHelper uiHelper)
         {
             return () =>
@@ -648,9 +645,19 @@ namespace MingoData.Scripts.MainUtil
                 isUIOverlayEnabled = false;
             };
         }
-
-        private MiddleIconHelper SpawnMiddleIconHelper(string middleIconsTopHelperTitleKey, string middleIconsTextHelperKey, Sprite bottomIconsImage, bool isMiddleIconsTopHelper)
+        
+        // Call this method to stop the animation
+        private void StopIconAnimation()
         {
+            if (_animationCoroutine == null)
+                return;
+            StopCoroutine(_animationCoroutine);
+            _animationCoroutine = null;
+        }
+
+        private MiddleIconHelper SpawnMiddleIconHelper(string middleIconsTopHelperTitleKey, string middleIconsTextHelperKey, Sprite bottomIconsImage, bool isMiddleIconsTopHelper, UtilsFns.AnimationDirection direction)
+        {
+            StopIconAnimation();
             // Instantiate the prefab
             GameObject instance = Instantiate(middleIconHelperPrefab, transform);
 
@@ -684,9 +691,16 @@ namespace MingoData.Scripts.MainUtil
             }
 
             HorizontalLayoutGroup layoutGroup = helper.middleIconsTopHelper.GetComponent<HorizontalLayoutGroup>();
+            
             ReverseOrderIfArabic(layoutGroup);
 
             instance.SetActive(true);
+            
+            // Get the RectTransform of the icon
+            RectTransform iconRectTransform = helper.bottomIconsImage.GetComponent<RectTransform>();
+
+            // Start the animation
+            StartCoroutine(UtilsFns.AnimateIcon(iconRectTransform, 1f, direction));  // Animate over 1 second
 
             return helper;
         }
@@ -698,7 +712,8 @@ namespace MingoData.Scripts.MainUtil
                 "",
                 "Move_your_phone_to_start_scanning_the_room",
                 scanRoomIcon,
-                false);
+                false,
+                UtilsFns.AnimationDirection.LeftRight);
 
             _darkImageBackgroundInitialUI = UtilsFns.CreateDarkBackground("InitialUI");
 
@@ -717,7 +732,8 @@ namespace MingoData.Scripts.MainUtil
                 "Instructions",
                 "Click_on_any_planet_or_click_on_the_menu_below_to_display_more_settings",
                 swipeUpDownIcon,
-                true);
+                true,
+                UtilsFns.AnimationDirection.UpDown);
 
             menuSliderPanel.SetActive(true);
             closePlanetButton.SetActive(false);
@@ -731,7 +747,8 @@ namespace MingoData.Scripts.MainUtil
                 "Instructions",
                 "Touch_and_drag_to_move_the_planet_Around",
                 swipeLeftRightIcon,
-                true);
+                true,
+                UtilsFns.AnimationDirection.LeftRight);
         }
 
         private void StoreSiblingIndexes()
@@ -753,5 +770,4 @@ namespace MingoData.Scripts.MainUtil
             UtilsFns.BringToFront(menuSliderPanel);
         }
     }
-
 }
