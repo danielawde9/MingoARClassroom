@@ -42,7 +42,6 @@ namespace MingoData.Scripts
         private bool isPlanetSelected;
         private bool isDistanceFromSunVisible;
 
-        private const float planetSelectedScale = 0.5f;
         
         private List<string> loadedPlanets;
         
@@ -87,7 +86,7 @@ namespace MingoData.Scripts
             if (!isPlanetSelected || uiHandler.isUIOverlayEnabled)
                 return;
 
-            const float rotationSpeed = 0.1f; // Adjust this value to change the rotation speed
+            const float rotationSpeed = 0.1f; 
             // Rotate around the y-axis based on x delta (for left/right swipes)
             selectedPlanet.transform.Rotate(0f, -delta.x * rotationSpeed, 0f, Space.World);
 
@@ -146,8 +145,8 @@ namespace MingoData.Scripts
             uiHandler.SetCelestialBodyData(SolarSystemUtility.planetDataDictionary[planet.name], selectedFields);
 
             // Save the original position and scale of the planet
-            SolarSystemUtility.OriginalPositions.TryAdd(planet, planet.transform.position);
-            SolarSystemUtility.OriginalScales.TryAdd(planet, planet.transform.localScale);
+            SolarSystemUtility.ColorOriginalPositions.TryAdd(planet, planet.transform.position);
+            SolarSystemUtility.ColorOriginalScales.TryAdd(planet, planet.transform.localScale);
 
             // Move the selected planet in front of the user by one unit and scale it to 1,1,1
             if (mainCamera != null)
@@ -157,7 +156,7 @@ namespace MingoData.Scripts
                 selectedPlanet.transform.position = newPosition;
             }
 
-            selectedPlanet.transform.localScale = new Vector3(planetSelectedScale, planetSelectedScale, planetSelectedScale);
+            selectedPlanet.transform.localScale = new Vector3(Constants.PlanetSelectedScale, Constants.PlanetSelectedScale, Constants.PlanetSelectedScale);
 
             if (movePlanetCoroutine != null)
             {
@@ -177,11 +176,11 @@ namespace MingoData.Scripts
                 movePlanetCoroutine = null;
             }
             // Return the planet to its original position and scale
-            if (SolarSystemUtility.OriginalPositions.TryGetValue(selectedPlanet, out Vector3 position))
+            if (SolarSystemUtility.ColorOriginalPositions.TryGetValue(selectedPlanet, out Vector3 position))
             {
                 selectedPlanet.transform.position = position;
             }
-            if (SolarSystemUtility.OriginalScales.TryGetValue(selectedPlanet, out Vector3 scale))
+            if (SolarSystemUtility.ColorOriginalScales.TryGetValue(selectedPlanet, out Vector3 scale))
             {
                 selectedPlanet.transform.localScale = scale;
             }
@@ -227,7 +226,6 @@ namespace MingoData.Scripts
             if (body.name == Constants.PlanetSun)
                 return;
             float scale = body.diameter * newSizeScaleFactor;
-            // sizeScale = body.diameter * newSizeScaleFactor;
             body.celestialBodyInstance.transform.localScale = new Vector3(scale, scale, scale);
         }
 
@@ -352,7 +350,7 @@ namespace MingoData.Scripts
                 }
 
                 uiHandler.SetPlanetColorLegend(SolarSystemUtility.planetDataDictionary);
-                SolarSystemUtility.OriginalPositions[planet.celestialBodyInstance] = planet.celestialBodyInstance.transform.position;
+                SolarSystemUtility.ColorOriginalPositions[planet.celestialBodyInstance] = planet.celestialBodyInstance.transform.position;
                 SolarSystemUtility.InitPlanetProgress(planet);
                 UtilsFns.CreateOrbitLine(planet.celestialBodyInstance, planet, (body, angle) => SolarSystemUtility.CalculatePlanetPosition((PlanetData)body, angle, distanceScale));
             }
@@ -555,7 +553,7 @@ namespace MingoData.Scripts
 // todo random placement of the planets
 // todo fix text lal initial scan 
 // todo add audio toggle
-// todo naming
+// todo naming planet issue 
 // todo texture 
 
 // features

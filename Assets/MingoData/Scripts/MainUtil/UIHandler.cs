@@ -33,7 +33,6 @@ namespace MingoData.Scripts.MainUtil
         public bool isUIOverlayEnabled;
         private GameObject sliderButtonToggleImage;
         private RectTransform sliderPanelRectTransform;
-        private const float sliderPanelTransitionDuration = 0.2f;
         private Vector2 initialPosition;
         private Vector2 targetPosition;
         private float startRotation;
@@ -594,9 +593,9 @@ namespace MingoData.Scripts.MainUtil
         private IEnumerator TransitionPanel(Vector2 startPosition, Vector2 endPosition)
         {
             float elapsedTime = 0f;
-            while (elapsedTime < sliderPanelTransitionDuration)
+            while (elapsedTime < Constants.SliderPanelTransitionDuration)
             {
-                float t = Mathf.Clamp01(elapsedTime / sliderPanelTransitionDuration);
+                float t = Mathf.Clamp01(elapsedTime / Constants.SliderPanelTransitionDuration);
                 sliderPanelRectTransform.anchoredPosition = Vector2.Lerp(startPosition, endPosition, t);
 
                 // Rotation

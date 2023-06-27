@@ -12,13 +12,13 @@ namespace MingoData.Scripts.MainUtil
     {
         private static PlanetDataList _planetDataList;
         public static Dictionary<string, PlanetData> planetDataDictionary;
-        public static readonly Dictionary<GameObject, Vector3> OriginalPositions = new Dictionary<GameObject, Vector3>();
-        public static readonly Dictionary<GameObject, Vector3> OriginalScales = new Dictionary<GameObject, Vector3>();
+        public static readonly Dictionary<GameObject, Vector3> ColorOriginalPositions = new Dictionary<GameObject, Vector3>();
+        public static readonly Dictionary<GameObject, Vector3> ColorOriginalScales = new Dictionary<GameObject, Vector3>();
 
         public static void ClearDictionary()
         {
-            OriginalScales.Clear();
-            OriginalPositions.Clear();
+            ColorOriginalScales.Clear();
+            ColorOriginalPositions.Clear();
             planetDataDictionary.Clear();
         }
         

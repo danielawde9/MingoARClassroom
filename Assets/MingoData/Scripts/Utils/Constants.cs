@@ -29,7 +29,9 @@ namespace MingoData.Scripts.Utils
         public const float InitialSizeScale = 1f / 50000f;
         public const float InitialSunSizeScale = 1f / 5000000f;
         public const float InitialTimeScale = 10000f;
-        
+        public const float PlanetSelectedScale = 0.5f;
+        public const float SliderPanelTransitionDuration = 0.2f;
+
         public const bool AnimateTrue = true;
 
         public const float MinTime = 1f;

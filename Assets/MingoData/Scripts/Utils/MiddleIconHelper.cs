@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 namespace MingoData.Scripts.Utils
 {
-
     public class MiddleIconHelper
     {
         private GameObject MiddleIconGameObject { get; set; }
@@ -12,7 +11,7 @@ namespace MingoData.Scripts.Utils
         public readonly TextMeshProUGUI middleIconsTopHelperTitleText;
         public readonly Button middleIconsTopHelperCloseButton;
         public readonly TextMeshProUGUI middleIconsTextHelper;
-        public SVGImage bottomIconsImage;
+        public readonly SVGImage bottomIconsImage;
 
         public MiddleIconHelper(GameObject gameObject)
         {
@@ -31,8 +30,5 @@ namespace MingoData.Scripts.Utils
             Object.Destroy(MiddleIconGameObject);
             MiddleIconGameObject = null;
         }
-
-        
     }
-
 }
