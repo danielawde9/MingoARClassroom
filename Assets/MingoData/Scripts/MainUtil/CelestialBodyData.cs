@@ -30,6 +30,7 @@ namespace MingoData.Scripts.MainUtil
         public float orbitalEccentricitySquared;
         public string prefabName;
         public Vector3 rotationAxis;
+        public Vector3 position;
         public GameObject celestialBodyInstance;
         public LineRenderer orbitLineRenderer;
 

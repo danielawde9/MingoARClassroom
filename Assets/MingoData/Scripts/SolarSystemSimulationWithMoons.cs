@@ -6,6 +6,7 @@ using MingoData.Scripts.Utils;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.XR.ARFoundation;
+using Random = UnityEngine.Random;
 
 namespace MingoData.Scripts
 {
@@ -375,8 +376,10 @@ namespace MingoData.Scripts
             planet.rotationAxis = Quaternion.Euler(0, 0, planet.obliquityToOrbit) * Vector3.up;
             
             distanceScale = Constants.InitialDistanceScale;
+            
+            planet.orbitProgress = Random.Range(0f, 360f);
 
-            Vector3 planetPosition = planet.name == Constants.PlanetSun ? Vector3.zero : spawnPosition + SolarSystemUtility.CalculatePlanetPosition(planet, 0f, distanceScale);
+            Vector3 planetPosition = planet.name == Constants.PlanetSun ? Vector3.zero : spawnPosition + SolarSystemUtility.CalculatePlanetPosition(planet, planet.orbitProgress, distanceScale);
 
             CreatePlanetGuidance(planet);
 
@@ -384,6 +387,7 @@ namespace MingoData.Scripts
             
             planet.celestialBodyInstance.name = planet.name;
 
+            Debug.LogError(planet.orbitProgress + " for " + planet.name);
             float planetScale = UtilsFns.GetPlanetScale(planet);
             planet.celestialBodyInstance.transform.localScale = new Vector3(planetScale, planetScale, planetScale);
 
@@ -546,13 +550,10 @@ namespace MingoData.Scripts
 }
 
 // fixes
-// todo fix translation
 // todo check camera permission
 // todo fix light range on distance
 // todo add black background when planet selected
 // todo fix solar dust , also add something like movement 
-// todo random placement of the planets
-// todo fix text lal initial scan 
 // todo add audio toggle
 // todo naming planet issue 
 // todo texture 

@@ -80,13 +80,11 @@ namespace MingoData.Scripts.MainUtil
             planetDataDictionary = _planetDataList.planets
                     .Where(p => desiredPlanets.Contains(p.name))
                     .ToDictionary(p => p.name, p => p);
-
         }
 
         public static void InitPlanetProgress(PlanetData planet)
         {
             planet.rotationSpeed = 360f / planet.rotationPeriod;
-            planet.orbitProgress = 0f;
             planet.rotationProgress = 0f;
         }
 

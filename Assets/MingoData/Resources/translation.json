@@ -247,18 +247,13 @@
         },
         {
             "key": "Move_your_phone_to_start_scanning_the_room",
-            "english": "Move your phone to start scanning the room",
-            "arabic": "حرك هاتفك لبدء فحص الغرفة"
-        },
-        {
-            "key": "Tap_on_the_scanned_area_to_place_the_solar_system",
-            "english": "Tap on the scanned area to place the solar system",
-            "arabic": "اضغط على المنطقة التي تم فحصها لوضع النظام الشمسي"
+            "english": "Move your phone to start scanning the room and place the solar system",
+            "arabic": "حرك هاتفك لبدء مسح الغرفة ووضع النظام الشمسي"
         },
         {
             "key": "Click_on_any_planet_or_click_on_the_menu_below_to_display_more_settings",
-            "english": "Click on any planet or click on the menu below to display more settings",
-            "arabic": "انقر على أي كوكب أو انقر على القائمة أدناه لعرض المزيد من الإعدادات"
+            "english": "Click on any planet or swipe up to show the menu below to display more settings",
+            "arabic": "انقر فوق أي كوكب أو اسحب لأعلى لإظهار القائمة أدناه لعرض المزيد من الإعدادات"
         },
         {
             "key": "Touch_and_drag_to_move_the_planet_Around",
