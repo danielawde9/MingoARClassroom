@@ -326,7 +326,6 @@ namespace MingoData.Scripts
             
             parentDistanceLinesObject = new GameObject("ParentDistanceLines");
 
-            // Simplified rotationCorrection to identity since Euler(0,0,0) equals to Quaternion.identity
             Quaternion rotationCorrection = Quaternion.identity;
 
             Transform mainCameraTransform = mainCamera.transform;
@@ -343,15 +342,17 @@ namespace MingoData.Scripts
                     
                     SolarSystemUtility.UpdateDistanceFromSunText(planet, localizationManager);
                 }
-                
                 else
                 {
                     SolarSystemUtility.AssignDirectionalLight(planet.celestialBodyInstance.transform, distanceScale, loadedPlanets);
                 }
 
                 uiHandler.SetPlanetColorLegend(SolarSystemUtility.planetDataDictionary);
+                
                 SolarSystemUtility.ColorOriginalPositions[planet.celestialBodyInstance] = planet.celestialBodyInstance.transform.position;
+                
                 SolarSystemUtility.InitPlanetProgress(planet);
+                
                 UtilsFns.CreateOrbitLine(planet.celestialBodyInstance, planet, (body, angle) => SolarSystemUtility.CalculatePlanetPosition((PlanetData)body, angle, distanceScale));
             }
         }
@@ -364,6 +365,7 @@ namespace MingoData.Scripts
             {
                 planetPrefab = Resources.Load<GameObject>(planet.prefabName);
             }
+            
             catch (Exception e)
             {
                 Debug.LogError($"Failed to load prefab for {planet.name}: {e.Message}");
@@ -549,7 +551,6 @@ namespace MingoData.Scripts
 // todo fix light range on distance
 // todo add black background when planet selected
 // todo fix solar dust , also add something like movement 
-// todo initial timing kmn msh zero 
 // todo random placement of the planets
 // todo fix text lal initial scan 
 // todo add audio toggle
