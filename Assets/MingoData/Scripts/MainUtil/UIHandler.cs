@@ -78,7 +78,6 @@ namespace MingoData.Scripts.MainUtil
         public UnityAction<bool> onDistanceFromSunToggleValueChanged;
         public UnityAction<bool> onPlanetShowGuidanceToggleValueChanged;
 
-
         [Header("Solar System Slider")]
         public TextMeshProUGUI solarSystemSliderTitle;
         public Slider timeScaleSlider;
@@ -614,7 +613,6 @@ namespace MingoData.Scripts.MainUtil
 
         }
 
-        // This method will be called whenever the ScrollView's position changes
         private void OnUserScroll(Vector2 scrollPosition)
         {
             // If the scroll position is at the top, disable the shadow

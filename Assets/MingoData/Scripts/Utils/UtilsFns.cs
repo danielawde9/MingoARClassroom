@@ -10,16 +10,16 @@ using UnityEngine.UI;
 
 namespace MingoData.Scripts.Utils
 {
+
     public class UtilsFns : MonoBehaviour
     {
-        public static GameObject directionalLight;
 
         public enum AnimationDirection
         {
             LeftRight,
             UpDown
         }
-        
+
         public static IEnumerator AnimateIcon(Transform iconRectTransform, float duration, AnimationDirection direction)
         {
             // Store the initial position
@@ -55,7 +55,7 @@ namespace MingoData.Scripts.Utils
                     // Use Lerp to smoothly transition between the initial and target position
                     iconRectTransform.localPosition = Vector3.Lerp(initialPosition, targetPosition, timeElapsed / duration);
 
-                    yield return null;  // Wait until the next frame
+                    yield return null; // Wait until the next frame
                 }
 
                 // Ensure the final position is the target position
@@ -69,7 +69,7 @@ namespace MingoData.Scripts.Utils
         public static GameObject CreateDarkBackground(string objectName)
         {
             // Create new GameObject
-            GameObject darkBackground = new GameObject("DarkBackground_"+objectName);
+            GameObject darkBackground = new GameObject("DarkBackground_" + objectName);
 
             // Add it as a child of the parent canvas
             darkBackground.transform.SetParent(FindObjectOfType<Canvas>().transform, false);
@@ -78,7 +78,7 @@ namespace MingoData.Scripts.Utils
             Image image = darkBackground.AddComponent<Image>();
 
             darkBackground.AddComponent<Button>();
-            
+
             // Set the image color to black with 50% opacity
             image.color = new Color(0, 0, 0, 0.5f);
 
@@ -93,12 +93,12 @@ namespace MingoData.Scripts.Utils
 
             return darkBackground;
         }
-        
+
         public static void LoadNewScene(string sceneName)
         {
             SceneManager.LoadScene(sceneName);
         }
-        
+
         public static void BringToFront(GameObject uiElement)
         {
             Canvas parentCanvas = uiElement.GetComponentInParent<Canvas>();
@@ -191,7 +191,7 @@ namespace MingoData.Scripts.Utils
             parentObject.AddComponent<FaceCamera>();
 
             GameObject inclinationLine = CreateGameObject(planet.name + "_InclinationLine", planetInstance, Vector3.zero, Quaternion.Euler(planet.obliquityToOrbit, 0f, 0f));
-            CreateLineRenderer(inclinationLine, 0.01f, 0.01f, 2, Vector3.down, Vector3.up, Constants.ColorYellow); 
+            CreateLineRenderer(inclinationLine, 0.01f, 0.01f, 2, Vector3.down, Vector3.up, Constants.ColorYellow);
 
             inclinationLine.SetActive(false);
 
@@ -232,7 +232,7 @@ namespace MingoData.Scripts.Utils
 
             GameObject planetTextObject = CreateGameObject($"{planet.name}_PlanetName", parentObject, Vector3.down * 1.1f, Quaternion.identity);
             TextMeshPro planetNameTextMeshPro = CreateTextMeshPro(planetTextObject, null, 4.25f, Color.white, TextAlignmentOptions.Center, new Vector2(2f, 2f));
-            planetNameTextMeshPro.text = localizationManager.GetLocalizedValue(planet.name, planetNameTextMeshPro, true, Constants.ColorWhite );
+            planetNameTextMeshPro.text = localizationManager.GetLocalizedValue(planet.name, planetNameTextMeshPro, true, Constants.ColorWhite);
             parentObject.SetActive(false);
         }
 
@@ -263,10 +263,26 @@ namespace MingoData.Scripts.Utils
             orbitLine.SetActive(true);
 
         }
-        
-        public static void CreateDirectionalLight(Transform sunTransform, float distanceScale, IReadOnlyDictionary<string, PlanetData> localPlanetDataDictionary, List<string> allowedPlanets)
+
+        public static void CreateSunLight(Transform sunTransform, float distanceScale, IReadOnlyDictionary<string, PlanetData> localPlanetDataDictionary, List<string> allowedPlanets)
         {
-            directionalLight = new GameObject("Directional Light");
+
+            // Find the last planet from the localPlanetDataDictionary order
+            string lastAllowedPlanet = localPlanetDataDictionary.Keys.Reverse().FirstOrDefault(allowedPlanets.Contains);
+
+            if (lastAllowedPlanet == null || !localPlanetDataDictionary.TryGetValue(lastAllowedPlanet, out PlanetData lastPlanetData))
+                return;
+            
+            float distanceToLastPlanet = lastPlanetData.distanceFromSun * distanceScale * 10;
+            Debug.Log("Distance from Sun to " + lastPlanetData.name + ": " + distanceToLastPlanet);
+            
+            CreateLightComponent(sunTransform, distanceToLastPlanet);
+
+        }
+        
+        public static GameObject CreateLightComponent(Transform parentTransform, float distanceToPlanet)
+        {
+            GameObject directionalLight = new GameObject( parentTransform.name+"_Directional_Light");
             if (!directionalLight.TryGetComponent(out Light lightComponent))
             {
                 lightComponent = directionalLight.AddComponent<Light>();
@@ -274,21 +290,15 @@ namespace MingoData.Scripts.Utils
             lightComponent.type = LightType.Point;
             lightComponent.color = Color.white;
             lightComponent.intensity = 1.0f;
-
-            // Find the last planet from the localPlanetDataDictionary order
-            string lastAllowedPlanet = localPlanetDataDictionary.Keys.Reverse().FirstOrDefault(allowedPlanets.Contains);
-
-            if (lastAllowedPlanet != null && localPlanetDataDictionary.TryGetValue(lastAllowedPlanet, out PlanetData lastPlanetData))
-            {
-                float distanceToLastPlanet = lastPlanetData.distanceFromSun * distanceScale * 10;
-                Debug.Log("Distance from Sun to " + lastPlanetData.name + ": " + distanceToLastPlanet);
-
-                // Adjust the range of the directional light
-                lightComponent.range = distanceToLastPlanet;
-            }
-
-            directionalLight.transform.SetParent(sunTransform);
+            lightComponent.bounceIntensity = 0;
+            lightComponent.renderMode = LightRenderMode.ForceVertex;
+            lightComponent.cullingMask = 1;
+            directionalLight.transform.SetParent(parentTransform);
             directionalLight.transform.localPosition = Vector3.zero;
+            
+            // Adjust the range of the directional light
+            lightComponent.range = distanceToPlanet;
+            return directionalLight;
         }
     }
 }

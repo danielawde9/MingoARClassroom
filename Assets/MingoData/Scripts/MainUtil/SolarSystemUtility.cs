@@ -14,7 +14,7 @@ namespace MingoData.Scripts.MainUtil
         public static Dictionary<string, PlanetData> planetDataDictionary;
         public static readonly Dictionary<GameObject, Vector3> ColorOriginalPositions = new Dictionary<GameObject, Vector3>();
         public static readonly Dictionary<GameObject, Vector3> ColorOriginalScales = new Dictionary<GameObject, Vector3>();
-
+        
         public static void ClearDictionary()
         {
             ColorOriginalScales.Clear();
@@ -55,8 +55,8 @@ namespace MingoData.Scripts.MainUtil
 
         public static void AssignDirectionalLight(Transform planetInstance, float distanceScale, List<string> desiredPlanets)
         {
-            UtilsFns.CreateDirectionalLight(planetInstance, distanceScale, planetDataDictionary, desiredPlanets);
-            GameObject localDirectionalLight = GameObject.Find("Directional Light");
+            UtilsFns.CreateSunLight(planetInstance, distanceScale, planetDataDictionary, desiredPlanets);
+            GameObject localDirectionalLight = GameObject.Find("Sun_Directional_Light");
             if (localDirectionalLight == null)
                 return;
             localDirectionalLight.transform.SetParent(planetInstance);
@@ -156,5 +156,4 @@ namespace MingoData.Scripts.MainUtil
             }
         }
     }
-
 }

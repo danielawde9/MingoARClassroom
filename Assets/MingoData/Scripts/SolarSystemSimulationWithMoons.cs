@@ -35,9 +35,9 @@ namespace MingoData.Scripts
 
         private GameObject parentDistanceLinesObject;
         private GameObject selectedPlanet;
+        private GameObject selectedPlanetLightObject;
 
         private bool isAfterScanShown;
-        private bool isCoroutineRunning;
         private bool isSolarSystemPlaced;
         private bool isPlanetGuidanceActive = true;
         private bool isPlanetSelected;
@@ -138,7 +138,10 @@ namespace MingoData.Scripts
 
             selectedPlanet = planet;
             isPlanetSelected = true;
+            selectedPlanetLightObject.SetActive(isPlanetSelected);
 
+            UpdateTogglePlanetGuidanceVisibilityToggle(false);
+                    
             uiHandler.PlayClickSound();
             uiHandler.SetPlanetNameTextTitle(selectedPlanet.name, true);
 
@@ -148,7 +151,7 @@ namespace MingoData.Scripts
             // Save the original position and scale of the planet
             SolarSystemUtility.ColorOriginalPositions.TryAdd(planet, planet.transform.position);
             SolarSystemUtility.ColorOriginalScales.TryAdd(planet, planet.transform.localScale);
-
+            
             // Move the selected planet in front of the user by one unit and scale it to 1,1,1
             if (mainCamera != null)
             {
@@ -169,7 +172,6 @@ namespace MingoData.Scripts
 
         public void ReturnSelectedPlanetToOriginalState()
         {
-
             // Stop the coroutine
             if (movePlanetCoroutine != null)
             {
@@ -190,7 +192,8 @@ namespace MingoData.Scripts
 
             isPlanetSelected = false;
             selectedPlanet = null;
-
+            selectedPlanetLightObject.SetActive(isPlanetSelected);
+            UpdateTogglePlanetGuidanceVisibilityToggle(true);
         }
 
         public void UpdateTimeScale(float value)
@@ -317,7 +320,7 @@ namespace MingoData.Scripts
             uiHandler.onPlanetShowGuidanceToggleValueChanged = UpdateTogglePlanetGuidanceVisibilityToggle;
 
             uiHandler.SetCelestialBodyData(null, selectedFields);
-
+            selectedPlanetLightObject =  UtilsFns.CreateLightComponent(mainCamera.transform, 10f);
             SolarSystemUtility.LoadPlanetData(loadedPlanets);
         }
 
@@ -387,7 +390,6 @@ namespace MingoData.Scripts
             
             planet.celestialBodyInstance.name = planet.name;
 
-            Debug.LogError(planet.orbitProgress + " for " + planet.name);
             float planetScale = UtilsFns.GetPlanetScale(planet);
             planet.celestialBodyInstance.transform.localScale = new Vector3(planetScale, planetScale, planetScale);
 
@@ -425,7 +427,6 @@ namespace MingoData.Scripts
 
         private new void OnEnable()
         {
-            isCoroutineRunning = true;
             UIHandler.OnPlanetClicked += SelectPlanetByName;
             mPlaneManager.planesChanged += OnPlanesChanged;
             base.OnEnable();
@@ -433,7 +434,6 @@ namespace MingoData.Scripts
 
         private new void OnDisable()
         {
-            isCoroutineRunning = false;
             UIHandler.OnPlanetClicked -= SelectPlanetByName;
             mPlaneManager.planesChanged -= OnPlanesChanged;
             base.OnDisable();
@@ -443,21 +443,16 @@ namespace MingoData.Scripts
         {
             if (mPlaneManager.trackables.count < 1)
                 return;
-
             SpawnPlanets();
-
             uiHandler.UIShowAfterPlanetPlacement();
             isSolarSystemPlaced = true;
             mPlaneManager.enabled = false;
-
         }
 
         private void Update()
         {
             if (!isSolarSystemPlaced) return;
-
             StartCoroutine(UpdateOffScreenGuidanceCoroutine());
-            StartCoroutine(UpdateDirectionalLightCoroutine());
             StartCoroutine(UpdatePlanetsCoroutine());
         }
 
@@ -484,20 +479,6 @@ namespace MingoData.Scripts
                 }
             }
             yield return null;
-        }
-
-        private IEnumerator UpdateDirectionalLightCoroutine()
-        {
-            while (isCoroutineRunning)
-            {
-                if (!SolarSystemUtility.planetDataDictionary.TryGetValue(Constants.PlanetSun, out PlanetData sunData)) yield break;
-                Vector3 sunDirection = -sunData.celestialBodyInstance.transform.position.normalized;
-                if (sunDirection != Vector3.zero)
-                {
-                    UtilsFns.directionalLight.transform.SetPositionAndRotation(sunData.celestialBodyInstance.transform.position, Quaternion.LookRotation(sunDirection));
-                }
-                yield return new WaitForSeconds(1); // Wait for 1 second before running the loop again
-            }
         }
 
         private IEnumerator UpdatePlanetsCoroutine()
@@ -551,14 +532,15 @@ namespace MingoData.Scripts
 
 // fixes
 // todo check camera permission
-// todo fix light range on distance
 // todo add black background when planet selected
 // todo fix solar dust , also add something like movement 
-// todo add audio toggle
-// todo naming planet issue 
 // todo texture 
+// todo hayda effect li bl solar app
+// todo tutorial
+
 
 // features
+// todo reward system 
 // todo add toggle for sound  
 // todo populate language from the translation json 
 // todo add swipe up icon
