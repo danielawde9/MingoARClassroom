@@ -4454,8 +4454,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1105738287}
   m_HandleRect: {fileID: 1105738286}
   m_Direction: 2
-  m_Value: 1
-  m_Size: 0.9990284
+  m_Value: 0
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -10433,9 +10433,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefabToSpawn: {fileID: 2070235436534360326, guid: f760a20f367815a45bb978fe2f63efde,
     type: 3}
-  spawnRadius: 5
-  deSpawnDistance: 1
-  maxSpawnedPrefabs: 10
 --- !u!4 &1827464140
 Transform:
   m_ObjectHideFlags: 0
@@ -11087,7 +11084,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 0, y: 2919.9998}
+  m_AnchoredPosition: {x: 0, y: 2920}
   m_SizeDelta: {x: -13, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1981951315

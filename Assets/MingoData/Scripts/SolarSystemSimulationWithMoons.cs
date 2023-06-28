@@ -532,12 +532,8 @@ namespace MingoData.Scripts
 }
 
 // fixes
-// todo check camera permission
-// todo add black background when planet selected
-// todo fix solar dust , also add something like movement 
 // todo texture height show tadaris
 // todo sun glow 
-// todo hayda effect li bl solar app
 // todo tutorial
 
 
@@ -553,7 +549,6 @@ namespace MingoData.Scripts
 // todo add toggle for normalizing the planets size 
 // todo add songs and click sound
 // todo add seasons 
-// todo add solar dust toggle
 // todo add pov planets
 // todo document your code
 // todo add solar eclipse

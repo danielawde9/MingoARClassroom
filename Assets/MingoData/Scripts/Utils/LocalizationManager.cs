@@ -24,7 +24,7 @@ namespace MingoData.Scripts.Utils
         public TextAsset localizationFile; // Reference to the JSON file
 
         private Dictionary<string, LocalizationItem> localizedText;
-        private const string missingTextString = "Localized text not found";
+        private const string MissingTextString = "Localized text not found";
         private string currentLanguage = Constants.LangEn;
         //private string currentLanguage = Constants.Lang_EN;
 
@@ -51,7 +51,7 @@ namespace MingoData.Scripts.Utils
         }
         public string GetLocalizedValue(string key, TMP_Text textComponent, bool centerText, Color valueColor, params object[] formatArgs)
         {
-            string result = missingTextString;
+            string result = MissingTextString;
 
             // Convert the valueColor to hex
             string hexValueColor = ColorUtility.ToHtmlStringRGB(valueColor);
@@ -110,7 +110,7 @@ namespace MingoData.Scripts.Utils
 
             // Add color to timeValue
 
-            string result = missingTextString;
+            string result = MissingTextString;
 
             // Check if there is a localized string for the given time unit
             if (!localizedText.ContainsKey(timeUnitKey))

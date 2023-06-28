@@ -32,6 +32,10 @@ namespace MingoData.Scripts.Utils
         public const float PlanetSelectedScale = 0.5f;
         public const float SliderPanelTransitionDuration = 0.2f;
 
+        public const float SolarDustSpawnRadius = 5; // Radius of the area in which the prefabs will be spawned
+        public const float SolarDustDeSpawnDistance = 5f; // Distance the user must move past the prefab to de spawn it
+        public const int SolarDustMaxSpawnedPrefabs = 100; // Maximum number of prefabs to be spawned at a time
+
         public const bool AnimateTrue = true;
 
         public const float MinTime = 1f;
