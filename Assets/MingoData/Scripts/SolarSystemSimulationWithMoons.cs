@@ -321,6 +321,7 @@ namespace MingoData.Scripts
 
             uiHandler.SetCelestialBodyData(null, selectedFields);
             selectedPlanetLightObject =  UtilsFns.CreateLightComponent(mainCamera.transform, 10f);
+            selectedPlanetLightObject.SetActive(false);
             SolarSystemUtility.LoadPlanetData(loadedPlanets);
         }
 
@@ -534,7 +535,8 @@ namespace MingoData.Scripts
 // todo check camera permission
 // todo add black background when planet selected
 // todo fix solar dust , also add something like movement 
-// todo texture 
+// todo texture height show tadaris
+// todo sun glow 
 // todo hayda effect li bl solar app
 // todo tutorial
 
