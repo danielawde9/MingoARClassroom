@@ -331,15 +331,13 @@ namespace MingoData.Scripts
             
             parentDistanceLinesObject = new GameObject("ParentDistanceLines");
 
-            Quaternion rotationCorrection = Quaternion.identity;
-
-            Transform mainCameraTransform = mainCamera.transform;
-            
-            Vector3 spawnPosition = mainCameraTransform.position + mainCameraTransform.forward;
+            // todo fix hay, bada yetzabat the textrue 
+            Quaternion rotationCorrection = Quaternion.Euler(-90f, 0f, 0f);
+            //Quaternion rotationCorrection = Quaternion.identity;
 
             foreach (PlanetData planet in SolarSystemUtility.planetDataDictionary.Values)
             {
-                InstantiatePlanet(planet, spawnPosition, rotationCorrection);
+                InstantiatePlanet(planet, Vector3.zero, rotationCorrection);
                 
                 if (planet.name != Constants.PlanetSun)
                 {
@@ -532,8 +530,8 @@ namespace MingoData.Scripts
 }
 
 // fixes
-// todo texture height show tadaris
 // todo sun glow 
+// todo height bump lal planets
 // todo tutorial
 
 
@@ -541,7 +539,6 @@ namespace MingoData.Scripts
 // todo reward system 
 // todo add toggle for sound  
 // todo populate language from the translation json 
-// todo add swipe up icon
 // todo add layout legend divider 
 // todo add tutorial 
 // todo add pinch zoom to increase decrease size 

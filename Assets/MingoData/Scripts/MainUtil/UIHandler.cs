@@ -509,13 +509,16 @@ namespace MingoData.Scripts.MainUtil
                 Destroy(child.gameObject);
             }
 
+            GameObject lastCreatedGameObject = null; // Declare this variable to hold the last created GameObject
+
+            
             foreach (PlanetData planetData in planetColorLegend.Values)
             {
                 // Instantiate new legend item
                 GameObject newLegendItem = Instantiate(legendItemPrefab, legendParent);
                 newLegendItem.name = "legendInfo" + planetData.name;
                 // Assign planet name to Text component
-                TextMeshProUGUI textComponent = newLegendItem.GetComponentInChildren<TextMeshProUGUI>();
+                TextMeshProUGUI textComponent = newLegendItem.transform.Find("LegendLayout/LegendColorText").GetComponent<TextMeshProUGUI>();
 
                 // Use localizationManager to get the localized planet name
                 string localizedPlanetName = localizationManager.GetLocalizedValue(planetData.name, textComponent, false, Constants.ColorWhite);
@@ -529,20 +532,22 @@ namespace MingoData.Scripts.MainUtil
                 textComponent.text = localizedPlanetName;
 
                 // Assign color to Image component
-                Image imageComponent = newLegendItem.GetComponentInChildren<Image>();
+                Image imageComponent = newLegendItem.transform.Find("LegendLayout/LegendColorImage").GetComponent<Image>();
                 Color planetLineColor = UtilsFns.CreateHexToColor(planetData.planetColor).ToUnityColor();
                 imageComponent.color = planetLineColor;
 
-                Button button = newLegendItem.GetComponent<Button>();
+                Button button = newLegendItem.transform.Find("LegendLayout").GetComponent<Button>();
                 button.onClick.AddListener(() =>
                 {
                     PlayClickSound();
                     OnPlanetClicked?.Invoke(planetData.name, true);
                 });
 
-                ReverseOrderIfArabic(legendItemPrefab.GetComponent<HorizontalLayoutGroup>());
-
+                ReverseOrderIfArabic(legendItemPrefab.transform.Find("LegendLayout").GetComponent<HorizontalLayoutGroup>());
+                lastCreatedGameObject = newLegendItem;
             }
+            
+            lastCreatedGameObject!.transform.Find("HR").gameObject.SetActive(false);
         }
 
         public void SetPlanetNameTextTitle(string text, bool showGameObjectHolder)
