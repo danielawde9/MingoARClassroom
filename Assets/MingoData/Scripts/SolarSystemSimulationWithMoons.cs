@@ -331,9 +331,8 @@ namespace MingoData.Scripts
             
             parentDistanceLinesObject = new GameObject("ParentDistanceLines");
 
-            // todo fix hay, bada yetzabat the textrue 
-            Quaternion rotationCorrection = Quaternion.Euler(-90f, 0f, 0f);
-            //Quaternion rotationCorrection = Quaternion.identity;
+            // Quaternion rotationCorrection = Quaternion.Euler(-90f, 0f, 0f);
+            Quaternion rotationCorrection = Quaternion.identity;
 
             foreach (PlanetData planet in SolarSystemUtility.planetDataDictionary.Values)
             {
@@ -530,7 +529,7 @@ namespace MingoData.Scripts
 }
 
 // fixes
-// todo sun glow 
+// todo fix issue iclination not correct
 // todo height bump lal planets
 // todo tutorial
 
