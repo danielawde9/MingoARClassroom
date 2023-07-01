@@ -25,8 +25,7 @@ namespace MingoData.Scripts.Utils
 
         private Dictionary<string, LocalizationItem> localizedText;
         private const string MissingTextString = "Localized text not found";
-        private string currentLanguage = Constants.LangEn;
-        //private string currentLanguage = Constants.Lang_EN;
+        private string currentLanguage;
 
         public void LoadLocalizedText()
         {
@@ -49,6 +48,7 @@ namespace MingoData.Scripts.Utils
                 Debug.LogError("Localization file not assigned!");
             }
         }
+        
         public string GetLocalizedValue(string key, TMP_Text textComponent, bool centerText, Color valueColor, params object[] formatArgs)
         {
             string result = MissingTextString;
@@ -144,8 +144,7 @@ namespace MingoData.Scripts.Utils
         public void SetLanguage(string language)
         {
             currentLanguage = language;
+            PlayerPrefs.SetString(Constants.SelectedLanguage, currentLanguage);
         }
-        
     }
-
 }

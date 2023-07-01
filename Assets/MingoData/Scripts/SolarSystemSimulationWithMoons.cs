@@ -532,9 +532,13 @@ namespace MingoData.Scripts
 // todo fix issue iclination not correct
 // todo height bump lal planets
 // todo tutorial
-
+// todo lgiht 
+// todo add unit metric
+// todo fix light 
 
 // features
+// todo add analytics
+// todo get all the text and translate it using the keyname
 // todo reward system 
 // todo add toggle for sound  
 // todo populate language from the translation json 
@@ -548,6 +552,7 @@ namespace MingoData.Scripts
 // todo add pov planets
 // todo document your code
 // todo add solar eclipse
+// todo notification
 // todo day night texture
 // todo add the cockpit
 // todo add moons 

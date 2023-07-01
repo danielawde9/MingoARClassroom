@@ -9,7 +9,6 @@ using UnityEngine.UI;
 
 namespace MingoData.Scripts
 {
-
     public class MainMenuScript : MonoBehaviour
     {
         public GameObject planetsRowItemPrefab;
@@ -18,13 +17,39 @@ namespace MingoData.Scripts
         public Button proceedButton;
         public Sprite checkedImage;
         public Sprite unCheckedImage;
-        public ToggleGroup chooseLangToggleGroup;
         public AudioSource clickAudioSource;
 
+        [SerializeField]
+        private LocalizationManager localizationManager;
+        public TextMeshProUGUI mainTitle;
+        public TextMeshProUGUI subTitle;
+        public TextMeshProUGUI chooseLang;
+        public TextMeshProUGUI choosePlanet;
+        
         private void Start()
         {
+            switch (Application.systemLanguage)
+            {
+                case SystemLanguage.English:
+                    localizationManager.SetLanguage(Constants.LangEn);
+                    break;
+                case SystemLanguage.Arabic:
+                    localizationManager.SetLanguage(Constants.LangAR);
+                    break;
+                default:   
+                    localizationManager.SetLanguage(Constants.LangEn);
+                    break;
+            }
+            
+            localizationManager.LoadLocalizedText();
+
             Application.targetFrameRate = 60;
 
+            mainTitle.text = localizationManager.GetLocalizedValue("MainTitle", mainTitle, false, Constants.ColorWhite);
+            subTitle.text = localizationManager.GetLocalizedValue("SubTitle", subTitle, false, Constants.ColorWhite);
+            chooseLang.text = localizationManager.GetLocalizedValue("ChooseLang", chooseLang, false, Constants.ColorWhite);
+            choosePlanet.text = localizationManager.GetLocalizedValue("ChoosePlanet", choosePlanet, false, Constants.ColorWhite);
+            
             PlayerPrefs.SetString(Constants.SelectedPlanets, "");
             PlayerPrefs.Save();
 
@@ -57,8 +82,10 @@ namespace MingoData.Scripts
                     Image toggleImage = child.GetComponent<Image>();
 
                     planetImage.sprite = Resources.Load<Sprite>("SolarSystemWithMoon/PlanetImages/" + planetDataList.planets[currentIndex].name);
-                    planetName.text = planetDataList.planets[currentIndex].name;
-
+                    
+                    string localizedPlanetName = localizationManager.GetLocalizedValue(planetDataList.planets[currentIndex].name, planetName, true, Constants.ColorWhite);
+                    planetName.text = localizedPlanetName;
+                    
                     if (planetDataList.planets[currentIndex].name == Constants.PlanetSun)
                     {
                         planetToggle.isOn = true;
@@ -75,12 +102,6 @@ namespace MingoData.Scripts
         private void LoadSolarSystemScene()
         {
             PlayClickSound();
-            Toggle activeToggle = chooseLangToggleGroup.ActiveToggles().FirstOrDefault();
-            // Save the name of the selected planet from the toggle group to PlayerPrefs
-            if (activeToggle != null)
-            {
-                PlayerPrefs.SetString(Constants.SelectedLanguage, activeToggle.gameObject.name);
-            }
 
             string selectedPlanetsString = string.Join(",", selectedPlanets);
 

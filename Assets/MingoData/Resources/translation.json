@@ -236,6 +236,36 @@
             "arabic": "إعدادات المدار"
         },
         {
+            "key": "MainTitle",
+            "english": "Mingo AR Classroom",
+            "arabic": "منجو واقع معزز"
+        },
+        {
+            "key": "SubTitle",
+            "english": "Explore the Solar System in Augmented Reality",
+            "arabic": "اكتشف النظام الشمسي في الواقع المعزز"
+        },
+        {
+            "key": "ChooseLang",
+            "english": "Choose Language",
+            "arabic": "اختر اللغة"
+        },
+        {
+            "key": "ChoosePlanet",
+            "english": "Choose Planets",
+            "arabic": "اختر الكواكب"
+        },
+        {
+            "key": "LangEN",
+            "english": "English",
+            "arabic": "إنجليزي"
+        },
+        {
+            "key": "LangAR",
+            "english": "Arabic",
+            "arabic": "عربي"
+        },
+        {
             "key": "Planets_legend",
             "english": "Planets legend",
             "arabic": "أساطير الكواكب"
