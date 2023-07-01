@@ -44,6 +44,7 @@ namespace MingoData.Scripts.MainUtil
         public GameObject returnToMainMenuButton;
         public GameObject topMenuPlanetLayout;
         public GameObject topMenuLayout;
+        public GameObject settingsButton;
 
         [Header("Planet Info Center List")]
         public GameObject planetInfoButton;
@@ -108,12 +109,24 @@ namespace MingoData.Scripts.MainUtil
         private UnityAction uiHelperSwipeToggleFunction;
         private readonly Dictionary<GameObject, int> siblingIndexes = new Dictionary<GameObject, int>();
 
+        [Header("Settings Layout")]
+        public GameObject settingsLayout;
+        
         private void OnPauseButtonClicked()
         {
             celestialBodyHandler.timeScale = 0;
             UpdateTimeScale(celestialBodyHandler.timeScale);
             PlayClickSound();
 
+        }
+        
+        private void OnSettingsButtonClicked()
+        {
+            PlayClickSound();
+            bool isSettingsPanelActive = settingsLayout.activeSelf;
+            settingsLayout.SetActive(!isSettingsPanelActive);
+            darkImageBackgroundPlanetInfo.SetActive(!isSettingsPanelActive);
+            menuSliderPanel.SetActive(isSettingsPanelActive);
         }
 
         private void OnFastForwardButtonClicked()
@@ -210,6 +223,9 @@ namespace MingoData.Scripts.MainUtil
 
         private void ClickListenerInit()
         {
+            Button settingsButtonComponent = settingsButton.GetComponent<Button>();
+            settingsButtonComponent.onClick.AddListener(OnSettingsButtonClicked);
+            
             Button returnToMainMenuButtonComponent = returnToMainMenuButton.GetComponent<Button>();
             returnToMainMenuButtonComponent.onClick.AddListener(OnReturnToMainMenuButtonClicked);
 
@@ -325,7 +341,7 @@ namespace MingoData.Scripts.MainUtil
 
             planetLegendsListTitle.text = localizationManager.GetLocalizedValue("Planets_legend", planetLegendsListTitle, false, Constants.ColorWhite);
 
-            planetInfoListItemParentTitle.text = localizationManager.GetLocalizedValue("Planets_Info", planetInfoListItemParentTitle, false, Constants.ColorWhite);
+            planetInfoListItemParentTitle.text = localizationManager.GetLocalizedValue("Planets_InfoPlanets_Info", planetInfoListItemParentTitle, false, Constants.ColorWhite);
 
             planetDistanceFromSunToggleTextMeshPro.text = localizationManager.GetLocalizedValue("Display_Distance_From_Sun", planetDistanceFromSunToggleTextMeshPro, false, Constants.ColorWhite);
 
@@ -720,6 +736,7 @@ namespace MingoData.Scripts.MainUtil
             _darkImageBackgroundInitialUI = UtilsFns.CreateDarkBackground("InitialUI");
 
             planetInfoLayout.SetActive(false);
+            settingsLayout.SetActive(false);
             topMenuPlanetLayout.SetActive(false);
             menuSliderPanel.SetActive(false);
         }

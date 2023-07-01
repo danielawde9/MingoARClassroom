@@ -183,8 +183,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Procced
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: e94f1bac55ce27f499dd855bc924a075, type: 2}
-  m_sharedMaterial: {fileID: 137549722810234417, guid: e94f1bac55ce27f499dd855bc924a075,
+  m_fontAsset: {fileID: 11400000, guid: 13ece98a92ad846b8b45cf981c3e5bcf, type: 2}
+  m_sharedMaterial: {fileID: -5246916829265112348, guid: 13ece98a92ad846b8b45cf981c3e5bcf,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -890,8 +890,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Explore the Solar System in Augmented Reality
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: e94f1bac55ce27f499dd855bc924a075, type: 2}
-  m_sharedMaterial: {fileID: 137549722810234417, guid: e94f1bac55ce27f499dd855bc924a075,
+  m_fontAsset: {fileID: 11400000, guid: 13ece98a92ad846b8b45cf981c3e5bcf, type: 2}
+  m_sharedMaterial: {fileID: -5246916829265112348, guid: 13ece98a92ad846b8b45cf981c3e5bcf,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -1942,15 +1942,12 @@ MonoBehaviour:
   proceedButton: {fileID: 1368909650}
   checkedImage: {fileID: 21300000, guid: 7dfd2b25e96464ab093e0a0eefcca837, type: 3}
   unCheckedImage: {fileID: 21300000, guid: 7e5ec719846384626b526157e27ef92b, type: 3}
-  chooseLangToggleGroup: {fileID: 2036966220}
   clickAudioSource: {fileID: 984727300}
   localizationManager: {fileID: 984727302}
   mainTitle: {fileID: 1222698711}
   subTitle: {fileID: 502820427}
   chooseLang: {fileID: 1324983061}
   choosePlanet: {fileID: 1583438558}
-  langAR: {fileID: 1368980525}
-  langEn: {fileID: 954141711}
 --- !u!82 &984727300
 AudioSource:
   m_ObjectHideFlags: 0
@@ -2324,7 +2321,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1510921268}
   m_HandleRect: {fileID: 1510921267}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -2428,8 +2425,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'Mingo AR Classroom '
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: e94f1bac55ce27f499dd855bc924a075, type: 2}
-  m_sharedMaterial: {fileID: 137549722810234417, guid: e94f1bac55ce27f499dd855bc924a075,
+  m_fontAsset: {fileID: 11400000, guid: 13ece98a92ad846b8b45cf981c3e5bcf, type: 2}
+  m_sharedMaterial: {fileID: -5246916829265112348, guid: 13ece98a92ad846b8b45cf981c3e5bcf,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -3112,8 +3109,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Choose Your Planet
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: e94f1bac55ce27f499dd855bc924a075, type: 2}
-  m_sharedMaterial: {fileID: 137549722810234417, guid: e94f1bac55ce27f499dd855bc924a075,
+  m_fontAsset: {fileID: 11400000, guid: 13ece98a92ad846b8b45cf981c3e5bcf, type: 2}
+  m_sharedMaterial: {fileID: -5246916829265112348, guid: 13ece98a92ad846b8b45cf981c3e5bcf,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}

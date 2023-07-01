@@ -251,6 +251,21 @@
             "arabic": "اختر اللغة"
         },
         {
+            "key": "English",
+            "english": "English",
+            "arabic": "English"
+        },
+        {
+            "key": "Arabic",
+            "english": "Arabic",
+            "arabic": "العربية"
+        },
+        {
+            "key": "Proceed",
+            "english": "Proceed",
+            "arabic": "تقدم"
+        },
+        {
             "key": "ChoosePlanet",
             "english": "Choose Planets",
             "arabic": "اختر الكواكب"

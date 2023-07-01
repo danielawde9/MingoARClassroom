@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using MingoData.Scripts.MainUtil;
 using MingoData.Scripts.Utils;
 using TMPro;
@@ -41,6 +40,8 @@ namespace MingoData.Scripts
                     break;
             }
             
+            // localizationManager.SetLanguage(Constants.LangAR);
+
             localizationManager.LoadLocalizedText();
 
             Application.targetFrameRate = 60;
@@ -49,7 +50,9 @@ namespace MingoData.Scripts
             subTitle.text = localizationManager.GetLocalizedValue("SubTitle", subTitle, false, Constants.ColorWhite);
             chooseLang.text = localizationManager.GetLocalizedValue("ChooseLang", chooseLang, false, Constants.ColorWhite);
             choosePlanet.text = localizationManager.GetLocalizedValue("ChoosePlanet", choosePlanet, false, Constants.ColorWhite);
-            
+            TextMeshProUGUI proceedButtonText = proceedButton.GetComponentInChildren<TextMeshProUGUI>();
+            proceedButtonText.text = localizationManager.GetLocalizedValue("Proceed", proceedButtonText, true, Constants.ColorWhite);
+
             PlayerPrefs.SetString(Constants.SelectedPlanets, "");
             PlayerPrefs.Save();
 
