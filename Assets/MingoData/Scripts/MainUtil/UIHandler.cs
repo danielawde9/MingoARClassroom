@@ -111,7 +111,21 @@ namespace MingoData.Scripts.MainUtil
 
         [Header("Settings Layout")]
         public GameObject settingsLayout;
+        public Button closeSettingButton;
+        public Toggle settingSoundToggle;
+        public AudioSource mainAudioSource;
+        public TextMeshProUGUI settingsTitle;
+        public TextMeshProUGUI generalSettingsTitle;
+        public TextMeshProUGUI toggleSoundSettingsTitle;
+        public TextMeshProUGUI appSettingsTitle;
+        public TextMeshProUGUI chooseLangSettingsTitle;
+        public TextMeshProUGUI othersSettingsTitle;
+        public TextMeshProUGUI openSourceSettingsTitle;
+        public TextMeshProUGUI contactUsSettingsTitle;
+        public TextMeshProUGUI privacyPolicySettingsTitle;
+        public TextMeshProUGUI versionsSettingsTitle;
         
+
         private void OnPauseButtonClicked()
         {
             celestialBodyHandler.timeScale = 0;
@@ -181,11 +195,14 @@ namespace MingoData.Scripts.MainUtil
             planetNameToggle.transform.gameObject.SetActive(false);
             planetInclinationLineToggle.transform.gameObject.SetActive(false);
             planetDistanceFromSunToggle.transform.gameObject.SetActive(false);
+            settingSoundToggle.transform.gameObject.SetActive(false);
             planetShowGuidanceToggle.transform.gameObject.SetActive(false);
         }
 
         private void Start()
         {
+            SettingsLayoutInit();
+            
             TranslationInit();
 
             TopMenuInit();
@@ -203,7 +220,38 @@ namespace MingoData.Scripts.MainUtil
             SliderShadowInit();
 
         }
+        private void SettingsLayoutInit()
+        {
+            settingSoundToggle.isOn = true;
+            settingSoundToggle.transform.gameObject.SetActive(true);
+            settingSoundToggle.onValueChanged.AddListener(OnSettingAudioTogglePressed);
+            
+            settingsTitle.text = localizationManager.GetLocalizedValue("SettingsTitle",settingsTitle,false,Constants.ColorWhite);
+            generalSettingsTitle.text = localizationManager.GetLocalizedValue("GeneralSettingsTitle",generalSettingsTitle,false,Constants.ColorWhite);
+            toggleSoundSettingsTitle.text = localizationManager.GetLocalizedValue("ToggleSoundSettingsTitle",toggleSoundSettingsTitle,false,Constants.ColorWhite);
+            appSettingsTitle.text = localizationManager.GetLocalizedValue("AppSettingsTitle",appSettingsTitle,false,Constants.ColorWhite);
+            chooseLangSettingsTitle.text = localizationManager.GetLocalizedValue("ChooseLangSettingsTitle",chooseLangSettingsTitle,false,Constants.ColorWhite);
+            othersSettingsTitle.text = localizationManager.GetLocalizedValue("OthersSettingsTitle",othersSettingsTitle,false,Constants.ColorWhite);
+            openSourceSettingsTitle.text = localizationManager.GetLocalizedValue("OpenSourceSettingsTitle",openSourceSettingsTitle,false,Constants.ColorWhite);
+            contactUsSettingsTitle.text = localizationManager.GetLocalizedValue("ContactUsSettingsTitle",contactUsSettingsTitle,false,Constants.ColorWhite);
+            privacyPolicySettingsTitle.text = localizationManager.GetLocalizedValue("PrivacyPolicySettingsTitle",privacyPolicySettingsTitle,false,Constants.ColorWhite);
+            versionsSettingsTitle.text = localizationManager.GetLocalizedValue("VersionsSettingsTitle",versionsSettingsTitle,false,Constants.ColorWhite, Application.unityVersion);
+            
+            ReverseOrderIfArabic(openSourceSettingsTitle.transform.parent.transform.gameObject.GetComponent<HorizontalLayoutGroup>());
+            ReverseOrderIfArabic(contactUsSettingsTitle.transform.parent.transform.gameObject.GetComponent<HorizontalLayoutGroup>());
+            ReverseOrderIfArabic(privacyPolicySettingsTitle.transform.parent.transform.gameObject.GetComponent<HorizontalLayoutGroup>());
+            ReverseOrderIfArabic(chooseLangSettingsTitle.transform.parent.transform.gameObject.GetComponent<HorizontalLayoutGroup>());
+            ReverseOrderIfArabic(toggleSoundSettingsTitle.transform.parent.transform.gameObject.GetComponent<HorizontalLayoutGroup>());
+            ReverseOrderIfArabic(settingsTitle.transform.parent.transform.gameObject.GetComponent<HorizontalLayoutGroup>());
+            
+            
+        }
 
+        private void OnSettingAudioTogglePressed(bool isOn)
+        {
+            mainAudioSource.enabled = isOn;
+        }
+        
         private void PlanetInfoInit()
         {
 

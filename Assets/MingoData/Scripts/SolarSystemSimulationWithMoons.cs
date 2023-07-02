@@ -535,6 +535,11 @@ namespace MingoData.Scripts
 // todo lgiht 
 // todo add unit metric
 // todo fix light 
+// todo generate spheres from json kmn 
+// todo json application for website 
+// todo privacy polucy 
+// todo earth glow 
+// todo icons had toggle maybe
 
 // features
 // todo add analytics
