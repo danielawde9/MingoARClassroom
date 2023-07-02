@@ -317,6 +317,7 @@ namespace MingoData.Scripts
             localizationManager.LoadLocalizedText();
 
             uiHandler.UIShowInitial();
+
             uiHandler.onUpdateTimeScaleSlider += UpdateTimeScale;
             uiHandler.onUpdateSizeScaleSlider += UpdateSizeScale;
             uiHandler.onUpdateDistanceScaleSlider += UpdateDistanceScale;
@@ -450,7 +451,18 @@ namespace MingoData.Scripts
             if (mPlaneManager.trackables.count < 1)
                 return;
             SpawnPlanets();
+
+            // Check if it's the first time the app is run
+            if (!PlayerPrefs.HasKey("FirstTimeRunPlacedPlanet"))
+            {
+                uiHandler.UIShowMiddleIconPlacePlanet();
+                // Set the flag to indicate the app has been run at least once
+                PlayerPrefs.SetInt("FirstTimeRunPlacedPlanet", 1);
+                PlayerPrefs.Save();
+            }
+            
             uiHandler.UIShowAfterPlanetPlacement();
+
             isSolarSystemPlaced = true;
             mPlaneManager.enabled = false;
         }
@@ -538,6 +550,7 @@ namespace MingoData.Scripts
 }
 
 // fixes
+// todo fix light
 // todo height bump lal planets
 
 // features

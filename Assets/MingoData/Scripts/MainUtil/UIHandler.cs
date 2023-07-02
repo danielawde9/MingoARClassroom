@@ -264,6 +264,18 @@ namespace MingoData.Scripts.MainUtil
                 Application.OpenURL("https://danielawde9.com/#get-in-touch");
             });
 
+            // Find the index of the current language in the dropdown options
+            int index = settingsLanguageDropdown.options.FindIndex(option => option.text == LocalizationManager.GetCurrentLanguage());
+
+            // If the language was found in the dropdown options
+            if (index != -1)
+            {
+                // Set the value of the dropdown to the index of the current language
+                settingsLanguageDropdown.value = index;
+
+                // Optionally, you can also dispatch the onValueChanged event
+                settingsLanguageDropdown.onValueChanged.Invoke(index);
+            }
             settingsLanguageDropdown.onValueChanged.AddListener(OnLanguageChanged);
         }
 
@@ -839,7 +851,15 @@ namespace MingoData.Scripts.MainUtil
         public void UIShowAfterPlanetPlacement()
         {
             uiHelperInit.Destroy();
+            _darkImageBackgroundInitialUI.SetActive(false);
+            settingsButton.SetActive(true);
+            menuSliderPanel.SetActive(true);
+            closePlanetButton.SetActive(false);
+            planetInfoButton.SetActive(false);
+        }
 
+        public void UIShowMiddleIconPlacePlanet()
+        {
             _darkImageBackgroundInitialUI.SetActive(true);
 
             SpawnMiddleIconHelper(
@@ -848,13 +868,8 @@ namespace MingoData.Scripts.MainUtil
                 swipeUpDownIcon,
                 true,
                 UtilsFns.AnimationDirection.UpDown);
-
-            settingsButton.SetActive(true);
-            menuSliderPanel.SetActive(true);
-            closePlanetButton.SetActive(false);
-            planetInfoButton.SetActive(false);
         }
-
+        
         public void ToggleSwipeIcon()
         {
             _darkImageBackgroundInitialUI.SetActive(true);
