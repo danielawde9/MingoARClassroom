@@ -263,6 +263,11 @@ namespace MingoData.Scripts.Utils
             orbitLine.SetActive(true);
 
         }
+        
+        public static void ReverseOrderIfArabic(HorizontalOrVerticalLayoutGroup layoutGroup)
+        {
+            layoutGroup.reverseArrangement = LocalizationManager.GetCurrentLanguage() == Constants.LangAR;
+        }
 
         public static void CreateSunLight(Transform sunTransform, float distanceScale, IReadOnlyDictionary<string, PlanetData> localPlanetDataDictionary, List<string> allowedPlanets)
         {

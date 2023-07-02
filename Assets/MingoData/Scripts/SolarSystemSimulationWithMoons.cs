@@ -320,7 +320,7 @@ namespace MingoData.Scripts
             uiHandler.onPlanetShowGuidanceToggleValueChanged = UpdateTogglePlanetGuidanceVisibilityToggle;
 
             uiHandler.SetCelestialBodyData(null, selectedFields);
-            selectedPlanetLightObject =  UtilsFns.CreateLightComponent(mainCamera.transform, 10f);
+            selectedPlanetLightObject =  UtilsFns.CreateLightComponent(mainCamera.transform, 1f);
             selectedPlanetLightObject.SetActive(false);
             SolarSystemUtility.LoadPlanetData(loadedPlanets);
         }
@@ -374,7 +374,7 @@ namespace MingoData.Scripts
                 return;
             }
 
-            planet.rotationAxis = Quaternion.Euler(0, 0, planet.obliquityToOrbit) * Vector3.up;
+            planet.rotationAxis = Quaternion.Euler(planet.obliquityToOrbit, 0, 0) * Vector3.up;
             
             distanceScale = Constants.InitialDistanceScale;
             
@@ -529,17 +529,12 @@ namespace MingoData.Scripts
 }
 
 // fixes
-// todo fix issue iclination not correct
 // todo height bump lal planets
 // todo tutorial
-// todo lgiht 
 // todo add unit metric option in setting
-// todo fix light 
 // todo generate spheres from json kmn 
 // todo json schema application for website 
-// todo privacy polucy, 
-// todo earth glow 
-// todo icons had toggle maybe
+// todo add share 
 
 // features
 // todo add analytics
@@ -562,6 +557,7 @@ namespace MingoData.Scripts
 // todo add point of interests on planets
 // todo add history of the solar system 
 // todo add show inner structures
+// todo icons had toggle maybe
 
 
 // in update function 

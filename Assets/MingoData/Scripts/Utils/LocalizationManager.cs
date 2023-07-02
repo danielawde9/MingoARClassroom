@@ -136,7 +136,7 @@ namespace MingoData.Scripts.Utils
             return result;
         }
 
-        public string GetCurrentLanguage()
+        public static string GetCurrentLanguage()
         {
             return currentLanguage;
         }

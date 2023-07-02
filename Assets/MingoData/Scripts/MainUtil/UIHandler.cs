@@ -239,14 +239,14 @@ namespace MingoData.Scripts.MainUtil
             versionsSettingsTitle.text = localizationManager.GetLocalizedValue("VersionsSettingsTitle",versionsSettingsTitle,false,Constants.ColorWhite, Application.version);
 
             Transform openSourceSettingsParent = openSourceSettingsTitle.transform.parent;
-            ReverseOrderIfArabic(openSourceSettingsParent.transform.gameObject.GetComponent<HorizontalLayoutGroup>());
+            UtilsFns.ReverseOrderIfArabic(openSourceSettingsParent.transform.gameObject.GetComponent<HorizontalLayoutGroup>());
             Transform contactUsSettingsParent = contactUsSettingsTitle.transform.parent;
-            ReverseOrderIfArabic(contactUsSettingsParent.transform.gameObject.GetComponent<HorizontalLayoutGroup>());
+            UtilsFns.ReverseOrderIfArabic(contactUsSettingsParent.transform.gameObject.GetComponent<HorizontalLayoutGroup>());
             Transform privacyPolicySettingsParent = privacyPolicySettingsTitle.transform.parent;
-            ReverseOrderIfArabic(privacyPolicySettingsParent.transform.gameObject.GetComponent<HorizontalLayoutGroup>());
-            ReverseOrderIfArabic(chooseLangSettingsTitle.transform.parent.transform.gameObject.GetComponent<HorizontalLayoutGroup>());
-            ReverseOrderIfArabic(toggleSoundSettingsTitle.transform.parent.transform.gameObject.GetComponent<HorizontalLayoutGroup>());
-            ReverseOrderIfArabic(settingsTitle.transform.parent.transform.gameObject.GetComponent<HorizontalLayoutGroup>());
+            UtilsFns.ReverseOrderIfArabic(privacyPolicySettingsParent.transform.gameObject.GetComponent<HorizontalLayoutGroup>());
+            UtilsFns.ReverseOrderIfArabic(chooseLangSettingsTitle.transform.parent.transform.gameObject.GetComponent<HorizontalLayoutGroup>());
+            UtilsFns.ReverseOrderIfArabic(toggleSoundSettingsTitle.transform.parent.transform.gameObject.GetComponent<HorizontalLayoutGroup>());
+            UtilsFns.ReverseOrderIfArabic(settingsTitle.transform.parent.transform.gameObject.GetComponent<HorizontalLayoutGroup>());
             
             closeSettingButton.onClick.AddListener(OnSettingsButtonClicked);
             
@@ -296,7 +296,7 @@ namespace MingoData.Scripts.MainUtil
             planetInfoCloseButton.onClick.AddListener(OnPlanetInfoPanelToggleOnOffClicked);
 
             HorizontalLayoutGroup layoutGroup = planetInfoListItemParentTitle.transform.parent.GetComponent<HorizontalLayoutGroup>();
-            ReverseOrderIfArabic(layoutGroup);
+            UtilsFns.ReverseOrderIfArabic(layoutGroup);
 
         }
 
@@ -366,7 +366,7 @@ namespace MingoData.Scripts.MainUtil
         
         private void TopMenuInit()
         {
-            ReverseOrderIfArabic(topMenuPlanetLayout.GetComponent<HorizontalLayoutGroup>());
+            UtilsFns.ReverseOrderIfArabic(topMenuPlanetLayout.GetComponent<HorizontalLayoutGroup>());
             StoreSiblingIndexes();
         }
 
@@ -454,25 +454,22 @@ namespace MingoData.Scripts.MainUtil
             planetShowGuidanceToggle.transform.gameObject.SetActive(true);
 
             HorizontalLayoutGroup planetDistanceFromSunToggleLayoutGroup = planetDistanceFromSunToggle.transform.parent.GetComponent<HorizontalLayoutGroup>();
-            ReverseOrderIfArabic(planetDistanceFromSunToggleLayoutGroup);
+            UtilsFns.ReverseOrderIfArabic(planetDistanceFromSunToggleLayoutGroup);
 
             HorizontalLayoutGroup planetShowGuidanceToggleLayoutGroup = planetShowGuidanceToggle.transform.parent.GetComponent<HorizontalLayoutGroup>();
-            ReverseOrderIfArabic(planetShowGuidanceToggleLayoutGroup);
+            UtilsFns.ReverseOrderIfArabic(planetShowGuidanceToggleLayoutGroup);
 
             HorizontalLayoutGroup planetNameToggleLayoutGroup = planetNameToggle.transform.parent.GetComponent<HorizontalLayoutGroup>();
-            ReverseOrderIfArabic(planetNameToggleLayoutGroup);
+            UtilsFns.ReverseOrderIfArabic(planetNameToggleLayoutGroup);
 
             HorizontalLayoutGroup planetInclinationLineToggleLayoutGroup = planetInclinationLineToggle.transform.parent.GetComponent<HorizontalLayoutGroup>();
-            ReverseOrderIfArabic(planetInclinationLineToggleLayoutGroup);
+            UtilsFns.ReverseOrderIfArabic(planetInclinationLineToggleLayoutGroup);
 
             HorizontalLayoutGroup orbitLineToggleLayoutGroup = orbitLineToggle.transform.parent.GetComponent<HorizontalLayoutGroup>();
-            ReverseOrderIfArabic(orbitLineToggleLayoutGroup);
+            UtilsFns.ReverseOrderIfArabic(orbitLineToggleLayoutGroup);
         }
 
-        private void ReverseOrderIfArabic(HorizontalOrVerticalLayoutGroup layoutGroup)
-        {
-            layoutGroup.reverseArrangement = localizationManager.GetCurrentLanguage() == Constants.LangAR;
-        }
+        
 
         private void SliderInit()
         {
@@ -540,7 +537,7 @@ namespace MingoData.Scripts.MainUtil
             TextMeshProUGUI textComponent = newDataItem.GetComponentsInChildren<TextMeshProUGUI>()[0];
             textComponent.text = localizationManager.GetLocalizedValue(field.Name, textComponent, false, Constants.ColorWhite);
             HorizontalLayoutGroup layoutGroup = textComponent.transform.parent.GetComponent<HorizontalLayoutGroup>();
-            ReverseOrderIfArabic(layoutGroup);
+            UtilsFns.ReverseOrderIfArabic(layoutGroup);
         }
 
         private void AssignFieldValue(FieldInfo field, GameObject newDataItem, CelestialBodyData celestialBodyData)
@@ -549,7 +546,7 @@ namespace MingoData.Scripts.MainUtil
             object fieldValue = field.GetValue(celestialBodyData);
             if (fieldValue != null)
             {
-                if (localizationManager.GetCurrentLanguage() == Constants.LangAR)
+                if (LocalizationManager.GetCurrentLanguage() == Constants.LangAR)
                 {
                     AssignArabicFieldValue(fieldValue, valueComponent);
                 }
@@ -638,7 +635,7 @@ namespace MingoData.Scripts.MainUtil
                     OnPlanetClicked?.Invoke(planetData.name, true);
                 });
 
-                ReverseOrderIfArabic(legendItemPrefab.transform.Find("LegendLayout").GetComponent<HorizontalLayoutGroup>());
+                UtilsFns.ReverseOrderIfArabic(legendItemPrefab.transform.Find("LegendLayout").GetComponent<HorizontalLayoutGroup>());
                 lastCreatedGameObject = newLegendItem;
             }
             
@@ -790,7 +787,7 @@ namespace MingoData.Scripts.MainUtil
 
             HorizontalLayoutGroup layoutGroup = helper.middleIconsTopHelper.GetComponent<HorizontalLayoutGroup>();
             
-            ReverseOrderIfArabic(layoutGroup);
+            UtilsFns.ReverseOrderIfArabic(layoutGroup);
 
             instance.SetActive(true);
             
