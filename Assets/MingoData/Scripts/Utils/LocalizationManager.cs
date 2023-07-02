@@ -25,7 +25,7 @@ namespace MingoData.Scripts.Utils
 
         private Dictionary<string, LocalizationItem> localizedText;
         private const string MissingTextString = "Localized text not found";
-        private string currentLanguage;
+        private static string _currentLanguage;
 
         public void LoadLocalizedText()
         {
@@ -58,7 +58,7 @@ namespace MingoData.Scripts.Utils
 
             if (localizedText.ContainsKey(key))
             {
-                switch (currentLanguage)
+                switch (_currentLanguage)
                 {
                     case Constants.LangEn:
                         // Add color to formatArgs
@@ -116,7 +116,7 @@ namespace MingoData.Scripts.Utils
             if (!localizedText.ContainsKey(timeUnitKey))
                 return result;
 
-            switch (currentLanguage)
+            switch (_currentLanguage)
             {
                 case Constants.LangEn:
                     timeValue = $"<color=#{hexValueColor}>{timeValue}</color>";
@@ -138,13 +138,13 @@ namespace MingoData.Scripts.Utils
 
         public static string GetCurrentLanguage()
         {
-            return currentLanguage;
+            return _currentLanguage;
         }
 
         public void SetLanguage(string language)
         {
-            currentLanguage = language;
-            PlayerPrefs.SetString(Constants.SelectedLanguage, currentLanguage);
+            _currentLanguage = language;
+            PlayerPrefs.SetString(Constants.SelectedLanguage, _currentLanguage);
         }
     }
 }

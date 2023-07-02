@@ -2,8 +2,8 @@ using System.Collections.Generic;
 using MingoData.Scripts.MainUtil;
 using MingoData.Scripts.Utils;
 using TMPro;
+using Unity.VectorGraphics;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.UI;
 
 
@@ -12,78 +12,27 @@ namespace MingoData.Scripts
     public class MainMenuScript : MonoBehaviour
     {
         public GameObject planetsRowItemPrefab;
-        public GameObject middleIconHelperPrefab;
         public Transform planetsRowItemListParent;
-        private readonly List<string> selectedPlanets = new List<string>();
         public Button proceedButton;
         public Sprite checkedImage;
         public Sprite unCheckedImage;
         public AudioSource clickAudioSource;
         private GameObject darkImageBackgroundInitialUI;
-        public Sprite swipeUpDownIcon;
+        private MiddleIconHelper uiHandler;
+        private readonly List<string> selectedPlanets = new List<string>();
 
         [SerializeField]
         private LocalizationManager localizationManager;
         public TextMeshProUGUI mainTitle;
         public TextMeshProUGUI subTitle;
-        public TextMeshProUGUI chooseLang;
         public TextMeshProUGUI choosePlanet;
-        
-        private UnityAction CreateUiHelperFunction(MiddleIconHelper uiHelper)
-        {
-            return () =>
-            {
-                PlayClickSound();
-                darkImageBackgroundInitialUI.SetActive(false);
-                uiHelper.Destroy();
-            };
-        }
-        
-        private MiddleIconHelper SpawnMiddleIconHelper(string middleIconsTopHelperTitleKey, string middleIconsTextHelperKey, Sprite bottomIconsImage, bool isMiddleIconsTopHelper, UtilsFns.AnimationDirection direction)
-        {
-            // Instantiate the prefab
-            GameObject instance = Instantiate(middleIconHelperPrefab, transform);
 
-            instance.name = "MiddleIconHelper";
-
-            // Get the components
-            MiddleIconHelper helper = new MiddleIconHelper(instance);
-            string middleIconsTopHelperTitleText = localizationManager.GetLocalizedValue(middleIconsTopHelperTitleKey, helper.middleIconsTopHelperTitleText, false, Constants.ColorWhite);
-
-            helper.middleIconsTopHelperTitleText.text = middleIconsTopHelperTitleText;
-            string middleIconsTextHelper = localizationManager.GetLocalizedValue(middleIconsTextHelperKey, helper.middleIconsTextHelper, false, Constants.ColorWhite);
-
-            helper.middleIconsTextHelper.text = middleIconsTextHelper;
-
-            helper.bottomIconsImage.sprite = bottomIconsImage;
-
-            // Set the activity of the top helper
-            helper.middleIconsTopHelper.SetActive(isMiddleIconsTopHelper);
-
-            if (isMiddleIconsTopHelper)
-            {
-                helper.middleIconsTopHelperCloseButton.onClick.RemoveAllListeners();
-
-                UnityAction uiHelperFunction = CreateUiHelperFunction(helper);
-
-                helper.middleIconsTopHelperCloseButton.onClick.AddListener(uiHelperFunction);
-
-            }
-
-            HorizontalLayoutGroup layoutGroup = helper.middleIconsTopHelper.GetComponent<HorizontalLayoutGroup>();
-            
-            UtilsFns.ReverseOrderIfArabic(layoutGroup);
-
-            instance.SetActive(true);
-            
-            // Get the RectTransform of the icon
-            RectTransform iconRectTransform = helper.bottomIconsImage.GetComponent<RectTransform>();
-
-            // Start the animation
-            StartCoroutine(UtilsFns.AnimateIcon(iconRectTransform, 1f, direction));  // Animate over 1 second
-
-            return helper;
-        }
+        [Header("Middle Icon Helper")]
+        public GameObject middleIconHelperGameObject;
+        public TextMeshProUGUI middleIconsTopHelperTitleText;
+        public Button middleIconsTopHelperCloseButton;
+        public TextMeshProUGUI middleIconsTextHelper;
+        public SVGImage bottomIconsImage;
         
         private void Start()
         {
@@ -95,28 +44,46 @@ namespace MingoData.Scripts
                 case SystemLanguage.Arabic:
                     localizationManager.SetLanguage(Constants.LangAR);
                     break;
-                default:   
+                default:
                     localizationManager.SetLanguage(Constants.LangEn);
                     break;
             }
-            
-            darkImageBackgroundInitialUI = UtilsFns.CreateDarkBackground("InitialUI");
-            darkImageBackgroundInitialUI.SetActive(true);
-            
-            SpawnMiddleIconHelper(
-                "Instructions",
-                "Click_on_any_planet_or_click_on_the_menu_below_to_display_more_settings",
-                swipeUpDownIcon,
-                true,
-                UtilsFns.AnimationDirection.UpDown);
-            
+
+            localizationManager.SetLanguage(Constants.LangAR);
+
             localizationManager.LoadLocalizedText();
+            
+            // Check if it's the first time the app is run
+            if (!PlayerPrefs.HasKey("FirstTimeRun"))
+            {
+
+                middleIconHelperGameObject.transform.parent.gameObject.SetActive(true);
+                
+                string middleIconsTopHelperTitleString = localizationManager.GetLocalizedValue("Instructions", middleIconsTopHelperTitleText, false, Constants.ColorWhite);
+                middleIconsTopHelperTitleText.text = middleIconsTopHelperTitleString;
+
+                string middleIconsHelperString = localizationManager.GetLocalizedValue("MainScreenWelcome", middleIconsTextHelper, false, Constants.ColorWhite);
+                middleIconsTextHelper.text = middleIconsHelperString;
+
+                middleIconsTopHelperCloseButton.onClick.AddListener(() =>
+                {
+                    middleIconHelperGameObject.transform.parent.gameObject.SetActive(false);
+                });
+
+                UtilsFns.ReverseOrderIfArabic(middleIconsTopHelperTitleText.transform.parent.GetComponent<HorizontalLayoutGroup>());
+
+                // Set the flag to indicate the app has been run at least once
+                PlayerPrefs.SetInt("FirstTimeRun", 1);
+                PlayerPrefs.Save();
+            }
+
+            // Start the animation
+            StartCoroutine(UtilsFns.AnimateIcon(bottomIconsImage.GetComponent<RectTransform>(), 1f, UtilsFns.AnimationDirection.UpDown));  // Animate over 1 second
 
             Application.targetFrameRate = 60;
 
             mainTitle.text = localizationManager.GetLocalizedValue("MainTitle", mainTitle, false, Constants.ColorWhite);
             subTitle.text = localizationManager.GetLocalizedValue("SubTitle", subTitle, false, Constants.ColorWhite);
-            chooseLang.text = localizationManager.GetLocalizedValue("ChooseLang", chooseLang, false, Constants.ColorWhite);
             choosePlanet.text = localizationManager.GetLocalizedValue("ChoosePlanet", choosePlanet, false, Constants.ColorWhite);
             TextMeshProUGUI proceedButtonText = proceedButton.GetComponentInChildren<TextMeshProUGUI>();
             proceedButtonText.text = localizationManager.GetLocalizedValue("Proceed", proceedButtonText, true, Constants.ColorWhite);
@@ -153,10 +120,10 @@ namespace MingoData.Scripts
                     Image toggleImage = child.GetComponent<Image>();
 
                     planetImage.sprite = Resources.Load<Sprite>("SolarSystemWithMoon/PlanetImages/" + planetDataList.planets[currentIndex].name);
-                    
+
                     string localizedPlanetName = localizationManager.GetLocalizedValue(planetDataList.planets[currentIndex].name, planetName, true, Constants.ColorWhite);
                     planetName.text = localizedPlanetName;
-                    
+
                     if (planetDataList.planets[currentIndex].name == Constants.PlanetSun)
                     {
                         planetToggle.isOn = true;
@@ -190,7 +157,7 @@ namespace MingoData.Scripts
         private void TogglePlanet(Image toggleImage, Toggle toggle, string planetName)
         {
             PlayClickSound();
-            
+
             if (toggle.isOn)
             {
                 if (!selectedPlanets.Contains(planetName))
@@ -206,4 +173,5 @@ namespace MingoData.Scripts
             proceedButton.interactable = selectedPlanets.Count > 0;
         }
     }
+
 }

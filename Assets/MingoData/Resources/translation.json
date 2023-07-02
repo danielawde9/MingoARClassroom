@@ -11,6 +11,16 @@
       "arabic": "معلومات عن الكوكب"
     },
     {
+      "key": "MainScreenWelcome",
+      "english": "Welcome to the Mingo app! Select planets and scroll down to proceed.",
+      "arabic": "مرحبًا بك في تطبيق منجو! حدد الكواكب وانتقل لأسفل للمتابعة."
+    },
+    {
+      "key": "Toggle_Sliders",
+      "english": "Feel free to adjust the sliders and toggle to customize the solar system!",
+      "arabic": "لا تتردد في ضبط أشرطة التمرير والتبديل لتخصيص النظام الشمسي!"
+    },
+    {
       "key": "name",
       "english": "Name",
       "arabic": "اسم"

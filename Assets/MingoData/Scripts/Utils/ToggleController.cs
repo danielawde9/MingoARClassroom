@@ -7,8 +7,6 @@ namespace MingoData.Scripts.Utils
         public Toggle toggle;
         public RectTransform knobTransform;
         public float speed = 5f;
-        [SerializeField]
-        private LocalizationManager localizationManager;
 
         private Vector2 onPosition;
         private Vector2 offPosition;
@@ -22,7 +20,7 @@ namespace MingoData.Scripts.Utils
             const float offset = 5f; // Adjust the offset value as per your requirement
 
             // If language is Arabic, swap the positions
-            if (localizationManager.GetCurrentLanguage() == Constants.LangAR)
+            if (LocalizationManager.GetCurrentLanguage() == Constants.LangAR)
             {
                 onPosition = new Vector2((-toggleWidth / 2 + knobWidth / 2) + offset, 0);
                 offPosition = new Vector2((toggleWidth / 2 - knobWidth / 2) - offset, 0);

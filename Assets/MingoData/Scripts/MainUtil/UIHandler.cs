@@ -15,6 +15,7 @@ using TextMeshProUGUI = TMPro.TextMeshProUGUI;
 
 namespace MingoData.Scripts.MainUtil
 {
+
     public class UIHandler : MonoBehaviour
     {
         [SerializeField]
@@ -134,7 +135,7 @@ namespace MingoData.Scripts.MainUtil
             PlayClickSound();
 
         }
-        
+
         private void OnSettingsButtonClicked()
         {
             PlayClickSound();
@@ -173,7 +174,7 @@ namespace MingoData.Scripts.MainUtil
             celestialBodyHandler.ReturnSelectedPlanetToOriginalState();
             PlayClickSound();
         }
-        
+
         private void OnReturnToMainMenuButtonClicked()
         {
             PlayClickSound();
@@ -183,7 +184,7 @@ namespace MingoData.Scripts.MainUtil
             SolarSystemUtility.ClearDictionary();
             UtilsFns.LoadNewScene("MainMenu");
         }
-        
+
         public void PlayClickSound()
         {
             clickAudioSource.Play();
@@ -203,7 +204,7 @@ namespace MingoData.Scripts.MainUtil
         private void Start()
         {
             SettingsLayoutInit();
-            
+
             TranslationInit();
 
             TopMenuInit();
@@ -226,17 +227,17 @@ namespace MingoData.Scripts.MainUtil
             settingSoundToggle.isOn = true;
             settingSoundToggle.transform.gameObject.SetActive(true);
             settingSoundToggle.onValueChanged.AddListener(OnSettingAudioTogglePressed);
-            
-            settingsTitle.text = localizationManager.GetLocalizedValue("SettingsTitle",settingsTitle,false,Constants.ColorWhite);
-            generalSettingsTitle.text = localizationManager.GetLocalizedValue("GeneralSettingsTitle",generalSettingsTitle,false,Constants.ColorWhite);
-            toggleSoundSettingsTitle.text = localizationManager.GetLocalizedValue("ToggleSoundSettingsTitle",toggleSoundSettingsTitle,false,Constants.ColorWhite);
-            appSettingsTitle.text = localizationManager.GetLocalizedValue("AppSettingsTitle",appSettingsTitle,false,Constants.ColorWhite);
-            chooseLangSettingsTitle.text = localizationManager.GetLocalizedValue("ChooseLangSettingsTitle",chooseLangSettingsTitle,false,Constants.ColorWhite);
-            othersSettingsTitle.text = localizationManager.GetLocalizedValue("OthersSettingsTitle",othersSettingsTitle,false,Constants.ColorWhite);
-            openSourceSettingsTitle.text = localizationManager.GetLocalizedValue("OpenSourceSettingsTitle",openSourceSettingsTitle,false,Constants.ColorWhite);
-            contactUsSettingsTitle.text = localizationManager.GetLocalizedValue("ContactUsSettingsTitle",contactUsSettingsTitle,false,Constants.ColorWhite);
-            privacyPolicySettingsTitle.text = localizationManager.GetLocalizedValue("PrivacyPolicySettingsTitle",privacyPolicySettingsTitle,false,Constants.ColorWhite);
-            versionsSettingsTitle.text = localizationManager.GetLocalizedValue("VersionsSettingsTitle",versionsSettingsTitle,false,Constants.ColorWhite, Application.version);
+
+            settingsTitle.text = localizationManager.GetLocalizedValue("SettingsTitle", settingsTitle, false, Constants.ColorWhite);
+            generalSettingsTitle.text = localizationManager.GetLocalizedValue("GeneralSettingsTitle", generalSettingsTitle, false, Constants.ColorWhite);
+            toggleSoundSettingsTitle.text = localizationManager.GetLocalizedValue("ToggleSoundSettingsTitle", toggleSoundSettingsTitle, false, Constants.ColorWhite);
+            appSettingsTitle.text = localizationManager.GetLocalizedValue("AppSettingsTitle", appSettingsTitle, false, Constants.ColorWhite);
+            chooseLangSettingsTitle.text = localizationManager.GetLocalizedValue("ChooseLangSettingsTitle", chooseLangSettingsTitle, false, Constants.ColorWhite);
+            othersSettingsTitle.text = localizationManager.GetLocalizedValue("OthersSettingsTitle", othersSettingsTitle, false, Constants.ColorWhite);
+            openSourceSettingsTitle.text = localizationManager.GetLocalizedValue("OpenSourceSettingsTitle", openSourceSettingsTitle, false, Constants.ColorWhite);
+            contactUsSettingsTitle.text = localizationManager.GetLocalizedValue("ContactUsSettingsTitle", contactUsSettingsTitle, false, Constants.ColorWhite);
+            privacyPolicySettingsTitle.text = localizationManager.GetLocalizedValue("PrivacyPolicySettingsTitle", privacyPolicySettingsTitle, false, Constants.ColorWhite);
+            versionsSettingsTitle.text = localizationManager.GetLocalizedValue("VersionsSettingsTitle", versionsSettingsTitle, false, Constants.ColorWhite, Application.version);
 
             Transform openSourceSettingsParent = openSourceSettingsTitle.transform.parent;
             UtilsFns.ReverseOrderIfArabic(openSourceSettingsParent.transform.gameObject.GetComponent<HorizontalLayoutGroup>());
@@ -247,9 +248,9 @@ namespace MingoData.Scripts.MainUtil
             UtilsFns.ReverseOrderIfArabic(chooseLangSettingsTitle.transform.parent.transform.gameObject.GetComponent<HorizontalLayoutGroup>());
             UtilsFns.ReverseOrderIfArabic(toggleSoundSettingsTitle.transform.parent.transform.gameObject.GetComponent<HorizontalLayoutGroup>());
             UtilsFns.ReverseOrderIfArabic(settingsTitle.transform.parent.transform.gameObject.GetComponent<HorizontalLayoutGroup>());
-            
+
             closeSettingButton.onClick.AddListener(OnSettingsButtonClicked);
-            
+
             openSourceSettingsParent.GetComponent<Button>().onClick.AddListener(() =>
             {
                 Application.OpenURL("https://danielawde9.com/opensource");
@@ -277,12 +278,12 @@ namespace MingoData.Scripts.MainUtil
             // Then reload the scene
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
-        
+
         private void OnSettingAudioTogglePressed(bool isOn)
         {
             mainAudioSource.enabled = isOn;
         }
-        
+
         private void PlanetInfoInit()
         {
 
@@ -304,7 +305,7 @@ namespace MingoData.Scripts.MainUtil
         {
             Button settingsButtonComponent = settingsButton.GetComponent<Button>();
             settingsButtonComponent.onClick.AddListener(OnSettingsButtonClicked);
-            
+
             Button returnToMainMenuButtonComponent = returnToMainMenuButton.GetComponent<Button>();
             returnToMainMenuButtonComponent.onClick.AddListener(OnReturnToMainMenuButtonClicked);
 
@@ -363,7 +364,7 @@ namespace MingoData.Scripts.MainUtil
 
             SetToggleButtonSize(sliderButtonToggleRectTransform, 250);
         }
-        
+
         private void TopMenuInit()
         {
             UtilsFns.ReverseOrderIfArabic(topMenuPlanetLayout.GetComponent<HorizontalLayoutGroup>());
@@ -377,7 +378,22 @@ namespace MingoData.Scripts.MainUtil
 
             startRotation = sliderButtonToggleImage.transform.eulerAngles.z;
             endRotation = isUIOverlayEnabled ? startRotation + 180 : startRotation - 180;
-
+            
+            // Check if it's the first time the app is run
+            if (!PlayerPrefs.HasKey("FirstTimeRunUISlider"))
+            {
+                SpawnMiddleIconHelper(
+                    "Instructions",
+                    "Toggle_Sliders",
+                    swipeLeftRightIcon,
+                    true,
+                    UtilsFns.AnimationDirection.LeftRight);
+                    
+                // Set the flag to indicate the app has been run at least once
+                PlayerPrefs.SetInt("FirstTimeRunUISlider", 1);
+                PlayerPrefs.Save();
+            }
+            
             if (isUIOverlayEnabled)
             {
                 sliderPanelScrollRect.verticalNormalizedPosition = 1f;
@@ -469,7 +485,7 @@ namespace MingoData.Scripts.MainUtil
             UtilsFns.ReverseOrderIfArabic(orbitLineToggleLayoutGroup);
         }
 
-        
+
 
         private void SliderInit()
         {
@@ -603,7 +619,7 @@ namespace MingoData.Scripts.MainUtil
 
             GameObject lastCreatedGameObject = null; // Declare this variable to hold the last created GameObject
 
-            
+
             foreach (PlanetData planetData in planetColorLegend.Values)
             {
                 // Instantiate new legend item
@@ -638,7 +654,7 @@ namespace MingoData.Scripts.MainUtil
                 UtilsFns.ReverseOrderIfArabic(legendItemPrefab.transform.Find("LegendLayout").GetComponent<HorizontalLayoutGroup>());
                 lastCreatedGameObject = newLegendItem;
             }
-            
+
             lastCreatedGameObject!.transform.Find("HR").gameObject.SetActive(false);
         }
 
@@ -740,7 +756,7 @@ namespace MingoData.Scripts.MainUtil
                 isUIOverlayEnabled = false;
             };
         }
-        
+
         // Call this method to stop the animation
         private void StopIconAnimation()
         {
@@ -750,7 +766,8 @@ namespace MingoData.Scripts.MainUtil
             _animationCoroutine = null;
         }
 
-        private MiddleIconHelper SpawnMiddleIconHelper(string middleIconsTopHelperTitleKey, string middleIconsTextHelperKey, Sprite bottomIconsImage, bool isMiddleIconsTopHelper, UtilsFns.AnimationDirection direction)
+        private MiddleIconHelper SpawnMiddleIconHelper(string middleIconsTopHelperTitleKey, string middleIconsTextHelperKey, Sprite bottomIconsImage, bool isMiddleIconsTopHelper,
+            UtilsFns.AnimationDirection direction)
         {
             StopIconAnimation();
             // Instantiate the prefab
@@ -786,16 +803,16 @@ namespace MingoData.Scripts.MainUtil
             }
 
             HorizontalLayoutGroup layoutGroup = helper.middleIconsTopHelper.GetComponent<HorizontalLayoutGroup>();
-            
+
             UtilsFns.ReverseOrderIfArabic(layoutGroup);
 
             instance.SetActive(true);
-            
+
             // Get the RectTransform of the icon
             RectTransform iconRectTransform = helper.bottomIconsImage.GetComponent<RectTransform>();
 
             // Start the animation
-            StartCoroutine(UtilsFns.AnimateIcon(iconRectTransform, 1f, direction));  // Animate over 1 second
+            StartCoroutine(UtilsFns.AnimateIcon(iconRectTransform, 1f, direction)); // Animate over 1 second
 
             return helper;
         }
@@ -868,4 +885,5 @@ namespace MingoData.Scripts.MainUtil
             UtilsFns.BringToFront(menuSliderPanel);
         }
     }
+
 }

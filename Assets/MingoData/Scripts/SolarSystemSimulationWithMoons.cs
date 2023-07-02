@@ -43,9 +43,9 @@ namespace MingoData.Scripts
         private bool isPlanetSelected;
         private bool isDistanceFromSunVisible;
 
-        
+
         private List<string> loadedPlanets;
-        
+
         private readonly List<string> selectedFields = new List<string>
         {
             "name",
@@ -87,7 +87,7 @@ namespace MingoData.Scripts
             if (!isPlanetSelected || uiHandler.isUIOverlayEnabled)
                 return;
 
-            const float rotationSpeed = 0.1f; 
+            const float rotationSpeed = 0.1f;
             // Rotate around the y-axis based on x delta (for left/right swipes)
             selectedPlanet.transform.Rotate(0f, -delta.x * rotationSpeed, 0f, Space.World);
 
@@ -141,17 +141,25 @@ namespace MingoData.Scripts
             selectedPlanetLightObject.SetActive(isPlanetSelected);
 
             UpdateTogglePlanetGuidanceVisibilityToggle(false);
-                    
+
             uiHandler.PlayClickSound();
             uiHandler.SetPlanetNameTextTitle(selectedPlanet.name, true);
 
-            uiHandler.ToggleSwipeIcon();
+            // Check if it's the first time the app is run
+            if (!PlayerPrefs.HasKey("FirstTimeRunSelectedPlanet"))
+            {
+                uiHandler.ToggleSwipeIcon();
+                // Set the flag to indicate the app has been run at least once
+                PlayerPrefs.SetInt("FirstTimeRunSelectedPlanet", 1);
+                PlayerPrefs.Save();
+            }
+
             uiHandler.SetCelestialBodyData(SolarSystemUtility.planetDataDictionary[planet.name], selectedFields);
 
             // Save the original position and scale of the planet
             SolarSystemUtility.ColorOriginalPositions.TryAdd(planet, planet.transform.position);
             SolarSystemUtility.ColorOriginalScales.TryAdd(planet, planet.transform.localScale);
-            
+
             // Move the selected planet in front of the user by one unit and scale it to 1,1,1
             if (mainCamera != null)
             {
@@ -320,7 +328,7 @@ namespace MingoData.Scripts
             uiHandler.onPlanetShowGuidanceToggleValueChanged = UpdateTogglePlanetGuidanceVisibilityToggle;
 
             uiHandler.SetCelestialBodyData(null, selectedFields);
-            selectedPlanetLightObject =  UtilsFns.CreateLightComponent(mainCamera.transform, 1f);
+            selectedPlanetLightObject = UtilsFns.CreateLightComponent(mainCamera.transform, 1f);
             selectedPlanetLightObject.SetActive(false);
             SolarSystemUtility.LoadPlanetData(loadedPlanets);
         }
@@ -328,7 +336,7 @@ namespace MingoData.Scripts
         private void SpawnPlanets()
         {
             uiHandler.PlayClickSound();
-            
+
             parentDistanceLinesObject = new GameObject("ParentDistanceLines");
 
             // Quaternion rotationCorrection = Quaternion.Euler(-90f, 0f, 0f);
@@ -337,11 +345,11 @@ namespace MingoData.Scripts
             foreach (PlanetData planet in SolarSystemUtility.planetDataDictionary.Values)
             {
                 InstantiatePlanet(planet, Vector3.zero, rotationCorrection);
-                
+
                 if (planet.name != Constants.PlanetSun)
                 {
                     SolarSystemUtility.CreateDistanceLineAndTextFromSun(parentDistanceLinesObject, planet);
-                    
+
                     SolarSystemUtility.UpdateDistanceFromSunText(planet, localizationManager);
                 }
                 else
@@ -350,11 +358,11 @@ namespace MingoData.Scripts
                 }
 
                 uiHandler.SetPlanetColorLegend(SolarSystemUtility.planetDataDictionary);
-                
+
                 SolarSystemUtility.ColorOriginalPositions[planet.celestialBodyInstance] = planet.celestialBodyInstance.transform.position;
-                
+
                 SolarSystemUtility.InitPlanetProgress(planet);
-                
+
                 UtilsFns.CreateOrbitLine(planet.celestialBodyInstance, planet, (body, angle) => SolarSystemUtility.CalculatePlanetPosition((PlanetData)body, angle, distanceScale));
             }
         }
@@ -367,7 +375,7 @@ namespace MingoData.Scripts
             {
                 planetPrefab = Resources.Load<GameObject>(planet.prefabName);
             }
-            
+
             catch (Exception e)
             {
                 Debug.LogError($"Failed to load prefab for {planet.name}: {e.Message}");
@@ -375,9 +383,9 @@ namespace MingoData.Scripts
             }
 
             planet.rotationAxis = Quaternion.Euler(planet.obliquityToOrbit, 0, 0) * Vector3.up;
-            
+
             distanceScale = Constants.InitialDistanceScale;
-            
+
             planet.orbitProgress = Random.Range(0f, 360f);
 
             Vector3 planetPosition = planet.name == Constants.PlanetSun ? Vector3.zero : spawnPosition + SolarSystemUtility.CalculatePlanetPosition(planet, planet.orbitProgress, distanceScale);
@@ -385,7 +393,7 @@ namespace MingoData.Scripts
             CreatePlanetGuidance(planet);
 
             planet.celestialBodyInstance = Instantiate(planetPrefab, planetPosition, rotationCorrection * planetPrefab.transform.rotation * Quaternion.Euler(planet.rotationAxis));
-            
+
             planet.celestialBodyInstance.name = planet.name;
 
             float planetScale = UtilsFns.GetPlanetScale(planet);
@@ -526,17 +534,14 @@ namespace MingoData.Scripts
             }
         }
     }
+
 }
 
 // fixes
 // todo height bump lal planets
-// todo tutorial
-// todo add unit metric option in setting
-// todo generate spheres from json kmn 
-// todo json schema application for website 
-// todo add share 
 
 // features
+// todo generate spheres from json kmn 
 // todo add analytics
 // todo reward system 
 // todo add pinch zoom to increase decrease size 
@@ -558,7 +563,7 @@ namespace MingoData.Scripts
 // todo add history of the solar system 
 // todo add show inner structures
 // todo icons had toggle maybe
-
+// todo add unit metric option in setting
 
 // in update function 
 /* foreach (var moon in planet.moons)
