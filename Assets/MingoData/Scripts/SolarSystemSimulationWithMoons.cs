@@ -533,26 +533,20 @@ namespace MingoData.Scripts
 // todo height bump lal planets
 // todo tutorial
 // todo lgiht 
-// todo add unit metric
+// todo add unit metric option in setting
 // todo fix light 
 // todo generate spheres from json kmn 
-// todo json application for website 
-// todo privacy polucy 
+// todo json schema application for website 
+// todo privacy polucy, 
 // todo earth glow 
 // todo icons had toggle maybe
 
 // features
 // todo add analytics
-// todo get all the text and translate it using the keyname
 // todo reward system 
-// todo add toggle for sound  
-// todo populate language from the translation json 
-// todo add layout legend divider 
-// todo add tutorial 
 // todo add pinch zoom to increase decrease size 
 // todo add size perspective
 // todo add toggle for normalizing the planets size 
-// todo add songs and click sound
 // todo add seasons 
 // todo add pov planets
 // todo document your code

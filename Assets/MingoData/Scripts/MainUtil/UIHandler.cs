@@ -9,6 +9,7 @@ using MingoData.Scripts.Utils;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TextMeshProUGUI = TMPro.TextMeshProUGUI;
 
@@ -124,7 +125,7 @@ namespace MingoData.Scripts.MainUtil
         public TextMeshProUGUI contactUsSettingsTitle;
         public TextMeshProUGUI privacyPolicySettingsTitle;
         public TextMeshProUGUI versionsSettingsTitle;
-        
+        public TMP_Dropdown settingsLanguageDropdown;
 
         private void OnPauseButtonClicked()
         {
@@ -235,18 +236,48 @@ namespace MingoData.Scripts.MainUtil
             openSourceSettingsTitle.text = localizationManager.GetLocalizedValue("OpenSourceSettingsTitle",openSourceSettingsTitle,false,Constants.ColorWhite);
             contactUsSettingsTitle.text = localizationManager.GetLocalizedValue("ContactUsSettingsTitle",contactUsSettingsTitle,false,Constants.ColorWhite);
             privacyPolicySettingsTitle.text = localizationManager.GetLocalizedValue("PrivacyPolicySettingsTitle",privacyPolicySettingsTitle,false,Constants.ColorWhite);
-            versionsSettingsTitle.text = localizationManager.GetLocalizedValue("VersionsSettingsTitle",versionsSettingsTitle,false,Constants.ColorWhite, Application.unityVersion);
-            
-            ReverseOrderIfArabic(openSourceSettingsTitle.transform.parent.transform.gameObject.GetComponent<HorizontalLayoutGroup>());
-            ReverseOrderIfArabic(contactUsSettingsTitle.transform.parent.transform.gameObject.GetComponent<HorizontalLayoutGroup>());
-            ReverseOrderIfArabic(privacyPolicySettingsTitle.transform.parent.transform.gameObject.GetComponent<HorizontalLayoutGroup>());
+            versionsSettingsTitle.text = localizationManager.GetLocalizedValue("VersionsSettingsTitle",versionsSettingsTitle,false,Constants.ColorWhite, Application.version);
+
+            Transform openSourceSettingsParent = openSourceSettingsTitle.transform.parent;
+            ReverseOrderIfArabic(openSourceSettingsParent.transform.gameObject.GetComponent<HorizontalLayoutGroup>());
+            Transform contactUsSettingsParent = contactUsSettingsTitle.transform.parent;
+            ReverseOrderIfArabic(contactUsSettingsParent.transform.gameObject.GetComponent<HorizontalLayoutGroup>());
+            Transform privacyPolicySettingsParent = privacyPolicySettingsTitle.transform.parent;
+            ReverseOrderIfArabic(privacyPolicySettingsParent.transform.gameObject.GetComponent<HorizontalLayoutGroup>());
             ReverseOrderIfArabic(chooseLangSettingsTitle.transform.parent.transform.gameObject.GetComponent<HorizontalLayoutGroup>());
             ReverseOrderIfArabic(toggleSoundSettingsTitle.transform.parent.transform.gameObject.GetComponent<HorizontalLayoutGroup>());
             ReverseOrderIfArabic(settingsTitle.transform.parent.transform.gameObject.GetComponent<HorizontalLayoutGroup>());
             
+            closeSettingButton.onClick.AddListener(OnSettingsButtonClicked);
             
+            openSourceSettingsParent.GetComponent<Button>().onClick.AddListener(() =>
+            {
+                Application.OpenURL("https://danielawde9.com/opensource");
+            });
+            privacyPolicySettingsParent.GetComponent<Button>().onClick.AddListener(() =>
+            {
+                Application.OpenURL("https://danielawde9.com/mingo-ar-classroom-privacy-policy/");
+            });
+            contactUsSettingsParent.GetComponent<Button>().onClick.AddListener(() =>
+            {
+                Application.OpenURL("https://danielawde9.com/#get-in-touch");
+            });
+
+            settingsLanguageDropdown.onValueChanged.AddListener(OnLanguageChanged);
         }
 
+        private void OnLanguageChanged(int selectedLang)
+        {
+            // Get the new value from the dropdown
+            string newValue = settingsLanguageDropdown.options[settingsLanguageDropdown.value].text;
+
+            // Call your function with the new value
+            localizationManager.SetLanguage(newValue);
+
+            // Then reload the scene
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
+        
         private void OnSettingAudioTogglePressed(bool isOn)
         {
             mainAudioSource.enabled = isOn;
@@ -259,7 +290,7 @@ namespace MingoData.Scripts.MainUtil
             planetInfoButtonComponent.onClick.AddListener(OnPlanetInfoPanelToggleOnOffClicked);
 
             darkImageBackgroundPlanetInfo = UtilsFns.CreateDarkBackground("PlanetInfo");
-            darkImageBackgroundPlanetInfo.GetComponent<Button>().onClick.AddListener(OnPlanetInfoPanelToggleOnOffClicked);
+            // darkImageBackgroundPlanetInfo.GetComponent<Button>().onClick.AddListener(OnPlanetInfoPanelToggleOnOffClicked);
             darkImageBackgroundPlanetInfo.SetActive(false);
 
             planetInfoCloseButton.onClick.AddListener(OnPlanetInfoPanelToggleOnOffClicked);
@@ -389,7 +420,7 @@ namespace MingoData.Scripts.MainUtil
 
             planetLegendsListTitle.text = localizationManager.GetLocalizedValue("Planets_legend", planetLegendsListTitle, false, Constants.ColorWhite);
 
-            planetInfoListItemParentTitle.text = localizationManager.GetLocalizedValue("Planets_InfoPlanets_Info", planetInfoListItemParentTitle, false, Constants.ColorWhite);
+            planetInfoListItemParentTitle.text = localizationManager.GetLocalizedValue("Planets_Info", planetInfoListItemParentTitle, false, Constants.ColorWhite);
 
             planetDistanceFromSunToggleTextMeshPro.text = localizationManager.GetLocalizedValue("Display_Distance_From_Sun", planetDistanceFromSunToggleTextMeshPro, false, Constants.ColorWhite);
 
@@ -629,6 +660,7 @@ namespace MingoData.Scripts.MainUtil
             menuPlanetName.text = localizedPlanetName;
 
             topMenuPlanetLayout.SetActive(showGameObjectHolder);
+            settingsButton.SetActive(!showGameObjectHolder);
             closePlanetButton.SetActive(showGameObjectHolder);
             returnToMainMenuButton.SetActive(!showGameObjectHolder);
             planetInfoButton.SetActive(showGameObjectHolder);
@@ -783,6 +815,7 @@ namespace MingoData.Scripts.MainUtil
 
             _darkImageBackgroundInitialUI = UtilsFns.CreateDarkBackground("InitialUI");
 
+            settingsButton.SetActive(false);
             planetInfoLayout.SetActive(false);
             settingsLayout.SetActive(false);
             topMenuPlanetLayout.SetActive(false);
@@ -802,6 +835,7 @@ namespace MingoData.Scripts.MainUtil
                 true,
                 UtilsFns.AnimationDirection.UpDown);
 
+            settingsButton.SetActive(true);
             menuSliderPanel.SetActive(true);
             closePlanetButton.SetActive(false);
             planetInfoButton.SetActive(false);

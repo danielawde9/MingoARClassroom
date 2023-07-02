@@ -22,6 +22,7 @@ namespace MingoData.Scripts.Utils
             return new Color(r / 255f, g / 255f, b / 255f, a / 255f);
         }
     }
+    
 
     public static class Constants
     {
