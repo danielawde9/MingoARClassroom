@@ -300,7 +300,6 @@ namespace MingoData.Scripts.Utils
             lightComponent.cullingMask = 1;
             directionalLight.transform.SetParent(parentTransform);
             directionalLight.transform.localPosition = Vector3.zero;
-            
             // Adjust the range of the directional light
             lightComponent.range = distanceToPlanet;
             return directionalLight;

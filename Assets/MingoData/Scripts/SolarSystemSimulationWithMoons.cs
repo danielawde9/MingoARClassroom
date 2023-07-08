@@ -330,6 +330,7 @@ namespace MingoData.Scripts
 
             uiHandler.SetCelestialBodyData(null, selectedFields);
             selectedPlanetLightObject = UtilsFns.CreateLightComponent(mainCamera.transform, 1f);
+            //selectedPlanetLightObject = new GameObject();
             selectedPlanetLightObject.SetActive(false);
             SolarSystemUtility.LoadPlanetData(loadedPlanets);
         }
