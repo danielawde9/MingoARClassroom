@@ -1,4 +1,3 @@
-
 # Mingo
 
 Mingo is a powerful and innovative AR application built for Unity, leveraging the power of AR Foundation. It allows users to interact with a simulated solar system, moving and adjusting planets with intuitive controls.
