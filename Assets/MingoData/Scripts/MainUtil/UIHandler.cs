@@ -831,7 +831,7 @@ namespace MingoData.Scripts.MainUtil
 
         public void UIShowInitial()
         {
-
+            
             uiHelperInit = SpawnMiddleIconHelper(
                 "",
                 "Move_your_phone_to_start_scanning_the_room",

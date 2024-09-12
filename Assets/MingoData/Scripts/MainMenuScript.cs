@@ -78,7 +78,7 @@ namespace MingoData.Scripts
             }
 
             // Start the animation
-            StartCoroutine(UtilsFns.AnimateIcon(bottomIconsImage.GetComponent<RectTransform>(), 1f, UtilsFns.AnimationDirection.UpDown));  // Animate over 1 second
+            // StartCoroutine(UtilsFns.AnimateIcon(bottomIconsImage.GetComponent<RectTransform>(), 1f, UtilsFns.AnimationDirection.UpDown));  // Animate over 1 second
 
             Application.targetFrameRate = 60;
 
